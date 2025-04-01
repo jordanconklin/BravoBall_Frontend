@@ -174,7 +174,7 @@ class DataSyncService {
         }
         
         // Create a mutable dictionary to build our progress history
-        var progressHistory: [String: Any] = [
+        let progressHistory: [String: Any] = [
             "current_streak": currentStreak,
             "highest_streak": highestStreak,
             "completed_sessions_count": completedSessionsCount

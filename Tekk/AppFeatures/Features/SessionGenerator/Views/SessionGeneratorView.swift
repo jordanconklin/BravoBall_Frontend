@@ -299,8 +299,8 @@ struct SessionGeneratorView: View {
         .onDisappear {
             sessionModel.saveChanges()
         }
-        .onChange(of: UIApplication.shared.applicationState) { newState in
-            if newState == .background {
+        .onChange(of: UIApplication.shared.applicationState) {
+            if UIApplication.shared.applicationState == .background {
                 sessionModel.saveChanges()
             }
         }
@@ -532,8 +532,6 @@ extension SessionGeneratorModel {
                 // Add to ordered drills
                 orderedSessionDrills.append(editableDrill)
                 print("✅ Added drill: \(drillModel.title) (Sets: \(drillModel.sets), Reps: \(drillModel.reps))")
-            } catch {
-                print("❌ Error processing drill: \(error.localizedDescription)")
             }
         }
         
@@ -585,8 +583,8 @@ extension SessionGeneratorModel {
             let editableDrill = EditableDrillModel(
                 drill: drill,
                 setsDone: 0,
-                totalSets: drill.sets ?? 0,
-                totalReps: drill.reps ?? 0,
+                totalSets: drill.sets,
+                totalReps: drill.reps,
                 totalDuration: drill.duration,
                 isCompleted: false
             )

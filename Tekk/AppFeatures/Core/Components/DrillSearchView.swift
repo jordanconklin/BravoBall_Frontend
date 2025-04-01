@@ -321,12 +321,12 @@ struct DrillSearchView: View {
             currentPage = 1
             performSearch()
         }
-        .onChange(of: selectedCategory) { _ in
+        .onChange(of: selectedCategory) {
             // Reset page and perform search when category changes
             currentPage = 1
             performSearch()
         }
-        .onChange(of: selectedDifficulty) { _ in
+        .onChange(of: selectedDifficulty) {
             // Reset page and perform search when difficulty changes
             currentPage = 1
             performSearch()
@@ -349,7 +349,7 @@ struct DrillSearchView: View {
         } else {
             // Check if a drill with the same title is already selected
             if let existingIndex = selectedDrills.firstIndex(where: { $0.title == drill.title }) {
-                print("⚠️ Drill with same title already selected: '\(drill.title)'")
+                print("⚠️ Drill with same title already selected: '\(drill.title)' with index \(existingIndex)")
                 // Don't add another one
             } else {
                 selectedDrills.append(drill)
