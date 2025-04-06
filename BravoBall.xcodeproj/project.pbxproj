@@ -421,8 +421,8 @@
 		4399B70F2D6D741100DA5E84 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				43AC25222DA24C7300EDD8C0 /* SessionGenerator */,
 				43C5FC402D6DB59A0064E7D5 /* DrillModel.swift */,
-				43524E762D4D994400AD897A /* SessionGeneratorModel.swift */,
 				430FD6CC2D3064850016D520 /* MainAppModel.swift */,
 			);
 			path = Models;
@@ -610,6 +610,30 @@
 				43BFAA3B2D442BEB00B12A6F /* Prereq_Difficulty.riv */,
 			);
 			path = RiveAssets;
+			sourceTree = "<group>";
+		};
+		43AC25222DA24C7300EDD8C0 /* SessionGenerator */ = {
+			isa = PBXGroup;
+			children = (
+				43AC25242DA24C8C00EDD8C0 /* Extensions */,
+				43AC25232DA24C8100EDD8C0 /* Protocols */,
+				43524E762D4D994400AD897A /* SessionGeneratorModel.swift */,
+			);
+			path = SessionGenerator;
+			sourceTree = "<group>";
+		};
+		43AC25232DA24C8100EDD8C0 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		43AC25242DA24C8C00EDD8C0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		43B687822D7C2DE6009CCA8C /* Models */ = {
