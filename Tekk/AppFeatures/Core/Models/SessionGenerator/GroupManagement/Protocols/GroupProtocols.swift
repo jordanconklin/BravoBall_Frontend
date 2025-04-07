@@ -7,14 +7,24 @@
 
 import Foundation
 
-// MARK: - Drill Group Management Protocol
-protocol DrillGroupManagement: AnyObject {
+// MARK: - Saved Drills Group Protocol
+protocol SavedDrillsGroupManagement: AnyObject {
     var savedDrills: [GroupModel] { get set }
-    var likedDrillsGroup: GroupModel { get set }
     
     func addDrillToGroup(drill: DrillModel, groupId: UUID)
+    func loadDrillGroupsFromBackend() async
+}
+
+// MARK: - Liked Drills Protocol
+protocol LikedDrillsManagement: AnyObject {
+    var likedDrillsGroup: GroupModel { get set }
+    
     func toggleDrillLike(drillId: UUID, drill: DrillModel)
     func isDrillLiked(_ drill: DrillModel) -> Bool
     func checkDrillLikedStatus(drillId: Int) async -> Bool
-    func loadDrillGroupsFromBackend() async
 }
+
+protocol BothGroupsManagement: AnyObject {
+    
+}
+
