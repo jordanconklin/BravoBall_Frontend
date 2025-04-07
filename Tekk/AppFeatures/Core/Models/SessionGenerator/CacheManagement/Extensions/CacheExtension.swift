@@ -49,22 +49,57 @@ extension SessionGeneratorModel: CacheManagement {
         print("✅ User data and cache cleared successfully")
     }
     
+   
     
-    // Displaying cached data for specific user based off email in keychain
+    
+    // MARK: - Cache Load Operations
     func loadCachedData() {
+        isInitialLoad = true
+        
         print("\n📱 Loading cached data for current user...")
         let userEmail = KeychainWrapper.standard.string(forKey: "userEmail") ?? "no user"
         print("\n👤 USER SESSION INFO:")
         print("----------------------------------------")
         print("Current user email: \(userEmail)")
-        print("Cache key being used: \(CacheKey.orderedDrillsCase.forUser(userEmail))")
-        print("----------------------------------------")
         
         // If no user is logged in or changing users, ensure we don't load old data
         if userEmail == "no user" {
             print("⚠️ No valid user found, clearing any existing data")
             clearUserData()
             return
+        }
+        
+        // First load all cached data
+        loadAllFromCache()
+        
+        // Then sync with backend
+        Task {
+            await syncAllWithBackend()
+        }
+    }
+    
+    private func loadAllFromCache() {
+        print("\n📱 Loading all data from cache...")
+        
+        // Load ordered drills
+        if let cachedDrills: [EditableDrillModel] = cacheManager.retrieve(forKey: .orderedDrillsCase) {
+            orderedSessionDrills = cachedDrills
+            print("✅ Loaded \(orderedSessionDrills.count) ordered drills from cache")
+            
+            // Extract and update skills if needed
+            if !cachedDrills.isEmpty {
+                let drillSkills = Set(cachedDrills.map { $0.drill.skill })
+                if selectedSkills.isEmpty {
+                    selectedSkills = drillSkills
+                    print("✅ Updated selected skills from cached drills: \(drillSkills)")
+                }
+            }
+        }
+        
+        // Load completed sessions
+        if let completedSessions: [CompletedSession] = cacheManager.retrieve(forKey: .allCompletedSessionsCase) {
+            appModel.allCompletedSessions = completedSessions
+            print("✅ Loaded \(completedSessions.count) completed sessions from cache")
         }
         
         // Load preferences
@@ -74,86 +109,139 @@ extension SessionGeneratorModel: CacheManagement {
             selectedTrainingStyle = preferences.selectedTrainingStyle
             selectedLocation = preferences.selectedLocation
             selectedDifficulty = preferences.selectedDifficulty
-            print("✅ Successfully loaded preferences from cache")
-        }
-        
-        // Load ordered drills
-        if let drills: [EditableDrillModel] = cacheManager.retrieve(forKey: .orderedDrillsCase) {
-            print("\n📋 ORDERED DRILLS FOR USER \(userEmail):")
-            print("----------------------------------------")
-            print("Number of drills found: \(drills.count)")
-            print("Drill titles:")
-            drills.enumerated().forEach { index, drill in
-                print("  \(index + 1). \(drill.drill.title) (Completed: \(drill.isCompleted))")
-            }
-            print("----------------------------------------")
-            orderedSessionDrills = drills
-            
-            // Ensure we don't override these drills with default ones
-            if !drills.isEmpty {
-                print("✅ Using cached drills instead of default drills")
-                
-                // Extract skills from the loaded drills
-                let drillSkills = Set(drills.map { $0.drill.skill })
-                print("📊 Skills from cached drills: \(drillSkills)")
-                
-                // Update selected skills based on the loaded drills
-                if selectedSkills.isEmpty {
-                    selectedSkills = drillSkills
-                    print("✅ Updated selected skills from cached drills: \(selectedSkills)")
-                }
-            }
-        } else {
-            print("\n📋 ORDERED DRILLS FOR USER \(userEmail):")
-            print("----------------------------------------")
-            print("ℹ️No drills found in cache")
-            print("----------------------------------------")
+            print("✅ Loaded preferences from cache")
         }
         
         // Load filter groups
         if let filterGroups: [SavedFiltersModel] = cacheManager.retrieve(forKey: .filterGroupsCase) {
             allSavedFilters = filterGroups
-            print("✅ Successfully loaded filter groups from cache")
-            print("Number of filter groups: \(filterGroups.count)")
-        } else {
-            print("ℹ️ No filter groups found in cache")
+            print("✅ Loaded \(filterGroups.count) filter groups from cache")
         }
         
-        // Load saved drills
+        // Load saved drills and their backend IDs
         if let drills: [GroupModel] = cacheManager.retrieve(forKey: .savedDrillsCase) {
             savedDrills = drills
-            print("✅ Successfully loaded saved drills from cache")
-        } else {
-            print("ℹ️ No saved drills found in cache")
+            print("✅ Loaded \(drills.count) saved drill groups from cache")
         }
-        
-        // Load backend IDs for groups
         if let ids: [UUID: Int] = cacheManager.retrieve(forKey: .groupBackendIdsCase) {
             groupBackendIds = ids
-            print("✅ Successfully loaded group backend IDs from cache")
+            print("✅ Loaded \(ids.count) group backend IDs from cache")
         }
         
-        // Load liked drills
+        // Load liked drills and their backend ID
         if let liked: GroupModel = cacheManager.retrieve(forKey: .likedDrillsCase) {
             likedDrillsGroup = liked
-            print("✅ Successfully loaded liked drills from cache")
-        } else {
-            print("ℹ️ No liked drills found in cache")
+            print("✅ Loaded liked drills group from cache (\(liked.drills.count) drills)")
         }
-        
-        // Load backend ID for liked group
         if let id: Int = cacheManager.retrieve(forKey: .likedGroupBackendIdCase) {
             likedGroupBackendId = id
-            print("✅ Successfully loaded liked group backend ID from cache")
+            print("✅ Loaded liked group backend ID from cache")
         }
         
-        // After loading from cache, try to refresh from backend
-        Task {
-            await loadDrillGroupsFromBackend()
+        // Load progress history
+        if let currentStreak: Int = cacheManager.retrieve(forKey: .currentStreakCase) {
+            appModel.currentStreak = currentStreak
+            print("✅ Loaded current streak: \(currentStreak)")
+        }
+        if let highestStreak: Int = cacheManager.retrieve(forKey: .highestSreakCase) {
+            appModel.highestStreak = highestStreak
+            print("✅ Loaded highest streak: \(highestStreak)")
+        }
+        if let completedCount: Int = cacheManager.retrieve(forKey: .countOfCompletedSessionsCase) {
+            appModel.countOfFullyCompletedSessions = completedCount
+            print("✅ Loaded completed sessions count: \(completedCount)")
         }
     }
     
-   func cacheFilterGroups(name: String) {
+    
+    // TODO: put this in syncing management for sesgenmodel extension
+    private func syncAllWithBackend() async {
+        print("\n🔄 Syncing all data with backend...")
+        
+        do {
+            try await withThrowingTaskGroup(of: Void.self) { group in
+                // Sync ordered drills
+                group.addTask {
+                    let backendDrills = try await DataSyncService.shared.fetchOrderedDrills()
+                    if backendDrills != self.orderedSessionDrills {
+                        await MainActor.run {
+                            self.orderedSessionDrills = backendDrills
+                            self.cacheOrderedDrills()
+                            print("✅ Updated ordered drills from backend")
+                        }
+                    }
+                }
+                
+                // Sync completed sessions
+                group.addTask {
+                    let backendSessions = try await DataSyncService.shared.fetchCompletedSessions()
+                    if backendSessions != self.appModel.allCompletedSessions {
+                        await MainActor.run {
+                            self.appModel.allCompletedSessions = backendSessions
+                            self.appModel.cacheCompletedSessions()
+                            print("✅ Updated completed sessions from backend")
+                        }
+                    }
+                }
+                
+                // Sync progress history
+                group.addTask {
+                    let progressHistory = try await DataSyncService.shared.fetchProgressHistory()
+                    await MainActor.run {
+                        if progressHistory.currentStreak != self.appModel.currentStreak {
+                            self.appModel.currentStreak = progressHistory.currentStreak
+                            self.appModel.cacheCurrentStreak()
+                        }
+                        if progressHistory.highestStreak != self.appModel.highestStreak {
+                            self.appModel.highestStreak = progressHistory.highestStreak
+                            self.appModel.cacheHighestStreak()
+                        }
+                        if progressHistory.completedSessionsCount != self.appModel.countOfFullyCompletedSessions {
+                            self.appModel.countOfFullyCompletedSessions = progressHistory.completedSessionsCount
+                            self.appModel.cacheCompletedSessionsCount()
+                        }
+                        print("✅ Updated progress history from backend")
+                    }
+                }
+                
+                // Sync saved filters
+                group.addTask {
+                    let backendFilters = try await SavedFiltersService.shared.fetchSavedFilters()
+                    if backendFilters != self.allSavedFilters {
+                        await MainActor.run {
+                            self.allSavedFilters = backendFilters
+                            self.cacheFilterGroups(name: "")
+                            print("✅ Updated filter groups from backend")
+                        }
+                    }
+                }
+                
+                // Sync drill groups (both saved and liked)
+                group.addTask {
+                    try await self.loadDrillGroupsFromBackend()
+                    print("✅ Updated drill groups from backend")
+                }
+                
+                // Wait for all sync operations to complete
+                try await group.waitForAll()
+            }
+            
+            // After all syncs complete successfully
+            await MainActor.run {
+                isInitialLoad = false
+                print("✅ Successfully synced all data with backend")
+            }
+            
+        } catch {
+            await MainActor.run {
+                isInitialLoad = false
+                print("⚠️ Error syncing with backend: \(error)")
+                // Keep using cached data if backend sync fails
+            }
+        }
+    }
+    
+    func cacheFilterGroups(name: String) {
         guard !isLoggingOut else {
             print("⚠️ Skipping filter groups cache during logout")
             return

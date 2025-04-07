@@ -23,6 +23,7 @@ class SessionGeneratorModel: ObservableObject {
     var hasUnsavedChanges = false
     var autoSaveTimer: Timer?
     var isLoggingOut = false  // Add flag to prevent caching during logout
+    var isInitialLoad = true  // Add this flag
     
     
     // MARK: Filter Types
@@ -49,7 +50,9 @@ class SessionGeneratorModel: ObservableObject {
     // Session Drills storage
     @Published var orderedSessionDrills: [EditableDrillModel] = [] {
         didSet { 
-            markAsNeedingSave(change: .orderedDrills)
+            if !isInitialLoad && !isLoggingOut {
+                markAsNeedingSave(change: .orderedDrills)
+            }
         }
     }
     // Saved Drills storage
@@ -100,18 +103,6 @@ class SessionGeneratorModel: ObservableObject {
             UserDefaults.standard.set(currentUser, forKey: "lastActiveUser")
         }
         
-        // Initialize liked drills group with user-specific UUID
-        likedDrillsGroup = GroupModel(
-            id: getLikedDrillsUUID(),
-            name: "Liked Drills",
-            description: "Your favorite drills",
-            drills: []
-        )
-        
-        loadCachedData()
-        // Force deduplication on app launch
-        deduplicateAllGroups()
-        
         // Only set these values if they're not already loaded from cache
         if selectedDifficulty == nil {
             selectedDifficulty = onboardingData.trainingExperience.lowercased()
@@ -146,18 +137,6 @@ class SessionGeneratorModel: ObservableObject {
             object: nil
         )
                 
-        
-        // After loading from cache, try to refresh from backend
-        Task {
-            await loadDrillGroupsFromBackend()
-        }
-        
-        // Load saved filters data from backend
-        Task {
-            await loadSavedFiltersFromBackend()
-        }
-        
-        //TODO: add the other data loadings?
     }
     
     deinit {
@@ -260,6 +239,7 @@ class SessionGeneratorModel: ObservableObject {
     }
     
     // MARK: - Saving and Syncing
+    // saves changes while user is using the app
     func saveChanges() {
         guard changeTracker.hasAnyChanges else { return }
         
@@ -428,7 +408,7 @@ class SessionGeneratorModel: ObservableObject {
             self.selectedDifficulty = model.selectedDifficulty
         }
     }
-    
+
 }
 
 

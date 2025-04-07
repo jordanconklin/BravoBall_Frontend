@@ -15,6 +15,62 @@ class DataSyncService {
     
     // MARK: - Ordered Session Drills Sync
     
+    func fetchOrderedDrills() async throws -> [EditableDrillModel] {
+        let url = URL(string: "\(baseURL)/api/sessions/ordered_drills/")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Add auth token
+        if let token = KeychainWrapper.standard.string(forKey: "authToken") {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            print("🔑 Using auth token: \(token)")
+        } else {
+            print("⚠️ No auth token found!")
+            throw URLError(.userAuthenticationRequired)
+        }
+        
+        print("📤 Fetching ordered drills from: \(url.absoluteString)")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ Invalid response type")
+            throw URLError(.badServerResponse)
+        }
+        
+        print("📥 Response status code: \(httpResponse.statusCode)")
+        
+        switch httpResponse.statusCode {
+        case 200:
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let drills = try decoder.decode([DrillResponse].self, from: data)
+            
+            // Convert API response to EditableDrillModel
+            return drills.map { apiDrill in
+                let drillModel = apiDrill.toDrillModel()
+                return EditableDrillModel(
+                    drill: drillModel,
+                    setsDone: 0,
+                    totalSets: drillModel.sets,
+                    totalReps: drillModel.reps,
+                    totalDuration: drillModel.duration,
+                    isCompleted: false
+                )
+            }
+        case 401:
+            print("❌ Unauthorized - Invalid or expired token")
+            throw URLError(.userAuthenticationRequired)
+        case 404:
+            print("❌ Endpoint not found")
+            throw URLError(.badURL)
+        default:
+            print("❌ Unexpected status code: \(httpResponse.statusCode)")
+            throw URLError(.badServerResponse)
+        }
+    }
+    
     func syncOrderedSessionDrills(sessionDrills: [EditableDrillModel]) async throws {
         let url = URL(string: "\(baseURL)/api/sessions/ordered_drills/")!
         var request = URLRequest(url: url)
@@ -231,6 +287,51 @@ class DataSyncService {
     
     // MARK: - Completed Sessions Sync
     
+    func fetchCompletedSessions() async throws -> [CompletedSession] {
+        let url = URL(string: "\(baseURL)/api/sessions/completed/")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Add auth token
+        if let token = KeychainWrapper.standard.string(forKey: "authToken") {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            print("🔑 Using auth token: \(token)")
+        } else {
+            print("⚠️ No auth token found!")
+            throw URLError(.userAuthenticationRequired)
+        }
+        
+        print("📤 Fetching completed sessions from: \(url.absoluteString)")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ Invalid response type")
+            throw URLError(.badServerResponse)
+        }
+        
+        print("📥 Response status code: \(httpResponse.statusCode)")
+        
+        switch httpResponse.statusCode {
+        case 200:
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let completedSessions = try decoder.decode([CompletedSession].self, from: data)
+            print("✅ Successfully fetched \(completedSessions.count) completed sessions")
+            return completedSessions
+        case 401:
+            print("❌ Unauthorized - Invalid or expired token")
+            throw URLError(.userAuthenticationRequired)
+        case 404:
+            print("❌ Endpoint not found")
+            throw URLError(.badURL)
+        default:
+            print("❌ Unexpected status code: \(httpResponse.statusCode)")
+            throw URLError(.badServerResponse)
+        }
+    }
+
     func syncCompletedSession(date: Date, drills: [EditableDrillModel], totalCompleted: Int, total: Int) async throws {
         let url = URL(string: "\(baseURL)/api/sessions/completed/")!
         var request = URLRequest(url: url)

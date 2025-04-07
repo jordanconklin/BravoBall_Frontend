@@ -293,6 +293,7 @@ struct SessionGeneratorView: View {
             
             }
         }
+        // functions when UI of app changes
         .onAppear {
             BravoTextBubbleDelay()
         }

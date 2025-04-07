@@ -18,6 +18,11 @@ class MainAppModel: ObservableObject {
     
     
     private let cacheManager = CacheManager.shared
+    private var isInitialLoad = true
+    private var loadingTask: Task<Void, Never>?  // Track loading task
+    
+    // Add error state
+    @Published private(set) var loadingError: Error?
 
     
     @Published var homeTab = RiveViewModel(fileName: "Tab_House")
@@ -121,10 +126,7 @@ class MainAppModel: ObservableObject {
     
     @Published var allCompletedSessions: [CompletedSession] = [] {
         didSet {
-            cacheCompletedSessions()
-            
-            // Only sync the most recently added session if the array grew
-            if allCompletedSessions.count > oldValue.count,
+            if !isInitialLoad && allCompletedSessions.count > oldValue.count,
                let latestSession = allCompletedSessions.last {
                 Task {
                     do {
@@ -157,7 +159,7 @@ class MainAppModel: ObservableObject {
     
     @Published var currentStreak: Int = 0 {
         didSet {
-            if currentStreak != oldValue {
+            if !isInitialLoad && currentStreak != oldValue {
                 cacheCurrentStreak()
                 syncProgressHistory()
             }
@@ -165,7 +167,7 @@ class MainAppModel: ObservableObject {
     }
     @Published var highestStreak: Int = 0 {
         didSet {
-            if highestStreak != oldValue {
+            if !isInitialLoad && highestStreak != oldValue {
                 cacheHighestStreak()
                 syncProgressHistory()
             }
@@ -173,7 +175,7 @@ class MainAppModel: ObservableObject {
     }
     @Published var countOfFullyCompletedSessions: Int = 0 {
         didSet {
-            if countOfFullyCompletedSessions != oldValue {
+            if !isInitialLoad && countOfFullyCompletedSessions != oldValue {
                 cacheCompletedSessionsCount()
                 syncProgressHistory()
             }
@@ -181,7 +183,9 @@ class MainAppModel: ObservableObject {
     }
     
     private func syncProgressHistory() {
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
+            
             do {
                 // First verify the current values match what we expect
                 let cachedCurrentStreak: Int = cacheManager.retrieve(forKey: .currentStreakCase) ?? 0
@@ -201,9 +205,16 @@ class MainAppModel: ObservableObject {
                     highestStreak: highestStreak,
                     completedSessionsCount: countOfFullyCompletedSessions
                 )
-                print("✅ Successfully synced progress history with verified values")
+                
+                await MainActor.run {
+                    self.loadingError = nil
+                    print("✅ Successfully synced progress history with verified values")
+                }
             } catch {
-                print("❌ Error syncing progress history: \(error)")
+                await MainActor.run {
+                    self.loadingError = error
+                    print("❌ Error syncing progress history: \(error)")
+                }
             }
         }
     }
@@ -231,6 +242,12 @@ class MainAppModel: ObservableObject {
     
     // MARK: - Cache Load Operations
     func loadCachedData() {
+        // Cancel any existing loading task
+        loadingTask?.cancel()
+        
+        isInitialLoad = true
+        loadingError = nil
+        
         print("\n📱 Loading cached data for current user...")
         let userEmail = KeychainWrapper.standard.string(forKey: "userEmail") ?? "no user"
         print("\n👤 USER SESSION INFO:")
@@ -256,10 +273,15 @@ class MainAppModel: ObservableObject {
         print("✅ Loaded from cache - Current Streak: \(cachedCurrentStreak), Highest: \(cachedHighestStreak), Completed: \(cachedCompletedCount)")
         print("----------------------------------------")
         
-        // Then fetch from backend to ensure we're up to date
-        Task {
+        // Create a new loading task
+        loadingTask = Task { [weak self] in
+            guard let self = self else { return }
+            
             do {
                 let response = try await DataSyncService.shared.fetchProgressHistory()
+                
+                // Check if task was cancelled
+                if Task.isCancelled { return }
                 
                 // Only update if the backend values are different from cache
                 if response.currentStreak != cachedCurrentStreak ||
@@ -267,6 +289,8 @@ class MainAppModel: ObservableObject {
                    response.completedSessionsCount != cachedCompletedCount {
                     
                     await MainActor.run {
+                        guard !Task.isCancelled else { return }
+                        
                         self.currentStreak = response.currentStreak
                         self.highestStreak = response.highestStreak
                         self.countOfFullyCompletedSessions = response.completedSessionsCount
@@ -274,7 +298,19 @@ class MainAppModel: ObservableObject {
                     }
                 }
             } catch {
-                print("⚠️ Could not fetch from backend, using cached values: \(error)")
+                if !Task.isCancelled {
+                    await MainActor.run {
+                        self.loadingError = error
+                        print("⚠️ Could not fetch from backend, using cached values: \(error)")
+                    }
+                }
+            }
+            
+            // Only set isInitialLoad to false if this task wasn't cancelled
+            if !Task.isCancelled {
+                await MainActor.run {
+                    self.isInitialLoad = false
+                }
             }
         }
     }
@@ -376,9 +412,12 @@ class MainAppModel: ObservableObject {
         countOfFullyCompletedSessions = 0
     }
     
+    deinit {
+        loadingTask?.cancel()
+    }
 }
 
-struct CompletedSession: Codable {
+struct CompletedSession: Codable, Equatable {
     let date: Date
     let drills: [EditableDrillModel]
     let totalCompletedDrills: Int
