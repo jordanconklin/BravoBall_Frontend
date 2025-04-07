@@ -17,12 +17,12 @@ class SessionGeneratorModel: ObservableObject {
     
     
     
-    private let cacheManager = CacheManager.shared
+    let cacheManager = CacheManager.shared
     private var lastSyncTime: Date = Date()
     private let syncDebounceInterval: TimeInterval = 2.0 // 2 seconds
     private var hasUnsavedChanges = false
     private var autoSaveTimer: Timer?
-    private var isLoggingOut = false  // Add flag to prevent caching during logout
+    var isLoggingOut = false  // Add flag to prevent caching during logout
     
     // FilterTypes
     @Published var selectedTime: String?

@@ -43,4 +43,3 @@ extension SessionGeneratorModel: DrillSelection {
         }
     }
 }
-

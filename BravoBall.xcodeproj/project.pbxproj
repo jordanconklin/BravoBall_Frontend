@@ -62,10 +62,11 @@
 		4399B7392D6D901B00DA5E84 /* ToastMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4399B7382D6D901300DA5E84 /* ToastMessageModel.swift */; };
 		4399B7422D6D92C100DA5E84 /* FilterTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4399B7412D6D92BE00DA5E84 /* FilterTypes.swift */; };
 		43A764992D825FEF004509E5 /* DataSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A764982D825FE8004509E5 /* DataSyncService.swift */; };
-		43AC25262DA321F900EDD8C0 /* DrillManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC25252DA321F400EDD8C0 /* DrillManagement.swift */; };
-		43AC252A2DA3249A00EDD8C0 /* DrillMgmtExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC25292DA3248C00EDD8C0 /* DrillMgmtExtension.swift */; };
 		43AC252C2DA3261A00EDD8C0 /* SessionDrillMgmtExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC252B2DA3261400EDD8C0 /* SessionDrillMgmtExtension.swift */; };
 		43AC252E2DA3265300EDD8C0 /* DrillGroupMgmtExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC252D2DA3264700EDD8C0 /* DrillGroupMgmtExtension.swift */; };
+		43AC254F2DA38E1100EDD8C0 /* DrillSelectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC254E2DA38E0B00EDD8C0 /* DrillSelectionExtension.swift */; };
+		43AC25512DA38E6100EDD8C0 /* SessionProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC25502DA38E5B00EDD8C0 /* SessionProtocols.swift */; };
+		43AC25562DA38F1400EDD8C0 /* GroupProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AC25552DA38F1000EDD8C0 /* GroupProtocols.swift */; };
 		43AFAE852D6168F800B61982 /* SessionCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AFAE842D6168F100B61982 /* SessionCompleteView.swift */; };
 		43B6877D2D7C2394009CCA8C /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B6877C2D7C2391009CCA8C /* CacheManager.swift */; };
 		43B687812D7C23DA009CCA8C /* GroupModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B687802D7C23D7009CCA8C /* GroupModel.swift */; };
@@ -194,10 +195,11 @@
 		4399B7382D6D901300DA5E84 /* ToastMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageModel.swift; sourceTree = "<group>"; };
 		4399B7412D6D92BE00DA5E84 /* FilterTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTypes.swift; sourceTree = "<group>"; };
 		43A764982D825FE8004509E5 /* DataSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSyncService.swift; sourceTree = "<group>"; };
-		43AC25252DA321F400EDD8C0 /* DrillManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrillManagement.swift; sourceTree = "<group>"; };
-		43AC25292DA3248C00EDD8C0 /* DrillMgmtExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrillMgmtExtension.swift; sourceTree = "<group>"; };
 		43AC252B2DA3261400EDD8C0 /* SessionDrillMgmtExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDrillMgmtExtension.swift; sourceTree = "<group>"; };
 		43AC252D2DA3264700EDD8C0 /* DrillGroupMgmtExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrillGroupMgmtExtension.swift; sourceTree = "<group>"; };
+		43AC254E2DA38E0B00EDD8C0 /* DrillSelectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrillSelectionExtension.swift; sourceTree = "<group>"; };
+		43AC25502DA38E5B00EDD8C0 /* SessionProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionProtocols.swift; sourceTree = "<group>"; };
+		43AC25552DA38F1000EDD8C0 /* GroupProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupProtocols.swift; sourceTree = "<group>"; };
 		43AFAE842D6168F100B61982 /* SessionCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCompleteView.swift; sourceTree = "<group>"; };
 		43B6877C2D7C2391009CCA8C /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		43B687802D7C23D7009CCA8C /* GroupModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupModel.swift; sourceTree = "<group>"; };
@@ -623,7 +625,8 @@
 		43AC25222DA24C7300EDD8C0 /* SessionGenerator */ = {
 			isa = PBXGroup;
 			children = (
-				43AC252F2DA3278500EDD8C0 /* DrillManagement */,
+				43AC25522DA38EE900EDD8C0 /* GroupManagement */,
+				43AC254D2DA38DE500EDD8C0 /* SessionManagement */,
 				43524E762D4D994400AD897A /* SessionGeneratorModel.swift */,
 			);
 			path = SessionGenerator;
@@ -632,7 +635,7 @@
 		43AC25232DA24C8100EDD8C0 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				43AC25252DA321F400EDD8C0 /* DrillManagement.swift */,
+				43AC25502DA38E5B00EDD8C0 /* SessionProtocols.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -640,20 +643,44 @@
 		43AC25242DA24C8C00EDD8C0 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				43AC252D2DA3264700EDD8C0 /* DrillGroupMgmtExtension.swift */,
+				43AC254E2DA38E0B00EDD8C0 /* DrillSelectionExtension.swift */,
 				43AC252B2DA3261400EDD8C0 /* SessionDrillMgmtExtension.swift */,
-				43AC25292DA3248C00EDD8C0 /* DrillMgmtExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		43AC252F2DA3278500EDD8C0 /* DrillManagement */ = {
+		43AC254D2DA38DE500EDD8C0 /* SessionManagement */ = {
 			isa = PBXGroup;
 			children = (
 				43AC25242DA24C8C00EDD8C0 /* Extensions */,
 				43AC25232DA24C8100EDD8C0 /* Protocols */,
 			);
-			path = DrillManagement;
+			path = SessionManagement;
+			sourceTree = "<group>";
+		};
+		43AC25522DA38EE900EDD8C0 /* GroupManagement */ = {
+			isa = PBXGroup;
+			children = (
+				43AC25542DA38EF800EDD8C0 /* Protocols */,
+				43AC25532DA38EF200EDD8C0 /* Extensions */,
+			);
+			path = GroupManagement;
+			sourceTree = "<group>";
+		};
+		43AC25532DA38EF200EDD8C0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				43AC252D2DA3264700EDD8C0 /* DrillGroupMgmtExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		43AC25542DA38EF800EDD8C0 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				43AC25552DA38F1000EDD8C0 /* GroupProtocols.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		43B687822D7C2DE6009CCA8C /* Models */ = {
@@ -988,6 +1015,7 @@
 			files = (
 				43C5FC602D6DC11A0064E7D5 /* SearchSkillsView.swift in Sources */,
 				43B687812D7C23DA009CCA8C /* GroupModel.swift in Sources */,
+				43AC25512DA38E6100EDD8C0 /* SessionProtocols.swift in Sources */,
 				43C5FC642D6DC1670064E7D5 /* FilterButton.swift in Sources */,
 				43C5FC6C2D6DCC520064E7D5 /* DrillCard.swift in Sources */,
 				430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */,
@@ -1015,7 +1043,6 @@
 				43C5FC7D2D6DCE740064E7D5 /* SelectionButton.swift in Sources */,
 				178208F12D2DFD6500246494 /* OnboardingPreview.swift in Sources */,
 				43C5FC662D6DC4800064E7D5 /* SavedFiltersSheet.swift in Sources */,
-				43AC25262DA321F900EDD8C0 /* DrillManagement.swift in Sources */,
 				178208E62D2DEC2900246494 /* CompletionView.swift in Sources */,
 				4399B6D92D6930AB00DA5E84 /* OnboardingService.swift in Sources */,
 				43C5FC702D6DCC9A0064E7D5 /* SkillButton.swift in Sources */,
@@ -1034,7 +1061,6 @@
 				1782090E2D2E0A1100246494 /* ProfileView.swift in Sources */,
 				43524E952D5198C900AD897A /* SearchDrillsSheetView.swift in Sources */,
 				43C5FC5E2D6DC0E40064E7D5 /* FilterOptionsButton.swift in Sources */,
-				43AC252A2DA3249A00EDD8C0 /* DrillMgmtExtension.swift in Sources */,
 				43C5FC562D6DBD310064E7D5 /* LikedGroupCard.swift in Sources */,
 				1782090C2D2E09EB00246494 /* SavedDrillsView.swift in Sources */,
 				178208E22D2DEBB400246494 /* OnboardingView.swift in Sources */,
@@ -1056,6 +1082,7 @@
 				43AFAE852D6168F800B61982 /* SessionCompleteView.swift in Sources */,
 				4399B6E62D693C3100DA5E84 /* EditingDrillView.swift in Sources */,
 				43C5FC7B2D6DCE4F0064E7D5 /* GroupsView.swift in Sources */,
+				43AC254F2DA38E1100EDD8C0 /* DrillSelectionExtension.swift in Sources */,
 				43C5FC5A2D6DBDF50064E7D5 /* CalendarView.swift in Sources */,
 				178208D22D2D14D200246494 /* MainTabView.swift in Sources */,
 				178208ED2D2DED0800246494 /* OnboardingBooleanView.swift in Sources */,
@@ -1063,6 +1090,7 @@
 				43524E772D4D994B00AD897A /* SessionGeneratorModel.swift in Sources */,
 				43C5FC762D6DCD1D0064E7D5 /* RecommendedDrillsSection.swift in Sources */,
 				43FCC7252D7F8D6E00005ABB /* CustomTabItem.swift in Sources */,
+				43AC25562DA38F1400EDD8C0 /* GroupProtocols.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
