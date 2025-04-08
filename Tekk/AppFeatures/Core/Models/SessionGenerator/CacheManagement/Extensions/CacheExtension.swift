@@ -233,8 +233,25 @@ extension SessionGeneratorModel: CacheManagement {
                 
                 // Sync drill groups (both saved and liked)
                 group.addTask {
-                    try await self.loadDrillGroupsFromBackend()
-                    print("✅ Updated drill groups from backend")
+                    // First check if we need to sync by comparing with cache
+                    let cachedGroups: [GroupModel] = self.savedDrills
+                    let cachedLikedGroup: GroupModel = self.likedDrillsGroup
+                    
+                    // Only sync if there are differences
+                    let needsSync = cachedGroups.count != self.savedDrills.count ||
+                        zip(cachedGroups, self.savedDrills).contains { cached, current in
+                            cached.drills.count != current.drills.count ||
+                            Set(cached.drills.map { $0.id }) != Set(current.drills.map { $0.id })
+                        } ||
+                        Set(cachedLikedGroup.drills.map { $0.id }) != Set(self.likedDrillsGroup.drills.map { $0.id })
+                    
+                    if needsSync {
+                        print("🔄 Drill group differences detected, syncing with backend...")
+                        try await self.loadDrillGroupsFromBackend()
+                        print("✅ Updated drill groups from backend")
+                    } else {
+                        print("✓ Drill groups are in sync with cache")
+                    }
                 }
                 
                 // Wait for all sync operations to complete

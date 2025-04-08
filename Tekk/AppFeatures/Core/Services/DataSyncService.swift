@@ -399,68 +399,60 @@ class DataSyncService {
     func syncAllDrillGroups(savedGroups: [GroupModel], likedGroup: GroupModel) async throws {
         print("\n🔄 Syncing all drill groups...")
         
-        // First, sync liked group
-        try await syncLikedGroup(likedGroup)
+        // First, get all existing groups in one call
+        let existingGroups = try await DrillGroupService.shared.getAllDrillGroups()
+        print("📥 Fetched \(existingGroups.count) existing groups")
         
-        // Then sync all saved groups
+        // Prepare liked group sync
+        let likedDrillIds = likedGroup.drills.compactMap { $0.backendId }
+        if let existingLikedGroup = existingGroups.first(where: { $0.isLikedGroup }) {
+            // Only update if there are differences
+            if Set(existingLikedGroup.drills.map { $0.id }) != Set(likedDrillIds) {
+                try await DrillGroupService.shared.updateDrillGroupWithIds(
+                    groupId: existingLikedGroup.id,
+                    name: likedGroup.name,
+                    description: likedGroup.description,
+                    drillIds: likedDrillIds,
+                    isLikedGroup: true
+                )
+                print("✅ Updated liked group")
+            } else {
+                print("✓ Liked group is up to date")
+            }
+        }
+        
+        // Prepare saved groups sync
         for group in savedGroups {
-            try await syncSavedGroup(group)
+            let drillIds = group.drills.compactMap { $0.backendId }
+            
+            // Try to find matching existing group
+            if let existingGroup = existingGroups.first(where: { $0.name == group.name && !$0.isLikedGroup }) {
+                // Only update if there are differences
+                if Set(existingGroup.drills.map { $0.id }) != Set(drillIds) {
+                    try await DrillGroupService.shared.updateDrillGroupWithIds(
+                        groupId: existingGroup.id,
+                        name: group.name,
+                        description: group.description,
+                        drillIds: drillIds,
+                        isLikedGroup: false
+                    )
+                    print("✅ Updated group: \(group.name)")
+                } else {
+                    print("✓ Group \(group.name) is up to date")
+                }
+            } else {
+                // Create new group
+                _ = try await DrillGroupService.shared.createDrillGroupWithIds(
+                    name: group.name,
+                    description: group.description,
+                    drillIds: drillIds,
+                    isLikedGroup: false
+                )
+                print("✅ Created new group: \(group.name)")
+            }
         }
         
         print("✅ Successfully synced all drill groups")
-    }
-
-    private func syncLikedGroup(_ group: GroupModel) async throws {
-        print("🔄 Syncing liked group...")
-        
-        // Extract backend IDs from drills
-        let drillIds = group.drills.compactMap { $0.backendId }
-        
-        // Get or create liked group
-        let likedGroup = try await DrillGroupService.shared.getLikedDrillsGroup()
-        
-        // Update liked group with current drills
-        _ = try await DrillGroupService.shared.updateDrillGroupWithIds(
-            groupId: likedGroup.id,
-            name: group.name,
-            description: group.description,
-            drillIds: drillIds,
-            isLikedGroup: true
-        )
-        
-        print("✅ Successfully synced liked group")
-    }
-
-    private func syncSavedGroup(_ group: GroupModel) async throws {
-        print("🔄 Syncing group: \(group.name)...")
-        
-        // Extract backend IDs from drills
-        let drillIds = group.drills.compactMap { $0.backendId }
-        
-        // Get all existing groups
-        let existingGroups = try await DrillGroupService.shared.getAllDrillGroups()
-        
-        // Try to find matching group
-        if let existingGroup = existingGroups.first(where: { $0.name == group.name && !$0.isLikedGroup }) {
-            // Update existing group
-            _ = try await DrillGroupService.shared.updateDrillGroupWithIds(
-                groupId: existingGroup.id,
-                name: group.name,
-                description: group.description,
-                drillIds: drillIds,
-                isLikedGroup: false
-            )
-        } else {
-            // Create new group
-            _ = try await DrillGroupService.shared.createDrillGroupWithIds(
-                name: group.name,
-                description: group.description,
-                drillIds: drillIds,
-                isLikedGroup: false
-            )
-        }
-        
-        print("✅ Successfully synced group: \(group.name)")
     }
 
     // TODO: might want to remove this and just do drillResponse object

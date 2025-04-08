@@ -24,9 +24,15 @@ class SessionGeneratorModel: ObservableObject {
     var autoSaveTimer: Timer?
     var isLoggingOut = false  // Add flag to prevent caching during logout
     var isInitialLoad = true  // Add this flag
+    // Track backend IDs for each group
+    var groupBackendIds: [UUID: Int] = [:]
+    // Track the backend ID for the liked group
+    var likedGroupBackendId: Int?
+    
     
     
     // MARK: Filter Types
+    
     
     @Published var selectedTime: String?
     @Published var selectedEquipment: Set<String> = []
@@ -85,6 +91,7 @@ class SessionGeneratorModel: ObservableObject {
         }
     }
     // didset in savedFilters func
+    
     
 
     
@@ -376,25 +383,6 @@ class SessionGeneratorModel: ObservableObject {
         )
     ]
 
-
-    
-    // MARK: - Group Management Methods
-    
-    // Add a property to track backend IDs for each group
-    var groupBackendIds: [UUID: Int] = [:]
-    
-    // Add a property to track the backend ID for the liked group
-    var likedGroupBackendId: Int?
-    
-
-
-    
-    
-    // MARK: - Loading and Syncing with Backend
-    
-
-      
-    
     
     // Define Preferences struct for caching
     struct Preferences: Codable {

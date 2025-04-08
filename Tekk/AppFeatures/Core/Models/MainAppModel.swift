@@ -402,11 +402,7 @@ class MainAppModel: ObservableObject {
         }
     }
     
-    
-    
-    
-    
-    
+
     
     // When logging out
     
