@@ -157,11 +157,16 @@ class MainAppModel: ObservableObject {
     @Published var showCalendar = false
     @Published var showDrillResults = false
     
+    // Add debounce properties
+    private var lastProgressSyncTime: Date = Date()
+    private let progressSyncDebounceInterval: TimeInterval = 1.0 // 1 second debounce
+    private var pendingProgressSync = false
+    
     @Published var currentStreak: Int = 0 {
         didSet {
             if !isInitialLoad && currentStreak != oldValue {
                 cacheCurrentStreak()
-                syncProgressHistory()
+                queueProgressSync()
             }
         }
     }
@@ -169,7 +174,7 @@ class MainAppModel: ObservableObject {
         didSet {
             if !isInitialLoad && highestStreak != oldValue {
                 cacheHighestStreak()
-                syncProgressHistory()
+                queueProgressSync()
             }
         }
     }
@@ -177,7 +182,26 @@ class MainAppModel: ObservableObject {
         didSet {
             if !isInitialLoad && countOfFullyCompletedSessions != oldValue {
                 cacheCompletedSessionsCount()
-                syncProgressHistory()
+                queueProgressSync()
+            }
+        }
+    }
+    
+    // TODO: better way to manage progress network calls?
+    // madds debounce so all progress history isnt pushing individual network calls
+    private func queueProgressSync() {
+        let now = Date()
+        if now.timeIntervalSince(lastProgressSyncTime) >= progressSyncDebounceInterval {
+            lastProgressSyncTime = now
+            syncProgressHistory()
+        } else if !pendingProgressSync {
+            pendingProgressSync = true
+            // Schedule a sync after the debounce interval
+            DispatchQueue.main.asyncAfter(deadline: .now() + progressSyncDebounceInterval) { [weak self] in
+                guard let self = self else { return }
+                self.pendingProgressSync = false
+                self.lastProgressSyncTime = Date()
+                self.syncProgressHistory()
             }
         }
     }

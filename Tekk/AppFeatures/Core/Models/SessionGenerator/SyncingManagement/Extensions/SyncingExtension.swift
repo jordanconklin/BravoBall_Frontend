@@ -233,21 +233,4 @@ extension SessionGeneratorModel: SyncManagement {
         // Cache is updated directly in the individual deduplication methods
         print("✅ All groups deduplicated successfully")
     }
-    
-    func loadSavedFiltersFromBackend() async {
-         do {
-             let filters = try await SavedFiltersService.shared.fetchSavedFilters()
-             await MainActor.run {
-                 self.allSavedFilters = filters
-                 print("✅ Successfully loaded \(filters.count) saved filters from backend")
-                 // Cache the updated filters
-                 cacheFilterGroups(name: "")
-             }
-         } catch {
-             print("❌ Error loading saved filters from backend: \(error)")
-             // Keep using cached data if backend fetch fails
-         }
-     }
-    
-  
 }

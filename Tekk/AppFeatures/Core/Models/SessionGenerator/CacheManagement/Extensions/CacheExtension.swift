@@ -207,12 +207,27 @@ extension SessionGeneratorModel: CacheManagement {
                 // Sync saved filters
                 group.addTask {
                     let backendFilters = try await SavedFiltersService.shared.fetchSavedFilters()
-                    if backendFilters != self.allSavedFilters {
+                    
+                    // Only update if there are actual differences
+                    let needsUpdate = backendFilters.count != self.allSavedFilters.count ||
+                        zip(backendFilters, self.allSavedFilters).contains { backend, local in
+                            backend.name != local.name ||
+                            backend.savedTime != local.savedTime ||
+                            backend.savedEquipment != local.savedEquipment ||
+                            backend.savedTrainingStyle != local.savedTrainingStyle ||
+                            backend.savedLocation != local.savedLocation ||
+                            backend.savedDifficulty != local.savedDifficulty
+                        }
+                    
+                    if needsUpdate {
+                        print("🔄 Filter differences detected, updating local cache...")
                         await MainActor.run {
                             self.allSavedFilters = backendFilters
                             self.cacheFilterGroups(name: "")
                             print("✅ Updated filter groups from backend")
                         }
+                    } else {
+                        print("✓ Filters are in sync with backend")
                     }
                 }
                 

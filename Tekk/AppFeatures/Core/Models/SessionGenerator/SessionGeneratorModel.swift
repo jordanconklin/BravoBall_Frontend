@@ -57,8 +57,10 @@ class SessionGeneratorModel: ObservableObject {
     }
     // Saved Drills storage
     @Published var savedDrills: [GroupModel] = [] {
-        didSet { 
-            markAsNeedingSave(change: .savedDrills)
+        didSet {
+            if !isInitialLoad && !isLoggingOut {
+                markAsNeedingSave(change: .savedDrills)
+            }
         }
     }
     
@@ -77,7 +79,9 @@ class SessionGeneratorModel: ObservableObject {
     // Saved filters storage
     @Published var allSavedFilters: [SavedFiltersModel] = [] {
         didSet {
-            markAsNeedingSave(change: .savedFilters)
+            if !isInitialLoad && !isLoggingOut {
+                markAsNeedingSave(change: .savedFilters)
+            }
         }
     }
     // didset in savedFilters func
