@@ -19,6 +19,7 @@ struct OnboardingView: View {
     let riveViewModelOne = RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1")
     let riveViewModelTwo = RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 2")
     
+    
 
     
     var body: some View {
@@ -175,6 +176,16 @@ struct OnboardingView: View {
                 // Skip Button
                 Button(action: {
                     
+                    riveViewModelTwo.setInput("user_input", value: false)
+                        // Small delay before setting it true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            riveViewModelTwo.setInput("user_input", value: true)
+                            // Reset after animation
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                riveViewModelTwo.setInput("user_input", value: false)
+                            }
+                        }
+                    
                     withAnimation {
                         model.backTransition = false
                         model.skipToNext()
@@ -306,15 +317,13 @@ struct OnboardingView: View {
             if model.currentStep < model.numberOfOnboardingPages {
                 Button(action: {
                     
-                    // TODO: cant get it to trigger rive animation
                     riveViewModelTwo.triggerInput("user_input")
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                withAnimation {
-                                    model.backTransition = false
-                                    model.moveNext()
-                                }
-                            }  
+                    withAnimation {
+                        model.backTransition = false
+                        model.moveNext()
+                    }
+                    
                 }) {
                     Text(model.currentStep == 10 ? "Finish" : "Next")
                         .frame(maxWidth: .infinity)
