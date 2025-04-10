@@ -17,7 +17,7 @@ class OnboardingModel: ObservableObject {
     
     @Published var showLoginPage = false
     @Published var showWelcome = false
-    @Published var showIntroAnimation = true
+    @Published var showIntroAnimation = false // TESTING, set true after
     @Published var isLoggedIn = false
     @Published var authToken = ""
     @Published var isPasswordVisible: Bool = false

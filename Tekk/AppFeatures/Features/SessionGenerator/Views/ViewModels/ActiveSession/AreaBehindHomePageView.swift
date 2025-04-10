@@ -30,7 +30,7 @@ struct AreaBehindHomePage: View {
                         VStack {
                             sessionMessageBubble
  
-                            RiveViewModel(fileName: "Bravo_Panting").view()
+                            RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1").view()
                                 .frame(width: 90, height: 90)
                         }
      
