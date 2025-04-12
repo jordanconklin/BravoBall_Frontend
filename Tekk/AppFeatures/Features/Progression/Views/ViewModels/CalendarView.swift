@@ -230,8 +230,6 @@ struct CalendarView: View {
     }
 
 
-    // TODO: get rid test drills and make this production ready
-
     private func addDrill(for date: Date) {
         let addedTestDrillsOne = DrillModel(
             title: "Cone weaves",

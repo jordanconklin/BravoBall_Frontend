@@ -16,8 +16,11 @@ struct OnboardingView: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     @Environment(\.dismiss) private var dismiss
     
+    
+    @State private var canTrigger = true
+    
     let riveViewModelOne = RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1")
-    let riveViewModelTwo = RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 2")
+    let riveViewModelTwo = RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 2", autoPlay: true)
     
     
 
@@ -176,15 +179,6 @@ struct OnboardingView: View {
                 // Skip Button
                 Button(action: {
                     
-                    riveViewModelTwo.setInput("user_input", value: false)
-                        // Small delay before setting it true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            riveViewModelTwo.setInput("user_input", value: true)
-                            // Reset after animation
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                riveViewModelTwo.setInput("user_input", value: false)
-                            }
-                        }
                     
                     withAnimation {
                         model.backTransition = false
@@ -317,7 +311,8 @@ struct OnboardingView: View {
             if model.currentStep < model.numberOfOnboardingPages {
                 Button(action: {
                     
-                    riveViewModelTwo.triggerInput("user_input")
+                    
+                    triggerBravoAnimation()
                     
                     withAnimation {
                         model.backTransition = false
@@ -340,5 +335,22 @@ struct OnboardingView: View {
             }
         }
     }
+    func triggerBravoAnimation() {
+            guard canTrigger else { return }
+            
+            // Disable triggering
+            canTrigger = false
+            
+            // Trigger the animation
+            riveViewModelTwo.setInput("user_input", value: true)
+            
+            // Wait for the full animation cycle (3 seconds + a small buffer)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
+                // Reset the trigger
+                riveViewModelTwo.setInput("user_input", value: false)
+                // Re-enable triggering
+                canTrigger = true
+            }
+        }
 }
 

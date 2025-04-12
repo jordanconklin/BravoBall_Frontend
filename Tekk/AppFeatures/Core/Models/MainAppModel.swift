@@ -392,9 +392,7 @@ class MainAppModel: ObservableObject {
         case none
     }
     
-    
-    // TODO: fix this
-    
+        
     // Sets the highest streak
     func highestStreakSetter(streak: Int) {
         if streak > highestStreak {

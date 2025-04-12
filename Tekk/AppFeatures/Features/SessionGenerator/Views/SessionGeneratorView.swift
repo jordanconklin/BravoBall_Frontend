@@ -147,33 +147,35 @@ struct SessionGeneratorView: View {
     @ObservedObject var model: OnboardingModel
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.sizeCategory) private var sizeCategory
     
-    @State private var savedFiltersName: String  = ""
+    @State private var savedFiltersName: String = ""
     @State private var searchSkillsText: String = ""
-    
     
     // MARK: Main view
     var body: some View {
         ZStack(alignment: .bottom) {
-            
             // Sky background color
             Color(hex:"bef1fa")
                 .ignoresSafeArea()
+                .accessibilityHidden(true)
 
             homePage
 
             // Golden button
-            if sessionReady()  {
+            if sessionReady() {
                 goldenButton
             }
             
             // Prompt to save filter
             if appModel.viewState.showSaveFiltersPrompt {
-                
                 saveFiltersPrompt
             }
-            
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Session Generator")
+        .accessibilityHint("Create and customize your training session")
 
         // Sheet pop-up for each filter
         .sheet(item: $appModel.selectedFilter) { type in
@@ -186,7 +188,6 @@ struct SessionGeneratorView: View {
             }
             .presentationDragIndicator(.hidden)
             .presentationDetents([.height(300)])
-
         }
         // Sheet pop-up for saved filters
         .sheet(isPresented: $appModel.viewState.showSavedFilters) {
@@ -207,7 +208,6 @@ struct SessionGeneratorView: View {
             .presentationDragIndicator(.hidden)
             .presentationDetents([.height(200)])
         }
-        
     }
     
     
@@ -227,14 +227,14 @@ struct SessionGeneratorView: View {
                 
 
                 // Bravo
-                RiveViewModel(fileName: "Bravo_Peaking").view()
+                RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 3").view()
                     .frame(width: 90, height: 90)
-                    .offset(x: -60)
+                    .offset(x: -60, y: -14)
    
                 // Bravo's message bubble
                 if appModel.viewState.showPreSessionTextBubble {
                     preSessionMessageBubble
-                        .offset(x: 50, y: 20)
+                        .offset(x: 50, y: -10)
                 }
   
                 // ZStack for rounded corner
@@ -289,7 +289,7 @@ struct SessionGeneratorView: View {
                     }
                 }
                 .transition(.move(edge: .bottom))
-                .padding(.top, 65)
+                .padding(.top, 48)
             
             }
         }
@@ -331,11 +331,12 @@ struct SessionGeneratorView: View {
                 }
                 .fill(Color(hex:"E4FBFF"))
                 .frame(width: 9, height: 20)
-                .offset(y: 1)  // Adjust this to align with text
+                .offset(y: 1)
+                .accessibilityHidden(true)
                 
                 // Text Bubble
                 Text(sessionModel.orderedSessionDrills.isEmpty ? "Choose your skill to improve today" : "Looks like you got \(sessionModel.orderedSessionDrills.count) drills for today!")
-                    .font(.custom("Poppins-Bold", size: 12))
+                    .font(.custom("Poppins-Bold", size: scaledFontSize(baseSize: 12)))
                     .foregroundColor(appModel.globalSettings.primaryDarkColor)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
@@ -344,7 +345,7 @@ struct SessionGeneratorView: View {
                             .fill(Color(hex:"E4FBFF"))
                     )
                     .frame(maxWidth: 150)
- 
+                    .accessibilityLabel(sessionModel.orderedSessionDrills.isEmpty ? "Bravo says: Choose your skill to improve today" : "Bravo says: You have \(sessionModel.orderedSessionDrills.count) drills ready")
             }
             .offset(y: -15)
             .transition(.opacity.combined(with: .offset(y: 10)))
@@ -466,29 +467,29 @@ struct SessionGeneratorView: View {
             withAnimation(.spring(dampingFraction: 0.7)) {
                 appModel.viewState.showHomePage = false
                 appModel.viewState.showPreSessionTextBubble = false
-                
             }
             
-            // Delay the appearance of field
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                 withAnimation(.spring(dampingFraction: 0.7)) {
                     appModel.viewState.showFieldBehindHomePage = true
                 }
             }
-            
         }) {
             ZStack {
                 RiveViewModel(fileName: "Golden_Button").view()
                     .frame(width: 320, height: 80)
+                    .accessibilityHidden(true)
                 
                 Text("Start Session")
-                    .font(.custom("Poppins-Bold", size: 22))
+                    .font(.custom("Poppins-Bold", size: scaledFontSize(baseSize: 22)))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .padding(.bottom, 10)
             }
         }
+        .accessibilityLabel("Start Session")
+        .accessibilityHint("Begin your training session with selected drills")
         .padding(.horizontal)
         .padding(.bottom, 46)
         .transition(.move(edge: .bottom))
@@ -496,6 +497,27 @@ struct SessionGeneratorView: View {
     
     private func sessionReady() -> Bool {
         !sessionModel.orderedSessionDrills.isEmpty && !appModel.viewState.showSkillSearch && appModel.viewState.showHomePage
+    }
+
+    // MARK: Helper Functions
+    private func scaledFontSize(baseSize: CGFloat) -> CGFloat {
+        let scaleFactor: CGFloat
+        switch sizeCategory {
+        case .accessibilityExtraExtraExtraLarge: scaleFactor = 2.0
+        case .accessibilityExtraExtraLarge: scaleFactor = 1.8
+        case .accessibilityExtraLarge: scaleFactor = 1.6
+        case .accessibilityLarge: scaleFactor = 1.4
+        case .accessibilityMedium: scaleFactor = 1.2
+        case .extraExtraExtraLarge: scaleFactor = 1.15
+        case .extraExtraLarge: scaleFactor = 1.1
+        case .extraLarge: scaleFactor = 1.05
+        case .large: scaleFactor = 1.025
+        case .medium: scaleFactor = 1.0
+        case .small: scaleFactor = 0.975
+        case .extraSmall: scaleFactor = 0.95
+        @unknown default: scaleFactor = 1.0
+        }
+        return baseSize * scaleFactor
     }
 }
 
@@ -597,3 +619,4 @@ extension SessionGeneratorModel {
         saveChanges()
     }
 }
+

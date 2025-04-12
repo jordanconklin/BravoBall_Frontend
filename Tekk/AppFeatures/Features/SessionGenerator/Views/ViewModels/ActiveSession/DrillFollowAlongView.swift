@@ -199,7 +199,7 @@ struct DrillFollowAlongView: View {
     }
     
     private func doneWithDrill() -> Bool {
-        // TODO: need to handle also for when new day comes
+
         return editableDrill.totalSets == editableDrill.setsDone
     }
     

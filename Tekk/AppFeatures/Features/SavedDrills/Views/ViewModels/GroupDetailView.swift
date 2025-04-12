@@ -262,14 +262,11 @@ struct GroupFilterOptions: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     
-    // TODO: case enums for neatness
     
     var body: some View {
         VStack(alignment: .leading) {
             Button(action: {
-                
-                // TODO: action for this
-                
+                                
                 withAnimation {
                     appModel.viewState.showGroupFilterOptions = false
                 }
@@ -288,9 +285,7 @@ struct GroupFilterOptions: View {
             Divider()
             
             Button(action: {
-                
-                // TODO: action for this
-                
+                                
                 withAnimation {
                     appModel.viewState.showGroupFilterOptions = false
                 }

@@ -142,7 +142,7 @@ class OnboardingModel: ObservableObject {
         currentStep = 0
         showLoginPage = false
         showWelcome = false
-        showIntroAnimation = false // TODO: test this when user resets app
+        showIntroAnimation = false // TESTING: set to true after
         authToken = ""
         
         // Reset onboardingData to default values
