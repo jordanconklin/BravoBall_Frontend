@@ -366,15 +366,31 @@ struct ProfileView: View {
                 }
                 
                 if httpResponse.statusCode == 200 {
+                    // Store email before clearing for logging
+                    let userEmail = userManager.email
                     
+                    // Clear all user data
+                    print("\n🗑️ Deleting account for user: \(userEmail)")
+                    
+                    // 1. Clear cache first
                     CacheManager.shared.clearUserCache()
+                    print("  ✓ Cleared user cache")
+                    
+                    // 2. Clear keychain data
                     userManager.clearUserKeychain()
+                    print("  ✓ Cleared keychain data")
+                    
+                    // 3. Clear any remaining UserDefaults data
+                    if let bundleID = Bundle.main.bundleIdentifier {
+                        UserDefaults.standard.removePersistentDomain(forName: bundleID)
+                    }
+                    print("  ✓ Cleared UserDefaults data")
+                    
+                    // 4. Log out user
                     logOutUser()
+                    print("  ✓ Logged out user")
                     
-                    
-                    print("✅ Account deleted successfully")
-                    // Account deletion successful - handled in the alert action
-                    // The alert action already handles logging out and removing the token
+                    print("✅ Account deleted and all data cleared successfully")
                 } else {
                     print("❌ Failed to delete account: \(httpResponse.statusCode)")
                     // You might want to show an error message to the user here

@@ -18,6 +18,11 @@ class MainAppModel: ObservableObject {
     
     
     private let cacheManager = CacheManager.shared
+    private var isInitialLoad = true
+    private var loadingTask: Task<Void, Never>?  // Track loading task
+    
+    // Add error state
+    @Published private(set) var loadingError: Error?
 
     
     @Published var homeTab = RiveViewModel(fileName: "Tab_House")
@@ -120,16 +125,123 @@ class MainAppModel: ObservableObject {
     let calendar = Calendar.current
     
     @Published var allCompletedSessions: [CompletedSession] = [] {
-        didSet { cacheCompletedSessions() }
+        didSet {
+            if !isInitialLoad && allCompletedSessions.count > oldValue.count,
+               let latestSession = allCompletedSessions.last {
+                Task {
+                    do {
+                        // Sync the completed session
+                        try await DataSyncService.shared.syncCompletedSession(
+                            date: latestSession.date,
+                            drills: latestSession.drills,
+                            totalCompleted: latestSession.totalCompletedDrills,
+                            total: latestSession.totalDrills
+                        )
+                        print("✅ Successfully synced latest completed session")
+                        
+                        // Then sync the progress history
+                        try await DataSyncService.shared.syncProgressHistory(
+                            currentStreak: currentStreak,
+                            highestStreak: highestStreak,
+                            completedSessionsCount: countOfFullyCompletedSessions
+                        )
+                        print("✅ Successfully synced progress history")
+                    } catch {
+                        print("❌ Error syncing session data: \(error)")
+                    }
+                }
+            }
+        }
     }
     @Published var selectedSession: CompletedSession? // For selecting into Drill Card View
     @Published var showCalendar = false
     @Published var showDrillResults = false
     
-    @Published var currentStreak: Int = 0
-    @Published var highestStreak: Int = 0
-    @Published var countOfFullyCompletedSessions: Int = 0
+    // Add debounce properties
+    private var lastProgressSyncTime: Date = Date()
+    private let progressSyncDebounceInterval: TimeInterval = 1.0 // 1 second debounce
+    private var pendingProgressSync = false
     
+    @Published var currentStreak: Int = 0 {
+        didSet {
+            if !isInitialLoad && currentStreak != oldValue {
+                cacheCurrentStreak()
+                queueProgressSync()
+            }
+        }
+    }
+    @Published var highestStreak: Int = 0 {
+        didSet {
+            if !isInitialLoad && highestStreak != oldValue {
+                cacheHighestStreak()
+                queueProgressSync()
+            }
+        }
+    }
+    @Published var countOfFullyCompletedSessions: Int = 0 {
+        didSet {
+            if !isInitialLoad && countOfFullyCompletedSessions != oldValue {
+                cacheCompletedSessionsCount()
+                queueProgressSync()
+            }
+        }
+    }
+    
+    // TODO: better way to manage progress network calls?
+    // madds debounce so all progress history isnt pushing individual network calls
+    private func queueProgressSync() {
+        let now = Date()
+        if now.timeIntervalSince(lastProgressSyncTime) >= progressSyncDebounceInterval {
+            lastProgressSyncTime = now
+            syncProgressHistory()
+        } else if !pendingProgressSync {
+            pendingProgressSync = true
+            // Schedule a sync after the debounce interval
+            DispatchQueue.main.asyncAfter(deadline: .now() + progressSyncDebounceInterval) { [weak self] in
+                guard let self = self else { return }
+                self.pendingProgressSync = false
+                self.lastProgressSyncTime = Date()
+                self.syncProgressHistory()
+            }
+        }
+    }
+    
+    private func syncProgressHistory() {
+        Task { [weak self] in
+            guard let self = self else { return }
+            
+            do {
+                // First verify the current values match what we expect
+                let cachedCurrentStreak: Int = cacheManager.retrieve(forKey: .currentStreakCase) ?? 0
+                let cachedHighestStreak: Int = cacheManager.retrieve(forKey: .highestSreakCase) ?? 0
+                let cachedCompletedCount: Int = cacheManager.retrieve(forKey: .countOfCompletedSessionsCase) ?? 0
+                
+                // Only sync if our current values match the cache (ensures we're not working with stale data)
+                guard currentStreak == cachedCurrentStreak &&
+                      highestStreak == cachedHighestStreak &&
+                      countOfFullyCompletedSessions == cachedCompletedCount else {
+                    print("⚠️ Local values don't match cache, skipping sync")
+                    return
+                }
+                
+                try await DataSyncService.shared.syncProgressHistory(
+                    currentStreak: currentStreak,
+                    highestStreak: highestStreak,
+                    completedSessionsCount: countOfFullyCompletedSessions
+                )
+                
+                await MainActor.run {
+                    self.loadingError = nil
+                    print("✅ Successfully synced progress history with verified values")
+                }
+            } catch {
+                await MainActor.run {
+                    self.loadingError = error
+                    print("❌ Error syncing progress history: \(error)")
+                }
+            }
+        }
+    }
     
     // MARK: - Cache Save Operations
     func cacheCompletedSessions() {
@@ -154,6 +266,12 @@ class MainAppModel: ObservableObject {
     
     // MARK: - Cache Load Operations
     func loadCachedData() {
+        // Cancel any existing loading task
+        loadingTask?.cancel()
+        
+        isInitialLoad = true
+        loadingError = nil
+        
         print("\n📱 Loading cached data for current user...")
         let userEmail = KeychainWrapper.standard.string(forKey: "userEmail") ?? "no user"
         print("\n👤 USER SESSION INFO:")
@@ -166,25 +284,59 @@ class MainAppModel: ObservableObject {
             print("✅ Loaded \(allCompletedSessions.count) completed sessions")
         }
         
-        // Load current streak
-        if let retrievedStreak: Int = cacheManager.retrieve(forKey: .currentStreakCase) {
-            currentStreak = retrievedStreak
-            print("✅ Loaded current streak: \(currentStreak)")
-        }
+        // Load progress history from cache first
+        let cachedCurrentStreak: Int = cacheManager.retrieve(forKey: .currentStreakCase) ?? 0
+        let cachedHighestStreak: Int = cacheManager.retrieve(forKey: .highestSreakCase) ?? 0
+        let cachedCompletedCount: Int = cacheManager.retrieve(forKey: .countOfCompletedSessionsCase) ?? 0
         
-        // Load highest streak
-        if let retrievedHighest: Int = cacheManager.retrieve(forKey: .highestSreakCase) {
-            highestStreak = retrievedHighest
-            print("✅ Loaded highest streak: \(highestStreak)")
-        }
+        // Set the values without triggering observers
+        self.currentStreak = cachedCurrentStreak
+        self.highestStreak = cachedHighestStreak
+        self.countOfFullyCompletedSessions = cachedCompletedCount
         
-        // Load completed sessions count
-        if let retrievedCount: Int = cacheManager.retrieve(forKey: .countOfCompletedSessionsCase) {
-            countOfFullyCompletedSessions = retrievedCount
-            print("✅ Loaded completed sessions count: \(countOfFullyCompletedSessions)")
-        }
-        
+        print("✅ Loaded from cache - Current Streak: \(cachedCurrentStreak), Highest: \(cachedHighestStreak), Completed: \(cachedCompletedCount)")
         print("----------------------------------------")
+        
+        // Create a new loading task
+        loadingTask = Task { [weak self] in
+            guard let self = self else { return }
+            
+            do {
+                let response = try await DataSyncService.shared.fetchProgressHistory()
+                
+                // Check if task was cancelled
+                if Task.isCancelled { return }
+                
+                // Only update if the backend values are different from cache
+                if response.currentStreak != cachedCurrentStreak ||
+                   response.highestStreak != cachedHighestStreak ||
+                   response.completedSessionsCount != cachedCompletedCount {
+                    
+                    await MainActor.run {
+                        guard !Task.isCancelled else { return }
+                        
+                        self.currentStreak = response.currentStreak
+                        self.highestStreak = response.highestStreak
+                        self.countOfFullyCompletedSessions = response.completedSessionsCount
+                        print("✅ Updated with backend data - Current: \(response.currentStreak), Highest: \(response.highestStreak), Completed: \(response.completedSessionsCount)")
+                    }
+                }
+            } catch {
+                if !Task.isCancelled {
+                    await MainActor.run {
+                        self.loadingError = error
+                        print("⚠️ Could not fetch from backend, using cached values: \(error)")
+                    }
+                }
+            }
+            
+            // Only set isInitialLoad to false if this task wasn't cancelled
+            if !Task.isCancelled {
+                await MainActor.run {
+                    self.isInitialLoad = false
+                }
+            }
+        }
     }
     
     // Adding completed session into allCompletedSessions array
@@ -250,11 +402,7 @@ class MainAppModel: ObservableObject {
         }
     }
     
-    
-    
-    
-    
-    
+
     
     // When logging out
     
@@ -284,9 +432,12 @@ class MainAppModel: ObservableObject {
         countOfFullyCompletedSessions = 0
     }
     
+    deinit {
+        loadingTask?.cancel()
+    }
 }
 
-struct CompletedSession: Codable {
+struct CompletedSession: Codable, Equatable {
     let date: Date
     let drills: [EditableDrillModel]
     let totalCompletedDrills: Int

@@ -93,9 +93,9 @@ enum FilterData {
     static let difficultyOptions = ["beginner", "intermediate", "advanced"]
 }
 
-struct SavedFiltersModel: Codable, Identifiable {
+struct SavedFiltersModel: Codable, Identifiable, Equatable {
     let id: UUID
-    var backendId: Int?  // Add this to store the server's ID
+    let backendId: Int?  // Add this to store the server's ID
     let name: String
     let savedTime: String?
     let savedEquipment: Set<String>
@@ -112,5 +112,30 @@ struct SavedFiltersModel: Codable, Identifiable {
         self.savedTrainingStyle = savedTrainingStyle
         self.savedLocation = savedLocation
         self.savedDifficulty = savedDifficulty
+    }
+    
+    // for snake_case and camelCase conversion
+    enum CodingKeys: String, CodingKey {
+        case id
+        case backendId = "backend_id"
+        case name
+        case savedTime = "saved_time"
+        case savedEquipment = "saved_equipment"
+        case savedTrainingStyle = "saved_training_style"
+        case savedLocation = "saved_location"
+        case savedDifficulty = "saved_difficulty"
+    }
+    
+    // Implement Equatable
+    static func == (lhs: SavedFiltersModel, rhs: SavedFiltersModel) -> Bool {
+        // Compare all relevant fields
+        return lhs.id == rhs.id &&
+               lhs.backendId == rhs.backendId &&
+               lhs.name == rhs.name &&
+               lhs.savedTime == rhs.savedTime &&
+               lhs.savedEquipment == rhs.savedEquipment &&
+               lhs.savedTrainingStyle == rhs.savedTrainingStyle &&
+               lhs.savedLocation == rhs.savedLocation &&
+               lhs.savedDifficulty == rhs.savedDifficulty
     }
 }

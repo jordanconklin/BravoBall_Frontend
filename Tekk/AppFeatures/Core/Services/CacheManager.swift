@@ -19,6 +19,7 @@ enum CacheKey: String, CaseIterable {
     case currentStreakCase = "currentStreak"
     case highestSreakCase = "highestSreak"
     case countOfCompletedSessionsCase = "countOfCompletedSessions"
+    case progressHistoryCase = "progressHistory"
     case lastUpdated = "lastUpdated_"
     case cacheSize = "cache_size"
     case groupBackendIdsCase = "groupBackendIds"
@@ -26,10 +27,16 @@ enum CacheKey: String, CaseIterable {
     
     // Create user-specific key
     func forUser(_ email: String) -> String {
+        // These keys are global and should not be user-specific
         if self == .version || self == .cacheSize {
             return self.rawValue
         }
         return "\(email)_\(self.rawValue)"
+    }
+    
+    // Helper to identify if a key is user-specific
+    var isUserSpecific: Bool {
+        self != .version && self != .cacheSize
     }
 }
 
@@ -165,45 +172,33 @@ class CacheManager {
     
     // Clear all user-specific cache data (enhanced version)
     func clearUserCache() {
-        print("🧹 Clearing all user-specific cache data...")
+        print("\n🧹 Starting thorough user cache clearing process...")
         
-        // First use the thorough key-by-key approach
         let userEmail = KeychainWrapper.standard.string(forKey: "userEmail") ?? "no user"
-        
-        // User-specific cache keys that need to be cleared
-        let userCacheKeys: [CacheKey] = [
-            .orderedDrillsCase,
-            .savedDrillsCase,
-            .likedDrillsCase,
-            .filterGroupsCase,
-            .groupBackendIdsCase,
-            .likedGroupBackendIdCase
-        ]
-        
-        // Clear each key for the current user
-        for key in userCacheKeys {
-            let userSpecificKey = key.forUser(userEmail)
-            UserDefaults.standard.removeObject(forKey: userSpecificKey)
-            print("  - Cleared cache for \(userSpecificKey)")
-        }
-        
-        // Then also use the original method that clears by prefix
-        clearUserCacheByPrefix(userEmail: userEmail)
-        
-        // Make sure changes are saved immediately
-        UserDefaults.standard.synchronize()
-        
-        print("✅ User cache cleared successfully")
-    }
-    
-    // Original prefix-based cache clearing method
-    private func clearUserCacheByPrefix(userEmail: String) {
         guard !userEmail.isEmpty && userEmail != "no user" else {
-            print("❌ Cache: Cannot clear by prefix - no valid user")
+            print("❌ Cannot clear cache - no valid user")
             return
         }
         
-        // Get all keys and remove user-specific ones
+        print("👤 Clearing cache for user: \(userEmail)")
+        
+        // 1. Clear all enum-defined cache keys
+        for key in CacheKey.allCases where key.isUserSpecific {
+            let userSpecificKey = key.forUser(userEmail)
+            
+            // Remove from UserDefaults
+            if let data = userDefaults.data(forKey: userSpecificKey) {
+                updateCacheSize(removing: data.count)
+            }
+            userDefaults.removeObject(forKey: userSpecificKey)
+            
+            // Remove from memory cache
+            memoryCache.removeObject(forKey: userSpecificKey as NSString)
+            
+            print("  ✓ Cleared \(key.rawValue)")
+        }
+        
+        // 2. Clear any additional user-specific UserDefaults keys
         let allKeys = Array(userDefaults.dictionaryRepresentation().keys)
         let userKeys = allKeys.filter { $0.hasPrefix(userEmail) }
         
@@ -213,11 +208,25 @@ class CacheManager {
             }
             userDefaults.removeObject(forKey: key)
             memoryCache.removeObject(forKey: key as NSString)
-            print("  - Cleared cache for \(key) (by prefix)")
+            print("  ✓ Cleared additional user data: \(key)")
         }
         
-        print("🧹 Cache: Cleared all cache by prefix for user: \(userEmail)")
-        print("📊 Cache: Current total size: \(formatSize(currentCacheSize))")
+        // 3. Clear user-specific liked drills UUID
+        UserDefaults.standard.removeObject(forKey: "\(userEmail)_likedDrillsUUID")
+        print("  ✓ Cleared liked drills UUID")
+        
+        // 4. Clear last active user if it matches current user
+        if let lastActiveUser = UserDefaults.standard.string(forKey: "lastActiveUser"),
+           lastActiveUser == userEmail {
+            UserDefaults.standard.removeObject(forKey: "lastActiveUser")
+            print("  ✓ Cleared last active user")
+        }
+        
+        // 5. Force UserDefaults to save changes immediately
+        UserDefaults.standard.synchronize()
+        
+        print("✅ User cache cleared successfully")
+        print("📊 Current total cache size: \(formatSize(currentCacheSize))")
     }
     
     func clearAllCache() {
