@@ -40,6 +40,7 @@
 		430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6CC2D3064850016D520 /* MainAppModel.swift */; };
 		430FD6D32D307AEC0016D520 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 430FD6D22D307AEC0016D520 /* SwiftKeychainWrapper */; };
 		430FD71F2D334CAF0016D520 /* Day_Null.riv in Resources */ = {isa = PBXBuildFile; fileRef = 430FD71E2D334CAF0016D520 /* Day_Null.riv */; };
+		4351674B2DAE3ECA00E7D964 /* ResponsiveLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */; };
 		43524E772D4D994B00AD897A /* SessionGeneratorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43524E762D4D994400AD897A /* SessionGeneratorModel.swift */; };
 		43524E952D5198C900AD897A /* SearchDrillsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43524E942D5198C300AD897A /* SearchDrillsSheetView.swift */; };
 		435A70152CA7AB2600BFCC40 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 435A70142CA7AB2600BFCC40 /* RiveRuntime */; };
@@ -183,6 +184,7 @@
 		430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegisterForm.swift; sourceTree = "<group>"; };
 		430FD6CC2D3064850016D520 /* MainAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppModel.swift; sourceTree = "<group>"; };
 		430FD71E2D334CAF0016D520 /* Day_Null.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Day_Null.riv; sourceTree = "<group>"; };
+		4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsiveLayout.swift; sourceTree = "<group>"; };
 		43524E762D4D994400AD897A /* SessionGeneratorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionGeneratorModel.swift; sourceTree = "<group>"; };
 		43524E942D5198C300AD897A /* SearchDrillsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDrillsSheetView.swift; sourceTree = "<group>"; };
 		437D1A1E2D94FE4700B875CF /* SavedFiltersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedFiltersService.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 		170167FE2D88F6170078446C /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */,
 				170167FF2D88F61D0078446C /* DrillSearchView.swift */,
 			);
 			path = Components;
@@ -1184,6 +1187,7 @@
 				174C676E2D34E9EE003D02EF /* SessionGeneratorView.swift in Sources */,
 				43AFAE852D6168F800B61982 /* SessionCompleteView.swift in Sources */,
 				4399B6E62D693C3100DA5E84 /* EditingDrillView.swift in Sources */,
+				4351674B2DAE3ECA00E7D964 /* ResponsiveLayout.swift in Sources */,
 				43C5FC7B2D6DCE4F0064E7D5 /* GroupsView.swift in Sources */,
 				43AC254F2DA38E1100EDD8C0 /* DrillSelectionExtension.swift in Sources */,
 				43C5FC5A2D6DBDF50064E7D5 /* CalendarView.swift in Sources */,

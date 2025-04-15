@@ -147,149 +147,142 @@ struct SessionGeneratorView: View {
     @ObservedObject var model: OnboardingModel
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @Environment(\.sizeCategory) private var sizeCategory
+    private let layout = ResponsiveLayout.shared
     
-    @State private var savedFiltersName: String = ""
+    @State private var savedFiltersName: String  = ""
     @State private var searchSkillsText: String = ""
     
     // MARK: Main view
     var body: some View {
-        ZStack(alignment: .bottom) {
-            // Sky background color
-            Color(hex:"bef1fa")
-                .ignoresSafeArea()
-                .accessibilityHidden(true)
+        GeometryReader { geometry in
+            ZStack(alignment: .bottom) {
+                // Sky background color
+                Color(hex:"bef1fa")
+                    .ignoresSafeArea()
 
-            homePage
+                homePage
+                    .frame(maxWidth: layout.adaptiveWidth(geometry))
+                    .frame(maxWidth: .infinity)
 
-            // Golden button
-            if sessionReady() {
-                goldenButton
-            }
-            
-            // Prompt to save filter
-            if appModel.viewState.showSaveFiltersPrompt {
-                saveFiltersPrompt
-            }
-        }
-        .accessibilityElement(children: .contain)
-        .accessibilityLabel("Session Generator")
-        .accessibilityHint("Create and customize your training session")
 
-        // Sheet pop-up for each filter
-        .sheet(item: $appModel.selectedFilter) { type in
-            FilterSheet(
-                appModel: appModel,
-                sessionModel: sessionModel,
-                type: type
-            ) {
-                appModel.selectedFilter = nil
+                // Golden button
+                if sessionReady() {
+                    goldenButton
+                        .frame(maxWidth: min(geometry.size.width - 40, layout.buttonMaxWidth))
+                }
+                
+                // Prompt to save filter
+                if appModel.viewState.showSaveFiltersPrompt {
+                    saveFiltersPrompt
+                }
             }
-            .presentationDragIndicator(.hidden)
-            .presentationDetents([.height(300)])
-        }
-        // Sheet pop-up for saved filters
-        .sheet(isPresented: $appModel.viewState.showSavedFilters) {
-            SavedFiltersSheet(
-                appModel: appModel,
-                sessionModel: sessionModel,
-                dismiss: { appModel.viewState.showSavedFilters = false }
-            )
-            .presentationDragIndicator(.hidden)
-            .presentationDetents([.height(300)])
-        }
-        // Sheet pop-up for filter option button
-        .sheet(isPresented: $appModel.viewState.showFilterOptions) {
-            FilterOptions(
-                appModel: appModel,
-                sessionModel: sessionModel
-            )
-            .presentationDragIndicator(.hidden)
-            .presentationDetents([.height(200)])
+            // Sheet pop-up for each filter
+            .sheet(item: $appModel.selectedFilter) { type in
+                FilterSheet(
+                    appModel: appModel,
+                    sessionModel: sessionModel,
+                    type: type
+                ) {
+                    appModel.selectedFilter = nil
+                }
+                .presentationDragIndicator(.hidden)
+                .presentationDetents([.height(300)])
+            }
+            // Sheet pop-up for saved filters
+            .sheet(isPresented: $appModel.viewState.showSavedFilters) {
+                SavedFiltersSheet(
+                    appModel: appModel,
+                    sessionModel: sessionModel,
+                    dismiss: { appModel.viewState.showSavedFilters = false }
+                )
+                .presentationDragIndicator(.hidden)
+                .presentationDetents([.height(300)])
+            }
+            // Sheet pop-up for filter option button
+            .sheet(isPresented: $appModel.viewState.showFilterOptions) {
+                FilterOptions(
+                    appModel: appModel,
+                    sessionModel: sessionModel
+                )
+                .presentationDragIndicator(.hidden)
+                .presentationDetents([.height(200)])
+            }
         }
     }
     
-    
     // MARK: Home page
     private var homePage: some View {
-        ZStack(alignment: .top) {
 
-            // Where session begins, behind home page
-            AreaBehindHomePage(
-                appModel: appModel,
-                sessionModel: sessionModel)
-            
-            
-            // Home page
-            if appModel.viewState.showHomePage {
-
+        GeometryReader { geometry in
+            ZStack(alignment: .top) {
+                // Where session begins, behind home page
+                AreaBehindHomePage(appModel: appModel, sessionModel: sessionModel)
+                    .frame(maxWidth: layout.adaptiveWidth(geometry))
                 
-
-                // Bravo
-                RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 3").view()
-                    .frame(width: 90, height: 90)
-                    .offset(x: -60, y: -14)
-   
-                // Bravo's message bubble
-                if appModel.viewState.showPreSessionTextBubble {
-                    preSessionMessageBubble
-                        .offset(x: 50, y: -10)
-                }
-  
-                // ZStack for rounded corner
-                ZStack {
-                    
-                    // Rounded corner
-                    RoundedCorner(radius: 30, corners: [.topLeft, .topRight])
-                        .fill(Color.white)
-                        .edgesIgnoringSafeArea(.bottom)
-                    
-                    // White part of home page
-                    VStack(alignment: .leading, spacing: 5) {
-                        
-                        HStack {
-
-                            Spacer()
+                if appModel.viewState.showHomePage {
+                    VStack(spacing: 0) {
+                        // Header with Bravo and message bubble
+                        HStack(alignment: .top) {
+                            // Bravo
+                            RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 3")
+                                .view()
+                                .frame(width: 90, height: 90)
+                                .padding(.leading, geometry.size.width * 0.1)
                             
-                            SkillSearchBar(appModel: appModel, sessionModel: sessionModel, searchText: $searchSkillsText)
-                                .padding(.top, 3)
+                            if appModel.viewState.showPreSessionTextBubble {
+                                preSessionMessageBubble
+                                    .padding(.leading, 10)
+                            }
                             
                             Spacer()
                         }
+                        .padding(.top, geometry.safeAreaInsets.top + 10)
                         
-                        // If skills search bar is selected
-                        if appModel.viewState.showSkillSearch {
+                        // ZStack for rounded corner
+                        ZStack {
                             
-                            // New view for searching skills
-                            SearchSkillsView(
-                                appModel: appModel,
-                                sessionModel: sessionModel,
-                                searchText: $searchSkillsText
-                            )
-                        // If skills search bar is not selected
-                        } else {
+                            // Rounded corner
+                            RoundedCorner(radius: 30, corners: [.topLeft, .topRight])
+                                .fill(Color.white)
+                                .edgesIgnoringSafeArea(.bottom)
                             
-                            // Filter options
-                            filterScrollView
-
-                            
-                            ScrollView {
-                                // Generated session portion
-                                GeneratedDrillsSection(appModel: appModel, sessionModel: sessionModel)
-                            // If user has selected skills
-                            if sessionModel.selectedSkills.isEmpty {
-                                RecommendedDrillsSection(appModel: appModel, sessionModel: sessionModel)
+                            // White part of home page
+                            VStack(alignment: .leading, spacing: 5) {
+                                
+                                HStack {
+                                    
+                                    Spacer()
+                                    
+                                    SkillSearchBar(appModel: appModel, sessionModel: sessionModel, searchText: $searchSkillsText)
+                                        .padding(.top, 3)
+                                    
+                                    Spacer()
+                                }
+                                .padding(.top, geometry.safeAreaInsets.top + 10)
+                                
+                                // Main content
+                                ScrollView {
+                                    VStack(spacing: layout.standardSpacing) {
+                                        filterScrollView
+                                            .padding(.horizontal, layout.contentMinPadding)
+                                        
+                                        
+                                        GeneratedDrillsSection(appModel: appModel, sessionModel: sessionModel)
+                                            .padding(.horizontal, layout.contentMinPadding)
+                                        
+                                        if sessionModel.selectedSkills.isEmpty {
+                                            RecommendedDrillsSection(appModel: appModel, sessionModel: sessionModel)
+                                                .padding(.horizontal, layout.contentMinPadding)
+                                        }
+                                    }
+                                }
                             }
-                            
-                            Spacer()
-                            }
-                            
+                            .frame(maxWidth: layout.adaptiveWidth(geometry))
+                            .frame(maxWidth: .infinity)
                         }
                     }
+                    .transition(.move(edge: .bottom))
                 }
-                .transition(.move(edge: .bottom))
-                .padding(.top, 48)
             
             }
         }
@@ -307,7 +300,7 @@ struct SessionGeneratorView: View {
         }
     }
     
-     func BravoTextBubbleDelay() {
+    func BravoTextBubbleDelay() {
         // Initially hide the bubble
         appModel.viewState.showPreSessionTextBubble = false
         
@@ -331,12 +324,11 @@ struct SessionGeneratorView: View {
                 }
                 .fill(Color(hex:"E4FBFF"))
                 .frame(width: 9, height: 20)
-                .offset(y: 1)
-                .accessibilityHidden(true)
+                .offset(y: 1)  // Adjust this to align with text
                 
                 // Text Bubble
                 Text(sessionModel.orderedSessionDrills.isEmpty ? "Choose your skill to improve today" : "Looks like you got \(sessionModel.orderedSessionDrills.count) drills for today!")
-                    .font(.custom("Poppins-Bold", size: scaledFontSize(baseSize: 12)))
+                    .font(.custom("Poppins-Bold", size: 12))
                     .foregroundColor(appModel.globalSettings.primaryDarkColor)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
@@ -345,7 +337,7 @@ struct SessionGeneratorView: View {
                             .fill(Color(hex:"E4FBFF"))
                     )
                     .frame(maxWidth: 150)
-                    .accessibilityLabel(sessionModel.orderedSessionDrills.isEmpty ? "Bravo says: Choose your skill to improve today" : "Bravo says: You have \(sessionModel.orderedSessionDrills.count) drills ready")
+ 
             }
             .offset(y: -15)
             .transition(.opacity.combined(with: .offset(y: 10)))
@@ -467,29 +459,29 @@ struct SessionGeneratorView: View {
             withAnimation(.spring(dampingFraction: 0.7)) {
                 appModel.viewState.showHomePage = false
                 appModel.viewState.showPreSessionTextBubble = false
+                
             }
             
+            // Delay the appearance of field
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                 withAnimation(.spring(dampingFraction: 0.7)) {
                     appModel.viewState.showFieldBehindHomePage = true
                 }
             }
+            
         }) {
             ZStack {
                 RiveViewModel(fileName: "Golden_Button").view()
                     .frame(width: 320, height: 80)
-                    .accessibilityHidden(true)
                 
                 Text("Start Session")
-                    .font(.custom("Poppins-Bold", size: scaledFontSize(baseSize: 22)))
+                    .font(.custom("Poppins-Bold", size: 22))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .padding(.bottom, 10)
             }
         }
-        .accessibilityLabel("Start Session")
-        .accessibilityHint("Begin your training session with selected drills")
         .padding(.horizontal)
         .padding(.bottom, 46)
         .transition(.move(edge: .bottom))
@@ -497,27 +489,6 @@ struct SessionGeneratorView: View {
     
     private func sessionReady() -> Bool {
         !sessionModel.orderedSessionDrills.isEmpty && !appModel.viewState.showSkillSearch && appModel.viewState.showHomePage
-    }
-
-    // MARK: Helper Functions
-    private func scaledFontSize(baseSize: CGFloat) -> CGFloat {
-        let scaleFactor: CGFloat
-        switch sizeCategory {
-        case .accessibilityExtraExtraExtraLarge: scaleFactor = 2.0
-        case .accessibilityExtraExtraLarge: scaleFactor = 1.8
-        case .accessibilityExtraLarge: scaleFactor = 1.6
-        case .accessibilityLarge: scaleFactor = 1.4
-        case .accessibilityMedium: scaleFactor = 1.2
-        case .extraExtraExtraLarge: scaleFactor = 1.15
-        case .extraExtraLarge: scaleFactor = 1.1
-        case .extraLarge: scaleFactor = 1.05
-        case .large: scaleFactor = 1.025
-        case .medium: scaleFactor = 1.0
-        case .small: scaleFactor = 0.975
-        case .extraSmall: scaleFactor = 0.95
-        @unknown default: scaleFactor = 1.0
-        }
-        return baseSize * scaleFactor
     }
 }
 

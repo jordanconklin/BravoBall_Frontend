@@ -11,8 +11,8 @@ import SwiftKeychainWrapper
 struct ProfileView: View {
     @ObservedObject var model: OnboardingModel
     @ObservedObject var appModel: MainAppModel
-    @ObservedObject var userManager: UserManager
     @ObservedObject var sessionModel: SessionGeneratorModel
+    @ObservedObject var userManager: UserManager
     @Environment(\.presentationMode) var presentationMode // ?
     
     
