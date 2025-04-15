@@ -15,90 +15,85 @@ class SavedFiltersService {
     func syncSavedFilters(savedFilters: [SavedFiltersModel]) async throws {
         print("\n🔄 Syncing saved filters...")
         
-        // First get existing filters to compare
+        // First fetch existing filters
         let existingFilters = try await fetchSavedFilters()
         
-        // Look at each filter in the savedFilters array
-        for filter in savedFilters {
-            do {
-                // Check if the filter already exists in the backend
-                if existingFilters.contains(where: { $0.id == filter.id }) {
-                    // Update existing filter
-                    let url = URL(string: "\(baseURL)/api/filters/\(filter.id)")!
-                    var request = URLRequest(url: url)
-                    // PUT request to update the filter
-                    request.httpMethod = "PUT"
-                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                    
-                    // Add auth token
-                    if let token = KeychainWrapper.standard.string(forKey: "authToken") {
-                        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-                    }
-                    
-                    // Convert the filter to a dictionary
-                    let filterData: [String: Any] = [
-                        "name": filter.name,
-                        "saved_time": filter.savedTime as Any,
-                        "saved_equipment": Array(filter.savedEquipment),
-                        "saved_training_style": filter.savedTrainingStyle as Any,
-                        "saved_location": filter.savedLocation as Any,
-                        "saved_difficulty": filter.savedDifficulty as Any
-                    ]
-                    
-                    // Convert the dictionary to data
-                    request.httpBody = try JSONSerialization.data(withJSONObject: filterData)
-                    
-                    // Send the request and get the response
-                    let (_, response) = try await URLSession.shared.data(for: request)
-                    guard let httpResponse = response as? HTTPURLResponse,
-                          httpResponse.statusCode == 200 else {
-                        throw URLError(.badServerResponse)
-                    }
-                    
-                    print("✅ Updated filter: \(filter.name)")
-                } else {
-                    // Create new filter
-                    let url = URL(string: "\(baseURL)/api/filters/")!
-                    var request = URLRequest(url: url)
-                    // POST request to create the filter
-                    request.httpMethod = "POST"
-                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                    
-                    // Add auth token
-                    if let token = KeychainWrapper.standard.string(forKey: "authToken") {
-                        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-                    }
-                    
-                    // Convert the filter to a dictionary
-                    let filterData: [String: Any] = [
-                        "id": filter.id.uuidString,
-                        "name": filter.name,
-                        "saved_time": filter.savedTime as Any,
-                        "saved_equipment": Array(filter.savedEquipment),
-                        "saved_training_style": filter.savedTrainingStyle as Any,
-                        "saved_location": filter.savedLocation as Any,
-                        "saved_difficulty": filter.savedDifficulty as Any
-                    ]
-                    
-                    // Convert the dictionary to data
-                    request.httpBody = try JSONSerialization.data(withJSONObject: filterData)
-                    
-                    // Send the request and get the response
-                    let (_, response) = try await URLSession.shared.data(for: request)
-                    guard let httpResponse = response as? HTTPURLResponse,
-                          httpResponse.statusCode == 200 else {
-                        throw URLError(.badServerResponse)
-                    }
-                    
-                    print("✅ Created new filter: \(filter.name)")
-                }
-            } catch {
-                print("❌ Error syncing filter '\(filter.name)': \(error)")
-                throw error
-            }
+        // Find only new filters that don't exist in the backend
+        let newFilters = savedFilters.filter { filter in
+            !existingFilters.contains { $0.id == filter.id }
         }
         
-        print("✅ Successfully synced all filters")
+        // If no new filters, we're done
+        if newFilters.isEmpty {
+            print("✓ No new filters to sync")
+            return
+        }
+        
+        print("📝 Found \(newFilters.count) new filters to sync")
+        
+        // Create new filters
+        let url = URL(string: "\(baseURL)/api/filters/")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Add auth token
+        if let token = KeychainWrapper.standard.string(forKey: "authToken") {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        
+        // Convert only new filters to match backend's expected format
+        let filterObjects = newFilters.map { filter -> [String: Any?] in
+            [
+                "id": filter.id.uuidString,
+                "name": filter.name,
+                "saved_time": filter.savedTime,
+                "saved_equipment": Array(filter.savedEquipment),
+                "saved_training_style": filter.savedTrainingStyle,
+                "saved_location": filter.savedLocation,
+                "saved_difficulty": filter.savedDifficulty
+            ]
+        }
+        
+        // Create the request body structure
+        let requestData = [
+            "saved_filters": filterObjects
+        ]
+        
+        // Convert to JSON data
+        request.httpBody = try JSONSerialization.data(withJSONObject: requestData)
+        
+        print("📤 Sending \(newFilters.count) new filters")
+        print("📤 Request body: \(String(data: request.httpBody!, encoding: .utf8) ?? "")")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            // Print response for debugging
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("📥 Response body: \(responseString)")
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw URLError(.badServerResponse)
+            }
+            
+            switch httpResponse.statusCode {
+            case 200:
+                print("✅ Successfully synced \(newFilters.count) new filters")
+            case 500:
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ Server error: \(responseString)")
+                }
+                throw URLError(.badServerResponse)
+            default:
+                print("❌ Unexpected status code: \(httpResponse.statusCode)")
+                throw URLError(.badServerResponse)
+            }
+        } catch {
+            print("❌ Error syncing filters: \(error)")
+            throw error
+        }
     }
 
     // Add the fetch function to get all saved filters from the backend
@@ -140,19 +135,19 @@ class SavedFiltersService {
             case 200:
                 
                 let decoder = JSONDecoder()
-                let filters = try decoder.decode([SavedFilterResponse].self, from: data)
+                let filters = try decoder.decode([SavedFiltersModel].self, from: data)
                 
                 // Convert backend response to our model
                 return filters.map { response in
                     SavedFiltersModel(
-                        id: UUID(uuidString: response.client_id) ?? UUID(),
-                        backendId: response.id,
+                        id: response.id,
+                        backendId: response.backendId,
                         name: response.name,
-                        savedTime: response.saved_time,
-                        savedEquipment: Set(response.saved_equipment),
-                        savedTrainingStyle: response.saved_training_style,
-                        savedLocation: response.saved_location,
-                        savedDifficulty: response.saved_difficulty
+                        savedTime: response.savedTime,
+                        savedEquipment: Set(response.savedEquipment),
+                        savedTrainingStyle: response.savedTrainingStyle,
+                        savedLocation: response.savedLocation,
+                        savedDifficulty: response.savedDifficulty
                     )
                 }
                 
@@ -172,16 +167,6 @@ class SavedFiltersService {
         }
     }
     
-    // Response model matching backend format
-    private struct SavedFilterResponse: Codable {
-        let id: Int
-        let client_id: String
-        let name: String
-        let saved_time: String?
-        let saved_equipment: [String]
-        let saved_training_style: String?
-        let saved_location: String?
-        let saved_difficulty: String?
-    }
+    // TODO: add delete method
 }
 

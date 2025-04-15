@@ -156,9 +156,6 @@ class DrillSearchService {
                         )
                         
                         drillResponses.append(drillResponse)
-                    } catch {
-                        print("⚠️ Error processing drill item: \(error)")
-                        // Continue with next item
                     }
                 }
                 
@@ -388,7 +385,7 @@ class DrillSearchService {
         }
         
         return drillResponses.map { response in
-            var drillModel = response.toDrillModel()
+            let drillModel = response.toDrillModel()
             // Create a new drill model with the backend ID included
             return DrillModel(
                 id: drillModel.id,
