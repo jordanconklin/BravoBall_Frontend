@@ -14,9 +14,11 @@ struct ProfileView: View {
     @ObservedObject var userManager: UserManager
     @ObservedObject var sessionModel: SessionGeneratorModel
     @StateObject private var settingsModel = SettingsModel()
-    @Environment(\.presentationMode) var presentationMode // ?
+    @Environment(\.presentationMode) var presentationMode
     @State private var showEditDetails = false
-    
+    @State private var showChangePassword = false
+    @State private var showPrivacyPolicy = false
+    @State private var showTerms = false
     
     var body: some View {
             ScrollView {
@@ -24,19 +26,27 @@ struct ProfileView: View {
                     profileHeader
                     
                     actionSection(title: "Account", buttons: [
-                        customActionButton(title: "Share With a Friend", icon: "square.and.arrow.up.fill"),
-                        customActionButton(title: "Edit your details", icon: "pencil")
+                        customActionButton(title: "Edit your details", icon: "pencil"),
+                        customActionButton(title: "Change Password", icon: "lock.fill"),
+                        customActionButton(title: "Notification Settings", icon: "bell.fill"),
+                        customActionButton(title: "Share With a Friend", icon: "square.and.arrow.up.fill")
                     ])
                     
                     actionSection(title: "Support", buttons: [
                         customActionButton(title: "Report an Error", icon: "exclamationmark.bubble.fill"),
-                        customActionButton(title: "Talk to a Founder", icon: "phone.fill"),
-                        customActionButton(title: "Drop a Rating", icon: "star.fill"),
+                        customActionButton(title: "Privacy Policy", icon: "doc.text.fill"),
+                        customActionButton(title: "Terms of Service", icon: "doc.fill"),
                         customActionButton(title: "Follow our Socials", icon: "link")
                     ])
                     
+                    // App Version Info
+                    Text("Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0")")
+                        .font(.custom("Poppins-Regular", size: 14))
+                        .foregroundColor(.gray)
+                        .padding(.top, 20)
+                    
                     logoutButton
-                        .padding(.top, 50)
+                        .padding(.top, 30)
                         .padding(.horizontal)
                     deleteAccountButton
                         .padding(.horizontal)
@@ -74,6 +84,15 @@ struct ProfileView: View {
             }
             .sheet(isPresented: $showEditDetails) {
                 EditDetailsView(settingsModel: settingsModel)
+            }
+            .sheet(isPresented: $showChangePassword) {
+                ChangePasswordView()
+            }
+            .sheet(isPresented: $showPrivacyPolicy) {
+                PrivacyPolicyView()
+            }
+            .sheet(isPresented: $showTerms) {
+                TermsOfServiceView()
             }
     }
     
@@ -184,6 +203,12 @@ struct ProfileView: View {
         switch title {
         case "Edit your details":
             showEditDetails = true
+        case "Change Password":
+            showChangePassword = true
+        case "Notification Settings":
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(url)
+            }
         case "Follow our Socials":
             showSocialLinks()
         case "Share With a Friend":
@@ -192,6 +217,10 @@ struct ProfileView: View {
             sendEmail(subject: "BravoBall Error Report", to: "conklinofficialsoccer@gmail.com")
         case "Talk to a Founder":
             sendEmail(subject: "BravoBall Inquiry", to: "conklinofficialsoccer@gmail.com")
+        case "Privacy Policy":
+            showPrivacyPolicy = true
+        case "Terms of Service":
+            showTerms = true
         default:
             break
         }
@@ -229,11 +258,12 @@ struct ProfileView: View {
     }
 
     // Send email to the founder
-    private func sendEmail(subject: String, to email: String) {
+    private func sendEmail(subject: String, to email: String, body: String = "") {
         let subjectEncoded = subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         let emailEncoded = email.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        let bodyEncoded = body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         
-        guard let url = URL(string: "mailto:\(emailEncoded)?subject=\(subjectEncoded)") else {
+        guard let url = URL(string: "mailto:\(emailEncoded)?subject=\(subjectEncoded)&body=\(bodyEncoded)") else {
             print("❌ Failed to create email URL")
             return
         }
@@ -428,3 +458,129 @@ struct ProfileView: View {
 //        }
 //    }
 //}
+
+struct ChangePasswordView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var currentPassword = ""
+    @State private var newPassword = ""
+    @State private var confirmPassword = ""
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                Section(header: Text("Change Password")) {
+                    SecureField("Current Password", text: $currentPassword)
+                    SecureField("New Password", text: $newPassword)
+                    SecureField("Confirm New Password", text: $confirmPassword)
+                }
+            }
+            .navigationTitle("Security")
+            .navigationBarItems(
+                leading: Button("Cancel") { dismiss() },
+                trailing: Button("Save") {
+                    if newPassword == confirmPassword {
+                        // TODO: Implement password change logic
+                        alertMessage = "Password updated successfully"
+                        showAlert = true
+                    } else {
+                        alertMessage = "New passwords don't match"
+                        showAlert = true
+                    }
+                }
+            )
+            .alert("Password Update", isPresented: $showAlert) {
+                Button("OK") {
+                    if newPassword == confirmPassword {
+                        dismiss()
+                    }
+                }
+            } message: {
+                Text(alertMessage)
+            }
+        }
+    }
+}
+
+struct PrivacyPolicyView: View {
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    Text("Privacy Policy")
+                        .font(.custom("Poppins-Bold", size: 24))
+                    
+                    Text("Last updated: \(Date().formatted(date: .long, time: .omitted))")
+                        .font(.custom("Poppins-Regular", size: 14))
+                        .foregroundColor(.gray)
+                    
+                    Group {
+                        policySection(title: "Information We Collect",
+                                    content: "We collect information that you provide directly to us, including name, email address, and training preferences.")
+                        
+                        policySection(title: "How We Use Your Information",
+                                    content: "We use the information we collect to provide and improve our services, communicate with you, and personalize your training experience.")
+                        
+                        policySection(title: "Data Security",
+                                    content: "We implement appropriate security measures to protect your personal information.")
+                    }
+                }
+                .padding()
+            }
+            .navigationBarItems(trailing: Button("Done") { dismiss() })
+        }
+    }
+    
+    private func policySection(title: String, content: String) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title)
+                .font(.custom("Poppins-Bold", size: 18))
+            Text(content)
+                .font(.custom("Poppins-Regular", size: 14))
+        }
+    }
+}
+
+struct TermsOfServiceView: View {
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    Text("Terms of Service")
+                        .font(.custom("Poppins-Bold", size: 24))
+                    
+                    Text("Last updated: \(Date().formatted(date: .long, time: .omitted))")
+                        .font(.custom("Poppins-Regular", size: 14))
+                        .foregroundColor(.gray)
+                    
+                    Group {
+                        termsSection(title: "Agreement to Terms",
+                                   content: "By accessing or using BravoBall, you agree to be bound by these Terms.")
+                        
+                        termsSection(title: "User Responsibilities",
+                                   content: "You are responsible for maintaining the confidentiality of your account and for all activities that occur under your account.")
+                        
+                        termsSection(title: "Acceptable Use",
+                                   content: "You agree to use the app only for lawful purposes and in accordance with these Terms of Service.")
+                    }
+                }
+                .padding()
+            }
+            .navigationBarItems(trailing: Button("Done") { dismiss() })
+        }
+    }
+    
+    private func termsSection(title: String, content: String) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title)
+                .font(.custom("Poppins-Bold", size: 18))
+            Text(content)
+                .font(.custom("Poppins-Regular", size: 14))
+        }
+    }
+}
