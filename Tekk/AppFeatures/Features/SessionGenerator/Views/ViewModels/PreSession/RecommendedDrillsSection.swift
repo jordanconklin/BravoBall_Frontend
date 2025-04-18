@@ -11,8 +11,10 @@ struct RecommendedDrillsSection: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     
+    private let layout = ResponsiveLayout.shared
+    
     var body: some View {
-            VStack {
+        VStack(spacing: layout.standardSpacing) {
                 HStack {
                     Text("Recommended drills for you:")
                         .font(.custom("Poppins-Bold", size: 17))
@@ -21,13 +23,14 @@ struct RecommendedDrillsSection: View {
                     Spacer()
                 }
                 
-                LazyVStack {
+            LazyVStack(spacing: layout.isPad ? 40 : 20) {
                     ForEach(sessionModel.recommendedDrills) { testDrill in
                         RecommendedDrillCard(
                             appModel: appModel,
                             sessionModel: sessionModel,
                             drill: testDrill
                         )
+                        .frame(height: layout.isPad ? 340 : 170)
                     }
                 }
                 

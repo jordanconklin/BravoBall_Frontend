@@ -15,6 +15,7 @@ struct DrillDetailView: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     let drill: DrillModel
     
+    @Environment(\.viewGeometry) var geometry
     @Environment(\.dismiss) private var dismiss
     @State private var showSaveDrill: Bool = false
     
@@ -156,6 +157,7 @@ struct DrillDetailView: View {
                     }
                     .padding()
                 }
+                .frame(width: geometry.size.width)
                 
                 if showSaveDrill {
                     findGroupToSaveToView

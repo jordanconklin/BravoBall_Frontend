@@ -13,7 +13,10 @@ import SwiftUI
 import SwiftKeychainWrapper
 
 class MainAppModel: ObservableObject {
+    
     let globalSettings = GlobalSettings()
+    let layout = ResponsiveLayout()
+
     
     
     
@@ -392,9 +395,7 @@ class MainAppModel: ObservableObject {
         case none
     }
     
-    
-    // TODO: fix this
-    
+        
     // Sets the highest streak
     func highestStreakSetter(streak: Int) {
         if streak > highestStreak {

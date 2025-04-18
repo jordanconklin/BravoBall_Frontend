@@ -11,6 +11,7 @@ import RiveRuntime
 struct AreaBehindHomePage: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
+    @Environment(\.viewGeometry) var geometry
         
     var body: some View {
         // Whole area behind the home page
@@ -22,15 +23,15 @@ struct AreaBehindHomePage: View {
             if appModel.viewState.showFieldBehindHomePage {
                 ZStack {
                     RiveViewModel(fileName: "Grass_Field").view()
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 100)
+                        .frame(width: geometry.size.width)
+                        .padding(.top, 150)
                     
                     HStack {
                         
                         VStack {
                             sessionMessageBubble
  
-                            RiveViewModel(fileName: "Bravo_Panting").view()
+                            RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1").view()
                                 .frame(width: 90, height: 90)
                         }
      

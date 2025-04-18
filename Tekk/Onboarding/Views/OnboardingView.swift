@@ -15,6 +15,14 @@ struct OnboardingView: View {
     @ObservedObject var userManager: UserManager
     @ObservedObject var sessionModel: SessionGeneratorModel
     @Environment(\.dismiss) private var dismiss
+    
+    
+    @State private var canTrigger = true
+    
+    let riveViewModelOne = RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1")
+    let riveViewModelTwo = RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 2", autoPlay: true)
+    
+    
 
     
     var body: some View {
@@ -81,7 +89,7 @@ struct OnboardingView: View {
     // Welcome view for new users
     var welcomeContent: some View {
         VStack {
-            RiveViewModel(fileName: "Bravo_Panting").view()
+            riveViewModelOne.view()
                 .frame(width: 300, height: 300)
                 .padding(.top, 30)
                 .padding(.bottom, 10)
@@ -170,9 +178,12 @@ struct OnboardingView: View {
                 
                 // Skip Button
                 Button(action: {
+                    
+                    
                     withAnimation {
                         model.backTransition = false
                         model.skipToNext()
+                        
                     }
                 }) {
                     Text("Skip")
@@ -183,9 +194,11 @@ struct OnboardingView: View {
             .padding(.horizontal)
             .padding(.top, 8)
             
+            
             // Mascot
-            RiveViewModel(fileName: "Bravo_Panting").view()
+            riveViewModelTwo.view()
                 .frame(width: 100, height: 100)
+            
             
             // Step Content
             ScrollView(showsIndicators: false) {
@@ -297,17 +310,22 @@ struct OnboardingView: View {
             // Next button
             if model.currentStep < model.numberOfOnboardingPages {
                 Button(action: {
+                    
+                    
+                    triggerBravoAnimation()
+                    
                     withAnimation {
                         model.backTransition = false
                         model.moveNext()
                     }
+                    
                 }) {
                     Text(model.currentStep == 10 ? "Finish" : "Next")
                         .frame(maxWidth: .infinity)
                         .frame(height: 50)
                         .background(
                             RoundedRectangle(cornerRadius: 25)
-                                .fill(model.canMoveNext() ? model.globalSettings.primaryYellowColor : model.globalSettings.primaryYellowColor.opacity(0.4))
+                                .fill(model.canMoveNext() ? model.globalSettings.primaryYellowColor : model.globalSettings.primaryLightGrayColor)
                         )
                         .foregroundColor(.white)
                         .font(.custom("Poppins-Bold", size: 16))
@@ -317,5 +335,22 @@ struct OnboardingView: View {
             }
         }
     }
+    func triggerBravoAnimation() {
+            guard canTrigger else { return }
+            
+            // Disable triggering
+            canTrigger = false
+            
+            // Trigger the animation
+            riveViewModelTwo.setInput("user_input", value: true)
+            
+            // Wait for the full animation cycle (3 seconds + a small buffer)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
+                // Reset the trigger
+                riveViewModelTwo.setInput("user_input", value: false)
+                // Re-enable triggering
+                canTrigger = true
+            }
+        }
 }
 
