@@ -11,6 +11,7 @@ import RiveRuntime
 struct AreaBehindHomePage: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
+    @Environment(\.viewGeometry) var geometry
         
     var body: some View {
         // Whole area behind the home page
@@ -22,7 +23,7 @@ struct AreaBehindHomePage: View {
             if appModel.viewState.showFieldBehindHomePage {
                 ZStack {
                     RiveViewModel(fileName: "Grass_Field").view()
-                        .frame(maxWidth: .infinity)
+                        .frame(width: geometry.size.width)
                         .padding(.top, 100)
                     
                     HStack {

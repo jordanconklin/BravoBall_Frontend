@@ -11,7 +11,7 @@ import RiveRuntime
 struct SkillSearchBar: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
-    let geometry: GeometryProxy
+    @Environment(\.viewGeometry) var geometry
     
     @State private var showingSkillSelector = false
     @FocusState private var isFocused: Bool
@@ -107,7 +107,6 @@ struct SkillSearchBar: View {
             SkillSelectorSheet(appModel: appModel, sessionModel: sessionModel)
                 .presentationDragIndicator(.hidden)
                 .interactiveDismissDisabled()
-                .frame(width: geometry.size.width)
         }
     }
     private func updateSearchState(isFocused: Bool? = nil, isShowing: Bool? = nil) {

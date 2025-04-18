@@ -8,15 +8,9 @@
 import SwiftUI
 
 // MARK: - Responsive Layout Constants
-class ResponsiveLayout: ObservableObject {
+struct ResponsiveLayout {
     static let shared = ResponsiveLayout()
     
-    @Published private var setGeometry: GeometryProxy?
-    
-    // Set app geometry
-    func updateGeometry(_ geometry: GeometryProxy) {
-        setGeometry = geometry
-    }
     
     // Device type checks
     var isPad: Bool {
@@ -86,7 +80,7 @@ class ResponsiveLayout: ObservableObject {
     }
     
     // Helper functions
-    func adaptiveWidth(_ geometry: GeometryProxy, maxWidth: CGFloat? = nil) -> CGFloat {
+    func adaptiveWidth(_ geometry: ViewGeometry, maxWidth: CGFloat? = nil) -> CGFloat {
         let width = min(geometry.size.width - 2 * contentMinPadding, maxWidth ?? contentMaxWidth)
         return width
     }
@@ -97,27 +91,9 @@ class ResponsiveLayout: ObservableObject {
         let contentWidth = min(screenWidth, contentMaxWidth)
         return max((screenWidth - contentWidth) / 2, contentMinPadding)
     }
+    
 }
 
-// MARK: - View Extensions
-extension View {
-    func responsiveWidth(_ geometry: GeometryProxy) -> some View {
-        let layout = ResponsiveLayout.shared
-        return self
-            .frame(maxWidth: layout.adaptiveWidth(geometry))
-            .frame(maxWidth: .infinity)
-    }
-    
-    func responsiveHorizontalPadding(_ geometry: GeometryProxy) -> some View {
-        let padding = ResponsiveLayout.shared.adaptiveHorizontalPadding(geometry)
-        return self.padding(.horizontal, padding)
-    }
-    
-    func adaptiveFont(_ size: CGFloat) -> some View {
-        let layout = ResponsiveLayout.shared
-        return self.font(.system(size: layout.isPad ? size * 1.3 : size))
-    }
-}
 
 // MARK: - Grid Layout Helper
 struct AdaptiveGrid: Layout {
@@ -128,7 +104,7 @@ struct AdaptiveGrid: Layout {
         let width = proposal.width ?? 0
         let columns = max(1, Int(width / minWidth))
         let spacing = spacing * CGFloat(columns - 1)
-        let itemWidth = (width - spacing) / CGFloat(columns)
+//        let itemWidth = (width - spacing) / CGFloat(columns)
         
         var height: CGFloat = 0
         var currentRow: CGFloat = 0
@@ -179,3 +155,5 @@ struct AdaptiveGrid: Layout {
         }
     }
 }
+
+

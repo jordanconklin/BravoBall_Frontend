@@ -147,11 +147,13 @@ struct SessionGeneratorView: View {
     @ObservedObject var model: OnboardingModel
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
-    private let layout = ResponsiveLayout.shared
-    let geometry: GeometryProxy
+    @Environment(\.viewGeometry) var geometry
     
     @State private var savedFiltersName: String  = ""
     @State private var searchSkillsText: String = ""
+    
+
+        
     
     // MARK: Main view
     var body: some View {
@@ -168,7 +170,7 @@ struct SessionGeneratorView: View {
             // Golden button
             if sessionReady() {
                 goldenButton
-                    .frame(maxWidth: min(geometry.size.width - 40, layout.buttonMaxWidth))
+                    .frame(maxWidth: min(geometry.size.width - 40, appModel.layout.buttonMaxWidth))
             }
             
             // Prompt to save filter
@@ -186,7 +188,7 @@ struct SessionGeneratorView: View {
                 appModel.selectedFilter = nil
             }
             .presentationDragIndicator(.hidden)
-            .presentationDetents([.height(layout.sheetHeight)])
+            .presentationDetents([.height(appModel.layout.sheetHeight)])
             .frame(width: geometry.size.width)
         }
         // Sheet pop-up for saved filters
@@ -197,7 +199,7 @@ struct SessionGeneratorView: View {
                 dismiss: { appModel.viewState.showSavedFilters = false }
             )
             .presentationDragIndicator(.hidden)
-            .presentationDetents([.height(layout.sheetHeight)])
+            .presentationDetents([.height(appModel.layout.sheetHeight)])
             .frame(width: geometry.size.width)
         }
         // Sheet pop-up for filter option button
@@ -207,7 +209,7 @@ struct SessionGeneratorView: View {
                 sessionModel: sessionModel
             )
             .presentationDragIndicator(.hidden)
-            .presentationDetents([.height(layout.sheetHeight)])
+            .presentationDetents([.height(appModel.layout.sheetHeight)])
             .frame(width: geometry.size.width)
         }
     }
@@ -256,32 +258,45 @@ struct SessionGeneratorView: View {
                                     
                                     Spacer()
                                     
-                                    SkillSearchBar(appModel: appModel, sessionModel: sessionModel, geometry: geometry, searchText: $searchSkillsText)
+                                    SkillSearchBar(appModel: appModel, sessionModel: sessionModel, searchText: $searchSkillsText)
                                         .padding(.top, 3)
                                     
                                     Spacer()
                                 }
                                 .padding(.top, 5)
-                                .frame(maxWidth: layout.adaptiveWidth(geometry))
+                                .frame(maxWidth: appModel.layout.adaptiveWidth(geometry))
                                 
-                                filterScrollView
-                                    .frame(width: geometry.size.width)
-                                
-                                // Main content
-                                ScrollView(showsIndicators: false) {
-                                    VStack(spacing: layout.standardSpacing) {
-                                        
-                                        
-                                        GeneratedDrillsSection(appModel: appModel, sessionModel: sessionModel)
-                                            .padding(.horizontal, layout.contentMinPadding)
-                                        
-                                        if sessionModel.selectedSkills.isEmpty {
-                                            RecommendedDrillsSection(appModel: appModel, sessionModel: sessionModel)
-                                                .padding(.horizontal, layout.contentMinPadding)
+                                // If skills search bar is selected
+                                if appModel.viewState.showSkillSearch {
+                                    
+                                    // New view for searching skills
+                                    SearchSkillsView(
+                                        appModel: appModel,
+                                        sessionModel: sessionModel,
+                                        searchText: $searchSkillsText
+                                    )
+                                    
+                                // If skills search bar is not selected
+                                } else {
+                                    filterScrollView
+                                        .frame(width: geometry.size.width)
+                                    
+                                    // Main content
+                                    ScrollView(showsIndicators: false) {
+                                        VStack(spacing: appModel.layout.standardSpacing) {
+                                            
+                                            
+                                            GeneratedDrillsSection(appModel: appModel, sessionModel: sessionModel)
+                                                .padding(.horizontal, appModel.layout.contentMinPadding)
+                                            
+                                            if sessionModel.selectedSkills.isEmpty {
+                                                RecommendedDrillsSection(appModel: appModel, sessionModel: sessionModel)
+                                                    .padding(.horizontal, appModel.layout.contentMinPadding)
+                                            }
                                         }
                                     }
+                                    .frame(maxWidth: appModel.layout.adaptiveWidth(geometry))
                                 }
-                                .frame(maxWidth: layout.adaptiveWidth(geometry))
                             }
                             .frame(maxWidth: geometry.size.width)
                         }
@@ -487,7 +502,7 @@ struct SessionGeneratorView: View {
             }
         }
         .padding(.horizontal)
-        .padding(.bottom, 46)
+        .padding(.bottom, 80)
         .transition(.move(edge: .bottom))
     }
     

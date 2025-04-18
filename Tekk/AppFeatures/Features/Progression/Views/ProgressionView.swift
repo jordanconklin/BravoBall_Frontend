@@ -11,7 +11,8 @@ import RiveRuntime
 struct ProgressionView: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
-    let geometry: GeometryProxy
+    @Environment(\.viewGeometry) var geometry
+    
     
     var body: some View {
             VStack {

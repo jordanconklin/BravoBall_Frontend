@@ -10,7 +10,7 @@ import SwiftUI
 struct SavedDrillsView: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
-    let geometry: GeometryProxy
+    @Environment(\.viewGeometry) var geometry
     
     @State private var showCreateGroup: Bool = false
     @State private var showGroupDetails: Bool = false

@@ -325,7 +325,7 @@ struct OnboardingView: View {
                         .frame(height: 50)
                         .background(
                             RoundedRectangle(cornerRadius: 25)
-                                .fill(model.canMoveNext() ? model.globalSettings.primaryYellowColor : model.globalSettings.primaryYellowColor.opacity(0.4))
+                                .fill(model.canMoveNext() ? model.globalSettings.primaryYellowColor : model.globalSettings.primaryLightGrayColor)
                         )
                         .foregroundColor(.white)
                         .font(.custom("Poppins-Bold", size: 16))

@@ -13,7 +13,10 @@ import SwiftUI
 import SwiftKeychainWrapper
 
 class MainAppModel: ObservableObject {
+    
     let globalSettings = GlobalSettings()
+    let layout = ResponsiveLayout()
+
     
     
     

@@ -17,6 +17,8 @@ struct EditingDrillView: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     @Binding var editableDrill: EditableDrillModel
     
+    @Environment(\.viewGeometry) var geometry
+    
     @State private var showDrillDetailView: Bool = false
     @State private var editSets: String = ""
     @State private var editReps: String = ""
@@ -162,12 +164,12 @@ struct EditingDrillView: View {
             .padding()
             
         }
-        
+        .frame(width: geometry.size.width)
         .sheet(isPresented: $showDrillDetailView) {
             DrillDetailView(appModel: appModel, sessionModel: sessionModel, drill: editableDrill.drill)
         }
         
-        // TODO: fix this
+        // Checks if changes are made
         .safeAreaInset(edge: .bottom) {
             let validations = (
                 sets: Int(editSets).map { $0 > 0 && $0 <= 99 } ?? false,
@@ -205,9 +207,6 @@ struct EditingDrillView: View {
             .disabled(!setsValid && !repsValid && !durationValid)
             .padding()
         }
-    }
-    
-    private func validateOneDrill() {
     }
 }
 

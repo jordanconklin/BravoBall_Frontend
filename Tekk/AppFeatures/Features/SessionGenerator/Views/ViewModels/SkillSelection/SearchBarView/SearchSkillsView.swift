@@ -10,6 +10,7 @@ import SwiftUI
 struct SearchSkillsView: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
+    @Environment(\.viewGeometry) var geometry
     
     @Binding var searchText: String
     
@@ -29,23 +30,25 @@ struct SearchSkillsView: View {
             }
             Spacer()
         }
+        .frame(width: geometry.size.width)
         .safeAreaInset(edge: .bottom) {
-            if sessionModel.selectedSkills.count > 0 {
-                Button(action: {
-                    searchText = ""
-                    appModel.viewState.showSkillSearch = false
-                }) {
+                        
+            Button(action: {
+                searchText = ""
+                appModel.viewState.showSkillSearch = false
+            }) {
+                
                     Text("Create Session")
-                        .font(.custom("Poppins-Bold", size: 18))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.yellow)
-                        .cornerRadius(12)
-                }
-                .padding()
+                    .font(.custom("Poppins-Bold", size: 18))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(sessionModel.selectedSkills.isEmpty ? appModel.globalSettings.primaryLightGrayColor : appModel.globalSettings.primaryYellowColor)
+                    .cornerRadius(12)
             }
-            
+            .disabled(sessionModel.selectedSkills.isEmpty)
+            .padding(.horizontal)
+            .padding(.bottom, 80)
         }
     }
     
