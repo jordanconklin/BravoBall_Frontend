@@ -43,6 +43,7 @@
 		4351674B2DAE3ECA00E7D964 /* ResponsiveLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */; };
 		43524E772D4D994B00AD897A /* SessionGeneratorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43524E762D4D994400AD897A /* SessionGeneratorModel.swift */; };
 		43524E952D5198C900AD897A /* SearchDrillsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43524E942D5198C300AD897A /* SearchDrillsSheetView.swift */; };
+		4355EEAB2DB1F70D00D98314 /* GeometryContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4355EEAA2DB1F6FD00D98314 /* GeometryContext.swift */; };
 		435A70152CA7AB2600BFCC40 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 435A70142CA7AB2600BFCC40 /* RiveRuntime */; };
 		437D1A1F2D94FE5600B875CF /* SavedFiltersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437D1A1E2D94FE4700B875CF /* SavedFiltersService.swift */; };
 		43985E472CB4EFA200BE2AB6 /* BravoBall_Intro.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43985E462CB4EFA200BE2AB6 /* BravoBall_Intro.riv */; };
@@ -187,6 +188,7 @@
 		4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsiveLayout.swift; sourceTree = "<group>"; };
 		43524E762D4D994400AD897A /* SessionGeneratorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionGeneratorModel.swift; sourceTree = "<group>"; };
 		43524E942D5198C300AD897A /* SearchDrillsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDrillsSheetView.swift; sourceTree = "<group>"; };
+		4355EEAA2DB1F6FD00D98314 /* GeometryContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryContext.swift; sourceTree = "<group>"; };
 		437D1A1E2D94FE4700B875CF /* SavedFiltersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedFiltersService.swift; sourceTree = "<group>"; };
 		43985E462CB4EFA200BE2AB6 /* BravoBall_Intro.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = BravoBall_Intro.riv; sourceTree = "<group>"; };
 		43985E512CB51E1100BE2AB6 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
@@ -302,7 +304,6 @@
 		170167FE2D88F6170078446C /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */,
 				170167FF2D88F61D0078446C /* DrillSearchView.swift */,
 			);
 			path = Components;
@@ -334,6 +335,8 @@
 				17E693182C7435B3006B58A3 /* Info.plist */,
 				17F5D6552CD347AD008E8C24 /* GlobalSettings.swift */,
 				17F5D6532CD3477E008E8C24 /* ColorExtension.swift */,
+				4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */,
+				4355EEAA2DB1F6FD00D98314 /* GeometryContext.swift */,
 				178208F52D2E05FE00246494 /* AppFeatures */,
 				178208D12D2D14D200246494 /* MainTabView.swift */,
 				178208DC2D2DEB7200246494 /* Onboarding */,
@@ -1121,6 +1124,7 @@
 				170167FD2D88F5C60078446C /* DrillSearchService.swift in Sources */,
 				174C67702D34EB26003D02EF /* DrillDetailView.swift in Sources */,
 				43C5FC852D6DCF530064E7D5 /* TabButton.swift in Sources */,
+				4355EEAB2DB1F70D00D98314 /* GeometryContext.swift in Sources */,
 				43C5FC5C2D6DBEC90064E7D5 /* RoundedCorner.swift in Sources */,
 				43AC25772DA39C6400EDD8C0 /* SyncingProtocols.swift in Sources */,
 				43C5FC6E2D6DCC7E0064E7D5 /* FieldDrillCard.swift in Sources */,

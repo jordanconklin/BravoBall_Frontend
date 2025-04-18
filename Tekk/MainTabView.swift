@@ -24,20 +24,20 @@ struct MainTabView: View {
                     ZStack {
                         switch appModel.mainTabSelected {
                         case 0:
-                            SessionGeneratorView(model: model, appModel: appModel, sessionModel: sessionModel)
-                                .responsiveWidth(geometry)
+                            SessionGeneratorView(model: model, appModel: appModel, sessionModel: sessionModel, geometry: geometry)
+                                .frame(width: geometry.size.width)
                         case 1:
-                            ProgressionView(appModel: appModel, sessionModel: sessionModel)
-                                .responsiveWidth(geometry)
+                            ProgressionView(appModel: appModel, sessionModel: sessionModel, geometry: geometry)
+                                .frame(width: geometry.size.width)
                         case 2:
-                            SavedDrillsView(appModel: appModel, sessionModel: sessionModel)
-                                .responsiveWidth(geometry)
+                            SavedDrillsView(appModel: appModel, sessionModel: sessionModel, geometry: geometry)
+                                .frame(width: geometry.size.width)
                         case 3:
-                            ProfileView(model: model, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
-                                .responsiveWidth(geometry)
+                            ProfileView(model: model, appModel: appModel, sessionModel: sessionModel, userManager: userManager, geometry: geometry)
+                                .frame(width: geometry.size.width)
                         default:
-                            SessionGeneratorView(model: model, appModel: appModel, sessionModel: sessionModel)
-                                .responsiveWidth(geometry)
+                            SessionGeneratorView(model: model, appModel: appModel, sessionModel: sessionModel, geometry: geometry)
+                                .frame(width: geometry.size.width)
                         }
                     }
                     .frame(maxWidth: .infinity)

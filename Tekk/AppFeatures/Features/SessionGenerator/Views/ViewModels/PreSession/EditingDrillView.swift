@@ -211,30 +211,30 @@ struct EditingDrillView: View {
     }
 }
 
-#Preview {
-    let mockDrill = EditableDrillModel(
-        drill: DrillModel(
-            title: "Test Drill",
-            skill: "Passing",
-            sets: 2,
-            reps: 10,
-            duration: 15,
-            description: "Test description",
-            tips: ["Tip 1", "Tip 2"],
-            equipment: ["Ball"],
-            trainingStyle: "Medium Intensity",
-            difficulty: "Beginner"
-        ),
-        setsDone: 0,
-        totalSets: 2,
-        totalReps: 10,
-        totalDuration: 15,
-        isCompleted: false
-    )
-    
-    return EditingDrillView(
-        appModel: MainAppModel(),
-        sessionModel: SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData()),
-        editableDrill: .constant(mockDrill)
-    )
-}
+//#Preview {
+//    let mockDrill = EditableDrillModel(
+//        drill: DrillModel(
+//            title: "Test Drill",
+//            skill: "Passing",
+//            sets: 2,
+//            reps: 10,
+//            duration: 15,
+//            description: "Test description",
+//            tips: ["Tip 1", "Tip 2"],
+//            equipment: ["Ball"],
+//            trainingStyle: "Medium Intensity",
+//            difficulty: "Beginner"
+//        ),
+//        setsDone: 0,
+//        totalSets: 2,
+//        totalReps: 10,
+//        totalDuration: 15,
+//        isCompleted: false
+//    )
+//    
+//    return EditingDrillView(
+//        appModel: MainAppModel(),
+//        sessionModel: SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData()),
+//        editableDrill: .constant(mockDrill)
+//    )
+//}

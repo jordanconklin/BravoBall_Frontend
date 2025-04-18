@@ -302,36 +302,36 @@ struct DrillFollowAlongView: View {
     }
 }
 
-#Preview {
-    struct PreviewWrapper: View {
-        @State var mockDrill = EditableDrillModel(
-            drill: DrillModel(
-                title: "Test Drill",
-                skill: "Passing",
-                sets: 2,
-                reps: 10,
-                duration: 15,
-                description: "Test description",
-                tips: ["Tip 1", "Tip 2"],
-                equipment: ["Ball"],
-                trainingStyle: "Medium Intensity",
-                difficulty: "Beginner"
-            ),
-            setsDone: 0,
-            totalSets: 2,
-            totalReps: 10,
-            totalDuration: 15,
-            isCompleted: false
-        )
-        
-        var body: some View {
-            DrillFollowAlongView(
-                appModel: MainAppModel(),
-                sessionModel: SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData()),
-                editableDrill: $mockDrill  // This binding will be mutable
-            )
-        }
-    }
-    
-    return PreviewWrapper()
-}
+//#Preview {
+//    struct PreviewWrapper: View {
+//        @State var mockDrill = EditableDrillModel(
+//            drill: DrillModel(
+//                title: "Test Drill",
+//                skill: "Passing",
+//                sets: 2,
+//                reps: 10,
+//                duration: 15,
+//                description: "Test description",
+//                tips: ["Tip 1", "Tip 2"],
+//                equipment: ["Ball"],
+//                trainingStyle: "Medium Intensity",
+//                difficulty: "Beginner"
+//            ),
+//            setsDone: 0,
+//            totalSets: 2,
+//            totalReps: 10,
+//            totalDuration: 15,
+//            isCompleted: false
+//        )
+//        
+//        var body: some View {
+//            DrillFollowAlongView(
+//                appModel: MainAppModel(),
+//                sessionModel: SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData()),
+//                editableDrill: $mockDrill  // This binding will be mutable
+//            )
+//        }
+//    }
+//    
+//    return PreviewWrapper()
+//}

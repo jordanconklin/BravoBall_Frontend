@@ -13,6 +13,7 @@ struct ProfileView: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     @ObservedObject var userManager: UserManager
+    let geometry: GeometryProxy
     @Environment(\.presentationMode) var presentationMode // ?
     
     

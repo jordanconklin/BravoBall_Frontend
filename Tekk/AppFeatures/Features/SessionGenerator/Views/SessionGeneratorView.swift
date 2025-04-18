@@ -148,81 +148,84 @@ struct SessionGeneratorView: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     private let layout = ResponsiveLayout.shared
+    let geometry: GeometryProxy
     
     @State private var savedFiltersName: String  = ""
     @State private var searchSkillsText: String = ""
     
     // MARK: Main view
     var body: some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .bottom) {
-                // Sky background color
-                Color(hex:"bef1fa")
-                    .ignoresSafeArea()
+        ZStack(alignment: .bottom) {
+            // Sky background color
+            Color(hex:"bef1fa")
+                .ignoresSafeArea()
 
-                homePage
-                    .frame(maxWidth: layout.adaptiveWidth(geometry))
-                    .frame(maxWidth: .infinity)
+            homePage
+                .frame(maxWidth: geometry.size.width)
+                .frame(maxWidth: .infinity)
 
 
-                // Golden button
-                if sessionReady() {
-                    goldenButton
-                        .frame(maxWidth: min(geometry.size.width - 40, layout.buttonMaxWidth))
-                }
-                
-                // Prompt to save filter
-                if appModel.viewState.showSaveFiltersPrompt {
-                    saveFiltersPrompt
-                }
+            // Golden button
+            if sessionReady() {
+                goldenButton
+                    .frame(maxWidth: min(geometry.size.width - 40, layout.buttonMaxWidth))
             }
-            // Sheet pop-up for each filter
-            .sheet(item: $appModel.selectedFilter) { type in
-                FilterSheet(
-                    appModel: appModel,
-                    sessionModel: sessionModel,
-                    type: type
-                ) {
-                    appModel.selectedFilter = nil
-                }
-                .presentationDragIndicator(.hidden)
-                .presentationDetents([.height(300)])
+            
+            // Prompt to save filter
+            if appModel.viewState.showSaveFiltersPrompt {
+                saveFiltersPrompt
             }
-            // Sheet pop-up for saved filters
-            .sheet(isPresented: $appModel.viewState.showSavedFilters) {
-                SavedFiltersSheet(
-                    appModel: appModel,
-                    sessionModel: sessionModel,
-                    dismiss: { appModel.viewState.showSavedFilters = false }
-                )
-                .presentationDragIndicator(.hidden)
-                .presentationDetents([.height(300)])
+        }
+        // Sheet pop-up for each filter
+        .sheet(item: $appModel.selectedFilter) { type in
+            FilterSheet(
+                appModel: appModel,
+                sessionModel: sessionModel,
+                type: type
+            ) {
+                appModel.selectedFilter = nil
             }
-            // Sheet pop-up for filter option button
-            .sheet(isPresented: $appModel.viewState.showFilterOptions) {
-                FilterOptions(
-                    appModel: appModel,
-                    sessionModel: sessionModel
-                )
-                .presentationDragIndicator(.hidden)
-                .presentationDetents([.height(200)])
-            }
+            .presentationDragIndicator(.hidden)
+            .presentationDetents([.height(layout.sheetHeight)])
+            .frame(width: geometry.size.width)
+        }
+        // Sheet pop-up for saved filters
+        .sheet(isPresented: $appModel.viewState.showSavedFilters) {
+            SavedFiltersSheet(
+                appModel: appModel,
+                sessionModel: sessionModel,
+                dismiss: { appModel.viewState.showSavedFilters = false }
+            )
+            .presentationDragIndicator(.hidden)
+            .presentationDetents([.height(layout.sheetHeight)])
+            .frame(width: geometry.size.width)
+        }
+        // Sheet pop-up for filter option button
+        .sheet(isPresented: $appModel.viewState.showFilterOptions) {
+            FilterOptions(
+                appModel: appModel,
+                sessionModel: sessionModel
+            )
+            .presentationDragIndicator(.hidden)
+            .presentationDetents([.height(layout.sheetHeight)])
+            .frame(width: geometry.size.width)
         }
     }
     
     // MARK: Home page
     private var homePage: some View {
-
-        GeometryReader { geometry in
             ZStack(alignment: .top) {
                 // Where session begins, behind home page
                 AreaBehindHomePage(appModel: appModel, sessionModel: sessionModel)
-                    .frame(maxWidth: layout.adaptiveWidth(geometry))
+                    .frame(maxWidth: geometry.size.width)
                 
                 if appModel.viewState.showHomePage {
                     VStack(spacing: 0) {
                         // Header with Bravo and message bubble
-                        HStack(alignment: .top) {
+                        HStack(alignment: .center) {
+                            
+                            Spacer()
+                            
                             // Bravo
                             RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 3")
                                 .view()
@@ -231,12 +234,12 @@ struct SessionGeneratorView: View {
                             
                             if appModel.viewState.showPreSessionTextBubble {
                                 preSessionMessageBubble
-                                    .padding(.leading, 10)
+                                    .padding(.leading, 5)
                             }
                             
                             Spacer()
                         }
-                        .padding(.top, geometry.safeAreaInsets.top + 10)
+                        .padding(.top, geometry.safeAreaInsets.top)
                         
                         // ZStack for rounded corner
                         ZStack {
@@ -247,24 +250,26 @@ struct SessionGeneratorView: View {
                                 .edgesIgnoringSafeArea(.bottom)
                             
                             // White part of home page
-                            VStack(alignment: .leading, spacing: 5) {
+                            VStack(alignment: .center, spacing: 5) {
                                 
                                 HStack {
                                     
                                     Spacer()
                                     
-                                    SkillSearchBar(appModel: appModel, sessionModel: sessionModel, searchText: $searchSkillsText)
+                                    SkillSearchBar(appModel: appModel, sessionModel: sessionModel, geometry: geometry, searchText: $searchSkillsText)
                                         .padding(.top, 3)
                                     
                                     Spacer()
                                 }
-                                .padding(.top, geometry.safeAreaInsets.top + 10)
+                                .padding(.top, 5)
+                                .frame(maxWidth: layout.adaptiveWidth(geometry))
+                                
+                                filterScrollView
+                                    .frame(width: geometry.size.width)
                                 
                                 // Main content
-                                ScrollView {
+                                ScrollView(showsIndicators: false) {
                                     VStack(spacing: layout.standardSpacing) {
-                                        filterScrollView
-                                            .padding(.horizontal, layout.contentMinPadding)
                                         
                                         
                                         GeneratedDrillsSection(appModel: appModel, sessionModel: sessionModel)
@@ -276,15 +281,14 @@ struct SessionGeneratorView: View {
                                         }
                                     }
                                 }
+                                .frame(maxWidth: layout.adaptiveWidth(geometry))
                             }
-                            .frame(maxWidth: layout.adaptiveWidth(geometry))
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: geometry.size.width)
                         }
                     }
                     .transition(.move(edge: .bottom))
                 }
             
-            }
         }
         // functions when UI of app changes
         .onAppear {

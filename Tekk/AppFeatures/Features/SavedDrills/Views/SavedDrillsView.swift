@@ -10,6 +10,7 @@ import SwiftUI
 struct SavedDrillsView: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
+    let geometry: GeometryProxy
     
     @State private var showCreateGroup: Bool = false
     @State private var showGroupDetails: Bool = false
@@ -45,6 +46,7 @@ struct SavedDrillsView: View {
                     }
                     
                     AllGroupsDisplay(appModel: appModel, sessionModel: sessionModel, selectedGroup: $selectedGroup)
+                    
 
                 }
                 
@@ -132,34 +134,34 @@ struct SavedDrillsView: View {
 }
 
 
-#Preview {
-    let mockAppModel = MainAppModel()
-    let mockSesGenModel = SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData())
-    
-    // Create a mock drill
-    let mockDrill = DrillModel(
-            title: "Quick Passing",
-            skill: "Passing",
-            sets: 3,
-            reps: 5,
-            duration: 15,
-            description: "Short passing drill to improve accuracy",
-            tips: ["no funny beezness"],
-            equipment: ["ball", "cones"],
-            trainingStyle: "Medium Intensity",
-            difficulty: "Beginner"
-        )
-        
-        // Create a mock group with the drill
-        let mockGroup = GroupModel(
-            name: "My First Group",
-            description: "Collection of passing drills",
-            drills: [mockDrill]
-        )
-        
-        // Add the mock group to savedDrills
-        mockSesGenModel.savedDrills = [mockGroup]
-    
-    
-    return SavedDrillsView(appModel: mockAppModel, sessionModel: mockSesGenModel)
-}
+//#Preview {
+//    let mockAppModel = MainAppModel()
+//    let mockSesGenModel = SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData())
+//    
+//    // Create a mock drill
+//    let mockDrill = DrillModel(
+//            title: "Quick Passing",
+//            skill: "Passing",
+//            sets: 3,
+//            reps: 5,
+//            duration: 15,
+//            description: "Short passing drill to improve accuracy",
+//            tips: ["no funny beezness"],
+//            equipment: ["ball", "cones"],
+//            trainingStyle: "Medium Intensity",
+//            difficulty: "Beginner"
+//        )
+//        
+//        // Create a mock group with the drill
+//        let mockGroup = GroupModel(
+//            name: "My First Group",
+//            description: "Collection of passing drills",
+//            drills: [mockDrill]
+//        )
+//        
+//        // Add the mock group to savedDrills
+//        mockSesGenModel.savedDrills = [mockGroup]
+//    
+//    
+//    return SavedDrillsView(appModel: mockAppModel, sessionModel: mockSesGenModel)
+//}

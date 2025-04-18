@@ -11,7 +11,6 @@ struct AllDrillsView: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     @State private var searchText: String = ""
     @FocusState private var isFocused: Bool
-
     
     var body: some View {
         VStack {
@@ -50,7 +49,7 @@ struct AllDrillsView: View {
                 LazyVStack(spacing: 16) {
                     ForEach(filteredDrills) { drill in
                         DrillRow(appModel: appModel, sessionModel: sessionModel,
-                            drill: drill
+                                 drill: drill
                         )
                         .padding(.horizontal)
                         Divider()

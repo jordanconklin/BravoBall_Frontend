@@ -8,8 +8,15 @@
 import SwiftUI
 
 // MARK: - Responsive Layout Constants
-struct ResponsiveLayout {
+class ResponsiveLayout: ObservableObject {
     static let shared = ResponsiveLayout()
+    
+    @Published private var setGeometry: GeometryProxy?
+    
+    // Set app geometry
+    func updateGeometry(_ geometry: GeometryProxy) {
+        setGeometry = geometry
+    }
     
     // Device type checks
     var isPad: Bool {
@@ -26,10 +33,15 @@ struct ResponsiveLayout {
     }
     
     var contentMinPadding: CGFloat {
-        isPad ? 40 : 20
+        isPad ? 30 : 5
     }
     
     // Component specific sizes
+    
+    var sheetHeight: CGFloat {
+        isPad ? 500 : 300
+    }
+    
     var buttonMaxWidth: CGFloat {
         isPad ? 500 : 320
     }
@@ -78,6 +90,7 @@ struct ResponsiveLayout {
         let width = min(geometry.size.width - 2 * contentMinPadding, maxWidth ?? contentMaxWidth)
         return width
     }
+
     
     func adaptiveHorizontalPadding(_ geometry: GeometryProxy) -> CGFloat {
         let screenWidth = geometry.size.width

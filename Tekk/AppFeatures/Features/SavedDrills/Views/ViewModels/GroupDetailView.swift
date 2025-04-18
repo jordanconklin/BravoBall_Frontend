@@ -12,6 +12,8 @@ struct GroupDetailView: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     let group: GroupModel
+    
+    
     @Environment(\.dismiss) private var dismiss
     @State private var showAddDrillSheet = false
     @State private var showToast = false
