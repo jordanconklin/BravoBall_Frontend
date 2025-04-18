@@ -24,7 +24,7 @@ struct AreaBehindHomePage: View {
                 ZStack {
                     RiveViewModel(fileName: "Grass_Field").view()
                         .frame(width: geometry.size.width)
-                        .padding(.top, 100)
+                        .padding(.top, 150)
                     
                     HStack {
                         

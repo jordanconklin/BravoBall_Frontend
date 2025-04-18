@@ -13,7 +13,7 @@ struct GroupDetailView: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     let group: GroupModel
     
-    
+    @Environment(\.viewGeometry) var geometry
     @Environment(\.dismiss) private var dismiss
     @State private var showAddDrillSheet = false
     @State private var showToast = false
@@ -114,6 +114,7 @@ struct GroupDetailView: View {
                     }
                 }
             }
+            .frame(width: geometry.size.width)
             // Sheet pop-up for filter option button
             .sheet(isPresented: $appModel.viewState.showGroupFilterOptions) {
                 GroupFilterOptions(
@@ -259,10 +260,13 @@ struct GroupDetailView: View {
     }
 }
 
+
 // MARK: Group Filter Options
 struct GroupFilterOptions: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
+    
+    @Environment(\.viewGeometry) var geometry
     
     
     var body: some View {
@@ -328,9 +332,11 @@ struct GroupFilterOptions: View {
                 .padding(.vertical, 8)
             }
         }
+        .frame(width: geometry.size.width)
         .padding(8)
         .background(Color.white)
         .frame(maxWidth: .infinity)
 
     }
 }
+
