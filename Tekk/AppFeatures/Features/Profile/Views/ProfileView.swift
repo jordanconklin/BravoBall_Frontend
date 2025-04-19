@@ -11,8 +11,10 @@ import SwiftKeychainWrapper
 struct ProfileView: View {
     @ObservedObject var model: OnboardingModel
     @ObservedObject var appModel: MainAppModel
-    @ObservedObject var userManager: UserManager
     @ObservedObject var sessionModel: SessionGeneratorModel
+    @ObservedObject var userManager: UserManager
+    
+    @Environment(\.viewGeometry) var geometry
     @StateObject private var settingsModel = SettingsModel()
     @Environment(\.presentationMode) var presentationMode
     @State private var showEditDetails = false

@@ -11,6 +11,8 @@ import RiveRuntime
 struct ProgressionView: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
+    @Environment(\.viewGeometry) var geometry
+    
     
     var body: some View {
             VStack {
@@ -96,9 +98,9 @@ struct ProgressionView: View {
 }
 
 
-#Preview {
-    let mockAppModel = MainAppModel()
-    let mockSessionModel = SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData())
-    
-    return ProgressionView(appModel: mockAppModel, sessionModel: mockSessionModel)
-}
+//#Preview {
+//    let mockAppModel = MainAppModel()
+//    let mockSessionModel = SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData())
+//    
+//    return ProgressionView(appModel: mockAppModel, sessionModel: mockSessionModel)
+//}

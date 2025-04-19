@@ -147,34 +147,37 @@ struct SessionGeneratorView: View {
     @ObservedObject var model: OnboardingModel
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
+    @Environment(\.viewGeometry) var geometry
     
     @State private var savedFiltersName: String  = ""
     @State private var searchSkillsText: String = ""
     
+
+        
     
     // MARK: Main view
     var body: some View {
         ZStack(alignment: .bottom) {
-            
             // Sky background color
             Color(hex:"bef1fa")
                 .ignoresSafeArea()
 
             homePage
+                .frame(maxWidth: geometry.size.width)
+                .frame(maxWidth: .infinity)
+
 
             // Golden button
-            if sessionReady()  {
+            if sessionReady() {
                 goldenButton
+                    .frame(maxWidth: min(geometry.size.width - 40, appModel.layout.buttonMaxWidth))
             }
             
             // Prompt to save filter
             if appModel.viewState.showSaveFiltersPrompt {
-                
                 saveFiltersPrompt
             }
-            
         }
-
         // Sheet pop-up for each filter
         .sheet(item: $appModel.selectedFilter) { type in
             FilterSheet(
@@ -185,8 +188,8 @@ struct SessionGeneratorView: View {
                 appModel.selectedFilter = nil
             }
             .presentationDragIndicator(.hidden)
-            .presentationDetents([.height(300)])
-
+            .presentationDetents([.height(appModel.layout.sheetHeight)])
+            .frame(width: geometry.size.width)
         }
         // Sheet pop-up for saved filters
         .sheet(isPresented: $appModel.viewState.showSavedFilters) {
@@ -196,7 +199,8 @@ struct SessionGeneratorView: View {
                 dismiss: { appModel.viewState.showSavedFilters = false }
             )
             .presentationDragIndicator(.hidden)
-            .presentationDetents([.height(300)])
+            .presentationDetents([.height(appModel.layout.sheetHeight)])
+            .frame(width: geometry.size.width)
         }
         // Sheet pop-up for filter option button
         .sheet(isPresented: $appModel.viewState.showFilterOptions) {
@@ -205,93 +209,101 @@ struct SessionGeneratorView: View {
                 sessionModel: sessionModel
             )
             .presentationDragIndicator(.hidden)
-            .presentationDetents([.height(200)])
+            .presentationDetents([.height(appModel.layout.sheetHeight)])
+            .frame(width: geometry.size.width)
         }
-        
     }
-    
     
     // MARK: Home page
     private var homePage: some View {
-        ZStack(alignment: .top) {
-
-            // Where session begins, behind home page
-            AreaBehindHomePage(
-                appModel: appModel,
-                sessionModel: sessionModel)
-            
-            
-            // Home page
-            if appModel.viewState.showHomePage {
-
+            ZStack(alignment: .top) {
+                // Where session begins, behind home page
+                AreaBehindHomePage(appModel: appModel, sessionModel: sessionModel)
+                    .frame(maxWidth: geometry.size.width)
                 
-
-                // Bravo
-                RiveViewModel(fileName: "Bravo_Peaking").view()
-                    .frame(width: 90, height: 90)
-                    .offset(x: -60)
-   
-                // Bravo's message bubble
-                if appModel.viewState.showPreSessionTextBubble {
-                    preSessionMessageBubble
-                        .offset(x: 50, y: 20)
-                }
-  
-                // ZStack for rounded corner
-                ZStack {
-                    
-                    // Rounded corner
-                    RoundedCorner(radius: 30, corners: [.topLeft, .topRight])
-                        .fill(Color.white)
-                        .edgesIgnoringSafeArea(.bottom)
-                    
-                    // White part of home page
-                    VStack(alignment: .leading, spacing: 5) {
-                        
-                        HStack {
-
+                if appModel.viewState.showHomePage {
+                    VStack(spacing: 0) {
+                        // Header with Bravo and message bubble
+                        HStack(alignment: .center) {
+                            
                             Spacer()
                             
-                            SkillSearchBar(appModel: appModel, sessionModel: sessionModel, searchText: $searchSkillsText)
-                                .padding(.top, 3)
+                            // Bravo
+                            RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 3")
+                                .view()
+                                .frame(width: 90, height: 90)
+                                .padding(.leading, geometry.size.width * 0.1)
+                            
+                            if appModel.viewState.showPreSessionTextBubble {
+                                preSessionMessageBubble
+                                    .padding(.leading, 5)
+                            }
                             
                             Spacer()
                         }
+                        .padding(.top, geometry.safeAreaInsets.top)
                         
-                        // If skills search bar is selected
-                        if appModel.viewState.showSkillSearch {
+                        // ZStack for rounded corner
+                        ZStack {
                             
-                            // New view for searching skills
-                            SearchSkillsView(
-                                appModel: appModel,
-                                sessionModel: sessionModel,
-                                searchText: $searchSkillsText
-                            )
-                        // If skills search bar is not selected
-                        } else {
+                            // Rounded corner
+                            RoundedCorner(radius: 30, corners: [.topLeft, .topRight])
+                                .fill(Color.white)
+                                .edgesIgnoringSafeArea(.bottom)
                             
-                            // Filter options
-                            filterScrollView
-
-                            
-                            ScrollView {
-                                // Generated session portion
-                                GeneratedDrillsSection(appModel: appModel, sessionModel: sessionModel)
-                            // If user has selected skills
-                            if sessionModel.selectedSkills.isEmpty {
-                                RecommendedDrillsSection(appModel: appModel, sessionModel: sessionModel)
+                            // White part of home page
+                            VStack(alignment: .center, spacing: 5) {
+                                
+                                HStack {
+                                    
+                                    Spacer()
+                                    
+                                    SkillSearchBar(appModel: appModel, sessionModel: sessionModel, searchText: $searchSkillsText)
+                                        .padding(.top, 3)
+                                    
+                                    Spacer()
+                                }
+                                .padding(.top, 5)
+                                .frame(maxWidth: appModel.layout.adaptiveWidth(geometry))
+                                
+                                // If skills search bar is selected
+                                if appModel.viewState.showSkillSearch {
+                                    
+                                    // New view for searching skills
+                                    SearchSkillsView(
+                                        appModel: appModel,
+                                        sessionModel: sessionModel,
+                                        searchText: $searchSkillsText
+                                    )
+                                    
+                                // If skills search bar is not selected
+                                } else {
+                                    filterScrollView
+                                        .frame(width: geometry.size.width)
+                                    
+                                    // Main content
+                                    ScrollView(showsIndicators: false) {
+                                        VStack(spacing: appModel.layout.standardSpacing) {
+                                            
+                                            
+                                            GeneratedDrillsSection(appModel: appModel, sessionModel: sessionModel)
+                                                .padding(.horizontal, appModel.layout.contentMinPadding)
+                                            
+                                            if sessionModel.selectedSkills.isEmpty {
+                                                RecommendedDrillsSection(appModel: appModel, sessionModel: sessionModel)
+                                                    .padding(.horizontal, appModel.layout.contentMinPadding)
+                                            }
+                                        }
+                                    }
+                                    .frame(maxWidth: appModel.layout.adaptiveWidth(geometry))
+                                }
                             }
-                            
-                            Spacer()
-                            }
-                            
+                            .frame(maxWidth: geometry.size.width)
                         }
                     }
+                    .transition(.move(edge: .bottom))
                 }
-                .transition(.move(edge: .bottom))
-                .padding(.top, 65)
             
-            }
         }
         // functions when UI of app changes
         .onAppear {
@@ -307,7 +319,7 @@ struct SessionGeneratorView: View {
         }
     }
     
-     func BravoTextBubbleDelay() {
+    func BravoTextBubbleDelay() {
         // Initially hide the bubble
         appModel.viewState.showPreSessionTextBubble = false
         
@@ -490,7 +502,7 @@ struct SessionGeneratorView: View {
             }
         }
         .padding(.horizontal)
-        .padding(.bottom, 46)
+        .padding(.bottom, 80)
         .transition(.move(edge: .bottom))
     }
     
@@ -597,3 +609,4 @@ extension SessionGeneratorModel {
         saveChanges()
     }
 }
+

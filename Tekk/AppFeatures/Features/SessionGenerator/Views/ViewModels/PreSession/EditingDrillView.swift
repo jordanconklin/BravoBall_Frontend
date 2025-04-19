@@ -17,6 +17,8 @@ struct EditingDrillView: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     @Binding var editableDrill: EditableDrillModel
     
+    @Environment(\.viewGeometry) var geometry
+    
     @State private var showDrillDetailView: Bool = false
     @State private var editSets: String = ""
     @State private var editReps: String = ""
@@ -162,12 +164,12 @@ struct EditingDrillView: View {
             .padding()
             
         }
-        
+        .frame(width: geometry.size.width)
         .sheet(isPresented: $showDrillDetailView) {
             DrillDetailView(appModel: appModel, sessionModel: sessionModel, drill: editableDrill.drill)
         }
         
-        // TODO: fix this
+        // Checks if changes are made
         .safeAreaInset(edge: .bottom) {
             let validations = (
                 sets: Int(editSets).map { $0 > 0 && $0 <= 99 } ?? false,
@@ -206,35 +208,32 @@ struct EditingDrillView: View {
             .padding()
         }
     }
-    
-    private func validateOneDrill() {
-    }
 }
 
-#Preview {
-    let mockDrill = EditableDrillModel(
-        drill: DrillModel(
-            title: "Test Drill",
-            skill: "Passing",
-            sets: 2,
-            reps: 10,
-            duration: 15,
-            description: "Test description",
-            tips: ["Tip 1", "Tip 2"],
-            equipment: ["Ball"],
-            trainingStyle: "Medium Intensity",
-            difficulty: "Beginner"
-        ),
-        setsDone: 0,
-        totalSets: 2,
-        totalReps: 10,
-        totalDuration: 15,
-        isCompleted: false
-    )
-    
-    return EditingDrillView(
-        appModel: MainAppModel(),
-        sessionModel: SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData()),
-        editableDrill: .constant(mockDrill)
-    )
-}
+//#Preview {
+//    let mockDrill = EditableDrillModel(
+//        drill: DrillModel(
+//            title: "Test Drill",
+//            skill: "Passing",
+//            sets: 2,
+//            reps: 10,
+//            duration: 15,
+//            description: "Test description",
+//            tips: ["Tip 1", "Tip 2"],
+//            equipment: ["Ball"],
+//            trainingStyle: "Medium Intensity",
+//            difficulty: "Beginner"
+//        ),
+//        setsDone: 0,
+//        totalSets: 2,
+//        totalReps: 10,
+//        totalDuration: 15,
+//        isCompleted: false
+//    )
+//    
+//    return EditingDrillView(
+//        appModel: MainAppModel(),
+//        sessionModel: SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData()),
+//        editableDrill: .constant(mockDrill)
+//    )
+//}

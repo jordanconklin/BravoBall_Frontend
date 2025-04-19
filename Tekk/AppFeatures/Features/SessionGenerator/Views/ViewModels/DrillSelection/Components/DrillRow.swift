@@ -12,6 +12,7 @@ struct DrillRow: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     let drill: DrillModel
+    
     @State var showDrillDetail: Bool = false
     
     var body: some View {

@@ -14,7 +14,6 @@ struct MainTabView: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var userManager: UserManager
     @ObservedObject var sessionModel: SessionGeneratorModel
-
     
     var body: some View {
         NavigationView {
@@ -29,59 +28,59 @@ struct MainTabView: View {
                     case 2:
                         SavedDrillsView(appModel: appModel, sessionModel: sessionModel)
                     case 3:
-                        ProfileView(model: model, appModel: appModel, userManager: userManager, sessionModel: sessionModel)
+                        ProfileView(model: model, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
                     default:
                         SessionGeneratorView(model: model, appModel: appModel, sessionModel: sessionModel)
                     }
                 }
+                .frame(maxWidth: .infinity)
                 
                 // Custom Tab Bar
-                HStack(spacing: 0) {
-                    CustomTabItem(
-                        icon: AnyView(appModel.homeTab.view()),
-                        isSelected: appModel.mainTabSelected == 0
-                    ) {
-                        appModel.mainTabSelected = 0
-                    }
+                VStack(spacing: 0) {
+                    Divider()
+                        .frame(height: 3)
+                        .background(Color.gray.opacity(0.3))
                     
-                    CustomTabItem(
-                        icon: AnyView(appModel.progressTab.view()),
-                        isSelected: appModel.mainTabSelected == 1
-                    ) {
-                        appModel.mainTabSelected = 1
+                    HStack(spacing: 0) {
+                        CustomTabItem(
+                            icon: AnyView(appModel.homeTab.view()),
+                            isSelected: appModel.mainTabSelected == 0
+                        ) {
+                            appModel.mainTabSelected = 0
+                        }
+                        
+                        CustomTabItem(
+                            icon: AnyView(appModel.progressTab.view()),
+                            isSelected: appModel.mainTabSelected == 1
+                        ) {
+                            appModel.mainTabSelected = 1
+                        }
+                        
+                        CustomTabItem(
+                            icon: AnyView(appModel.savedTab.view()),
+                            isSelected: appModel.mainTabSelected == 2
+                        ) {
+                            appModel.mainTabSelected = 2
+                        }
+                        
+                        CustomTabItem(
+                            icon: AnyView(appModel.profileTab.view()),
+                            isSelected: appModel.mainTabSelected == 3
+                        ) {
+                            appModel.mainTabSelected = 3
+                        }
                     }
-                    
-                    CustomTabItem(
-                        icon: AnyView(appModel.savedTab.view()),
-                        isSelected: appModel.mainTabSelected == 2
-                    ) {
-                        appModel.mainTabSelected = 2
-                    }
-                    
-                    CustomTabItem(
-                        icon: AnyView(appModel.profileTab.view()),
-                        isSelected: appModel.mainTabSelected == 3
-                    ) {
-                        appModel.mainTabSelected = 3
-                    }
+                    .padding(.horizontal, appModel.layout.contentMinPadding)
+                    .frame(height: 80)
+                    .background(Color.white)
                 }
-                .padding(.horizontal)
-                .padding(.top, 18)
-                .background(
-                    VStack(spacing: 0) {
-                        Divider()
-                            .frame(height: 3)
-                            .background(Color.gray.opacity(0.3))
-                        Color.white
-                    }
-                    .ignoresSafeArea()
-                )
+                .background(Color.white)
             }
+            .edgesIgnoringSafeArea(.bottom)
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
-
-
 
 #Preview {
     let mockOnboardingModel = OnboardingModel()

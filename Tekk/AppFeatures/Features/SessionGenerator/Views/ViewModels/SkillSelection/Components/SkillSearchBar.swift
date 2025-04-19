@@ -11,6 +11,7 @@ import RiveRuntime
 struct SkillSearchBar: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
+    @Environment(\.viewGeometry) var geometry
     
     @State private var showingSkillSelector = false
     @FocusState private var isFocused: Bool

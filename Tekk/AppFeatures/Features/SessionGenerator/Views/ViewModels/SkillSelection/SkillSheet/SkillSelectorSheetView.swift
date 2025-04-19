@@ -12,6 +12,7 @@ struct SkillSelectorSheet: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     
+    @Environment(\.viewGeometry) var geometry
     @Environment(\.dismiss) private var dismiss
     @State private var expandedCategory: String?
     
@@ -100,7 +101,8 @@ struct SkillSelectorSheet: View {
                                                 .padding(.horizontal)
                                                 .padding(.vertical, 8)
                                             }
-                                            .foregroundColor(appModel.globalSettings.primaryDarkColor)                                    }
+                                            .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                                        }
                                     }
                                     .padding(.vertical)
                                     .background(Color.gray.opacity(0.05))
@@ -114,22 +116,22 @@ struct SkillSelectorSheet: View {
                     .padding()
                 }
             }
+            .frame(width: geometry.size.width)
             .safeAreaInset(edge: .bottom) {
-                if sessionModel.selectedSkills.count > 0 {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Text("Create Session")
-                            .font(.custom("Poppins-Bold", size: 18))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.yellow)
-                            .cornerRadius(12)
-                    }
-                    .padding()
+                Button(action: {
+                    dismiss()
+                }) {
+                        
+                    Text("Create Session")
+                        .font(.custom("Poppins-Bold", size: 18))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(sessionModel.selectedSkills.isEmpty ? appModel.globalSettings.primaryLightGrayColor : appModel.globalSettings.primaryYellowColor)
+                        .cornerRadius(12)
                 }
-                
+                .disabled(sessionModel.selectedSkills.isEmpty)
+                .padding()
             }
     }
     // TODO: move this somewhere else?
@@ -143,3 +145,5 @@ struct SkillSelectorSheet: View {
         return false
     }
 }
+
+

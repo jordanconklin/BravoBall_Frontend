@@ -12,6 +12,7 @@ import SwiftUI
 struct DrillSearchView: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
+    @Environment(\.viewGeometry) var geometry
     
     // Callback for when drills are selected
     var onDrillsSelected: ([DrillModel]) -> Void
@@ -312,6 +313,7 @@ struct DrillSearchView: View {
                 .padding()
             }
         }
+        .frame(width: geometry.size.width)
         .onAppear {
             // Directly call performSearch without any filters
             // to load all drills immediately
