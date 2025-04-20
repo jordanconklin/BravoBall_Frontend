@@ -36,6 +36,7 @@ struct DrillResponse: Codable, Identifiable {
     let instructions: [String]
     let tips: [String]
     let type: String
+    let subSkills: [String]
     let sets: Int?  // Make sets optional to handle null values
     let reps: Int?  // Make reps optional to handle null values
     let rest: Int?
@@ -115,6 +116,7 @@ struct DrillResponse: Codable, Identifiable {
             backendId: id, // Store the backend ID from the API
             title: title,
             skill: type,
+            subSkills: subSkills,
             sets: sets ?? 0,
             reps: reps ?? 0,
             duration: duration,

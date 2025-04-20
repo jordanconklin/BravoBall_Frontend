@@ -187,7 +187,6 @@ struct CalendarView: View {
     
     private var testButton: some View {
         Group {
-            if appModel.inSimulationMode {
                 // test button
                 Button(action: {
                     addDrill(for: simulatedDate)
@@ -215,7 +214,6 @@ struct CalendarView: View {
                         .font(.custom("Poppins-Bold", size: 13))
                         .foregroundColor(appModel.globalSettings.primaryGrayColor)
                 }
-            }
         }
     }
 
@@ -230,6 +228,7 @@ struct CalendarView: View {
     }
 
 
+    // MARK: testing function
     private func addDrill(for date: Date) {
         let addedTestDrillsOne = DrillModel(
             title: "Cone weaves",

@@ -392,6 +392,7 @@ class DrillSearchService {
                 backendId: response.id,
                 title: drillModel.title,
                 skill: drillModel.skill,
+                subSkills: drillModel.subSkills,
                 sets: drillModel.sets,
                 reps: drillModel.reps,
                 duration: drillModel.duration,

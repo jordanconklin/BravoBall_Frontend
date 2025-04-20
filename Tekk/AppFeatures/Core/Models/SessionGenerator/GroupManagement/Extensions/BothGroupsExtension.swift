@@ -39,6 +39,7 @@ extension SessionGeneratorModel: BothGroupsManagement {
                             backendId: drillResponse.id,
                             title: drillResponse.title,
                             skill: drillResponse.type,
+                            subSkills: drillResponse.subSkills,
                             sets: drillResponse.sets ?? 0,
                             reps: drillResponse.reps ?? 0,
                             duration: drillResponse.duration,

@@ -324,6 +324,7 @@ class SessionGeneratorModel: ObservableObject {
         DrillModel(
             title: "Short Passing Drill",
             skill: "Passing",
+            subSkills: ["short_passing"],
             sets: 4,
             reps: 10,
             duration: 15,
@@ -336,6 +337,7 @@ class SessionGeneratorModel: ObservableObject {
         DrillModel(
             title: "Long Passing Practice",
             skill: "Passing",
+            subSkills: ["long_passing"],
             sets: 3,
             reps: 8,
             duration: 20,
@@ -348,6 +350,7 @@ class SessionGeneratorModel: ObservableObject {
         DrillModel(
             title: "Through Ball Training",
             skill: "Passing",
+            subSkills: ["long_passing"],
             sets: 4,
             reps: 6,
             duration: 15,
@@ -360,6 +363,7 @@ class SessionGeneratorModel: ObservableObject {
         DrillModel(
             title: "Power Shot Practice",
             skill: "Shooting",
+            subSkills: ["power_shot"],
             sets: 3,
             reps: 5,
             duration: 20,
@@ -372,6 +376,7 @@ class SessionGeneratorModel: ObservableObject {
         DrillModel(
             title: "1v1 Dribbling Skills",
             skill: "Dribbling",
+            subSkills: ["winger_skills"],
             sets: 4,
             reps: 8,
             duration: 15,

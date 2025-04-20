@@ -72,13 +72,15 @@ extension SessionGeneratorModel: CacheManagement {
         // First load all cached data
         loadAllFromCache()
         
-        // Then sync with backend
+        // Then sync with backend and load database drills
         Task {
             await syncAllWithBackend()
+            // Load and cache database drills
+            await loadAndCacheDatabaseDrills()
         }
     }
     
-    private func loadAllFromCache() {
+    func loadAllFromCache() {
         print("\n📱 Loading all data from cache...")
         
         // Load ordered drills
