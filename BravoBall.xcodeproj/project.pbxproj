@@ -36,6 +36,13 @@
 		1784EB6D2D965F79001D4F2F /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1784EB6C2D965F70001D4F2F /* SettingsModel.swift */; };
 		1784EB6F2D965FE0001D4F2F /* EditDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1784EB6E2D965FDC001D4F2F /* EditDetailsView.swift */; };
 		17C3B58D2D38E43900D2471F /* DrillFollowAlongView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C3B58C2D38E41C00D2471F /* DrillFollowAlongView.swift */; };
+		17D528BE2DB3365A003F5048 /* SessionResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D528BD2DB3364C003F5048 /* SessionResponseModel.swift */; };
+		17D528C22DB336FF003F5048 /* FilterScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D528C12DB336FA003F5048 /* FilterScrollView.swift */; };
+		17D528C42DB33713003F5048 /* GoldenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D528C32DB33705003F5048 /* GoldenButton.swift */; };
+		17D528C62DB33725003F5048 /* HomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D528C52DB33717003F5048 /* HomePage.swift */; };
+		17D528C82DB33732003F5048 /* PreSessionMessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D528C72DB3372F003F5048 /* PreSessionMessageBubble.swift */; };
+		17D528CA2DB3374A003F5048 /* SaveFiltersPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D528C92DB33746003F5048 /* SaveFiltersPrompt.swift */; };
+		17D528CC2DB338DA003F5048 /* SessionGeneratorModel+InitialSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D528CB2DB338D0003F5048 /* SessionGeneratorModel+InitialSession.swift */; };
 		17F5D6542CD3477E008E8C24 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F5D6532CD3477E008E8C24 /* ColorExtension.swift */; };
 		17F5D6562CD347AE008E8C24 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F5D6552CD347AD008E8C24 /* GlobalSettings.swift */; };
 		430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */; };
@@ -183,6 +190,13 @@
 		1784EB6C2D965F70001D4F2F /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		1784EB6E2D965FDC001D4F2F /* EditDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDetailsView.swift; sourceTree = "<group>"; };
 		17C3B58C2D38E41C00D2471F /* DrillFollowAlongView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrillFollowAlongView.swift; sourceTree = "<group>"; };
+		17D528BD2DB3364C003F5048 /* SessionResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionResponseModel.swift; sourceTree = "<group>"; };
+		17D528C12DB336FA003F5048 /* FilterScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterScrollView.swift; sourceTree = "<group>"; };
+		17D528C32DB33705003F5048 /* GoldenButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoldenButton.swift; sourceTree = "<group>"; };
+		17D528C52DB33717003F5048 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
+		17D528C72DB3372F003F5048 /* PreSessionMessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreSessionMessageBubble.swift; sourceTree = "<group>"; };
+		17D528C92DB33746003F5048 /* SaveFiltersPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveFiltersPrompt.swift; sourceTree = "<group>"; };
+		17D528CB2DB338D0003F5048 /* SessionGeneratorModel+InitialSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionGeneratorModel+InitialSession.swift"; sourceTree = "<group>"; };
 		17E693182C7435B3006B58A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		17F5D6532CD3477E008E8C24 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		17F5D6552CD347AD008E8C24 /* GlobalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
@@ -438,6 +452,18 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		17D528C02DB336A1003F5048 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				17D528C12DB336FA003F5048 /* FilterScrollView.swift */,
+				17D528C32DB33705003F5048 /* GoldenButton.swift */,
+				17D528C72DB3372F003F5048 /* PreSessionMessageBubble.swift */,
+				17D528C52DB33717003F5048 /* HomePage.swift */,
+				17D528C92DB33746003F5048 /* SaveFiltersPrompt.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		431BDFE82D853E0700F4E6EE /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -511,6 +537,7 @@
 		4399B71A2D6D79D800DA5E84 /* SessionGenerator */ = {
 			isa = PBXGroup;
 			children = (
+				17D528C02DB336A1003F5048 /* Components */,
 				43C5FC452D6DB8280064E7D5 /* Models */,
 				4399B7212D6D7A0D00DA5E84 /* Views */,
 			);
@@ -821,6 +848,8 @@
 			isa = PBXGroup;
 			children = (
 				43C5FC482D6DB84B0064E7D5 /* EditableDrillModel.swift */,
+				17D528CB2DB338D0003F5048 /* SessionGeneratorModel+InitialSession.swift */,
+				17D528BD2DB3364C003F5048 /* SessionResponseModel.swift */,
 				43C5FC432D6DB7DF0064E7D5 /* SkillTypes.swift */,
 				4399B7412D6D92BE00DA5E84 /* FilterTypes.swift */,
 			);
@@ -1136,6 +1165,8 @@
 				43C5FC6C2D6DCC520064E7D5 /* DrillCard.swift in Sources */,
 				430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */,
 				170167FD2D88F5C60078446C /* DrillSearchService.swift in Sources */,
+				17D528C62DB33725003F5048 /* HomePage.swift in Sources */,
+				17D528CC2DB338DA003F5048 /* SessionGeneratorModel+InitialSession.swift in Sources */,
 				174C67702D34EB26003D02EF /* DrillDetailView.swift in Sources */,
 				43C5FC852D6DCF530064E7D5 /* TabButton.swift in Sources */,
 				43C5FC5C2D6DBEC90064E7D5 /* RoundedCorner.swift in Sources */,
@@ -1154,10 +1185,12 @@
 				17595AA32D3B3B610015F35D /* WeekDisplayButton.swift in Sources */,
 				43C5FC412D6DB59D0064E7D5 /* DrillModel.swift in Sources */,
 				43C5FC622D6DC1470064E7D5 /* SkillRow.swift in Sources */,
+				17D528C22DB336FF003F5048 /* FilterScrollView.swift in Sources */,
 				43C5FC442D6DB7E20064E7D5 /* SkillTypes.swift in Sources */,
 				43C5FC832D6DCF1B0064E7D5 /* AllDrillsView.swift in Sources */,
 				43AC252C2DA3261A00EDD8C0 /* SessionDrillMgmtExtension.swift in Sources */,
 				17595AA12D3B3B520015F35D /* DrillResultsView.swift in Sources */,
+				17D528BE2DB3365A003F5048 /* SessionResponseModel.swift in Sources */,
 				170168002D88F6240078446C /* DrillSearchView.swift in Sources */,
 				43C5FC7D2D6DCE740064E7D5 /* SelectionButton.swift in Sources */,
 				178208F12D2DFD6500246494 /* OnboardingPreview.swift in Sources */,
@@ -1177,6 +1210,7 @@
 				178208E02D2DEB9C00246494 /* OnboardingModel.swift in Sources */,
 				43C5FC6A2D6DCC130064E7D5 /* RecommendedDrillCard.swift in Sources */,
 				43C5FC542D6DBD0E0064E7D5 /* GroupCard.swift in Sources */,
+				17D528C82DB33732003F5048 /* PreSessionMessageBubble.swift in Sources */,
 				4399B7392D6D901B00DA5E84 /* ToastMessageModel.swift in Sources */,
 				17F5D6562CD347AE008E8C24 /* GlobalSettings.swift in Sources */,
 				17F5D6542CD3477E008E8C24 /* ColorExtension.swift in Sources */,
@@ -1184,6 +1218,7 @@
 				43524E952D5198C900AD897A /* SearchDrillsSheetView.swift in Sources */,
 				43C5FC5E2D6DC0E40064E7D5 /* FilterOptionsButton.swift in Sources */,
 				43AC25622DA394B500EDD8C0 /* SavedGroupsExtension.swift in Sources */,
+				17D528C42DB33713003F5048 /* GoldenButton.swift in Sources */,
 				43C5FC562D6DBD310064E7D5 /* LikedGroupCard.swift in Sources */,
 				1784EB6D2D965F79001D4F2F /* SettingsModel.swift in Sources */,
 				1782090C2D2E09EB00246494 /* SavedDrillsView.swift in Sources */,
@@ -1216,6 +1251,7 @@
 				4399B6F32D6C854B00DA5E84 /* FilterSheet.swift in Sources */,
 				43AC25792DA39C7200EDD8C0 /* SyncingExtension.swift in Sources */,
 				43524E772D4D994B00AD897A /* SessionGeneratorModel.swift in Sources */,
+				17D528CA2DB3374A003F5048 /* SaveFiltersPrompt.swift in Sources */,
 				43C5FC762D6DCD1D0064E7D5 /* RecommendedDrillsSection.swift in Sources */,
 				43FCC7252D7F8D6E00005ABB /* CustomTabItem.swift in Sources */,
 				43AC25562DA38F1400EDD8C0 /* GroupProtocols.swift in Sources */,
