@@ -34,13 +34,40 @@ extension SessionGeneratorModel: SessionDrillManagement {
     // Load drills from database and cache them
     func loadAndCacheDatabaseDrills() async {
         print("🔄 Loading drills from database...")
+        
+        // Clear existing cache first
+        CacheManager.shared.clearCache(forKey: .databaseDrillsCase)
+        print("🗑️ Cleared existing drill cache")
+        
         do {
             let drillResponses = try await DrillSearchService.shared.searchDrills()
             let drills = DrillSearchService.shared.convertToLocalModels(drillResponses: drillResponses.items)
             
+            // Print some debug info about the drills
+            print("\n📊 DEBUG: Converting \(drillResponses.items?.count ?? 0) drills")
+            if let firstFewDrills = drillResponses.items?.prefix(3) {
+                print("\n🔍 Sample of first few drills:")
+                for (index, drill) in firstFewDrills.enumerated() {
+                    print("\nDrill \(index + 1):")
+                    print("- Title:", drill.title)
+                    print("- Primary Skill:", drill.primarySkill?.category ?? "None")
+                    print("- Type:", drill.type)
+                    print("- Secondary Skills:", drill.secondarySkills?.map { $0.category } ?? [])
+                }
+            }
+            
             // Cache the drills
             CacheManager.shared.cache(drills, forKey: .databaseDrillsCase)
             print("✅ Cached \(drills.count) drills from database")
+            
+            // Print sample of cached drills
+            print("\n📋 Sample of cached drills:")
+            for (index, drill) in drills.prefix(3).enumerated() {
+                print("\nCached Drill \(index + 1):")
+                print("- Title:", drill.title)
+                print("- Skill:", drill.skill)
+                print("- SubSkills:", drill.subSkills)
+            }
         } catch {
             print("❌ Error loading drills from database: \(error)")
         }
@@ -49,12 +76,27 @@ extension SessionGeneratorModel: SessionDrillManagement {
     // Get drills from cache or fallback to test drills
     private func getDrills() -> [DrillModel] {
         if let cachedDrills: [DrillModel] = CacheManager.shared.retrieve(forKey: .databaseDrillsCase) {
-            print("📋 Using \(cachedDrills.count) drills from cache")
+            print("\n📋 Using \(cachedDrills.count) drills from cache")
+            print("📋 Sample of cached drills:")
+            for (index, drill) in cachedDrills.prefix(3).enumerated() {
+                print("\nCached Drill \(index + 1):")
+                print("- Title:", drill.title)
+                print("- Skill:", drill.skill)
+                print("- SubSkills:", drill.subSkills)
+            }
             return cachedDrills
         }
         
-        print("⚠️ No cached drills found, using test drills")
-        return Self.testDrills
+        print("\n⚠️ No cached drills found, using test drills")
+        let testDrills = Self.testDrills
+        print("📋 Sample of test drills:")
+        for (index, drill) in testDrills.prefix(3).enumerated() {
+            print("\nTest Drill \(index + 1):")
+            print("- Title:", drill.title)
+            print("- Skill:", drill.skill)
+            print("- SubSkills:", drill.subSkills)
+        }
+        return testDrills
     }
     
     // this will update the ordered drills based on the selected skills
@@ -62,29 +104,56 @@ extension SessionGeneratorModel: SessionDrillManagement {
         // Get drills from cache or fallback to test drills
         let availableDrills = getDrills()
         
-        // Show drills that match any of the selected sub-skills
+        print("\n🔍 DEBUG: Selected Skills:", selectedSkills)
+        print("\n📊 DEBUG: Available Drills Count:", availableDrills.count)
+        
+        // Print first few drills to check their structure
+        print("\n🔎 DEBUG: Sample of Available Drills:")
+        for (index, drill) in availableDrills.prefix(5).enumerated() {
+            print("\nDrill \(index + 1):")
+            print("- Title:", drill.title)
+            print("- Skill:", drill.skill)
+            print("- SubSkills:", drill.subSkills)
+        }
+        
+        // Filter drills based on selected skills
         let filteredDrills = availableDrills.filter { drill in
-            // Check if any of the selected skills match the drill
-            for skill in selectedSkills {
-                // Match drills based on skill keywords
-                switch skill.lowercased() {
-                case "short passing":
-                    if drill.title.contains("Pass") { return true }
-                case "long passing":
-                    if drill.title.contains("Long Passing") { return true }
-                case "through balls":
-                    if drill.title.contains("Through Ball") { return true }
-                case "power shots", "finesse shots", "volleys", "one-on-one finishing", "long shots":
-                    if drill.title.contains("Shot") || drill.title.contains("Shooting") { return true }
-                case "close control", "speed dribbling", "1v1 moves", "winger skills", "ball mastery":
-                    if drill.title.contains("Dribbling") || drill.title.contains("1v1") { return true }
-                default:
-                    // For any other skills, try to match based on the first word
-                    let mainSkill = skill.split(separator: " ").first?.lowercased() ?? ""
-                    if drill.title.lowercased().contains(mainSkill) { return true }
+            // If no skills are selected, include all drills
+            guard !selectedSkills.isEmpty else { return true }
+            
+            // Check if any of the selected skills match the drill's category
+            return selectedSkills.contains { selectedSkill in
+                // First, check if the selected skill directly matches the drill's skill category
+                if drill.skill.lowercased() == selectedSkill.lowercased() {
+                    print("✅ MATCH FOUND: '\(drill.title)' matches category '\(selectedSkill)'")
+                    return true
                 }
+                
+                // For specific cases where we need to check subSkills
+                switch selectedSkill.lowercased() {
+                case "close control", "speed dribbling":
+                    let hasMatch = drill.subSkills.contains(where: { $0.contains("ground_control") })
+                    print("- Checking for 'ball_control' in subSkills:", hasMatch)
+                    if hasMatch {
+                        print("✅ MATCH FOUND: '\(drill.title)' matches control/dribbling category")
+                        return true
+                    }
+                default:
+                    return false
+                }
+                
+                return false
             }
-            return false
+        }
+        
+        print("\n📝 DEBUG: Filtered Drills Count:", filteredDrills.count)
+        if filteredDrills.isEmpty {
+            print("⚠️ WARNING: No drills matched the selected skills!")
+        } else {
+            print("\n✅ Matched Drills:")
+            filteredDrills.forEach { drill in
+                print("- '\(drill.title)' (Skill: \(drill.skill), SubSkills: \(drill.subSkills))")
+            }
         }
         
         // Convert filtered DrillModels to EditableDrillModels
@@ -98,5 +167,7 @@ extension SessionGeneratorModel: SessionDrillManagement {
                 isCompleted: false
             )
         }
+        
+        print("\n📱 Final Session Drills Count:", orderedSessionDrills.count)
     }
 }

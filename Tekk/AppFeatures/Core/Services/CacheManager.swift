@@ -150,6 +150,7 @@ class CacheManager {
         return nil
     }
     
+    // Clear cache for specific keys
     func clearCache(forKey key: CacheKey) {
         let userEmail = getCurrentUserEmail()
         guard !userEmail.isEmpty else {

@@ -24,6 +24,7 @@ struct SessionResponse: Codable {
 }
 
 // Add the DrillResponse model definition
+//TODO: have backend send othe rneeded data types (e.g. thumbnail URL) it is accepting 
 struct DrillResponse: Codable, Identifiable {
     let id: Int
     let title: String
@@ -36,11 +37,24 @@ struct DrillResponse: Codable, Identifiable {
     let instructions: [String]
     let tips: [String]
     let type: String
-    let subSkills: [String]
     let sets: Int?  // Make sets optional to handle null values
     let reps: Int?  // Make reps optional to handle null values
     let rest: Int?
     
+    struct Skill: Codable {
+            let category: String
+            let subSkill: String
+            
+            enum CodingKeys: String, CodingKey {
+                case category
+                case subSkill = "sub_skill"
+            }
+        }
+        
+    let primarySkill: Skill?
+    let secondarySkills: [Skill]?
+    
+    // enums to handle sanke_case and camelCase differences from frontend and backend
     enum CodingKeys: String, CodingKey {
         case id
         case title
@@ -56,6 +70,39 @@ struct DrillResponse: Codable, Identifiable {
         case sets
         case reps
         case rest
+        case primarySkill = "primary_skill"
+        case secondarySkills = "secondary_skills"
+    }
+    
+    // Convert API response to local DrillModel
+    func toDrillModel() -> DrillModel {
+        // Get the primary skill category, defaulting to the type if not available
+        let skillCategory = primarySkill?.category ?? type
+        
+        // Collect all sub-skills from both primary and secondary skills
+        var allSubSkills: [String] = []
+        if let primarySubSkill = primarySkill?.subSkill {
+            allSubSkills.append(primarySubSkill)
+        }
+        if let secondarySkills = secondarySkills {
+            allSubSkills.append(contentsOf: secondarySkills.map { $0.subSkill })
+        }
+        
+        return DrillModel(
+            id: UUID(),  // Generate a new UUID since we can't convert an Int to UUID
+            backendId: id, // Store the backend ID from the API
+            title: title,
+            skill: skillCategory,
+            subSkills: allSubSkills,
+            sets: sets ?? 0,
+            reps: reps ?? 0,
+            duration: duration,
+            description: description,
+            tips: tips,
+            equipment: equipment,
+            trainingStyle: intensity,
+            difficulty: difficulty
+        )
     }
     
     // Custom initializer to handle decoding with null values
@@ -85,14 +132,18 @@ struct DrillResponse: Codable, Identifiable {
         
         type = try container.decodeIfPresent(String.self, forKey: .type) ?? "other"
         
+        
         // Optional fields
         sets = try container.decodeIfPresent(Int.self, forKey: .sets)
         reps = try container.decodeIfPresent(Int.self, forKey: .reps)
         rest = try container.decodeIfPresent(Int.self, forKey: .rest)
+        
+        primarySkill = try container.decodeIfPresent(Skill.self, forKey: .primarySkill)
+        secondarySkills = try container.decodeIfPresent([Skill].self, forKey: .secondarySkills)
     }
     
     // Standard initializer for creating instances directly
-    init(id: Int, title: String, description: String, duration: Int, intensity: String, difficulty: String, equipment: [String], suitableLocations: [String], instructions: [String], tips: [String], type: String, sets: Int?, reps: Int?, rest: Int?) {
+    init(id: Int, title: String, description: String, duration: Int, intensity: String, difficulty: String, equipment: [String], suitableLocations: [String], instructions: [String], tips: [String], type: String, sets: Int?, reps: Int?, rest: Int?, primarySkill: Skill?, secondarySkills: [Skill]?) {
         self.id = id
         self.title = title
         self.description = description
@@ -107,25 +158,8 @@ struct DrillResponse: Codable, Identifiable {
         self.sets = sets
         self.reps = reps
         self.rest = rest
-    }
-    
-    // Convert API drill to app's DrillModel
-    func toDrillModel() -> DrillModel {
-        return DrillModel(
-            id: UUID(),  // Generate a new UUID since we can't convert an Int to UUID
-            backendId: id, // Store the backend ID from the API
-            title: title,
-            skill: type,
-            subSkills: subSkills,
-            sets: sets ?? 0,
-            reps: reps ?? 0,
-            duration: duration,
-            description: description,
-            tips: tips,
-            equipment: equipment,
-            trainingStyle: intensity,
-            difficulty: difficulty
-        )
+        self.primarySkill = primarySkill
+        self.secondarySkills = secondarySkills
     }
     
     // Map API skill types to app skill types

@@ -469,9 +469,12 @@ class DataSyncService {
         let instructions: [String]
         let tips: [String]
         let type: String
+        let subSkills: [String]
         let sets: Int?
         let reps: Int?
         let rest: Int?
+        let primarySkill: DrillResponse.Skill?
+        let secondarySkills: [DrillResponse.Skill]?
         
         // Convert to a DrillResponse
         func toDrillResponse() -> DrillResponse {
@@ -489,7 +492,9 @@ class DataSyncService {
                 type: self.type,
                 sets: self.sets,
                 reps: self.reps,
-                rest: self.rest
+                rest: self.rest,
+                primarySkill: self.primarySkill,
+                secondarySkills: self.secondarySkills
             )
         }
     }

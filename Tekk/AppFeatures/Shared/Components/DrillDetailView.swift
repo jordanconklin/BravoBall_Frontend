@@ -251,6 +251,7 @@ struct DrillDetailView: View {
         id: UUID(),
         title: "Quick Passing Drill",
         skill: "Passing",
+        subSkills: ["close_control"],
         sets: 3,
         reps: 10,
         duration: 15,

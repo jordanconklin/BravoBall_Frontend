@@ -42,4 +42,5 @@ extension SessionGeneratorModel: DrillSelection {
             selectedDrills.removeAll()
         }
     }
+    
 }

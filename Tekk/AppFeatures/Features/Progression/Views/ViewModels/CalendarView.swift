@@ -233,6 +233,7 @@ struct CalendarView: View {
         let addedTestDrillsOne = DrillModel(
             title: "Cone weaves",
             skill: "Dribbling",
+            subSkills: ["close_control"],
             sets: 4,
             reps: 8,
             duration: 20,
@@ -246,6 +247,7 @@ struct CalendarView: View {
         let addedTestDrillsTwo = DrillModel(
             title: "Toe-taps",
             skill: "Dribbling",
+            subSkills: ["close_control"],
             sets: 3,
             reps: 20,
             duration: 10,
@@ -259,6 +261,7 @@ struct CalendarView: View {
         let addedTestDrillsThree = DrillModel(
             title: "Ronaldinho Drill",
             skill: "Dribbling",
+            subSkills: ["close_control"],
             sets: 4,
             reps: 3,
             duration: 15,
