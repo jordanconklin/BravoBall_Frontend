@@ -15,7 +15,8 @@ class SessionGeneratorModel: ObservableObject {
     
     @ObservedObject var appModel: MainAppModel  // Add this
     
-    
+    // Add loading state
+    @Published var isRegeneratingSession: Bool = false
     
     let cacheManager = CacheManager.shared
     private var lastSyncTime: Date = Date()
@@ -398,6 +399,152 @@ class SessionGeneratorModel: ObservableObject {
             self.selectedTrainingStyle = model.selectedTrainingStyle
             self.selectedLocation = model.selectedLocation
             self.selectedDifficulty = model.selectedDifficulty
+        }
+    }
+
+    // MARK: - Session Generation
+
+    /// Generate a session using the current preferences
+    func generateSession() async throws -> SessionResponse {
+        let url = URL(string: "\(AppSettings.baseURL)/api/session/generate")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Add auth token
+        if let token = KeychainWrapper.standard.string(forKey: "authToken") {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            print("🔑 Using auth token: \(token)")
+        } else {
+            print("⚠️ No auth token found!")
+            throw URLError(.userAuthenticationRequired)
+        }
+        
+        print("📤 Generating session with current preferences")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ Invalid response type")
+            throw URLError(.badServerResponse)
+        }
+        
+        print("📥 Response status code: \(httpResponse.statusCode)")
+        
+        switch httpResponse.statusCode {
+        case 200:
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let sessionResponse = try decoder.decode(SessionResponse.self, from: data)
+            print("✅ Successfully generated session with \(sessionResponse.drills.count) drills")
+            return sessionResponse
+        case 401:
+            print("❌ Unauthorized - Invalid or expired token")
+            throw URLError(.userAuthenticationRequired)
+        case 404:
+            print("❌ Endpoint not found")
+            throw URLError(.badURL)
+        default:
+            print("❌ Unexpected status code: \(httpResponse.statusCode)")
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("Response body: \(responseString)")
+            }
+            throw URLError(.badServerResponse)
+        }
+    }
+
+    /// Generate a session with custom preferences without saving them
+    func generateSessionWithPreferences() async throws -> SessionResponse {
+        let url = URL(string: "\(AppSettings.baseURL)/api/session/generate-with-preferences")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Add auth token
+        if let token = KeychainWrapper.standard.string(forKey: "authToken") {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            print("🔑 Using auth token: \(token)")
+        } else {
+            print("⚠️ No auth token found!")
+            throw URLError(.userAuthenticationRequired)
+        }
+        
+        // Convert duration string to minutes
+        let duration: Int
+        switch selectedTime {
+        case "15min": duration = 15
+        case "30min": duration = 30
+        case "1h": duration = 60
+        case "1h30": duration = 90
+        case "2h+": duration = 120
+        default: duration = 30
+        }
+        
+        // Create preferences dictionary
+        let preferences: [String: Any] = [
+            "duration": duration,
+            "available_equipment": Array(selectedEquipment),
+            "training_style": selectedTrainingStyle?.lowercased().replacingOccurrences(of: " ", with: "_") ?? "medium_intensity",
+            "training_location": selectedLocation?.lowercased().replacingOccurrences(of: " ", with: "_") ?? "full_field",
+            "difficulty": selectedDifficulty?.lowercased() ?? "beginner",
+            "target_skills": Array(selectedSkills).map { $0.lowercased().replacingOccurrences(of: " ", with: "_") }
+        ]
+        
+        print("📤 Generating session with preferences: \(preferences)")
+        
+        // Encode request body
+        request.httpBody = try JSONSerialization.data(withJSONObject: preferences)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ Invalid response type")
+            throw URLError(.badServerResponse)
+        }
+        
+        print("📥 Response status code: \(httpResponse.statusCode)")
+        
+        switch httpResponse.statusCode {
+        case 200:
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let sessionResponse = try decoder.decode(SessionResponse.self, from: data)
+            print("✅ Successfully generated session with \(sessionResponse.drills.count) drills")
+            return sessionResponse
+        case 401:
+            print("❌ Unauthorized - Invalid or expired token")
+            throw URLError(.userAuthenticationRequired)
+        case 404:
+            print("❌ Endpoint not found")
+            throw URLError(.badURL)
+        case 422:
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("❌ Validation error: \(responseString)")
+            }
+            throw URLError(.badServerResponse)
+        default:
+            print("❌ Unexpected status code: \(httpResponse.statusCode)")
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("Response body: \(responseString)")
+            }
+            throw URLError(.badServerResponse)
+        }
+    }
+
+    // Add regenerate session function
+    func regenerateSession() async {
+        await MainActor.run { isRegeneratingSession = true }
+        
+        do {
+            // Use generateSessionWithPreferences to use current filter selections
+            let sessionResponse = try await generateSessionWithPreferences()
+            await MainActor.run {
+                loadInitialSession(from: sessionResponse)
+                isRegeneratingSession = false
+            }
+        } catch {
+            print("❌ Error regenerating session: \(error)")
+            await MainActor.run { isRegeneratingSession = false }
         }
     }
 

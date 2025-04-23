@@ -16,47 +16,78 @@ struct GeneratedDrillsSection: View {
     
     var body: some View {
         LazyVStack(alignment: .center, spacing: layout.standardSpacing) {
-                HStack {
-                    
-                    Button(action: {
-                        appModel.viewState.showSearchDrills = true
-                    }) {
-                        RiveViewModel(fileName: "Plus_Button").view()
-                            .frame(width: 30, height: 30)
-                    }
-                    
-                    Button(action: {
-                        withAnimation(.spring(dampingFraction: 0.7)) {
-                            appModel.viewState.showDeleteButtons.toggle()
-                        }
-                    }) {
-                        ZStack {
-                            Circle()
-                                .fill(appModel.globalSettings.primaryLightGrayColor)
-                                .frame(width: 30, height: 30)
-                                .offset(x: 0, y: 3)
-                            Circle()
-                                .fill(Color.white)
-                                .frame(width: 30, height: 30)
-                            
-                            Image(systemName: "trash")
-                                .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                                .font(.system(size: 16, weight: .medium))
-                        }
-                    }
-
-                    Spacer()
-                    
-                    Text("Session")
-                        .font(.custom("Poppins-Bold", size: 20))
-                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                        .padding(.trailing, 60)
-                    
-                    Spacer()
-
+            HStack {
+                Button(action: {
+                    appModel.viewState.showSearchDrills = true
+                }) {
+                    RiveViewModel(fileName: "Plus_Button").view()
+                        .frame(width: 30, height: 30)
                 }
- 
                 
+                Button(action: {
+                    withAnimation(.spring(dampingFraction: 0.7)) {
+                        appModel.viewState.showDeleteButtons.toggle()
+                    }
+                }) {
+                    ZStack {
+                        Circle()
+                            .fill(appModel.globalSettings.primaryLightGrayColor)
+                            .frame(width: 30, height: 30)
+                            .offset(x: 0, y: 3)
+                        Circle()
+                            .fill(Color.white)
+                            .frame(width: 30, height: 30)
+                        
+                        Image(systemName: "trash")
+                            .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                            .font(.system(size: 16, weight: .medium))
+                    }
+                }
+                
+                Spacer()
+                
+                Text("Session")
+                    .font(.custom("Poppins-Bold", size: 20))
+                    .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                
+                Button(action: {
+                    Task {
+                        await sessionModel.regenerateSession()
+                    }
+                }) {
+                    ZStack {
+                        Circle()
+                            .fill(appModel.globalSettings.primaryLightGrayColor)
+                            .frame(width: 30, height: 30)
+                            .offset(x: 0, y: 3)
+                        Circle()
+                            .fill(Color.white)
+                            .frame(width: 30, height: 30)
+                        
+                        Image(systemName: "arrow.clockwise")
+                            .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                            .font(.system(size: 16, weight: .medium))
+                    }
+                }
+                .padding(.leading, 8)
+                .disabled(sessionModel.isRegeneratingSession)
+                
+                Spacer()
+            }
+            
+            if sessionModel.isRegeneratingSession {
+                VStack {
+                    ProgressView()
+                        .scaleEffect(1.5)
+                        .padding(.bottom, 10)
+                    Text("Generating new session...")
+                        .font(.custom("Poppins-Regular", size: 14))
+                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding(30)
+                .background(Color.white.opacity(0.95))
+            } else {
                 if sessionModel.orderedSessionDrills.isEmpty {
                     Spacer()
                     HStack {
@@ -68,7 +99,6 @@ struct GeneratedDrillsSection: View {
                             .foregroundColor(appModel.globalSettings.primaryLightGrayColor)
                     }
                     .padding(30)
-                    
                 } else {
                     ForEach($sessionModel.orderedSessionDrills, id: \.drill.id) { $editableDrill in
                         HStack {
@@ -118,13 +148,13 @@ struct GeneratedDrillsSection: View {
                         }
                     }
                 }
-
             }
-            .padding(.horizontal)
-            .padding(.top, 10)
-            .cornerRadius(15)
-            .sheet(isPresented: $appModel.viewState.showSearchDrills) {
-                SearchDrillsSheetView(appModel: appModel, sessionModel: sessionModel, dismiss: { appModel.viewState.showSearchDrills = false })
-            }
+        }
+        .padding(.horizontal)
+        .padding(.top, 10)
+        .cornerRadius(15)
+        .sheet(isPresented: $appModel.viewState.showSearchDrills) {
+            SearchDrillsSheetView(appModel: appModel, sessionModel: sessionModel, dismiss: { appModel.viewState.showSearchDrills = false })
+        }
     }
 }
