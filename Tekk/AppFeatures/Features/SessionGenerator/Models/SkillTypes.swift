@@ -29,24 +29,25 @@ extension SessionGeneratorView {
         SkillCategory(name: "Passing", subSkills: [
             "Short passing",
             "Long passing",
-            "Through balls",
-            "First-time passing",
-            "Wall passing"
+            "One touch passing",
+            "Technique",
+            "Passing with movement"
         ], icon: "figure.soccer"),
         
         SkillCategory(name: "Shooting", subSkills: [
             "Power shots",
             "Finesse shots",
-            "Volleys",
-            "One-on-one finishing",
-            "Long shots"
+            "First time shots",
+            "1v1 to shoot",
+            "Shooting on the run",
+            "Volleying"
         ], icon: "figure.soccer"),
         
         SkillCategory(name: "Dribbling", subSkills: [
             "Close control",
             "Speed dribbling",
             "1v1 moves",
-            "Winger skills",
+            "Change of direction",
             "Ball mastery"
         ], icon: "figure.walk"),
         
@@ -54,8 +55,8 @@ extension SessionGeneratorView {
             "Ground control",
             "Aerial control",
             "Turn with ball",
-            "Receiving under pressure",
-            "One-touch control"
+            "Touch and move",
+            "Juggling"
         ], icon: "figure.stand"),
         
         SkillCategory(name: "Defending", subSkills: [

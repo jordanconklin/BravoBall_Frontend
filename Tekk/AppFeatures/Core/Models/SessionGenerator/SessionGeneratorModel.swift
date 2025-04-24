@@ -31,20 +31,109 @@ class SessionGeneratorModel: ObservableObject {
     
     
     
-    // MARK: Filter Types
+    // MARK: Filter and Skill Selection
     
-    
-    @Published var selectedTime: String?
-    @Published var selectedEquipment: Set<String> = []
-    @Published var selectedTrainingStyle: String?
-    @Published var selectedLocation: String?
-    @Published var selectedDifficulty: String?
-    @Published var selectedSkills: Set<String> = [] {
+    @Published var selectedTime: String? {
         didSet {
-            updateDrills()
+            filterChangeTracker.selectedTimeChanged = true
+            updateSessionByFilters(change: .selectedTimeChanged)
+            markAsNeedingSave(change: .savedFilters)
         }
     }
-    
+
+    @Published var selectedEquipment: Set<String> = [] {
+        didSet {
+            filterChangeTracker.selectedEquipmentChanged = true
+            updateSessionByFilters(change: .selectedEquipmentChanged)
+            markAsNeedingSave(change: .savedFilters)
+        }
+    }
+
+    @Published var selectedTrainingStyle: String? {
+        didSet {
+            filterChangeTracker.selectedTrainingStyleChanged = true
+            updateSessionByFilters(change: .selectedTrainingStyleChanged)
+            markAsNeedingSave(change: .savedFilters)
+        }
+    }
+
+    @Published var selectedLocation: String? {
+        didSet {
+            filterChangeTracker.selectedLocationChanged = true
+            updateSessionByFilters(change: .selectedLocationChanged)
+            markAsNeedingSave(change: .savedFilters)
+        }
+    }
+
+    @Published var selectedDifficulty: String? {
+        didSet {
+            filterChangeTracker.selectedDifficulty = true
+            updateSessionByFilters(change: .selectedDifficulty)
+            markAsNeedingSave(change: .savedFilters)
+        }
+    }
+
+    // update by selected skills
+    @Published var selectedSkills: Set<String> = [] {
+        didSet {
+            let availableDrills = getDrillsFromCache()
+            
+            // First filter by skills
+            let skillFilteredDrills = !selectedSkills.isEmpty ? availableDrills.filter { drill in
+                selectedSkills.contains { selectedSkill in
+                    // Check if the drill's skill matches the selected skill
+                    if drill.skill.lowercased() == selectedSkill.lowercased() {
+                        return true
+                    }
+                    
+                    // Check subskills
+                    switch selectedSkill {
+                    case /* Dribbling cases */
+                        "Close control", "Speed dribbling", "1v1 moves", "Change of direction", "Ball mastery",
+                        /* First Touch cases */
+                        "Ground control", "Aerial control", "Turn with ball", "Touch and move", "Juggling",
+                        /* Passing cases */
+                        "Short passing", "Long passing", "One touch passing", "Technique", "Passing with movement",
+                        /* Shooting cases */
+                        "Power shots", "Finesse shots", "First time shots", "1v1 to shoot", "Shooting on the run", "Volleying":
+                        
+                        let searchTerm = selectedSkill.lowercased().replacingOccurrences(of: " ", with: "_")
+                        return drill.subSkills.contains(where: { $0.contains(searchTerm) })
+                        
+                    default:
+                        return false
+                    }
+                }
+            } : availableDrills
+            
+            // Then apply any active filters
+            let filteredByOtherCriteria = filterDrills(skillFilteredDrills, using: DrillFilters(
+                time: nil, // Handle time separately
+                equipment: selectedEquipment,
+                trainingStyle: selectedTrainingStyle,
+                location: selectedLocation,
+                difficulty: selectedDifficulty
+            ))
+            
+            // Finally, optimize for time if a time filter is active
+            if let timeFilter = selectedTime {
+                let targetMinutes = convertTimeFilterToMinutes(timeFilter)
+                let timeOptimizedDrills = optimizeDrillsForTime(drills: filteredByOtherCriteria, targetMinutes: targetMinutes)
+                updateOrderedSessionDrills(with: timeOptimizedDrills)
+            } else {
+                updateOrderedSessionDrills(with: filteredByOtherCriteria)
+            }
+            
+            print("\n🎯 Skills Update Summary:")
+            print("- Selected Skills: \(selectedSkills.joined(separator: ", "))")
+            print("- After skill filtering: \(skillFilteredDrills.count) drills")
+            print("- After other filters: \(filteredByOtherCriteria.count) drills")
+            print("- Final session drills: \(orderedSessionDrills.count) drills")
+            
+            // Cache the changes
+            markAsNeedingSave(change: .orderedDrills)
+        }
+    }
     
     
     // MARK: Local Data Storage
@@ -319,6 +408,42 @@ class SessionGeneratorModel: ObservableObject {
     }
     
     
+    
+    
+    struct FilterChangeTracker {
+        var selectedTimeChanged: Bool = false
+        var selectedEquipmentChanged: Bool = false
+        var selectedTrainingStyleChanged: Bool = false
+        var selectedLocationChanged: Bool = false
+        var selectedDifficulty: Bool = false
+        
+        mutating func reset() {
+            selectedTimeChanged = false
+            selectedEquipmentChanged = false
+            selectedTrainingStyleChanged = false
+            selectedLocationChanged = false
+            selectedDifficulty = false
+        }
+    }
+    
+    var filterChangeTracker = FilterChangeTracker()
+    
+    
+//    // this will update the ordered drills based on the selected filters
+//    func updateSessionByFilters(change: FilterDataChange) {
+//        
+//    }
+    
+    enum FilterDataChange {
+        case selectedTimeChanged
+        case selectedEquipmentChanged
+        case selectedTrainingStyleChanged
+        case selectedLocationChanged
+        case selectedDifficulty
+    }
+    
+    
+    
     // Test data for drills with specific sub-skills
     static let testDrills: [DrillModel] = [
         DrillModel(
@@ -363,7 +488,7 @@ class SessionGeneratorModel: ObservableObject {
         DrillModel(
             title: "Power Shot Practice",
             skill: "Shooting",
-            subSkills: ["power_shot"],
+            subSkills: ["power_shots"],
             sets: 3,
             reps: 5,
             duration: 20,
@@ -376,7 +501,7 @@ class SessionGeneratorModel: ObservableObject {
         DrillModel(
             title: "1v1 Dribbling Skills",
             skill: "Dribbling",
-            subSkills: ["winger_skills"],
+            subSkills: ["1v1_moves"],
             sets: 4,
             reps: 8,
             duration: 15,

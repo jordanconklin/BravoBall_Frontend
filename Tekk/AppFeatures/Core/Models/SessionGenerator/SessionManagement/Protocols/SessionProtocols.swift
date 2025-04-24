@@ -28,7 +28,7 @@ protocol SessionDrillManagement: AnyObject {
     func deleteDrillFromSession(drill: EditableDrillModel)
     func sessionNotComplete() -> Bool
     func sessionsLeftToComplete() -> Int
-    func updateDrills()
+    func updateSessionBySelectedSkills()
 }
 
 

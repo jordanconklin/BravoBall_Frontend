@@ -42,6 +42,7 @@
 		430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6CC2D3064850016D520 /* MainAppModel.swift */; };
 		430FD6D32D307AEC0016D520 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 430FD6D22D307AEC0016D520 /* SwiftKeychainWrapper */; };
 		430FD71F2D334CAF0016D520 /* Day_Null.riv in Resources */ = {isa = PBXBuildFile; fileRef = 430FD71E2D334CAF0016D520 /* Day_Null.riv */; };
+		43112E562DBACAA500DEAE59 /* FilterMgmtExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43112E552DBACA9900DEAE59 /* FilterMgmtExtension.swift */; };
 		4351674B2DAE3ECA00E7D964 /* ResponsiveLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */; };
 		43524E772D4D994B00AD897A /* SessionGeneratorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43524E762D4D994400AD897A /* SessionGeneratorModel.swift */; };
 		43524E952D5198C900AD897A /* SearchDrillsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43524E942D5198C300AD897A /* SearchDrillsSheetView.swift */; };
@@ -189,6 +190,7 @@
 		430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegisterForm.swift; sourceTree = "<group>"; };
 		430FD6CC2D3064850016D520 /* MainAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppModel.swift; sourceTree = "<group>"; };
 		430FD71E2D334CAF0016D520 /* Day_Null.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Day_Null.riv; sourceTree = "<group>"; };
+		43112E552DBACA9900DEAE59 /* FilterMgmtExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterMgmtExtension.swift; sourceTree = "<group>"; };
 		4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsiveLayout.swift; sourceTree = "<group>"; };
 		43524E762D4D994400AD897A /* SessionGeneratorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionGeneratorModel.swift; sourceTree = "<group>"; };
 		43524E942D5198C300AD897A /* SearchDrillsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDrillsSheetView.swift; sourceTree = "<group>"; };
@@ -795,6 +797,7 @@
 		43AC256D2DA398F800EDD8C0 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				43112E552DBACA9900DEAE59 /* FilterMgmtExtension.swift */,
 				43AC25702DA3996000EDD8C0 /* SavedFilterExtension.swift */,
 			);
 			path = Extensions;
@@ -1154,6 +1157,7 @@
 				17595AA32D3B3B610015F35D /* WeekDisplayButton.swift in Sources */,
 				43C5FC412D6DB59D0064E7D5 /* DrillModel.swift in Sources */,
 				43C5FC622D6DC1470064E7D5 /* SkillRow.swift in Sources */,
+				43112E562DBACAA500DEAE59 /* FilterMgmtExtension.swift in Sources */,
 				43C5FC442D6DB7E20064E7D5 /* SkillTypes.swift in Sources */,
 				43C5FC832D6DCF1B0064E7D5 /* AllDrillsView.swift in Sources */,
 				43AC252C2DA3261A00EDD8C0 /* SessionDrillMgmtExtension.swift in Sources */,
