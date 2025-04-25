@@ -209,26 +209,26 @@ class SessionGeneratorModel: ObservableObject {
             UserDefaults.standard.set(currentUser, forKey: "lastActiveUser")
         }
         
-        // Only set these values if they're not already loaded from cache
-        if selectedDifficulty == nil {
-            selectedDifficulty = onboardingData.trainingExperience.lowercased()
-        }
-        if selectedLocation == nil && !onboardingData.trainingLocation.isEmpty {
-            selectedLocation = onboardingData.trainingLocation.first
-        }
-        if selectedEquipment.isEmpty {
-            selectedEquipment = Set(onboardingData.availableEquipment)
-        }
-        if selectedTime == nil {
-            switch onboardingData.dailyTrainingTime {
-            case "Less than 15 minutes": selectedTime = "15min"
-            case "15-30 minutes": selectedTime = "30min"
-            case "30-60 minutes": selectedTime = "1h"
-            case "1-2 hours": selectedTime = "1h30"
-            case "More than 2 hours": selectedTime = "2h+"
-            default: selectedTime = "1h"
-            }
-        }
+//        // Only set these values if they're not already loaded from cache
+//        if selectedDifficulty == nil {
+//            selectedDifficulty = onboardingData.trainingExperience.lowercased()
+//        }
+//        if selectedLocation == nil && !onboardingData.trainingLocation.isEmpty {
+//            selectedLocation = onboardingData.trainingLocation.first
+//        }
+//        if selectedEquipment.isEmpty {
+//            selectedEquipment = Set(onboardingData.availableEquipment)
+//        }
+//        if selectedTime == nil {
+//            switch onboardingData.dailyTrainingTime {
+//            case "Less than 15 minutes": selectedTime = "15min"
+//            case "15-30 minutes": selectedTime = "30min"
+//            case "30-60 minutes": selectedTime = "1h"
+//            case "1-2 hours": selectedTime = "1h30"
+//            case "More than 2 hours": selectedTime = "2h+"
+//            default: selectedTime = "1h"
+//            }
+//        }
         
         // Setup auto-save timer
         autoSaveTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
