@@ -23,6 +23,7 @@ struct SkillCategory {
     let icon: String
 }
 
+
 extension SessionGeneratorView {
     // Define all available skill categories and their sub-skills
     static let skillCategories: [SkillCategory] = [

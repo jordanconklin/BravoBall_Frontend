@@ -125,7 +125,6 @@ extension SessionGeneratorModel {
         
         // Equipment filter - match any selected equipment
         if !filters.equipment.isEmpty {
-            print("🔍 Debug - Filter equipment before normalization: \(filters.equipment)")
             remainingDrills = remainingDrills.filter { drill in
                 // Normalize equipment strings for comparison
                 let normalizedDrillEquipment = drill.equipment.map { $0.lowercased().trimmingCharacters(in: .whitespaces) }
@@ -143,6 +142,8 @@ extension SessionGeneratorModel {
                 return hasAnyRequiredEquipment
             }
             print("🔧 After equipment filter: \(remainingDrills.count) drills")
+        } else {
+            print("Skipped equipment since it is nil")
         }
         
         // Training Style filter
@@ -155,8 +156,9 @@ extension SessionGeneratorModel {
                 return matches
             }
             print("🎯 After training style filter: \(remainingDrills.count) drills")
+        } else {
+            print("Skipped training style since it is nil")
         }
-        print("Skipped style since it is nil")
         
         // Location filter
         if let locationFilter = filters.location {
@@ -168,8 +170,9 @@ extension SessionGeneratorModel {
                 return matches
             }
             print("📍 After location filter: \(remainingDrills.count) drills")
+        } else {
+            print("Skipped location since it is nil")
         }
-        print("Skipped location since it is nil")
         
         // Difficulty filter
         if let difficultyFilter = filters.difficulty {
@@ -181,8 +184,11 @@ extension SessionGeneratorModel {
                 return matches
             }
             print("⭐ After difficulty filter: \(remainingDrills.count) drills")
+        } else {
+            print("Skipped difficulty since it is nil")
         }
         
+        // Return remaining drills after filtering
         return remainingDrills
     }
     

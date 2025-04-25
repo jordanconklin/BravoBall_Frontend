@@ -23,6 +23,8 @@ struct SessionResponse: Codable {
     }
 }
 
+
+
 // Add the DrillResponse model definition
 //TODO: have backend send othe rneeded data types (e.g. thumbnail URL) it is accepting 
 struct DrillResponse: Codable, Identifiable {
@@ -40,8 +42,10 @@ struct DrillResponse: Codable, Identifiable {
     let sets: Int?  // Make sets optional to handle null values
     let reps: Int?  // Make reps optional to handle null values
     let rest: Int?
+    let primarySkill: DrillResponse.Skill?
+    let secondarySkills: [DrillResponse.Skill]?
     
-    struct Skill: Codable {
+    struct Skill: Codable, Hashable {
             let category: String
             let subSkill: String
             
@@ -50,9 +54,6 @@ struct DrillResponse: Codable, Identifiable {
                 case subSkill = "sub_skill"
             }
         }
-        
-    let primarySkill: Skill?
-    let secondarySkills: [Skill]?
     
     // enums to handle sanke_case and camelCase differences from frontend and backend
     enum CodingKeys: String, CodingKey {

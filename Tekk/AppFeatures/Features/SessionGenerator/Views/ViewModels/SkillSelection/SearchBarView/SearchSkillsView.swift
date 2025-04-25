@@ -52,23 +52,28 @@ struct SearchSkillsView: View {
         }
     }
     
-    // Flatten all skills for searching
-    private var allSkills: [String] {
-        SessionGeneratorView.skillCategories.flatMap { category in
-            category.subSkills.map { subSkill in
-                (subSkill)
+
+    private var filteredSkills: [DrillResponse.Skill] {
+        if searchText.isEmpty {
+            return []
+        }
+        
+        var matchingSkills: [DrillResponse.Skill] = []
+        
+        for category in SessionGeneratorView.skillCategories {
+            // Find all subskills in this category that match the search text
+            let matchingSubSkills = category.subSkills.filter { subSkill in
+                subSkill.lowercased().contains(searchText.lowercased())
+            }
+            
+            // Create a Skill object for each matching subskill
+            for subSkill in matchingSubSkills {
+                matchingSkills.append(DrillResponse.Skill(category: category.name, subSkill: subSkill))
             }
         }
         
-    }
-
-    private var filteredSkills: [String] {
-        if searchText.isEmpty {
-            return []
-        } else {
-            return allSkills.filter { skill in
-                skill.lowercased().contains(searchText.lowercased())
-            }
-        }
+        return matchingSkills
     }
 }
+
+

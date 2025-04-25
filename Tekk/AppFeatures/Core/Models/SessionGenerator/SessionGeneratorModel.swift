@@ -209,6 +209,8 @@ class SessionGeneratorModel: ObservableObject {
             UserDefaults.standard.set(currentUser, forKey: "lastActiveUser")
         }
         
+        
+        // TODO: make recommended session instead of initializing filters w/ onboarding data
 //        // Only set these values if they're not already loaded from cache
 //        if selectedDifficulty == nil {
 //            selectedDifficulty = onboardingData.trainingExperience.lowercased()
