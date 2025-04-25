@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-import RiveRuntime
+import RiveRuntime 
 
 struct MainTabView: View {
     @ObservedObject var model: OnboardingModel

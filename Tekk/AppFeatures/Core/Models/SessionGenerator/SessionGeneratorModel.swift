@@ -31,7 +31,13 @@ class SessionGeneratorModel: ObservableObject {
     
     
     
+    
+    
+    
     // MARK: Filter and Skill Selection
+    
+    
+    var filterChangeTracker = FilterChangeTracker()
     
     @Published var selectedTime: String? {
         didSet {
@@ -407,40 +413,6 @@ class SessionGeneratorModel: ObservableObject {
         }
     }
     
-    
-    
-    
-    struct FilterChangeTracker {
-        var selectedTimeChanged: Bool = false
-        var selectedEquipmentChanged: Bool = false
-        var selectedTrainingStyleChanged: Bool = false
-        var selectedLocationChanged: Bool = false
-        var selectedDifficulty: Bool = false
-        
-        mutating func reset() {
-            selectedTimeChanged = false
-            selectedEquipmentChanged = false
-            selectedTrainingStyleChanged = false
-            selectedLocationChanged = false
-            selectedDifficulty = false
-        }
-    }
-    
-    var filterChangeTracker = FilterChangeTracker()
-    
-    
-//    // this will update the ordered drills based on the selected filters
-//    func updateSessionByFilters(change: FilterDataChange) {
-//        
-//    }
-    
-    enum FilterDataChange {
-        case selectedTimeChanged
-        case selectedEquipmentChanged
-        case selectedTrainingStyleChanged
-        case selectedLocationChanged
-        case selectedDifficulty
-    }
     
     
     

@@ -7,6 +7,14 @@
 
 import Foundation
 
+enum FilterDataChange {
+    case selectedTimeChanged
+    case selectedEquipmentChanged
+    case selectedTrainingStyleChanged
+    case selectedLocationChanged
+    case selectedDifficulty
+}
+
 
 struct DrillFilters {
     let time: String?
@@ -33,14 +41,6 @@ struct FilterChangeTracker {
     }
 }
 
-// Add this enum if not already defined
-enum FilterDataChange {
-    case selectedTimeChanged
-    case selectedEquipmentChanged
-    case selectedTrainingStyleChanged
-    case selectedLocationChanged
-    case selectedDifficulty
-}
 
 // Add these functions to your SessionGeneratorModel class
 extension SessionGeneratorModel {
@@ -58,7 +58,7 @@ extension SessionGeneratorModel {
     func updateSessionByFilters(change: FilterDataChange) {
         let availableDrills = getDrillsFromCache()
         
-        // Apply filters based on what's active
+        // Apply filters based on what's active, will return filtered drills
         let filteredDrills = filterDrills(availableDrills, using: currentFilters)
         
         // Optimize for time if time filter is active
@@ -178,6 +178,7 @@ extension SessionGeneratorModel {
             )
         }
         
+        // debugging
         let totalSessionDuration = orderedSessionDrills.reduce(0) { $0 + $1.totalDuration }
         print("\n📱 Updated session with \(orderedSessionDrills.count) drills")
         print("⏱️ Total session duration: \(totalSessionDuration) minutes")
