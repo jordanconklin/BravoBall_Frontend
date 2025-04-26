@@ -194,15 +194,18 @@ extension SessionGeneratorModel {
     
     func matchesLocationFilter(_ drill: DrillModel, _ locationFilter: String) -> Bool {
         switch locationFilter.lowercased() {
-        case "field with goals":
-            return drill.equipment.contains(where: { $0.lowercased().contains("goal") })
-        case "small field":
-            return !drill.equipment.contains(where: { $0.lowercased().contains("goal") })
-        case "indoor court":
-            return drill.equipment.contains(where: { $0.lowercased().contains("indoor") }) ||
-                   !drill.equipment.contains(where: { $0.lowercased().contains("field") })
+        case "full field":
+            return drill.equipment.contains(where: { $0.lowercased().contains("full_field") })
+        case "medium field":
+            return !drill.equipment.contains(where: { $0.lowercased().contains("medium_field") })
+        case "small space":
+            return drill.equipment.contains(where: { $0.lowercased().contains("small_space") })
+        case "location with goals":
+            return drill.equipment.contains(where: { $0.lowercased().contains("location_with_goals") })
+        case "location with wall":
+            return drill.equipment.contains(where: { $0.lowercased().contains("location_with_wall") })
         default:
-            return true
+            return false
         }
     }
     
