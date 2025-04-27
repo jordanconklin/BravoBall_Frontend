@@ -55,26 +55,6 @@ extension SessionGeneratorModel {
         )
     }
     
-    func updateSessionByFilters(change: FilterDataChange) {
-        let availableDrills = getDrillsFromCache()
-        print("📦 Retrieved \(availableDrills.count) drills from cache")
-        
-        // Apply filters based on what's active, will return filtered drills
-        let filteredDrills = filterDrills(availableDrills, using: currentFilters)
-        
-        // Optimize for time if time filter is active
-        if let timeFilter = selectedTime {
-            let targetMinutes = convertTimeFilterToMinutes(timeFilter)
-            let timeOptimizedDrills = optimizeDrillsForTime(drills: filteredDrills, targetMinutes: targetMinutes)
-            print("⌛ After time optimization: \(timeOptimizedDrills.count) drills selected")
-            updateOrderedSessionDrills(with: timeOptimizedDrills)
-        } else {
-            print("⏰ No time filter active, using all filtered drills")
-            updateOrderedSessionDrills(with: filteredDrills)
-        }
-        
-        filterChangeTracker.reset()
-    }
     
     func convertTimeFilterToMinutes(_ timeFilter: String) -> Int {
         switch timeFilter {
@@ -120,76 +100,85 @@ extension SessionGeneratorModel {
         return selectedDrills
     }
     
+    
+    func updateSessionByFilters(change: FilterDataChange) {
+        let availableDrills = getDrillsFromCache()
+        print("📦 Retrieved \(availableDrills.count) drills from cache")
+        
+        // Apply filters based on what's active, will return filtered drills
+        let filteredDrills = filterDrills(availableDrills, using: currentFilters)
+        
+    
+        // Optimize for time if time filter is active
+        if let timeFilter = selectedTime {
+            let targetMinutes = convertTimeFilterToMinutes(timeFilter)
+            let timeOptimizedDrills = optimizeDrillsForTime(drills: filteredDrills, targetMinutes: targetMinutes)
+            print("⌛ After time optimization: \(timeOptimizedDrills.count) drills selected")
+            updateOrderedSessionDrills(with: timeOptimizedDrills)
+        } else {
+            print("⏰ No time filter active, using all filtered drills")
+            updateOrderedSessionDrills(with: filteredDrills)
+        }
+        
+        filterChangeTracker.reset()
+    }
+    
     func filterDrills(_ drills: [DrillModel], using filters: DrillFilters) -> [DrillModel] {
+        let maxDrills = 10
         var remainingDrills = drills
         
-        // Equipment filter - match any selected equipment
+        // Equipment filter
         if !filters.equipment.isEmpty {
             remainingDrills = remainingDrills.filter { drill in
-                // Normalize equipment strings for comparison
                 let normalizedDrillEquipment = drill.equipment.map { $0.lowercased().trimmingCharacters(in: .whitespaces) }
                 let normalizedFilterEquipment = filters.equipment.map { $0.lowercased().trimmingCharacters(in: .whitespaces) }
-
-                
-                // Check if drill has ANY of the required equipment
-                let hasAnyRequiredEquipment = normalizedDrillEquipment.contains { equipment in
+                return normalizedDrillEquipment.contains { equipment in
                     normalizedFilterEquipment.contains(equipment)
                 }
-                
-                if !hasAnyRequiredEquipment {
-                    print("❌ Drill '\(drill.title)' filtered out due to equipment mismatch")
-                }
-                return hasAnyRequiredEquipment
             }
-            print("🔧 After equipment filter: \(remainingDrills.count) drills")
-        } else {
-            print("Skipped equipment since it is nil")
+            
+            // Early exit if no drill matches this filter
+            if remainingDrills.isEmpty {
+                return []
+            }
         }
-        
-        // Training Style filter
+
+        // Training Style filter with randomization
         if let styleFilter = filters.trainingStyle {
-            remainingDrills = remainingDrills.filter { drill in
-                let matches = drill.trainingStyle.lowercased() == styleFilter.lowercased()
-                if !matches {
-                    print("❌ Drill '\(drill.title)' filtered out due to style mismatch")
-                }
-                return matches
+            remainingDrills = remainingDrills.shuffled().prefix(maxDrills).filter { drill in
+                drill.trainingStyle.lowercased() == styleFilter.lowercased()
             }
-            print("🎯 After training style filter: \(remainingDrills.count) drills")
-        } else {
-            print("Skipped training style since it is nil")
+            
+            if remainingDrills.isEmpty {
+                return []
+            }
         }
-        
-        // Location filter
+
+        // Location filter with randomization
         if let locationFilter = filters.location {
-            remainingDrills = remainingDrills.filter { drill in
-                let matches = matchesLocationFilter(drill, locationFilter)
-                if !matches {
-                    print("❌ Drill '\(drill.title)' filtered out due to location mismatch")
-                }
-                return matches
+            remainingDrills = remainingDrills.shuffled().prefix(maxDrills).filter { drill in
+                matchesLocationFilter(drill, locationFilter)
             }
-            print("📍 After location filter: \(remainingDrills.count) drills")
-        } else {
-            print("Skipped location since it is nil")
+            
+            if remainingDrills.isEmpty {
+                return []
+            }
         }
-        
-        // Difficulty filter
+
+        // Difficulty filter with final randomization
         if let difficultyFilter = filters.difficulty {
-            remainingDrills = remainingDrills.filter { drill in
-                let matches = drill.difficulty.lowercased() == difficultyFilter.lowercased()
-                if !matches {
-                    print("❌ Drill '\(drill.title)' filtered out due to difficulty mismatch")
-                }
-                return matches
+            remainingDrills = remainingDrills.shuffled().prefix(maxDrills).filter { drill in
+                drill.difficulty.lowercased() == difficultyFilter.lowercased()
             }
-            print("⭐ After difficulty filter: \(remainingDrills.count) drills")
-        } else {
-            print("Skipped difficulty since it is nil")
         }
         
-        // Return remaining drills after filtering
-        return remainingDrills
+        if remainingDrills != drills {
+            // Final randomization and limit
+            return Array(remainingDrills.shuffled().prefix(maxDrills))
+        } else {
+            // Return empty array if no filter created
+            return []
+        }
     }
     
     func matchesLocationFilter(_ drill: DrillModel, _ locationFilter: String) -> Bool {

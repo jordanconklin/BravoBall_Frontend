@@ -83,6 +83,7 @@ class SessionGeneratorModel: ObservableObject {
     @Published var selectedSkills: Set<String> = [] {
         didSet {
             let availableDrills = getDrillsFromCache()
+            let maxDrills = 10
             
             // First filter by skills
             let skillFilteredDrills = !selectedSkills.isEmpty ? availableDrills.filter { drill in
@@ -104,7 +105,7 @@ class SessionGeneratorModel: ObservableObject {
                         "Power shots", "Finesse shots", "First time shots", "1v1 to shoot", "Shooting on the run", "Volleying":
                         
                         let searchTerm = selectedSkill.lowercased().replacingOccurrences(of: " ", with: "_")
-                        return drill.subSkills.contains(where: { $0.contains(searchTerm) })
+                        return drill.subSkills.shuffled().prefix(maxDrills).contains(where: { $0.contains(searchTerm) })
                         
                     default:
                         return false
