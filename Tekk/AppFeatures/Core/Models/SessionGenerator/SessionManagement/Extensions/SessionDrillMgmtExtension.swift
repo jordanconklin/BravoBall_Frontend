@@ -101,38 +101,22 @@ extension SessionGeneratorModel: SessionDrillManagement {
     
     
     
-    
-    // this will update the ordered drills based on the selected skills
-    func updateSessionBySelectedSkills() {
-        // Get drills from cache or fallback to test drills
+    // Gives us drills based on selected skills, if none selected then return all drills
+    func updateSessionBySelectedSkills() -> [DrillModel] {
         let availableDrills = getDrillsFromCache()
+        var drillsWithSelectedSkills: [DrillModel] = []
+
         
-        print("\n🔍 DEBUG: Selected Skills:", selectedSkills)
-        print("\n📊 DEBUG: Available Drills Count:", availableDrills.count)
-        
-        // Print first few drills to check their structure
-        print("\n🔎 DEBUG: Sample of Available Drills:")
-        for (index, drill) in availableDrills.prefix(5).enumerated() {
-            print("\nDrill \(index + 1):")
-            print("- Title:", drill.title)
-            print("- Skill:", drill.skill)
-            print("- SubSkills:", drill.subSkills)
-        }
-        
-        
-        // Filter drills based on selected skills
-        let filteredDrills = availableDrills.filter { drill in
-            // If no skills are selected, include no drills
-            guard !selectedSkills.isEmpty else { return false }
-            
-            // Check if any of the selected skills match the drill's category
-            return selectedSkills.contains { selectedSkill in
+        // First filter by skills
+        let skillFilteredDrills = !selectedSkills.isEmpty ? availableDrills.filter { drill in
+            selectedSkills.contains { selectedSkill in
+                // Check if the drill's skill matches the selected skill
+//                if drill.skill.lowercased() == selectedSkill.lowercased() {
+//                    return true
+//                }
                 
-                // For specific cases where we need to check subSkills
+                // Check subskills
                 switch selectedSkill {
-                
-                //TODO: might be able to optimize this code for performance
-                    
                 case /* Dribbling cases */
                     "Close control", "Speed dribbling", "1v1 moves", "Change of direction", "Ball mastery",
                     /* First Touch cases */
@@ -143,45 +127,22 @@ extension SessionGeneratorModel: SessionDrillManagement {
                     "Power shots", "Finesse shots", "First time shots", "1v1 to shoot", "Shooting on the run", "Volleying":
                     
                     let searchTerm = selectedSkill.lowercased().replacingOccurrences(of: " ", with: "_")
-                    let hasMatch = drill.subSkills.contains(where: { $0.contains(searchTerm) })
+                    let drillContainsSubSkill = drill.subSkills.contains(where: { $0.contains(searchTerm) })
                     
-                    if hasMatch {
-                        print("✅ MATCH FOUND: '\(drill.title)' matches control/dribbling category")
-                        return true
+                    if drillContainsSubSkill {
+                        drillsWithSelectedSkills.append(drill)
                     }
-
+                    
+                    
+                    return drillContainsSubSkill
+                    
                 default:
                     return false
                 }
-                
-                return false
             }
-        }
+        } : availableDrills
         
-        print("\n📝 DEBUG: Filtered Drills Count:", filteredDrills.count)
-        if filteredDrills.isEmpty {
-            print("⚠️ WARNING: No drills matched the selected skills!")
-        } else {
-            print("\n✅ Matched Drills:")
-            filteredDrills.forEach { drill in
-                print("- '\(drill.title)' (Skill: \(drill.skill), SubSkills: \(drill.subSkills))")
-            }
-        }
-        
-        // Convert filtered DrillModels to EditableDrillModels
-        orderedSessionDrills = filteredDrills.map { drill in
-            EditableDrillModel(
-                drill: drill,
-                setsDone: 0,
-                totalSets: drill.sets,
-                totalReps: drill.reps,
-                totalDuration: drill.duration,
-                isCompleted: false
-            )
-        }
-        
-        print("\n📱 Final Session Drills Count:", orderedSessionDrills.count)
+        return drillsWithSelectedSkills
     }
-    
     
 }

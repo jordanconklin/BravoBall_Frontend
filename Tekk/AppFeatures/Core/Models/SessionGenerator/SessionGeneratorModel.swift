@@ -42,7 +42,16 @@ class SessionGeneratorModel: ObservableObject {
     @Published var selectedTime: String? {
         didSet {
             filterChangeTracker.selectedTimeChanged = true
-            updateSessionByFilters(change: .selectedTimeChanged)
+            
+            let availableDrills: [DrillModel]
+            
+            if !selectedSkills.isEmpty {
+                availableDrills = updateSessionBySelectedSkills()
+            } else {
+                availableDrills = getDrillsFromCache()
+            }
+            
+            updateSessionByFilters(availableDrills)
             markAsNeedingSave(change: .savedFilters)
         }
     }
@@ -50,7 +59,17 @@ class SessionGeneratorModel: ObservableObject {
     @Published var selectedEquipment: Set<String> = [] {
         didSet {
             filterChangeTracker.selectedEquipmentChanged = true
-            updateSessionByFilters(change: .selectedEquipmentChanged)
+            
+            let availableDrills: [DrillModel]
+            
+            if !selectedSkills.isEmpty {
+                availableDrills = updateSessionBySelectedSkills()
+            } else {
+                availableDrills = getDrillsFromCache()
+            }
+            
+            
+            updateSessionByFilters(availableDrills)
             markAsNeedingSave(change: .savedFilters)
         }
     }
@@ -58,7 +77,16 @@ class SessionGeneratorModel: ObservableObject {
     @Published var selectedTrainingStyle: String? {
         didSet {
             filterChangeTracker.selectedTrainingStyleChanged = true
-            updateSessionByFilters(change: .selectedTrainingStyleChanged)
+            
+            let availableDrills: [DrillModel]
+            
+            if !selectedSkills.isEmpty {
+                availableDrills = updateSessionBySelectedSkills()
+            } else {
+                availableDrills = getDrillsFromCache()
+            }
+            
+            updateSessionByFilters(availableDrills)
             markAsNeedingSave(change: .savedFilters)
         }
     }
@@ -66,15 +94,36 @@ class SessionGeneratorModel: ObservableObject {
     @Published var selectedLocation: String? {
         didSet {
             filterChangeTracker.selectedLocationChanged = true
-            updateSessionByFilters(change: .selectedLocationChanged)
+            
+            let availableDrills: [DrillModel]
+            
+            if !selectedSkills.isEmpty {
+                availableDrills = updateSessionBySelectedSkills()
+            } else {
+                availableDrills = getDrillsFromCache()
+            }
+            
+            
+            updateSessionByFilters(availableDrills)
             markAsNeedingSave(change: .savedFilters)
         }
     }
 
     @Published var selectedDifficulty: String? {
         didSet {
+            
             filterChangeTracker.selectedDifficulty = true
-            updateSessionByFilters(change: .selectedDifficulty)
+            
+            let availableDrills: [DrillModel]
+            
+            if !selectedSkills.isEmpty {
+                availableDrills = updateSessionBySelectedSkills()
+            } else {
+                availableDrills = getDrillsFromCache()
+            }
+            
+            
+            updateSessionByFilters(availableDrills)
             markAsNeedingSave(change: .savedFilters)
         }
     }
@@ -82,59 +131,18 @@ class SessionGeneratorModel: ObservableObject {
     // update by selected skills
     @Published var selectedSkills: Set<String> = [] {
         didSet {
-            let availableDrills = getDrillsFromCache()
             
-            // First filter by skills
-            let skillFilteredDrills = !selectedSkills.isEmpty ? availableDrills.filter { drill in
-                selectedSkills.contains { selectedSkill in
-                    // Check if the drill's skill matches the selected skill
-                    if drill.skill.lowercased() == selectedSkill.lowercased() {
-                        return true
-                    }
-                    
-                    // Check subskills
-                    switch selectedSkill {
-                    case /* Dribbling cases */
-                        "Close control", "Speed dribbling", "1v1 moves", "Change of direction", "Ball mastery",
-                        /* First Touch cases */
-                        "Ground control", "Aerial control", "Turn with ball", "Touch and move", "Juggling",
-                        /* Passing cases */
-                        "Short passing", "Long passing", "One touch passing", "Technique", "Passing with movement",
-                        /* Shooting cases */
-                        "Power shots", "Finesse shots", "First time shots", "1v1 to shoot", "Shooting on the run", "Volleying":
-                        
-                        let searchTerm = selectedSkill.lowercased().replacingOccurrences(of: " ", with: "_")
-                        return drill.subSkills.contains(where: { $0.contains(searchTerm) })
-                        
-                    default:
-                        return false
-                    }
-                }
-            } : availableDrills
+            let availableDrills: [DrillModel]
             
-            // Then apply any active filters
-            let filteredByOtherCriteria = filterDrills(skillFilteredDrills, using: DrillFilters(
-                time: nil, // Handle time separately
-                equipment: selectedEquipment,
-                trainingStyle: selectedTrainingStyle,
-                location: selectedLocation,
-                difficulty: selectedDifficulty
-            ))
-            
-            // Finally, optimize for time if a time filter is active
-            if let timeFilter = selectedTime {
-                let targetMinutes = convertTimeFilterToMinutes(timeFilter)
-                let timeOptimizedDrills = optimizeDrillsForTime(drills: filteredByOtherCriteria, targetMinutes: targetMinutes)
-                updateOrderedSessionDrills(with: timeOptimizedDrills)
+            if currentFilters.isAllEmptyOrNil {
+                availableDrills = updateSessionBySelectedSkills()
+                updateOrderedSessionDrills(with: availableDrills)
             } else {
-                updateOrderedSessionDrills(with: filteredByOtherCriteria)
+                availableDrills = updateSessionBySelectedSkills()
+                updateSessionByFilters(availableDrills)
             }
             
-            print("\n🎯 Skills Update Summary:")
-            print("- Selected Skills: \(selectedSkills.joined(separator: ", "))")
-            print("- After skill filtering: \(skillFilteredDrills.count) drills")
-            print("- After other filters: \(filteredByOtherCriteria.count) drills")
-            print("- Final session drills: \(orderedSessionDrills.count) drills")
+
             
             // Cache the changes
             markAsNeedingSave(change: .orderedDrills)
@@ -422,6 +430,45 @@ class SessionGeneratorModel: ObservableObject {
     static let testDrills: [DrillModel] = [
         DrillModel(
             title: "Short Passing Drill",
+            skill: "Passing",
+            subSkills: ["short_passing"],
+            sets: 4,
+            reps: 10,
+            duration: 15,
+            description: "Practice accurate short passes with a partner or wall.",
+            tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
+            equipment: ["Soccer ball", "Cones"],
+            trainingStyle: "High Intensity",
+            difficulty: "Beginner"
+        ),
+        DrillModel(
+            title: "Short Passing Drill Two",
+            skill: "Passing",
+            subSkills: ["short_passing"],
+            sets: 4,
+            reps: 10,
+            duration: 15,
+            description: "Practice accurate short passes with a partner or wall.",
+            tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
+            equipment: ["Soccer ball", "Cones"],
+            trainingStyle: "High Intensity",
+            difficulty: "Beginner"
+        ),
+        DrillModel(
+            title: "Short Passing Drill Three",
+            skill: "Passing",
+            subSkills: ["short_passing"],
+            sets: 4,
+            reps: 10,
+            duration: 15,
+            description: "Practice accurate short passes with a partner or wall.",
+            tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
+            equipment: ["Soccer ball", "Cones"],
+            trainingStyle: "High Intensity",
+            difficulty: "Beginner"
+        ),
+        DrillModel(
+            title: "Short Passing Four",
             skill: "Passing",
             subSkills: ["short_passing"],
             sets: 4,
