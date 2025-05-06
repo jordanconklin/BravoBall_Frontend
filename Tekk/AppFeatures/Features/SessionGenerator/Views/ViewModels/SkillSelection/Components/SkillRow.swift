@@ -10,14 +10,14 @@ import SwiftUI
 struct SkillRow: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
-    let skill: String
+    let skill: DrillResponse.Skill
     
     var body: some View {
         Button( action: {
-            if sessionModel.selectedSkills.contains(skill) {
-                sessionModel.selectedSkills.remove(skill)
+            if sessionModel.selectedSkills.contains(skill.subSkill) {
+                sessionModel.selectedSkills.remove(skill.subSkill)
             } else {
-                sessionModel.selectedSkills.insert(skill)
+                sessionModel.selectedSkills.insert(skill.subSkill)
             }
         }) {
             HStack {
@@ -29,10 +29,10 @@ struct SkillRow: View {
                     .cornerRadius(8)
                 
                 VStack(alignment: .leading) {
-                    Text(skill)
+                    Text(skill.subSkill)
                         .font(.custom("Poppins-Bold", size: 14))
                         .foregroundColor(.black)
-                    Text("Defending")
+                    Text(skill.category)
                         .font(.custom("Poppins-Regular", size: 12))
                         .foregroundColor(.gray)
                         .lineLimit(2)

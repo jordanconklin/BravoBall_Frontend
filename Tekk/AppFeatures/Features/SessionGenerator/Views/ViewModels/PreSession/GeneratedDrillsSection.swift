@@ -12,8 +12,10 @@ struct GeneratedDrillsSection: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     
+    private let layout = ResponsiveLayout.shared
+    
     var body: some View {
-            LazyVStack(alignment: .center, spacing: 12) {
+        LazyVStack(alignment: .center, spacing: layout.standardSpacing) {
                 HStack {
                     
                     Button(action: {
@@ -112,6 +114,7 @@ struct GeneratedDrillsSection: View {
                                 }
                                 return true
                             }
+                            .frame(height: layout.isPad ? 340 : 170)
                         }
                     }
                 }
@@ -123,6 +126,5 @@ struct GeneratedDrillsSection: View {
             .sheet(isPresented: $appModel.viewState.showSearchDrills) {
                 SearchDrillsSheetView(appModel: appModel, sessionModel: sessionModel, dismiss: { appModel.viewState.showSearchDrills = false })
             }
-        
     }
 }

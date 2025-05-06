@@ -16,58 +16,67 @@ struct RecommendedDrillCard: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     let drill: DrillModel
+    private let layout = ResponsiveLayout.shared
     
     @State private var showingDrillDetail: Bool = false
-    
     
     var body: some View {
         Button(action: {
             showingDrillDetail = true
         }) {
             ZStack {
+                // Background card
                 RiveViewModel(fileName: "Drill_Card_Incomplete").view()
-                    .frame(width: 320, height: 170)
-                HStack {
+                    .frame(width: layout.isPad ? 640 : 320, height: layout.isPad ? 340 : 170)
+                
+                // Content container
+                HStack(spacing: layout.isPad ? 20 : 12) {
+                    // Left side content
+                    HStack(spacing: layout.isPad ? 16 : 12) {
                         // Drag handle
                         Image(systemName: "line.3.horizontal")
-                            .padding()
                             .foregroundColor(appModel.globalSettings.primaryGrayColor)
-                            .font(.system(size: 14))
-                            .padding(.trailing, 8)
+                            .font(.system(size: layout.isPad ? 16 : 14))
                         
-                    Image(systemName: "figure.soccer")
-                            .font(.system(size: 24))
-                        .padding()
-                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(10)
-                    
-                    VStack(alignment: .leading) {
-                        Text(drill.title)
-                                .font(.custom("Poppins-Bold", size: 16))
-                                .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                        Text("\(drill.sets) sets - \(drill.reps) reps - \(drill.duration)")
-                            .font(.custom("Poppins-Bold", size: 14))
-                            .foregroundColor(appModel.globalSettings.primaryGrayColor)
+                        // Soccer icon
+                        Image(systemName: "figure.soccer")
+                            .font(.system(size: layout.isPad ? 28 : 24))
+                            .padding(layout.isPad ? 12 : 8)
+                            .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                            .background(Color.gray.opacity(0.1))
+                            .cornerRadius(10)
                     }
-                
-                Spacer()
-                
+                    .padding(.leading, layout.isPad ? 24 : 16)
+                    
+                    // Center content
+                    VStack(alignment: .leading, spacing: layout.isPad ? 8 : 6) {
+                        Text(drill.title)
+                            .font(.custom("Poppins-Bold", size: layout.isPad ? 18 : 16))
+                            .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                            .lineLimit(2)
+                        Text("\(drill.sets) sets - \(drill.reps) reps - \(drill.duration)")
+                            .font(.custom("Poppins-Bold", size: layout.isPad ? 16 : 14))
+                            .foregroundColor(appModel.globalSettings.primaryGrayColor)
+                            .lineLimit(1)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    // Right arrow
                     Image(systemName: "chevron.right")
-                        .padding()
                         .foregroundColor(appModel.globalSettings.primaryGrayColor)
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.system(size: layout.isPad ? 16 : 14, weight: .semibold))
+                        .padding(.trailing, layout.isPad ? 24 : 16)
                 }
+                .frame(maxWidth: layout.isPad ? 600 : 300)
             }
-            .padding(.horizontal)
         }
         .buttonStyle(PlainButtonStyle())
         .sheet(isPresented: $showingDrillDetail) {
-                DrillDetailView(
-                    appModel: appModel,
-                    sessionModel: sessionModel,
-                    drill: drill
-                )
+            DrillDetailView(
+                appModel: appModel,
+                sessionModel: sessionModel,
+                drill: drill
+            )
         }
     }
 }

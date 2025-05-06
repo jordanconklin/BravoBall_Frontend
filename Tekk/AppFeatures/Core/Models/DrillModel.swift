@@ -13,6 +13,7 @@ struct DrillModel: Identifiable, Equatable, Codable {
     let backendId: Int? // Backend ID from database (between 1-79)
     let title: String
     let skill: String
+    let subSkills: [String]
     let sets: Int
     let reps: Int
     let duration: Int
@@ -26,6 +27,7 @@ struct DrillModel: Identifiable, Equatable, Codable {
          backendId: Int? = nil, // Add backend ID parameter
          title: String,
          skill: String,
+         subSkills: [String],
          sets: Int = 0,  // Make sets optional with default value of 0
          reps: Int = 0,  // Make reps optional with default value of 0
          duration: Int,
@@ -38,6 +40,7 @@ struct DrillModel: Identifiable, Equatable, Codable {
         self.backendId = backendId
         self.title = title
         self.skill = skill
+        self.subSkills = subSkills
         self.sets = sets
         self.reps = reps
         self.duration = duration

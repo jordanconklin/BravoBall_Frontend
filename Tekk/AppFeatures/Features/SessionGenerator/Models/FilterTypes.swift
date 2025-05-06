@@ -87,9 +87,9 @@ enum DifficultyType: String, CaseIterable {
 enum FilterData {
     // Filter options
     static let timeOptions = ["15min", "30min", "45min", "1h", "1h30", "2h+"]
-    static let equipmentOptions = ["balls", "cones", "goals"]
+    static let equipmentOptions = ["soccer ball", "cones", "goal"]
     static let trainingStyleOptions = ["medium intensity", "high intensity", "game prep", "game recovery", "rest day"]
-    static let locationOptions = ["field with goals", "small field", "indoor court"]
+    static let locationOptions = ["full field", "medium field", "small space", "location with goals", "location with wall"]
     static let difficultyOptions = ["beginner", "intermediate", "advanced"]
 }
 

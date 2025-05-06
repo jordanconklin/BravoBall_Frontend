@@ -16,27 +16,37 @@ struct BravoBallApp: App {
     }
 }
 
+
 struct ContentView: View {
     @StateObject private var onboardingModel = OnboardingModel()
     @StateObject private var appModel = MainAppModel()
     @StateObject private var userInfoManager = UserManager()
     @StateObject private var sessionGenModel = SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData())
 
+
     var body: some View {
-        Group {
-            if onboardingModel.isLoggedIn {
-                MainTabView(model: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
-                    .onAppear {
-                        // Reload user data when login state changes to true
-                        appModel.loadCachedData()
-                        sessionGenModel.loadCachedData()
-                    }
-            } else {
-                OnboardingView(model: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
+        GeometryReader { geometry in
+            Group {
+                if onboardingModel.isLoggedIn {
+                    MainTabView(model: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
+                        .onAppear {
+                            // Reload user data when login state changes to true
+                            appModel.loadCachedData()
+                            sessionGenModel.loadCachedData()
+                        }
+                    
+                } else {
+                    OnboardingView(model: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
+                }
+    //              DragDropTest()
             }
-//              DragDropTest()
+            .preferredColorScheme(.light)
+            .environment(\.viewGeometry, ViewGeometry(
+                size: geometry.size,
+                safeAreaInsets: geometry.safeAreaInsets
+            ))
+
         }
-        .preferredColorScheme(.light)
     }
 }
 

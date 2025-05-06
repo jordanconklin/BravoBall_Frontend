@@ -23,7 +23,10 @@ struct SessionResponse: Codable {
     }
 }
 
+
+
 // Add the DrillResponse model definition
+//TODO: have backend send othe rneeded data types (e.g. thumbnail URL) it is accepting 
 struct DrillResponse: Codable, Identifiable {
     let id: Int
     let title: String
@@ -39,7 +42,20 @@ struct DrillResponse: Codable, Identifiable {
     let sets: Int?  // Make sets optional to handle null values
     let reps: Int?  // Make reps optional to handle null values
     let rest: Int?
+    let primarySkill: DrillResponse.Skill?
+    let secondarySkills: [DrillResponse.Skill]?
     
+    struct Skill: Codable, Hashable {
+            let category: String
+            let subSkill: String
+            
+            enum CodingKeys: String, CodingKey {
+                case category
+                case subSkill = "sub_skill"
+            }
+        }
+    
+    // enums to handle sanke_case and camelCase differences from frontend and backend
     enum CodingKeys: String, CodingKey {
         case id
         case title
@@ -55,6 +71,39 @@ struct DrillResponse: Codable, Identifiable {
         case sets
         case reps
         case rest
+        case primarySkill = "primary_skill"
+        case secondarySkills = "secondary_skills"
+    }
+    
+    // Convert API response to local DrillModel
+    func toDrillModel() -> DrillModel {
+        // Get the primary skill category, defaulting to the type if not available
+        let skillCategory = primarySkill?.category ?? type
+        
+        // Collect all sub-skills from both primary and secondary skills
+        var allSubSkills: [String] = []
+        if let primarySubSkill = primarySkill?.subSkill {
+            allSubSkills.append(primarySubSkill)
+        }
+        if let secondarySkills = secondarySkills {
+            allSubSkills.append(contentsOf: secondarySkills.map { $0.subSkill })
+        }
+        
+        return DrillModel(
+            id: UUID(),  // Generate a new UUID since we can't convert an Int to UUID
+            backendId: id, // Store the backend ID from the API
+            title: title,
+            skill: skillCategory,
+            subSkills: allSubSkills,
+            sets: sets ?? 0,
+            reps: reps ?? 0,
+            duration: duration,
+            description: description,
+            tips: tips,
+            equipment: equipment,
+            trainingStyle: intensity,
+            difficulty: difficulty
+        )
     }
     
     // Custom initializer to handle decoding with null values
@@ -84,14 +133,18 @@ struct DrillResponse: Codable, Identifiable {
         
         type = try container.decodeIfPresent(String.self, forKey: .type) ?? "other"
         
+        
         // Optional fields
         sets = try container.decodeIfPresent(Int.self, forKey: .sets)
         reps = try container.decodeIfPresent(Int.self, forKey: .reps)
         rest = try container.decodeIfPresent(Int.self, forKey: .rest)
+        
+        primarySkill = try container.decodeIfPresent(Skill.self, forKey: .primarySkill)
+        secondarySkills = try container.decodeIfPresent([Skill].self, forKey: .secondarySkills)
     }
     
     // Standard initializer for creating instances directly
-    init(id: Int, title: String, description: String, duration: Int, intensity: String, difficulty: String, equipment: [String], suitableLocations: [String], instructions: [String], tips: [String], type: String, sets: Int?, reps: Int?, rest: Int?) {
+    init(id: Int, title: String, description: String, duration: Int, intensity: String, difficulty: String, equipment: [String], suitableLocations: [String], instructions: [String], tips: [String], type: String, sets: Int?, reps: Int?, rest: Int?, primarySkill: Skill?, secondarySkills: [Skill]?) {
         self.id = id
         self.title = title
         self.description = description
@@ -106,24 +159,8 @@ struct DrillResponse: Codable, Identifiable {
         self.sets = sets
         self.reps = reps
         self.rest = rest
-    }
-    
-    // Convert API drill to app's DrillModel
-    func toDrillModel() -> DrillModel {
-        return DrillModel(
-            id: UUID(),  // Generate a new UUID since we can't convert an Int to UUID
-            backendId: id, // Store the backend ID from the API
-            title: title,
-            skill: type,
-            sets: sets ?? 0,
-            reps: reps ?? 0,
-            duration: duration,
-            description: description,
-            tips: tips,
-            equipment: equipment,
-            trainingStyle: intensity,
-            difficulty: difficulty
-        )
+        self.primarySkill = primarySkill
+        self.secondarySkills = secondarySkills
     }
     
     // Map API skill types to app skill types
@@ -147,34 +184,37 @@ struct SessionGeneratorView: View {
     @ObservedObject var model: OnboardingModel
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
+    @Environment(\.viewGeometry) var geometry
     
     @State private var savedFiltersName: String  = ""
     @State private var searchSkillsText: String = ""
     
+
+        
     
     // MARK: Main view
     var body: some View {
         ZStack(alignment: .bottom) {
-            
             // Sky background color
             Color(hex:"bef1fa")
                 .ignoresSafeArea()
 
             homePage
+                .frame(maxWidth: geometry.size.width)
+                .frame(maxWidth: .infinity)
+
 
             // Golden button
-            if sessionReady()  {
+            if sessionReady() {
                 goldenButton
+                    .frame(maxWidth: min(geometry.size.width - 40, appModel.layout.buttonMaxWidth))
             }
             
             // Prompt to save filter
             if appModel.viewState.showSaveFiltersPrompt {
-                
                 saveFiltersPrompt
             }
-            
         }
-
         // Sheet pop-up for each filter
         .sheet(item: $appModel.selectedFilter) { type in
             FilterSheet(
@@ -185,8 +225,8 @@ struct SessionGeneratorView: View {
                 appModel.selectedFilter = nil
             }
             .presentationDragIndicator(.hidden)
-            .presentationDetents([.height(300)])
-
+            .presentationDetents([.height(appModel.layout.sheetHeight)])
+            .frame(width: geometry.size.width)
         }
         // Sheet pop-up for saved filters
         .sheet(isPresented: $appModel.viewState.showSavedFilters) {
@@ -196,7 +236,8 @@ struct SessionGeneratorView: View {
                 dismiss: { appModel.viewState.showSavedFilters = false }
             )
             .presentationDragIndicator(.hidden)
-            .presentationDetents([.height(300)])
+            .presentationDetents([.height(appModel.layout.sheetHeight)])
+            .frame(width: geometry.size.width)
         }
         // Sheet pop-up for filter option button
         .sheet(isPresented: $appModel.viewState.showFilterOptions) {
@@ -205,93 +246,101 @@ struct SessionGeneratorView: View {
                 sessionModel: sessionModel
             )
             .presentationDragIndicator(.hidden)
-            .presentationDetents([.height(200)])
+            .presentationDetents([.height(appModel.layout.sheetHeight)])
+            .frame(width: geometry.size.width)
         }
-        
     }
-    
     
     // MARK: Home page
     private var homePage: some View {
-        ZStack(alignment: .top) {
-
-            // Where session begins, behind home page
-            AreaBehindHomePage(
-                appModel: appModel,
-                sessionModel: sessionModel)
-            
-            
-            // Home page
-            if appModel.viewState.showHomePage {
-
+            ZStack(alignment: .top) {
+                // Where session begins, behind home page
+                AreaBehindHomePage(appModel: appModel, sessionModel: sessionModel)
+                    .frame(maxWidth: geometry.size.width)
                 
-
-                // Bravo
-                RiveViewModel(fileName: "Bravo_Peaking").view()
-                    .frame(width: 90, height: 90)
-                    .offset(x: -60)
-   
-                // Bravo's message bubble
-                if appModel.viewState.showPreSessionTextBubble {
-                    preSessionMessageBubble
-                        .offset(x: 50, y: 20)
-                }
-  
-                // ZStack for rounded corner
-                ZStack {
-                    
-                    // Rounded corner
-                    RoundedCorner(radius: 30, corners: [.topLeft, .topRight])
-                        .fill(Color.white)
-                        .edgesIgnoringSafeArea(.bottom)
-                    
-                    // White part of home page
-                    VStack(alignment: .leading, spacing: 5) {
-                        
-                        HStack {
-
+                if appModel.viewState.showHomePage {
+                    VStack(spacing: 0) {
+                        // Header with Bravo and message bubble
+                        HStack(alignment: .center) {
+                            
                             Spacer()
                             
-                            SkillSearchBar(appModel: appModel, sessionModel: sessionModel, searchText: $searchSkillsText)
-                                .padding(.top, 3)
+                            // Bravo
+                            RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 3")
+                                .view()
+                                .frame(width: 90, height: 90)
+                                .padding(.leading, geometry.size.width * 0.1)
+                            
+                            if appModel.viewState.showPreSessionTextBubble {
+                                preSessionMessageBubble
+                                    .padding(.leading, 5)
+                            }
                             
                             Spacer()
                         }
+                        .padding(.top, geometry.safeAreaInsets.top)
                         
-                        // If skills search bar is selected
-                        if appModel.viewState.showSkillSearch {
+                        // ZStack for rounded corner
+                        ZStack {
                             
-                            // New view for searching skills
-                            SearchSkillsView(
-                                appModel: appModel,
-                                sessionModel: sessionModel,
-                                searchText: $searchSkillsText
-                            )
-                        // If skills search bar is not selected
-                        } else {
+                            // Rounded corner
+                            RoundedCorner(radius: 30, corners: [.topLeft, .topRight])
+                                .fill(Color.white)
+                                .edgesIgnoringSafeArea(.bottom)
                             
-                            // Filter options
-                            filterScrollView
-
-                            
-                            ScrollView {
-                                // Generated session portion
-                                GeneratedDrillsSection(appModel: appModel, sessionModel: sessionModel)
-                            // If user has selected skills
-                            if sessionModel.selectedSkills.isEmpty {
-                                RecommendedDrillsSection(appModel: appModel, sessionModel: sessionModel)
+                            // White part of home page
+                            VStack(alignment: .center, spacing: 5) {
+                                
+                                HStack {
+                                    
+                                    Spacer()
+                                    
+                                    SkillSearchBar(appModel: appModel, sessionModel: sessionModel, searchText: $searchSkillsText)
+                                        .padding(.top, 3)
+                                    
+                                    Spacer()
+                                }
+                                .padding(.top, 5)
+                                .frame(maxWidth: appModel.layout.adaptiveWidth(geometry))
+                                
+                                // If skills search bar is selected
+                                if appModel.viewState.showSkillSearch {
+                                    
+                                    // New view for searching skills
+                                    SearchSkillsView(
+                                        appModel: appModel,
+                                        sessionModel: sessionModel,
+                                        searchText: $searchSkillsText
+                                    )
+                                    
+                                // If skills search bar is not selected
+                                } else {
+                                    filterScrollView
+                                        .frame(width: geometry.size.width)
+                                    
+                                    // Main content
+                                    ScrollView(showsIndicators: false) {
+                                        VStack(spacing: appModel.layout.standardSpacing) {
+                                            
+                                            
+                                            GeneratedDrillsSection(appModel: appModel, sessionModel: sessionModel)
+                                                .padding(.horizontal, appModel.layout.contentMinPadding)
+                                            
+                                            if sessionModel.selectedSkills.isEmpty {
+                                                RecommendedDrillsSection(appModel: appModel, sessionModel: sessionModel)
+                                                    .padding(.horizontal, appModel.layout.contentMinPadding)
+                                            }
+                                        }
+                                    }
+                                    .frame(maxWidth: appModel.layout.adaptiveWidth(geometry))
+                                }
                             }
-                            
-                            Spacer()
-                            }
-                            
+                            .frame(maxWidth: geometry.size.width)
                         }
                     }
+                    .transition(.move(edge: .bottom))
                 }
-                .transition(.move(edge: .bottom))
-                .padding(.top, 65)
             
-            }
         }
         // functions when UI of app changes
         .onAppear {
@@ -307,7 +356,7 @@ struct SessionGeneratorView: View {
         }
     }
     
-     func BravoTextBubbleDelay() {
+    func BravoTextBubbleDelay() {
         // Initially hide the bubble
         appModel.viewState.showPreSessionTextBubble = false
         
@@ -490,110 +539,11 @@ struct SessionGeneratorView: View {
             }
         }
         .padding(.horizontal)
-        .padding(.bottom, 46)
+        .padding(.bottom, 80)
         .transition(.move(edge: .bottom))
     }
     
     private func sessionReady() -> Bool {
         !sessionModel.orderedSessionDrills.isEmpty && !appModel.viewState.showSkillSearch && appModel.viewState.showHomePage
-    }
-}
-
-// Add this extension to SessionGeneratorModel to handle the initial session data
-extension SessionGeneratorModel {
-    func loadInitialSession(from sessionResponse: SessionResponse) {
-        print("🔄 Loading initial session with \(sessionResponse.drills.count) drills")
-        
-        // Clear any existing drills
-        orderedSessionDrills.removeAll()
-        
-        // Validate the session response
-        guard !sessionResponse.drills.isEmpty else {
-            print("⚠️ No drills found in the initial session response")
-            addDefaultDrills()
-            return
-        }
-        
-        // Convert API drills to app's drill models and add them to orderedDrills
-        for apiDrill in sessionResponse.drills {
-            do {
-                print("📋 Processing drill: \(apiDrill.title)")
-                let drillModel = apiDrill.toDrillModel()
-                
-                // Create an editable drill model
-                let editableDrill = EditableDrillModel(
-                    drill: drillModel,
-                    setsDone: 0,
-                    totalSets: drillModel.sets,
-                    totalReps: drillModel.reps,
-                    totalDuration: drillModel.duration,
-                    isCompleted: false
-                )
-                
-                // Add to ordered drills
-                orderedSessionDrills.append(editableDrill)
-                print("✅ Added drill: \(drillModel.title) (Sets: \(drillModel.sets), Reps: \(drillModel.reps))")
-            }
-        }
-        
-        print("✅ Added \(orderedSessionDrills.count) drills to session")
-        
-        // Update selected skills based on focus areas
-        selectedSkills.removeAll()
-        for skill in sessionResponse.focusAreas {
-            print("🎯 Adding focus area: \(skill)")
-            // Map backend skill names to frontend skill names
-            let mappedSkill = mapBackendSkillToFrontend(skill)
-            selectedSkills.insert(mappedSkill)
-        }
-        
-        print("✅ Updated selected skills: \(selectedSkills)")
-        
-        // Save the session to cache
-        cacheOrderedDrills()
-        saveChanges()
-        print("💾 Saved session to cache")
-        
-        // If no drills were loaded, add some default drills
-        if orderedSessionDrills.isEmpty {
-            print("⚠️ No drills were loaded from the initial session, adding default drills")
-            addDefaultDrills()
-        }
-    }
-    
-    private func mapBackendSkillToFrontend(_ backendSkill: String) -> String {
-        let skillMap = [
-            "passing": "Passing",
-            "dribbling": "Dribbling",
-            "shooting": "Shooting",
-            "defending": "Defending",
-            "first_touch": "First touch",
-            "fitness": "Fitness"
-        ]
-        
-        return skillMap[backendSkill.lowercased()] ?? backendSkill.capitalized
-    }
-    
-    private func addDefaultDrills() {
-        // Add a few default drills based on the selected skills
-        let defaultDrills = SessionGeneratorModel.testDrills.filter { drill in
-            return selectedSkills.contains(drill.skill) || selectedSkills.isEmpty
-        }
-        
-        for drill in defaultDrills.prefix(3) {
-            let editableDrill = EditableDrillModel(
-                drill: drill,
-                setsDone: 0,
-                totalSets: drill.sets,
-                totalReps: drill.reps,
-                totalDuration: drill.duration,
-                isCompleted: false
-            )
-            
-            orderedSessionDrills.append(editableDrill)
-        }
-        
-        print("✅ Added \(orderedSessionDrills.count) default drills to session")
-        saveChanges()
     }
 }

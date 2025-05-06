@@ -26,7 +26,7 @@ struct SessionCompleteView: View {
                     .font(.custom("Poppins-Bold", size: 20))
                     .padding()
                 
-                RiveViewModel(fileName: "Bravo_Panting").view()
+                RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1").view()
                     .frame(width: 200, height: 200)
                 
                 VStack {

@@ -101,6 +101,7 @@ class UserManager: ObservableObject {
         authToken = ""
         isLoggedIn = false
         
+    
         // Remove from UserDefaults and Keychain
         UserDefaults.standard.removeObject(forKey: "userId")
         UserDefaults.standard.removeObject(forKey: "firstName")

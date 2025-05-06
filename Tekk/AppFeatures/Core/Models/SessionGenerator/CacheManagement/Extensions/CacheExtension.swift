@@ -72,13 +72,15 @@ extension SessionGeneratorModel: CacheManagement {
         // First load all cached data
         loadAllFromCache()
         
-        // Then sync with backend
+        // Then sync with backend and load database drills
         Task {
             await syncAllWithBackend()
+            // Load and cache database drills
+            await loadAndCacheDatabaseDrills()
         }
     }
     
-    private func loadAllFromCache() {
+    func loadAllFromCache() {
         print("\n📱 Loading all data from cache...")
         
         // Load ordered drills
@@ -162,9 +164,9 @@ extension SessionGeneratorModel: CacheManagement {
             try await withThrowingTaskGroup(of: Void.self) { group in
                 // Sync ordered drills
                 group.addTask {
-                    let backendDrills = try await DataSyncService.shared.fetchOrderedDrills()
+                let backendDrills = try await DataSyncService.shared.fetchOrderedDrills()
                     if backendDrills != self.orderedSessionDrills {
-                        await MainActor.run {
+                await MainActor.run {
                             self.orderedSessionDrills = backendDrills
                             self.cacheOrderedDrills()
                             print("✅ Updated ordered drills from backend")
@@ -176,7 +178,7 @@ extension SessionGeneratorModel: CacheManagement {
                 group.addTask {
                     let backendSessions = try await DataSyncService.shared.fetchCompletedSessions()
                     if backendSessions != self.appModel.allCompletedSessions {
-                        await MainActor.run {
+                await MainActor.run {
                             self.appModel.allCompletedSessions = backendSessions
                             self.appModel.cacheCompletedSessions()
                             print("✅ Updated completed sessions from backend")
@@ -273,7 +275,7 @@ extension SessionGeneratorModel: CacheManagement {
         }
     }
     
-    func cacheFilterGroups(name: String) {
+   func cacheFilterGroups(name: String) {
         guard !isLoggingOut else {
             print("⚠️ Skipping filter groups cache during logout")
             return

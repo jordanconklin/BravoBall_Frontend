@@ -91,11 +91,6 @@ class DrillSearchService {
             throw NSError(domain: "DrillSearchService", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid response"])
         }
         
-        // For debugging - print the response
-        if let responseString = String(data: data, encoding: .utf8) {
-            print("📥 Search API Response: \(responseString)")
-        }
-        
         if httpResponse.statusCode == 200 {
             print("✅ Successfully retrieved drill search results")
             
@@ -132,11 +127,31 @@ class DrillSearchService {
                         let tips = item["tips"] as? [String] ?? []
                         
                         let type = item["type"] as? String ?? "other"
-                        
+                                                
                         // Handle nullable integers
                         let sets: Int? = item["sets"] as? Int
                         let reps: Int? = item["reps"] as? Int
                         let rest: Int? = item["rest"] as? Int
+                        
+                        // Handle primary skill
+                        var primarySkill: DrillResponse.Skill? = nil
+                        if let primarySkillData = item["primary_skill"] as? [String: Any] {
+                            primarySkill = DrillResponse.Skill(
+                                category: primarySkillData["category"] as? String ?? "",
+                                subSkill: primarySkillData["sub_skill"] as? String ?? ""
+                            )
+                        }
+                        
+                        // Handle secondary skills
+                        var secondarySkills: [DrillResponse.Skill] = []
+                        if let secondarySkillsData = item["secondary_skills"] as? [[String: Any]] {
+                            secondarySkills = secondarySkillsData.map { skillData in
+                                DrillResponse.Skill(
+                                    category: skillData["category"] as? String ?? "",
+                                    subSkill: skillData["sub_skill"] as? String ?? ""
+                                )
+                            }
+                        }
                         
                         let drillResponse = DrillResponse(
                             id: id,
@@ -152,10 +167,25 @@ class DrillSearchService {
                             type: type,
                             sets: sets,
                             reps: reps,
-                            rest: rest
+                            rest: rest,
+                            primarySkill: primarySkill,
+                            secondarySkills: secondarySkills
                         )
                         
                         drillResponses.append(drillResponse)
+                        
+                        // Debug print for the first few drills
+                        if drillResponses.count <= 3 {
+                            print("\nProcessed Drill \(drillResponses.count):")
+                            print("- Title:", drillResponse.title)
+                            print("- Primary Skill:", drillResponse.primarySkill?.category ?? "None")
+                            print("- Primary SubSkill:", drillResponse.primarySkill?.subSkill ?? "None")
+                            print("- Type:", drillResponse.type)
+                            print("- Secondary Skills:", drillResponse.secondarySkills?.map { "\($0.category):\($0.subSkill)" } ?? [])
+                        }
+                    } catch {
+                        print("⚠️ Error processing drill item:", error)
+                        continue
                     }
                 }
                 
@@ -225,9 +255,13 @@ class DrillSearchService {
                                 let instructions = item["instructions"] as? [String] ?? []
                                 let tips = item["tips"] as? [String] ?? []
                                 let type = item["type"] as? String ?? "passing"
+                                                                
                                 let sets = item["sets"] as? Int
                                 let reps = item["reps"] as? Int
                                 let rest = item["rest"] as? Int
+                                
+                                let primarySkill = item["primary_skill"] as? DrillResponse.Skill
+                                let secondarySkills = item["secondary_skills"] as? [DrillResponse.Skill]
                                 
                                 let drillResponse = DrillResponse(
                                     id: id,
@@ -243,7 +277,9 @@ class DrillSearchService {
                                     type: type,
                                     sets: sets,
                                     reps: reps,
-                                    rest: rest
+                                    rest: rest,
+                                    primarySkill: primarySkill,
+                                    secondarySkills: secondarySkills
                                 )
                                 
                                 drillResponses.append(drillResponse)
@@ -301,7 +337,12 @@ class DrillSearchService {
                 type: "passing",
                 sets: 3,
                 reps: 30,
-                rest: 30
+                rest: 30,
+                primarySkill: DrillResponse.Skill(category: "passing", subSkill: "short_passing"),
+                secondarySkills: [
+                    DrillResponse.Skill(category: "passing", subSkill: "first_touch"),
+                    DrillResponse.Skill(category: "passing", subSkill: "ball_control")
+                ]
             ),
             DrillResponse(
                 id: 2,
@@ -317,7 +358,12 @@ class DrillSearchService {
                 type: "dribbling",
                 sets: 4,
                 reps: 5,
-                rest: 45
+                rest: 45,
+                primarySkill: DrillResponse.Skill(category: "passing", subSkill: "short_passing"),
+                secondarySkills: [
+                    DrillResponse.Skill(category: "passing", subSkill: "first_touch"),
+                    DrillResponse.Skill(category: "passing", subSkill: "ball_control")
+                ]
             ),
             DrillResponse(
                 id: 3,
@@ -333,7 +379,12 @@ class DrillSearchService {
                 type: "shooting",
                 sets: 3,
                 reps: 10,
-                rest: 60
+                rest: 60,
+                primarySkill: DrillResponse.Skill(category: "passing", subSkill: "short_passing"),
+                secondarySkills: [
+                    DrillResponse.Skill(category: "passing", subSkill: "first_touch"),
+                    DrillResponse.Skill(category: "passing", subSkill: "ball_control")
+                ]
             ),
             DrillResponse(
                 id: 4,
@@ -349,7 +400,12 @@ class DrillSearchService {
                 type: "defending",
                 sets: 4,
                 reps: 8,
-                rest: 45
+                rest: 45,
+                primarySkill: DrillResponse.Skill(category: "passing", subSkill: "short_passing"),
+                secondarySkills: [
+                    DrillResponse.Skill(category: "passing", subSkill: "first_touch"),
+                    DrillResponse.Skill(category: "passing", subSkill: "ball_control")
+                ]
             ),
             DrillResponse(
                 id: 5,
@@ -365,7 +421,12 @@ class DrillSearchService {
                 type: "first_touch",
                 sets: 5,
                 reps: 20,
-                rest: 30
+                rest: 30,
+                primarySkill: DrillResponse.Skill(category: "passing", subSkill: "short_passing"),
+                secondarySkills: [
+                    DrillResponse.Skill(category: "passing", subSkill: "first_touch"),
+                    DrillResponse.Skill(category: "passing", subSkill: "ball_control")
+                ]
             )
         ]
         
@@ -392,6 +453,7 @@ class DrillSearchService {
                 backendId: response.id,
                 title: drillModel.title,
                 skill: drillModel.skill,
+                subSkills: drillModel.subSkills,
                 sets: drillModel.sets,
                 reps: drillModel.reps,
                 duration: drillModel.duration,

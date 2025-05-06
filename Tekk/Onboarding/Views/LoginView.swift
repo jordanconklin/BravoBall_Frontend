@@ -33,7 +33,7 @@ struct LoginView: View {
                     .font(.custom("PottaOne-Regular", size: 32))
                     .foregroundColor(model.globalSettings.primaryDarkColor)
                 
-                RiveViewModel(fileName: "Bravo_Panting").view()
+            RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1").view()
                     .frame(width: 200, height: 200)
                     .padding()
                 

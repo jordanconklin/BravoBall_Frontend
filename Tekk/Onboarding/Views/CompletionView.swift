@@ -22,7 +22,7 @@ struct CompletionView: View {
                 // Loading screen with Bravo
                 VStack(spacing: 20) {
                     // Bravo animation
-                    RiveViewModel(fileName: "Bravo_Panting").view()
+                    RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1").view()
                         .frame(width: 150, height: 150)
                         .padding(.top, 50)
                     
@@ -48,7 +48,7 @@ struct CompletionView: View {
                 // Fallback view in case isLoading not set to true
                 VStack(spacing: 20) {
                     // Bravo image
-                    RiveViewModel(fileName: "Bravo_Panting").view()
+                    RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1").view()
                         .frame(width: 150, height: 150)
                         .padding(.top, 50)
                     

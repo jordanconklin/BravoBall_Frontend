@@ -17,14 +17,14 @@ class OnboardingModel: ObservableObject {
     
     @Published var showLoginPage = false
     @Published var showWelcome = false
-    @Published var showIntroAnimation = true
+    @Published var showIntroAnimation = false // TESTING, set true after
     @Published var isLoggedIn = false
     @Published var authToken = ""
     @Published var isPasswordVisible: Bool = false
     @Published var numberOfOnboardingPages = 13 // Updated to include registration page
     
     // TESTING: Set this to true to skip onboarding and go straight to completion
-    @Published var skipOnboarding = false
+    @Published var skipOnboarding = true
     
     // Variables for when onboarding data is being submitted
     @Published var isLoading = true
@@ -142,7 +142,7 @@ class OnboardingModel: ObservableObject {
         currentStep = 0
         showLoginPage = false
         showWelcome = false
-        showIntroAnimation = false // TODO: test this when user resets app
+        showIntroAnimation = false // TESTING: set to true after
         authToken = ""
         
         // Reset onboardingData to default values

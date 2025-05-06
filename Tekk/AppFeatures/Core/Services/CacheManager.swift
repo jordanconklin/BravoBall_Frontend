@@ -24,6 +24,7 @@ enum CacheKey: String, CaseIterable {
     case cacheSize = "cache_size"
     case groupBackendIdsCase = "groupBackendIds"
     case likedGroupBackendIdCase = "likedGroupBackendId"
+    case databaseDrillsCase = "databaseDrills"  // New cache key for database drills
     
     // Create user-specific key
     func forUser(_ email: String) -> String {
@@ -149,6 +150,7 @@ class CacheManager {
         return nil
     }
     
+    // Clear cache for specific keys
     func clearCache(forKey key: CacheKey) {
         let userEmail = getCurrentUserEmail()
         guard !userEmail.isEmpty else {

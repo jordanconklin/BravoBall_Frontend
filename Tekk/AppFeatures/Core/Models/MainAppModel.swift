@@ -13,7 +13,10 @@ import SwiftUI
 import SwiftKeychainWrapper
 
 class MainAppModel: ObservableObject {
+    
     let globalSettings = GlobalSettings()
+    let layout = ResponsiveLayout()
+
     
     
     
@@ -31,7 +34,7 @@ class MainAppModel: ObservableObject {
     @Published var profileTab = RiveViewModel(fileName: "Tab_Dude")
     
     @Published var mainTabSelected = 0
-    @Published var inSimulationMode: Bool = true
+    @Published var inSimulationMode: Bool = false
     
     
     // Toast messages
@@ -392,9 +395,7 @@ class MainAppModel: ObservableObject {
         case none
     }
     
-    
-    // TODO: fix this
-    
+        
     // Sets the highest streak
     func highestStreakSetter(streak: Int) {
         if streak > highestStreak {

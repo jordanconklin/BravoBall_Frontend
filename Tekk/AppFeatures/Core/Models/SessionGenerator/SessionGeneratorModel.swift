@@ -31,20 +31,123 @@ class SessionGeneratorModel: ObservableObject {
     
     
     
-    // MARK: Filter Types
     
     
-    @Published var selectedTime: String?
-    @Published var selectedEquipment: Set<String> = []
-    @Published var selectedTrainingStyle: String?
-    @Published var selectedLocation: String?
-    @Published var selectedDifficulty: String?
-    @Published var selectedSkills: Set<String> = [] {
+    
+    // MARK: Filter and Skill Selection
+    
+    
+    var filterChangeTracker = FilterChangeTracker()
+    
+    @Published var selectedTime: String? {
         didSet {
-            updateDrills()
+            filterChangeTracker.selectedTimeChanged = true
+            
+            let availableDrills: [DrillModel]
+            
+            if !selectedSkills.isEmpty {
+                availableDrills = updateSessionBySelectedSkills()
+            } else {
+                availableDrills = getDrillsFromCache()
+            }
+            
+            updateSessionByFilters(availableDrills)
+            markAsNeedingSave(change: .savedFilters)
         }
     }
-    
+
+    @Published var selectedEquipment: Set<String> = [] {
+        didSet {
+            filterChangeTracker.selectedEquipmentChanged = true
+            
+            let availableDrills: [DrillModel]
+            
+            if !selectedSkills.isEmpty {
+                availableDrills = updateSessionBySelectedSkills()
+            } else {
+                availableDrills = getDrillsFromCache()
+            }
+            
+            
+            updateSessionByFilters(availableDrills)
+            markAsNeedingSave(change: .savedFilters)
+        }
+    }
+
+    @Published var selectedTrainingStyle: String? {
+        didSet {
+            filterChangeTracker.selectedTrainingStyleChanged = true
+            
+            let availableDrills: [DrillModel]
+            
+            if !selectedSkills.isEmpty {
+                availableDrills = updateSessionBySelectedSkills()
+            } else {
+                availableDrills = getDrillsFromCache()
+            }
+            
+            updateSessionByFilters(availableDrills)
+            markAsNeedingSave(change: .savedFilters)
+        }
+    }
+
+    @Published var selectedLocation: String? {
+        didSet {
+            filterChangeTracker.selectedLocationChanged = true
+            
+            let availableDrills: [DrillModel]
+            
+            if !selectedSkills.isEmpty {
+                availableDrills = updateSessionBySelectedSkills()
+            } else {
+                availableDrills = getDrillsFromCache()
+            }
+            
+            
+            updateSessionByFilters(availableDrills)
+            markAsNeedingSave(change: .savedFilters)
+        }
+    }
+
+    @Published var selectedDifficulty: String? {
+        didSet {
+            
+            filterChangeTracker.selectedDifficulty = true
+            
+            let availableDrills: [DrillModel]
+            
+            if !selectedSkills.isEmpty {
+                availableDrills = updateSessionBySelectedSkills()
+            } else {
+                availableDrills = getDrillsFromCache()
+            }
+            
+            
+            updateSessionByFilters(availableDrills)
+            markAsNeedingSave(change: .savedFilters)
+        }
+    }
+
+    // update by selected skills
+    @Published var selectedSkills: Set<String> = [] {
+        didSet {
+            
+            let availableDrills: [DrillModel]
+            
+            if currentFilters.isAllEmptyOrNil {
+                availableDrills = updateSessionBySelectedSkills()
+                updateOrderedSessionDrills(with: availableDrills)
+            } else {
+                availableDrills = updateSessionBySelectedSkills()
+                updateSessionByFilters(availableDrills)
+            }
+            
+
+            
+            // Cache the changes
+            markAsNeedingSave(change: .orderedDrills)
+        }
+    }
     
     
     // MARK: Local Data Storage
@@ -114,6 +217,8 @@ class SessionGeneratorModel: ObservableObject {
             UserDefaults.standard.set(currentUser, forKey: "lastActiveUser")
         }
         
+        
+        // TODO: make recommended session instead of initializing filters w/ onboarding data
         // Only set these values if they're not already loaded from cache
         if selectedDifficulty == nil {
             selectedDifficulty = onboardingData.trainingExperience.lowercased()
@@ -319,11 +424,53 @@ class SessionGeneratorModel: ObservableObject {
     }
     
     
+    
+    
     // Test data for drills with specific sub-skills
     static let testDrills: [DrillModel] = [
         DrillModel(
             title: "Short Passing Drill",
             skill: "Passing",
+            subSkills: ["short_passing"],
+            sets: 4,
+            reps: 10,
+            duration: 15,
+            description: "Practice accurate short passes with a partner or wall.",
+            tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
+            equipment: ["Soccer ball", "Cones"],
+            trainingStyle: "High Intensity",
+            difficulty: "Beginner"
+        ),
+        DrillModel(
+            title: "Short Passing Drill Two",
+            skill: "Passing",
+            subSkills: ["short_passing"],
+            sets: 4,
+            reps: 10,
+            duration: 15,
+            description: "Practice accurate short passes with a partner or wall.",
+            tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
+            equipment: ["Soccer ball", "Cones"],
+            trainingStyle: "High Intensity",
+            difficulty: "Beginner"
+        ),
+        DrillModel(
+            title: "Short Passing Drill Three",
+            skill: "Passing",
+            subSkills: ["short_passing"],
+            sets: 4,
+            reps: 10,
+            duration: 15,
+            description: "Practice accurate short passes with a partner or wall.",
+            tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
+            equipment: ["Soccer ball", "Cones"],
+            trainingStyle: "High Intensity",
+            difficulty: "Beginner"
+        ),
+        DrillModel(
+            title: "Short Passing Four",
+            skill: "Passing",
+            subSkills: ["short_passing"],
             sets: 4,
             reps: 10,
             duration: 15,
@@ -336,6 +483,7 @@ class SessionGeneratorModel: ObservableObject {
         DrillModel(
             title: "Long Passing Practice",
             skill: "Passing",
+            subSkills: ["long_passing"],
             sets: 3,
             reps: 8,
             duration: 20,
@@ -348,6 +496,7 @@ class SessionGeneratorModel: ObservableObject {
         DrillModel(
             title: "Through Ball Training",
             skill: "Passing",
+            subSkills: ["long_passing"],
             sets: 4,
             reps: 6,
             duration: 15,
@@ -360,6 +509,7 @@ class SessionGeneratorModel: ObservableObject {
         DrillModel(
             title: "Power Shot Practice",
             skill: "Shooting",
+            subSkills: ["power_shots"],
             sets: 3,
             reps: 5,
             duration: 20,
@@ -372,6 +522,7 @@ class SessionGeneratorModel: ObservableObject {
         DrillModel(
             title: "1v1 Dribbling Skills",
             skill: "Dribbling",
+            subSkills: ["1v1_moves"],
             sets: 4,
             reps: 8,
             duration: 15,
@@ -401,6 +552,80 @@ class SessionGeneratorModel: ObservableObject {
         }
     }
 
+     func loadInitialSession(from sessionResponse: SessionResponse) {
+        print("\n🔄 Loading initial session with \(sessionResponse.drills.count) drills")
+        
+        // Update focus areas
+        selectedSkills = Set(sessionResponse.focusAreas)
+        print("✅ Updated focus areas: \(selectedSkills.joined(separator: ", "))")
+        
+        // Clear any existing drills
+        orderedSessionDrills.removeAll()
+        
+        // Check if we have drills to process
+        guard !sessionResponse.drills.isEmpty else {
+            print("⚠️ No drills found in the initial session response")
+            addDefaultDrills()
+            return
+        }
+        
+        // Convert API drills to app's drill models and add them to orderedDrills
+        var processedCount = 0
+        for apiDrill in sessionResponse.drills {
+            do {
+                let drillModel = apiDrill.toDrillModel()
+                
+                // Create an editable drill model
+                let editableDrill = EditableDrillModel(
+                    drill: drillModel,
+                    setsDone: 0,
+                    totalSets: drillModel.sets,
+                    totalReps: drillModel.reps,
+                    totalDuration: drillModel.duration,
+                    isCompleted: false
+                )
+                
+                // Add to ordered drills
+                orderedSessionDrills.append(editableDrill)
+                processedCount += 1
+            }
+        }
+        
+        print("✅ Processed \(processedCount) drills for session")
+        
+        // Explicitly save to cache since we're in initial load
+        cacheOrderedDrills()
+        saveChanges()
+        
+        // If no drills were loaded, add some default drills
+        if orderedSessionDrills.isEmpty {
+            print("⚠️ No drills were loaded from the initial session, adding default drills")
+            addDefaultDrills()
+        }
+    }
+
+    private func addDefaultDrills() {
+        // Add a few default drills based on the selected skills
+        let defaultDrills = SessionGeneratorModel.testDrills.filter { drill in
+            return selectedSkills.contains(drill.skill) || selectedSkills.isEmpty
+        }
+        
+        for drill in defaultDrills.prefix(3) {
+            let editableDrill = EditableDrillModel(
+                drill: drill,
+                setsDone: 0,
+                totalSets: drill.sets,
+                totalReps: drill.reps,
+                totalDuration: drill.duration,
+                isCompleted: false
+            )
+            
+            orderedSessionDrills.append(editableDrill)
+        }
+        
+        print("✅ Added \(orderedSessionDrills.count) default drills to session")
+        saveChanges()
+    }
 }
 
 

@@ -187,7 +187,6 @@ struct CalendarView: View {
     
     private var testButton: some View {
         Group {
-            if appModel.inSimulationMode {
                 // test button
                 Button(action: {
                     addDrill(for: simulatedDate)
@@ -215,7 +214,6 @@ struct CalendarView: View {
                         .font(.custom("Poppins-Bold", size: 13))
                         .foregroundColor(appModel.globalSettings.primaryGrayColor)
                 }
-            }
         }
     }
 
@@ -230,12 +228,12 @@ struct CalendarView: View {
     }
 
 
-    // TODO: get rid test drills and make this production ready
-
+    // MARK: testing function
     private func addDrill(for date: Date) {
         let addedTestDrillsOne = DrillModel(
             title: "Cone weaves",
             skill: "Dribbling",
+            subSkills: ["close_control"],
             sets: 4,
             reps: 8,
             duration: 20,
@@ -249,6 +247,7 @@ struct CalendarView: View {
         let addedTestDrillsTwo = DrillModel(
             title: "Toe-taps",
             skill: "Dribbling",
+            subSkills: ["close_control"],
             sets: 3,
             reps: 20,
             duration: 10,
@@ -262,6 +261,7 @@ struct CalendarView: View {
         let addedTestDrillsThree = DrillModel(
             title: "Ronaldinho Drill",
             skill: "Dribbling",
+            subSkills: ["close_control"],
             sets: 4,
             reps: 3,
             duration: 15,

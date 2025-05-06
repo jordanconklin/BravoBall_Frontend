@@ -12,6 +12,8 @@ import RiveRuntime
 struct DrillResultsView: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
+    
+    @Environment(\.viewGeometry) var geometry
     @Environment(\.presentationMode) var presentationMode
     @State private var showScore: Bool = false
     
@@ -98,6 +100,7 @@ struct DrillResultsView: View {
                 Spacer()
             }
         }
+        .frame(width: geometry.size.width)
     }
 
     
