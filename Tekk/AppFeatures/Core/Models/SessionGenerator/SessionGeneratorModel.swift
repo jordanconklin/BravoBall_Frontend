@@ -42,16 +42,6 @@ class SessionGeneratorModel: ObservableObject {
     @Published var selectedTime: String? {
         didSet {
             filterChangeTracker.selectedTimeChanged = true
-            
-            let availableDrills: [DrillModel]
-            
-            if !selectedSkills.isEmpty {
-                availableDrills = updateSessionBySelectedSkills()
-            } else {
-                availableDrills = getDrillsFromCache()
-            }
-            
-            updateSessionByFilters(availableDrills)
             markAsNeedingSave(change: .savedFilters)
         }
     }
@@ -59,17 +49,6 @@ class SessionGeneratorModel: ObservableObject {
     @Published var selectedEquipment: Set<String> = [] {
         didSet {
             filterChangeTracker.selectedEquipmentChanged = true
-            
-            let availableDrills: [DrillModel]
-            
-            if !selectedSkills.isEmpty {
-                availableDrills = updateSessionBySelectedSkills()
-            } else {
-                availableDrills = getDrillsFromCache()
-            }
-            
-            
-            updateSessionByFilters(availableDrills)
             markAsNeedingSave(change: .savedFilters)
         }
     }
@@ -77,16 +56,6 @@ class SessionGeneratorModel: ObservableObject {
     @Published var selectedTrainingStyle: String? {
         didSet {
             filterChangeTracker.selectedTrainingStyleChanged = true
-            
-            let availableDrills: [DrillModel]
-            
-            if !selectedSkills.isEmpty {
-                availableDrills = updateSessionBySelectedSkills()
-            } else {
-                availableDrills = getDrillsFromCache()
-            }
-            
-            updateSessionByFilters(availableDrills)
             markAsNeedingSave(change: .savedFilters)
         }
     }
@@ -94,36 +63,13 @@ class SessionGeneratorModel: ObservableObject {
     @Published var selectedLocation: String? {
         didSet {
             filterChangeTracker.selectedLocationChanged = true
-            
-            let availableDrills: [DrillModel]
-            
-            if !selectedSkills.isEmpty {
-                availableDrills = updateSessionBySelectedSkills()
-            } else {
-                availableDrills = getDrillsFromCache()
-            }
-            
-            
-            updateSessionByFilters(availableDrills)
             markAsNeedingSave(change: .savedFilters)
         }
     }
 
     @Published var selectedDifficulty: String? {
         didSet {
-            
             filterChangeTracker.selectedDifficulty = true
-            
-            let availableDrills: [DrillModel]
-            
-            if !selectedSkills.isEmpty {
-                availableDrills = updateSessionBySelectedSkills()
-            } else {
-                availableDrills = getDrillsFromCache()
-            }
-            
-            
-            updateSessionByFilters(availableDrills)
             markAsNeedingSave(change: .savedFilters)
         }
     }
@@ -131,20 +77,6 @@ class SessionGeneratorModel: ObservableObject {
     // update by selected skills
     @Published var selectedSkills: Set<String> = [] {
         didSet {
-            
-            let availableDrills: [DrillModel]
-            
-            if currentFilters.isAllEmptyOrNil {
-                availableDrills = updateSessionBySelectedSkills()
-                updateOrderedSessionDrills(with: availableDrills)
-            } else {
-                availableDrills = updateSessionBySelectedSkills()
-                updateSessionByFilters(availableDrills)
-            }
-            
-
-            
-            // Cache the changes
             markAsNeedingSave(change: .orderedDrills)
         }
     }
@@ -216,29 +148,29 @@ class SessionGeneratorModel: ObservableObject {
             // Save current user as last active
             UserDefaults.standard.set(currentUser, forKey: "lastActiveUser")
         }
+        print("OnboardingData at model init: \(onboardingData)")
         
-        
-        // TODO: make recommended session instead of initializing filters w/ onboarding data
-//        // Only set these values if they're not already loaded from cache
-//        if selectedDifficulty == nil {
-//            selectedDifficulty = onboardingData.trainingExperience.lowercased()
-//        }
-//        if selectedLocation == nil && !onboardingData.trainingLocation.isEmpty {
-//            selectedLocation = onboardingData.trainingLocation.first
-//        }
-//        if selectedEquipment.isEmpty {
-//            selectedEquipment = Set(onboardingData.availableEquipment)
-//        }
-//        if selectedTime == nil {
-//            switch onboardingData.dailyTrainingTime {
-//            case "Less than 15 minutes": selectedTime = "15min"
-//            case "15-30 minutes": selectedTime = "30min"
-//            case "30-60 minutes": selectedTime = "1h"
-//            case "1-2 hours": selectedTime = "1h30"
-//            case "More than 2 hours": selectedTime = "2h+"
-//            default: selectedTime = "1h"
-//            }
-//        }
+        // Autofill preferences from onboarding data if not already set
+        if selectedDifficulty == nil {
+            print("difficulty: '\(onboardingData.trainingExperience.lowercased())'")
+            selectedDifficulty = onboardingData.trainingExperience.lowercased()
+        }
+        if selectedLocation == nil && !onboardingData.trainingLocation.isEmpty {
+            selectedLocation = onboardingData.trainingLocation.first
+        }
+        if selectedEquipment.isEmpty {
+            selectedEquipment = Set(onboardingData.availableEquipment)
+        }
+        if selectedTime == nil {
+            switch onboardingData.dailyTrainingTime {
+            case "Less than 15 minutes": selectedTime = "15min"
+            case "15-30 minutes": selectedTime = "30min"
+            case "30-60 minutes": selectedTime = "1h"
+            case "1-2 hours": selectedTime = "1h30"
+            case "More than 2 hours": selectedTime = "2h+"
+            default: selectedTime = "1h"
+            }
+        }
         
         // Setup auto-save timer
         autoSaveTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
@@ -550,6 +482,58 @@ class SessionGeneratorModel: ObservableObject {
             self.selectedLocation = model.selectedLocation
             self.selectedDifficulty = model.selectedDifficulty
         }
+    }
+
+    func loadInitialSession(from sessionResponse: SessionResponse) {
+        print("\n🔄 Loading initial session with \(sessionResponse.drills.count) drills")
+        
+        // Update focus areas
+        selectedSkills = Set(sessionResponse.focusAreas)
+        print("✅ Updated focus areas: \(selectedSkills.joined(separator: ", "))")
+        
+        // Clear any existing drills
+        orderedSessionDrills.removeAll()
+        
+        // // Check if we have drills to process
+        // guard !sessionResponse.drills.isEmpty else {
+        //     print("⚠️ No drills found in the initial session response")
+        //     addDefaultDrills()
+        //     return
+        // }
+        
+        // Convert API drills to app's drill models and add them to orderedDrills
+        var processedCount = 0
+        for apiDrill in sessionResponse.drills {
+            do {
+                let drillModel = apiDrill.toDrillModel()
+                
+                // Create an editable drill model
+                let editableDrill = EditableDrillModel(
+                    drill: drillModel,
+                    setsDone: 0,
+                    totalSets: drillModel.sets,
+                    totalReps: drillModel.reps,
+                    totalDuration: drillModel.duration,
+                    isCompleted: false
+                )
+                
+                // Add to ordered drills
+                orderedSessionDrills.append(editableDrill)
+                processedCount += 1
+            }
+        }
+        
+        print("✅ Processed \(processedCount) drills for session")
+        
+        // Explicitly save to cache since we're in initial load
+        cacheOrderedDrills()
+        saveChanges()
+        
+        // // If no drills were loaded, add some default drills
+        // if orderedSessionDrills.isEmpty {
+        //     print("⚠️ No drills were loaded from the initial session, adding default drills")
+        //     addDefaultDrills()
+        // }
     }
 
 }
