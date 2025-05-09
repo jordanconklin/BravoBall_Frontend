@@ -95,6 +95,8 @@ struct ResponsiveLayout {
 }
 
 
+ 
+
 // MARK: - Grid Layout Helper
 struct AdaptiveGrid: Layout {
     var minWidth: CGFloat = 300
