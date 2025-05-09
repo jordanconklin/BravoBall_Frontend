@@ -37,39 +37,33 @@ class SessionGeneratorModel: ObservableObject {
     // MARK: Filter and Skill Selection
     
     
-    var filterChangeTracker = FilterChangeTracker()
     
     @Published var selectedTime: String? {
         didSet {
-            filterChangeTracker.selectedTimeChanged = true
             markAsNeedingSave(change: .savedFilters)
         }
     }
 
     @Published var selectedEquipment: Set<String> = [] {
         didSet {
-            filterChangeTracker.selectedEquipmentChanged = true
             markAsNeedingSave(change: .savedFilters)
         }
     }
 
     @Published var selectedTrainingStyle: String? {
         didSet {
-            filterChangeTracker.selectedTrainingStyleChanged = true
             markAsNeedingSave(change: .savedFilters)
         }
     }
 
     @Published var selectedLocation: String? {
         didSet {
-            filterChangeTracker.selectedLocationChanged = true
             markAsNeedingSave(change: .savedFilters)
         }
     }
 
     @Published var selectedDifficulty: String? {
         didSet {
-            filterChangeTracker.selectedDifficulty = true
             markAsNeedingSave(change: .savedFilters)
         }
     }

@@ -38,6 +38,7 @@
 		17C3B58D2D38E43900D2471F /* DrillFollowAlongView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C3B58C2D38E41C00D2471F /* DrillFollowAlongView.swift */; };
 		17F5D6542CD3477E008E8C24 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F5D6532CD3477E008E8C24 /* ColorExtension.swift */; };
 		17F5D6562CD347AE008E8C24 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F5D6552CD347AD008E8C24 /* GlobalSettings.swift */; };
+		420DA39A2DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv in Resources */ = {isa = PBXBuildFile; fileRef = 420DA3992DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv */; };
 		430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */; };
 		430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6CC2D3064850016D520 /* MainAppModel.swift */; };
 		430FD6D32D307AEC0016D520 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 430FD6D22D307AEC0016D520 /* SwiftKeychainWrapper */; };
@@ -187,6 +188,7 @@
 		17E693182C7435B3006B58A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		17F5D6532CD3477E008E8C24 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		17F5D6552CD347AD008E8C24 /* GlobalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
+		420DA3992DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Bravo_Peaking_Home.riv; sourceTree = "<group>"; };
 		430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegisterForm.swift; sourceTree = "<group>"; };
 		430FD6CC2D3064850016D520 /* MainAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppModel.swift; sourceTree = "<group>"; };
 		430FD71E2D334CAF0016D520 /* Day_Null.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Day_Null.riv; sourceTree = "<group>"; };
@@ -642,6 +644,7 @@
 				43985E462CB4EFA200BE2AB6 /* BravoBall_Intro.riv */,
 				43C5773B2D645BBB00D9B587 /* Break_Area.riv */,
 				17595AAC2D3B44FE0015F35D /* Drill_Card_Complete.riv */,
+				420DA3992DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv */,
 				430FD71E2D334CAF0016D520 /* Day_Null.riv */,
 				43BFA9D52D3F38B300B12A6F /* Golden_Button.riv */,
 				43BFA9E52D40885000B12A6F /* Plus_Button.riv */,
@@ -1086,6 +1089,7 @@
 				43BFAA422D444A2C00B12A6F /* Message_Bubble.riv in Resources */,
 				17595AAD2D3B44FE0015F35D /* Drill_Card_Complete.riv in Resources */,
 				43BFAA2C2D439D2C00B12A6F /* Prereq_Time.riv in Resources */,
+				420DA39A2DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv in Resources */,
 				43BFA9E82D408B8100B12A6F /* Arrow.riv in Resources */,
 				43BFAA3C2D442BEB00B12A6F /* Prereq_Difficulty.riv in Resources */,
 				43BFA9F62D40ABB600B12A6F /* Paw_Yellow.riv in Resources */,

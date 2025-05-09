@@ -27,14 +27,18 @@ struct FilterButton: View {
                 
                 Text(value.isEmpty ? type.rawValue : value)
                     .font(.custom("Poppins-Bold", size: 18))
-                    .foregroundColor(Color.white)
+                    .foregroundColor(value.isEmpty ? appModel.globalSettings.primaryGrayColor : Color.white)
+                
+                Image(systemName: "chevron.down")
+                    .font(.system(size: 14))
+                    .foregroundColor(value.isEmpty ? appModel.globalSettings.primaryGrayColor : Color.white)
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
             .background(
                 RoundedRectangle(cornerRadius: 20)
-                    .fill(value.isEmpty ? Color(hex:"#f5cc9f") : Color(hex:"eb9c49"))
-                    .stroke(isSelected ? appModel.globalSettings.primaryYellowColor : Color.clear, lineWidth: 5)
+                    .fill(value.isEmpty ? Color.clear : appModel.globalSettings.primaryYellowColor)
+                    .stroke(value.isEmpty ? appModel.globalSettings.primaryGrayColor : Color.clear, lineWidth: 2)
             )
             .scaleEffect(isSelected ? 0.85 : 0.8)
             .animation(.spring(response: 0.4, dampingFraction: 0.6), value: isSelected)
