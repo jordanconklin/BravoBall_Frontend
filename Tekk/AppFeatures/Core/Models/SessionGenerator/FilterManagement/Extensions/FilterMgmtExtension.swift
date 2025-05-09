@@ -32,22 +32,6 @@ struct DrillFilters {
     }
 }
 
-// First, make sure your FilterChangeTracker struct is defined
-struct FilterChangeTracker {
-    var selectedTimeChanged: Bool = false
-    var selectedEquipmentChanged: Bool = false
-    var selectedTrainingStyleChanged: Bool = false
-    var selectedLocationChanged: Bool = false
-    var selectedDifficulty: Bool = false
-    
-    mutating func reset() {
-        selectedTimeChanged = false
-        selectedEquipmentChanged = false
-        selectedTrainingStyleChanged = false
-        selectedLocationChanged = false
-        selectedDifficulty = false
-    }
-}
 
 
 // Add these functions to your SessionGeneratorModel class
@@ -81,7 +65,6 @@ extension SessionGeneratorModel {
             updateOrderedSessionDrills(with: filteredDrills)
         }
         
-        filterChangeTracker.reset()
     }
     
     

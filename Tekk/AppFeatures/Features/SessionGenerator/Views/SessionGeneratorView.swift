@@ -261,19 +261,19 @@ struct SessionGeneratorView: View {
                 if appModel.viewState.showHomePage {
                     VStack(spacing: 0) {
                         // Header with Bravo and message bubble
-                        HStack(alignment: .center) {
+                        ZStack(alignment: .center) {
                             
                             Spacer()
                             
                             // Bravo
-                            RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 3")
+                            RiveViewModel(fileName: "Bravo_Peaking_Home")
                                 .view()
                                 .frame(width: 90, height: 90)
-                                .padding(.leading, geometry.size.width * 0.1)
+                                .offset(x: geometry.size.width * 0.1 - 85)
                             
                             if appModel.viewState.showPreSessionTextBubble {
                                 preSessionMessageBubble
-                                    .padding(.leading, 5)
+                                    .offset(x: geometry.size.width * 0.1 + 35)
                             }
                             
                             Spacer()
@@ -431,7 +431,7 @@ struct SessionGeneratorView: View {
                         .padding(.vertical, 3)
                     }
                 }
-                .frame(height: 50)
+                .frame(height: 55)
             }
             .padding(.leading, 70)
             
