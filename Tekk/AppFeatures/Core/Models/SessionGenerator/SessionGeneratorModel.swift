@@ -40,37 +40,44 @@ class SessionGeneratorModel: ObservableObject {
     
     @Published var selectedTime: String? {
         didSet {
+           
             markAsNeedingSave(change: .savedFilters)
+            //            markAsNeedingSave(change: .userPreferences)
         }
     }
 
     @Published var selectedEquipment: Set<String> = [] {
         didSet {
             markAsNeedingSave(change: .savedFilters)
+            //            markAsNeedingSave(change: .userPreferences)
         }
     }
 
     @Published var selectedTrainingStyle: String? {
         didSet {
             markAsNeedingSave(change: .savedFilters)
+            //            markAsNeedingSave(change: .userPreferences)
         }
     }
 
     @Published var selectedLocation: String? {
         didSet {
             markAsNeedingSave(change: .savedFilters)
+//            markAsNeedingSave(change: .userPreferences)
         }
     }
 
     @Published var selectedDifficulty: String? {
         didSet {
             markAsNeedingSave(change: .savedFilters)
+            //            markAsNeedingSave(change: .userPreferences)
         }
     }
 
     // update by selected skills
     @Published var selectedSkills: Set<String> = [] {
         didSet {
+//            markAsNeedingSave(change: .userPreferences)
             markAsNeedingSave(change: .orderedDrills)
         }
     }
@@ -230,8 +237,9 @@ class SessionGeneratorModel: ObservableObject {
         }
         
         var hasAnyChanges: Bool {
-            return orderedDrillsChanged || 
-                   savedFiltersChanged || 
+            return
+                   orderedDrillsChanged ||
+                   savedFiltersChanged ||
                    progressHistoryChanged || 
                    likedDrillsChanged || 
                    savedDrillsChanged ||
@@ -254,9 +262,17 @@ class SessionGeneratorModel: ObservableObject {
         case .orderedDrills:
             changeTracker.orderedDrillsChanged = true
             cacheOrderedDrills()
+//        case .userPreferences:
+//            // Add preference syncing when filters change
+////            Task {
+////                await syncPreferencesWithBackend()
+////            }
         case .savedFilters:
             changeTracker.savedFiltersChanged = true
             cacheFilterGroups(name: "")
+            Task {
+                await syncPreferencesWithBackend()
+            }
         case .progressHistory:
             changeTracker.progressHistoryChanged = true
             // Progress history is handled by MainAppModel
@@ -528,6 +544,24 @@ class SessionGeneratorModel: ObservableObject {
         //     print("⚠️ No drills were loaded from the initial session, adding default drills")
         //     addDefaultDrills()
         // }
+    }
+
+    // Update the syncPreferencesWithBackend method
+    func syncPreferencesWithBackend() async {
+        do {
+            try await PreferencesUpdateService.shared.updatePreferences(
+                time: selectedTime,
+                equipment: selectedEquipment,
+                trainingStyle: selectedTrainingStyle,
+                location: selectedLocation,
+                difficulty: selectedDifficulty,
+                skills: selectedSkills,
+                sessionModel: self
+            )
+            print("✅ Successfully synced preferences with backend")
+        } catch {
+            print("❌ Failed to sync preferences with backend: \(error)")
+        }
     }
 
 }

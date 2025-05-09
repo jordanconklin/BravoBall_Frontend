@@ -91,6 +91,7 @@ struct FilterSheet: View {
                 sessionModel.selectedTime = nil
             } else {
                 sessionModel.selectedTime = option
+                dismiss()
             }
         case .equipment:
             if sessionModel.selectedEquipment.contains(option) {
@@ -103,18 +104,21 @@ struct FilterSheet: View {
                 sessionModel.selectedTrainingStyle = nil
             } else {
                 sessionModel.selectedTrainingStyle = option
+                dismiss()
             }
         case .location:
             if sessionModel.selectedLocation == option {
                 sessionModel.selectedLocation = nil
             } else {
                 sessionModel.selectedLocation = option
+                dismiss()
             }
         case .difficulty:
             if sessionModel.selectedDifficulty == option {
                 sessionModel.selectedDifficulty = nil
             } else {
                 sessionModel.selectedDifficulty = option
+                dismiss()
             }
         }
     }

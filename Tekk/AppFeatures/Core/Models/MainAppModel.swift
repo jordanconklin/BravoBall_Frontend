@@ -56,7 +56,6 @@ class MainAppModel: ObservableObject {
     
     struct ViewState: Codable {
         var showingDrills = false
-        var showFilter: Bool = true
         var showHomePage: Bool = true
         var showPreSessionTextBubble: Bool = false
         var showPostSessionTextBubble: Bool = false
@@ -75,7 +74,6 @@ class MainAppModel: ObservableObject {
         // Reset view states when user logs out / resets app
         mutating func reset() {
                 showingDrills = false
-                showFilter = true
                 showHomePage = true
                 showPreSessionTextBubble = false
                 showPostSessionTextBubble = false
