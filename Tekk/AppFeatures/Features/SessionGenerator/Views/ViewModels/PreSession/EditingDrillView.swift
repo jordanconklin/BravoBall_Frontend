@@ -187,9 +187,11 @@ struct EditingDrillView: View {
 
                 if let sets = Int(editSets), setsValid {
                     editableDrill.totalSets = sets
-                } else if let reps = Int(editReps), repsValid {
+                }
+                if let reps = Int(editReps), repsValid {
                     editableDrill.totalReps = reps
-                } else if let duration = Int(editDuration), durationValid {
+                }
+                if let duration = Int(editDuration), durationValid {
                     editableDrill.totalDuration = duration
                 }
                 
