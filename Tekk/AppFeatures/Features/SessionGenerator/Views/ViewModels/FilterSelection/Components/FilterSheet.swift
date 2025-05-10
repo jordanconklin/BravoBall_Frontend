@@ -35,6 +35,8 @@ struct FilterSheet: View {
                         .foregroundColor(appModel.globalSettings.primaryGrayColor)
                 }
             }
+            .padding(.horizontal)
+            .padding(.top)
             
             // Options list
             ScrollView {
@@ -45,22 +47,31 @@ struct FilterSheet: View {
                         }) {
                             HStack {
                                 Text(option)
-                                    .font(.custom("Poppins-Regular", size: 14))
+                                    .font(.custom("Poppins-Regular", size: 16))
                                     .foregroundColor(appModel.globalSettings.primaryGrayColor)
                                 Spacer()
-                                if isSelected(option) {
-                                    Image(systemName: "checkmark")
-                                        .foregroundColor(appModel.globalSettings.primaryYellowColor)
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .fill(isSelected(option) ? appModel.globalSettings.primaryYellowColor : Color.clear)
+                                        .stroke(isSelected(option) ? appModel.globalSettings.primaryYellowColor : appModel.globalSettings.primaryGrayColor, lineWidth: 1)
+                                        .frame(width: 20, height: 20)
+                                    
+                                    if isSelected(option) {
+                                        Image(systemName: "checkmark")
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 12, weight: .bold))
+                                    }
                                 }
                             }
-                            .padding(.vertical, 8)
+                            .padding(.vertical, 12)
+                            .padding(.horizontal, 4)
                         }
+                        .padding(.horizontal)
                         Divider()
                     }
                 }
             }
         }
-        .padding()
     }
     
     
@@ -89,6 +100,7 @@ struct FilterSheet: View {
         case .time:
             if sessionModel.selectedTime == option {
                 sessionModel.selectedTime = nil
+                dismiss()
             } else {
                 sessionModel.selectedTime = option
                 dismiss()
@@ -102,6 +114,7 @@ struct FilterSheet: View {
         case .trainingStyle:
             if sessionModel.selectedTrainingStyle == option {
                 sessionModel.selectedTrainingStyle = nil
+                dismiss()
             } else {
                 sessionModel.selectedTrainingStyle = option
                 dismiss()
@@ -109,6 +122,7 @@ struct FilterSheet: View {
         case .location:
             if sessionModel.selectedLocation == option {
                 sessionModel.selectedLocation = nil
+                dismiss()
             } else {
                 sessionModel.selectedLocation = option
                 dismiss()
@@ -116,6 +130,7 @@ struct FilterSheet: View {
         case .difficulty:
             if sessionModel.selectedDifficulty == option {
                 sessionModel.selectedDifficulty = nil
+                dismiss()
             } else {
                 sessionModel.selectedDifficulty = option
                 dismiss()

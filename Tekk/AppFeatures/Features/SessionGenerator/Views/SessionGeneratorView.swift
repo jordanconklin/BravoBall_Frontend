@@ -384,7 +384,7 @@ struct SessionGeneratorView: View {
                 
                 // Text Bubble
                 Text(sessionModel.orderedSessionDrills.isEmpty ? "Choose your skill to improve today" : "Looks like you got \(sessionModel.orderedSessionDrills.count) drills for today!")
-                    .font(.custom("Poppins-Bold", size: 12))
+                    .font(.custom("Poppins-Bold", size: 13))
                     .foregroundColor(appModel.globalSettings.primaryDarkColor)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)

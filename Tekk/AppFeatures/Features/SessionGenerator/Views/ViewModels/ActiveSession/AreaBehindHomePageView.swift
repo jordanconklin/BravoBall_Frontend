@@ -136,7 +136,7 @@ struct AreaBehindHomePage: View {
         VStack(spacing: 0) {
             
             Text(sessionModel.sessionNotComplete() ? "You have \(sessionModel.sessionsLeftToComplete()) drills left" : "Well done! Click on the trophy to claim your prize")
-                .font(.custom("Poppins-Bold", size: 16))
+                .font(.custom("Poppins-Bold", size: 13))
                 .foregroundColor(.white)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
