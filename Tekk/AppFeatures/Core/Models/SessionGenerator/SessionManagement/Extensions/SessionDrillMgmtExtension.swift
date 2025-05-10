@@ -101,49 +101,4 @@ extension SessionGeneratorModel: SessionDrillManagement {
     }
     
     
-    
-    // Gives us drills based on selected skills, if none selected then return all drills
-    func updateSessionBySelectedSkills() -> [DrillModel] {
-        let availableDrills = getDrillsFromCache()
-        var drillsWithSelectedSkills: [DrillModel] = []
-
-        
-        // First filter by skills
-        let skillFilteredDrills = !selectedSkills.isEmpty ? availableDrills.filter { drill in
-            selectedSkills.contains { selectedSkill in
-                // Check if the drill's skill matches the selected skill
-//                if drill.skill.lowercased() == selectedSkill.lowercased() {
-//                    return true
-//                }
-                
-                // Check subskills
-                switch selectedSkill {
-                case /* Dribbling cases */
-                    "Close control", "Speed dribbling", "1v1 moves", "Change of direction", "Ball mastery",
-                    /* First Touch cases */
-                    "Ground control", "Aerial control", "Turn with ball", "Touch and move", "Juggling",
-                    /* Passing cases */
-                    "Short passing", "Long passing", "One touch passing", "Technique", "Passing with movement",
-                    /* Shooting cases */
-                    "Power shots", "Finesse shots", "First time shots", "1v1 to shoot", "Shooting on the run", "Volleying":
-                    
-                    let searchTerm = selectedSkill.lowercased().replacingOccurrences(of: " ", with: "_")
-                    let drillContainsSubSkill = drill.subSkills.contains(where: { $0.contains(searchTerm) })
-                    
-                    if drillContainsSubSkill {
-                        drillsWithSelectedSkills.append(drill)
-                    }
-                    
-                    
-                    return drillContainsSubSkill
-                    
-                default:
-                    return false
-                }
-            }
-        } : availableDrills
-        
-        return drillsWithSelectedSkills
-    }
-    
 }

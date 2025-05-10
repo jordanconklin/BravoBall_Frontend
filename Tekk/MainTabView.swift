@@ -34,7 +34,7 @@ struct MainTabView: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
-                
+
                 // Custom Tab Bar
                 VStack(spacing: 0) {
                     Divider()
