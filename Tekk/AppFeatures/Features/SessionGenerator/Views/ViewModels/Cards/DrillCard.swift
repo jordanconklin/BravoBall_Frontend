@@ -52,7 +52,7 @@ struct DrillCard: View {
                             .font(.custom("Poppins-Bold", size: layout.isPad ? 18 : 16))
                             .foregroundColor(appModel.globalSettings.primaryDarkColor)
                             .lineLimit(2)
-                        Text("\(editableDrill.drill.sets) sets - \(editableDrill.drill.reps) reps - \(editableDrill.drill.duration)")
+                        Text("\(editableDrill.totalSets) sets - \(editableDrill.totalReps) reps - \(editableDrill.totalDuration)")
                             .font(.custom("Poppins-Bold", size: layout.isPad ? 16 : 14))
                             .foregroundColor(appModel.globalSettings.primaryGrayColor)
                             .lineLimit(1)
