@@ -11,10 +11,11 @@ struct SkillRow: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     let skill: DrillResponse.Skill
+    let isSelected: Bool
     
     var body: some View {
         Button( action: {
-            if sessionModel.selectedSkills.contains(skill.subSkill) {
+            if isSelected {
                 sessionModel.selectedSkills.remove(skill.subSkill)
             } else {
                 sessionModel.selectedSkills.insert(skill.subSkill)
@@ -37,6 +38,9 @@ struct SkillRow: View {
                         .foregroundColor(.gray)
                         .lineLimit(2)
                 }
+                Spacer()
+                
+                Checkbox(appModel: appModel, isSelected: isSelected)
             }
         }
     }

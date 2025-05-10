@@ -14,7 +14,7 @@ extension SessionGeneratorModel: SavedFiltersManagement {
         case .time:
             selectedTime ?? ""
         case .equipment:
-            selectedEquipment.isEmpty ? "" : "\(selectedEquipment.count) selected"
+            selectedEquipment.isEmpty ? "" : "Equipment (\(selectedEquipment.count))"
         case .trainingStyle:
             selectedTrainingStyle ?? ""
         case .location:

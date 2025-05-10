@@ -500,18 +500,7 @@ struct DrillRowForSearch: View {
                     .foregroundColor(.gray)
             } else {
                 Button(action: onSelect) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(isSelected ? appModel.globalSettings.primaryYellowColor : Color.clear)
-                            .stroke(isSelected ? appModel.globalSettings.primaryYellowColor : appModel.globalSettings.primaryGrayColor, lineWidth: 1)
-                            .frame(width: 20, height: 20)
-                        
-                        if isSelected {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(.white)
-                                .font(.system(size: 12, weight: .bold))
-                        }
-                    }
+                    Checkbox(appModel: appModel, isSelected: isSelected)
                 }
             }
         }
