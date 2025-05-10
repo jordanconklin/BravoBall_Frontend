@@ -120,6 +120,8 @@ struct SkillSelectorSheet: View {
             .safeAreaInset(edge: .bottom) {
                 Button(action: {
                     dismiss()
+                
+                    
                 }) {
                         
                     Text("Create Session")

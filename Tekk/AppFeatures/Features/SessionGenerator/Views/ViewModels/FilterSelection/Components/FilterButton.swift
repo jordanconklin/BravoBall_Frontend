@@ -38,7 +38,7 @@ struct FilterButton: View {
             .background(
                 RoundedRectangle(cornerRadius: 20)
                     .fill(value.isEmpty ? Color.clear : appModel.globalSettings.primaryYellowColor)
-                    .stroke(value.isEmpty ? appModel.globalSettings.primaryGrayColor : Color.clear, lineWidth: 2)
+                    .stroke(value.isEmpty ? appModel.globalSettings.primaryLightGrayColor : appModel.globalSettings.primaryYellowColor, lineWidth: 2)
             )
             .scaleEffect(isSelected ? 0.85 : 0.8)
             .animation(.spring(response: 0.4, dampingFraction: 0.6), value: isSelected)

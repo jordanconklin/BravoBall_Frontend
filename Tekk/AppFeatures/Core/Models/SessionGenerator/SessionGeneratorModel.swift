@@ -40,47 +40,46 @@ class SessionGeneratorModel: ObservableObject {
     
     @Published var selectedTime: String? {
         didSet {
-           
-            markAsNeedingSave(change: .savedFilters)
-            //            markAsNeedingSave(change: .userPreferences)
+            if !isInitialLoad && !isLoggingOut {
+                markAsNeedingSave(change: .userPreferences)
+            }
         }
     }
 
     @Published var selectedEquipment: Set<String> = [] {
         didSet {
-            markAsNeedingSave(change: .savedFilters)
-            //            markAsNeedingSave(change: .userPreferences)
+            if !isInitialLoad && !isLoggingOut {
+                markAsNeedingSave(change: .userPreferences)
+            }
         }
     }
 
     @Published var selectedTrainingStyle: String? {
         didSet {
-            markAsNeedingSave(change: .savedFilters)
-            //            markAsNeedingSave(change: .userPreferences)
+            if !isInitialLoad && !isLoggingOut {
+                markAsNeedingSave(change: .userPreferences)
+            }
         }
     }
 
     @Published var selectedLocation: String? {
         didSet {
-            markAsNeedingSave(change: .savedFilters)
-//            markAsNeedingSave(change: .userPreferences)
+            if !isInitialLoad && !isLoggingOut {
+                markAsNeedingSave(change: .userPreferences)
+            }
         }
     }
 
     @Published var selectedDifficulty: String? {
         didSet {
-            markAsNeedingSave(change: .savedFilters)
-            //            markAsNeedingSave(change: .userPreferences)
+            if !isInitialLoad && !isLoggingOut {
+                markAsNeedingSave(change: .userPreferences)
+            }
         }
     }
 
     // update by selected skills
-    @Published var selectedSkills: Set<String> = [] {
-        didSet {
-//            markAsNeedingSave(change: .userPreferences)
-            markAsNeedingSave(change: .orderedDrills)
-        }
-    }
+    @Published var selectedSkills: Set<String> = []
     
     
     // MARK: Local Data Storage
@@ -259,6 +258,11 @@ class SessionGeneratorModel: ObservableObject {
         hasUnsavedChanges = true
         
         switch change {
+        case .userPreferences:
+            // preferences will be saved through this function
+            Task {
+                await syncPreferencesWithBackend()
+            }
         case .orderedDrills:
             changeTracker.orderedDrillsChanged = true
             cacheOrderedDrills()
@@ -270,9 +274,6 @@ class SessionGeneratorModel: ObservableObject {
         case .savedFilters:
             changeTracker.savedFiltersChanged = true
             cacheFilterGroups(name: "")
-            Task {
-                await syncPreferencesWithBackend()
-            }
         case .progressHistory:
             changeTracker.progressHistoryChanged = true
             // Progress history is handled by MainAppModel
@@ -288,6 +289,7 @@ class SessionGeneratorModel: ObservableObject {
     }
     
     enum DataChange {
+        case userPreferences
         case orderedDrills
         case savedFilters
         case progressHistory
@@ -495,6 +497,7 @@ class SessionGeneratorModel: ObservableObject {
     }
 
     func loadInitialSession(from sessionResponse: SessionResponse) {
+
         print("\n🔄 Loading initial session with \(sessionResponse.drills.count) drills")
         
         // Update focus areas

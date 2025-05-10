@@ -247,6 +247,7 @@ struct DrillSearchView: View {
                     LazyVStack(spacing: 16) {
                         ForEach(searchResults) { drill in
                             DrillRowForSearch(
+                                appModel: appModel,
                                 drill: drill,
                                 isSelected: selectedDrills.contains(drill),
                                 isDisabled: filterDrills?(drill) ?? false,
@@ -440,6 +441,7 @@ struct DrillSearchView: View {
 
 // Drill row component specifically for search results
 struct DrillRowForSearch: View {
+    @ObservedObject var appModel: MainAppModel
     let drill: DrillModel
     let isSelected: Bool
     let isDisabled: Bool
@@ -498,18 +500,7 @@ struct DrillRowForSearch: View {
                     .foregroundColor(.gray)
             } else {
                 Button(action: onSelect) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(isSelected ? Color.yellow : Color.clear)
-                            .stroke(isSelected ? Color.yellow : Color.black, lineWidth: 2)
-                            .frame(width: 20, height: 20)
-                        
-                        if isSelected {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(.white)
-                                .font(.system(size: 12, weight: .bold))
-                        }
-                    }
+                    Checkbox(appModel: appModel, isSelected: isSelected)
                 }
             }
         }

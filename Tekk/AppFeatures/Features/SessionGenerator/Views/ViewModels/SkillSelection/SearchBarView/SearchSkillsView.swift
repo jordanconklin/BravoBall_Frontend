@@ -16,14 +16,16 @@ struct SearchSkillsView: View {
     
     var body: some View {
         VStack {
-            ScrollView(showsIndicators: false) {
+            ScrollView(showsIndicators: true) {
                 ForEach(filteredSkills, id: \.self) { skill in
                     VStack(alignment: .leading) {
                         SkillRow(
                             appModel: appModel,
                             sessionModel: sessionModel,
-                            skill: skill
+                            skill: skill,
+                            isSelected: sessionModel.selectedSkills.contains(skill.subSkill)
                         )
+                        .padding()
                         Divider()
                     }
                 }
@@ -36,6 +38,10 @@ struct SearchSkillsView: View {
             Button(action: {
                 searchText = ""
                 appModel.viewState.showSkillSearch = false
+                
+                Task {
+                    await sessionModel.syncPreferencesWithBackend()
+                }
             }) {
                 
                     Text("Create Session")

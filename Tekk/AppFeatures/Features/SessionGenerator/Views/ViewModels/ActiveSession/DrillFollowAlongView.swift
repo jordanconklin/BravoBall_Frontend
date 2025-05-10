@@ -16,10 +16,27 @@ struct DrillFollowAlongView: View {
     
     @Environment(\.dismiss) private var dismiss
     @State private var isPlaying = false
-    @State private var elapsedTime: TimeInterval = 1.0
+    @State private var elapsedTime: TimeInterval
     @State private var countdownValue: Int?
-    @State private var displayCountdown: Bool = false // MARK: TESTING
+    @State private var displayCountdown: Bool = true
     @State private var timer: Timer?
+    
+    
+    init(appModel: MainAppModel, sessionModel: SessionGeneratorModel, editableDrill: Binding<EditableDrillModel>) {
+        self.appModel = appModel
+        self.sessionModel = sessionModel
+        self._editableDrill = editableDrill
+        self._showDrillDetailView = State(initialValue: false)
+        self._isPlaying = State(initialValue: false)
+        self._countdownValue = State(initialValue: nil)
+        self._displayCountdown = State(initialValue: false)
+        self._timer = State(initialValue: nil)
+        // Calculate per-set duration in seconds
+        let perSetDuration = editableDrill.wrappedValue.totalSets > 0 ? Double(editableDrill.wrappedValue.totalDuration) / Double(editableDrill.wrappedValue.totalSets) : 0
+        let perSetDurationSeconds = perSetDuration * 60
+        let roundedDuration = (perSetDurationSeconds / 30.0).rounded() * 30.0 // rounding to the nearest 30th second for more official sliced times
+        self._elapsedTime = State(initialValue: roundedDuration)
+    }
     
 
     
