@@ -121,6 +121,7 @@ struct SkillSelectorSheet: View {
                 Button(action: {
                     dismiss()
                 
+                    sessionModel.markAsNeedingSave(change: .userPreferences)
                     
                 }) {
                         

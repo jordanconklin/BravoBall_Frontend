@@ -39,9 +39,7 @@ struct SearchSkillsView: View {
                 searchText = ""
                 appModel.viewState.showSkillSearch = false
                 
-                Task {
-                    await sessionModel.syncPreferencesWithBackend()
-                }
+                sessionModel.markAsNeedingSave(change: .userPreferences)
             }) {
                 
                     Text("Create Session")

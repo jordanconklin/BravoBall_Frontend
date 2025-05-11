@@ -549,8 +549,49 @@ class SessionGeneratorModel: ObservableObject {
         // }
     }
 
+    // Helper to map display skill names to backend keys, using - to separate category and subSkill
+    func mapSelectedSkillsToBackend(_ displaySkills: Set<String>) -> Set<String> {
+        let skillMap: [String: String] = [
+            // Dribbling
+            "Close control": "dribbling-close_control",
+            "Speed dribbling": "dribbling-speed_dribbling",
+            "1v1 moves": "dribbling-1v1_moves",
+            "Change of direction": "dribbling-change_of_direction",
+            "Ball mastery": "dribbling-ball_mastery",
+            // First Touch
+            "Ground control": "first_touch-ground_control",
+            "Aerial control": "first_touch-aerial_control",
+            "Turn with ball": "first_touch-turn_with_ball",
+            "Touch and move": "first_touch-touch_and_move",
+            "Juggling": "first_touch-juggling",
+            // Passing
+            "Short passing": "passing-short_passing",
+            "Long passing": "passing-long_passing",
+            "One touch passing": "passing-one_touch_passing",
+            "Technique": "passing-technique",
+            "Passing with movement": "passing-passing_with_movement",
+            // Shooting
+            "Power shots": "shooting-power_shots",
+            "Finesse shots": "shooting-finesse_shots",
+            "First time shots": "shooting-first_time_shots",
+            "1v1 to shoot": "shooting-1v1_to_shoot",
+            "Shooting on the run": "shooting-shooting_on_the_run",
+            "Volleying": "shooting-volleying",
+            // Defending (add if you have defending skills)
+            "Tackling": "defending-tackling",
+            "Marking": "defending-marking",
+            "Intercepting": "defending-intercepting",
+            "Positioning": "defending-positioning",
+            // Add more as needed...
+        ]
+        return Set(displaySkills.compactMap { skillMap[$0] })
+    }
+    
+
     // Update the syncPreferencesWithBackend method
     func syncPreferencesWithBackend() async {
+        // Convert display skill names to backend keys before sending
+        let selectedSkillsSnakeCase = mapSelectedSkillsToBackend(selectedSkills)
         do {
             try await PreferencesUpdateService.shared.updatePreferences(
                 time: selectedTime,
@@ -558,7 +599,7 @@ class SessionGeneratorModel: ObservableObject {
                 trainingStyle: selectedTrainingStyle,
                 location: selectedLocation,
                 difficulty: selectedDifficulty,
-                skills: selectedSkills,
+                skills: selectedSkillsSnakeCase,
                 sessionModel: self
             )
             print("✅ Successfully synced preferences with backend")
