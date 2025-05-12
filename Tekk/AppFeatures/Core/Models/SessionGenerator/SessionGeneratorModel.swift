@@ -500,9 +500,17 @@ class SessionGeneratorModel: ObservableObject {
 
         print("\n🔄 Loading initial session with \(sessionResponse.drills.count) drills")
         
-        // Update focus areas
-        selectedSkills = Set(sessionResponse.focusAreas)
-        print("✅ Updated focus areas: \(selectedSkills.joined(separator: ", "))")
+        // Instead of directly setting selectedSkills, map the focus areas to their full skill strings
+            let newSkills = Set(sessionResponse.focusAreas.compactMap { category in
+                // Find any existing skills that match this category
+                selectedSkills.first { $0.starts(with: "\(category)-") }
+            })
+            
+            // Only update if we found matching skills
+            if !newSkills.isEmpty {
+                selectedSkills = newSkills
+                print("✅ Updated focus areas: \(selectedSkills.joined(separator: ", "))")
+            }
         
         // Clear any existing drills
         orderedSessionDrills.removeAll()
