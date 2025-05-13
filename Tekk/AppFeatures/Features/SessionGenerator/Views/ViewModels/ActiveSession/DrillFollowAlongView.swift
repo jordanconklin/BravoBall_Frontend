@@ -34,7 +34,7 @@ struct DrillFollowAlongView: View {
         self._timer = State(initialValue: nil)
         // Calculate per-set duration in seconds
         let totalDurationSeconds = Double(editableDrill.wrappedValue.totalDuration) * 60
-        let totalBreakSeconds = Double(editableDrill.wrappedValue.totalSets) * 45
+        let totalBreakSeconds = Double((editableDrill.wrappedValue.totalSets - 1)) * 45
         let perSetDuration = (totalDurationSeconds - totalBreakSeconds) / Double(editableDrill.wrappedValue.totalSets)
         let roundedDuration = (perSetDuration / 10.0).rounded() * 10.0 // round to nearest 10s
         self._restartTime = State(initialValue: roundedDuration)

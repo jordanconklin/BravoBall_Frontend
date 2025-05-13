@@ -80,6 +80,7 @@ class SessionGeneratorModel: ObservableObject {
 
     // update by selected skills
     @Published var selectedSkills: Set<String> = []
+    @Published var originalSelectedSkills: Set<String> = []
     
     
     // MARK: Local Data Storage

@@ -42,6 +42,7 @@
 		420DA39E2DCE935B004CDD7A /* PreferencesUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420DA39D2DCE9357004CDD7A /* PreferencesUpdate.swift */; };
 		420DA3A22DCEAF69004CDD7A /* Grass_Field.riv in Resources */ = {isa = PBXBuildFile; fileRef = 420DA3A12DCEAF69004CDD7A /* Grass_Field.riv */; };
 		420DA3A72DCEEF55004CDD7A /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420DA3A62DCEEF52004CDD7A /* Checkbox.swift */; };
+		42929F3B2DD2EB5000DA73BB /* GroupFilterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42929F3A2DD2EB4900DA73BB /* GroupFilterOptions.swift */; };
 		430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */; };
 		430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6CC2D3064850016D520 /* MainAppModel.swift */; };
 		430FD6D32D307AEC0016D520 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 430FD6D22D307AEC0016D520 /* SwiftKeychainWrapper */; };
@@ -189,6 +190,7 @@
 		420DA39D2DCE9357004CDD7A /* PreferencesUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesUpdate.swift; sourceTree = "<group>"; };
 		420DA3A12DCEAF69004CDD7A /* Grass_Field.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Grass_Field.riv; sourceTree = "<group>"; };
 		420DA3A62DCEEF52004CDD7A /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
+		42929F3A2DD2EB4900DA73BB /* GroupFilterOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupFilterOptions.swift; sourceTree = "<group>"; };
 		430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegisterForm.swift; sourceTree = "<group>"; };
 		430FD6CC2D3064850016D520 /* MainAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppModel.swift; sourceTree = "<group>"; };
 		430FD71E2D334CAF0016D520 /* Day_Null.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Day_Null.riv; sourceTree = "<group>"; };
@@ -633,6 +635,7 @@
 		4399B72E2D6D7F7100DA5E84 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				42929F3A2DD2EB4900DA73BB /* GroupFilterOptions.swift */,
 				4399B6E82D69407A00DA5E84 /* GroupDetailView.swift */,
 			);
 			path = ViewModels;
@@ -1176,6 +1179,7 @@
 				43C5FC542D6DBD0E0064E7D5 /* GroupCard.swift in Sources */,
 				4399B7392D6D901B00DA5E84 /* ToastMessageModel.swift in Sources */,
 				420DA3A72DCEEF55004CDD7A /* Checkbox.swift in Sources */,
+				42929F3B2DD2EB5000DA73BB /* GroupFilterOptions.swift in Sources */,
 				17F5D6562CD347AE008E8C24 /* GlobalSettings.swift in Sources */,
 				17F5D6542CD3477E008E8C24 /* ColorExtension.swift in Sources */,
 				1782090E2D2E0A1100246494 /* ProfileView.swift in Sources */,

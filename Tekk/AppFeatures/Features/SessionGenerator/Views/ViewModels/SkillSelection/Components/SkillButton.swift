@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SkillButton: View {
     @ObservedObject var appModel: MainAppModel
+    @ObservedObject var sessionModel: SessionGeneratorModel
     let title: String
     let isSelected: Bool
     let action: () -> Void
@@ -22,7 +23,12 @@ struct SkillButton: View {
                     .lineLimit(2)
                     .minimumScaleFactor(0.8)
                 
-                Button(action: action) {
+                Button(action: {
+                    action()
+                    
+                    sessionModel.markAsNeedingSave(change: .userPreferences)
+                    
+                }) {
                     Image(systemName: "xmark")
                         .foregroundColor(appModel.globalSettings.primaryDarkColor.opacity(0.5))
                         .font(.system(size: 14))
