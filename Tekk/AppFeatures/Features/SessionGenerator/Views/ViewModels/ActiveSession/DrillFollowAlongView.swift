@@ -16,6 +16,7 @@ struct DrillFollowAlongView: View {
     
     @Environment(\.dismiss) private var dismiss
     @State private var isPlaying = false
+    @State private var restartTime: TimeInterval
     @State private var elapsedTime: TimeInterval
     @State private var countdownValue: Int?
     @State private var displayCountdown: Bool = true
@@ -32,9 +33,11 @@ struct DrillFollowAlongView: View {
         self._displayCountdown = State(initialValue: false)
         self._timer = State(initialValue: nil)
         // Calculate per-set duration in seconds
-        let perSetDuration = editableDrill.wrappedValue.totalSets > 0 ? Double(editableDrill.wrappedValue.totalDuration) / Double(editableDrill.wrappedValue.totalSets) : 0
-        let perSetDurationSeconds = perSetDuration * 60
-        let roundedDuration = (perSetDurationSeconds / 30.0).rounded() * 30.0 // rounding to the nearest 30th second for more official sliced times
+        let totalDurationSeconds = Double(editableDrill.wrappedValue.totalDuration) * 60
+        let totalBreakSeconds = Double(editableDrill.wrappedValue.totalSets) * 45
+        let perSetDuration = (totalDurationSeconds - totalBreakSeconds) / Double(editableDrill.wrappedValue.totalSets)
+        let roundedDuration = (perSetDuration / 10.0).rounded() * 10.0 // round to nearest 10s
+        self._restartTime = State(initialValue: roundedDuration)
         self._elapsedTime = State(initialValue: roundedDuration)
     }
     
@@ -286,7 +289,6 @@ struct DrillFollowAlongView: View {
     }
     
     private func startTimer() {
-        let restartTime = elapsedTime
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             if elapsedTime > 0 {
                 elapsedTime -= 1

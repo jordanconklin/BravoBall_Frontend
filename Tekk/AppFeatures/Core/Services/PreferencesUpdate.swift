@@ -89,8 +89,12 @@ class PreferencesUpdateService {
         // Convert time string to minutes
         let duration = convertTimeToMinutes(time)
         
+        // Print selected skills before conversion
+        print("🟡 Selected skills before conversion: \(skills)")
         // Convert skills to the required format
         let targetSkills = convertSkillsToPreferences(skills)
+        // Print targetSkills after conversion
+        print("🟢 targetSkills after conversion: \(targetSkills)")
         
         // Create the request body
         let preferencesRequest = SessionPreferencesRequest(
@@ -182,11 +186,11 @@ class PreferencesUpdateService {
         var skillsByCategory: [String: Set<String>] = [:]
         
         for skill in skills {
-            // Split the skill into category and sub-skill
-            let components = skill.split(separator: "_")
+            // Split the skill into category and sub-skill using '-'
+            let components = skill.split(separator: "-")
             if components.count >= 2 {
                 let category = String(components[0])
-                let subSkill = components.dropFirst().joined(separator: "_")
+                let subSkill = components.dropFirst().joined(separator: "-")
                 
                 if skillsByCategory[category] == nil {
                     skillsByCategory[category] = []
