@@ -153,44 +153,44 @@ class SessionGeneratorModel: ObservableObject {
         
         // Autofill preferences from onboarding data if not already set
         
-        //time
-        if selectedTime == nil {
-            switch onboardingData.dailyTrainingTime {
-            case "Less than 15 minutes": selectedTime = "15min"
-            case "15-30 minutes": selectedTime = "30min"
-            case "30-60 minutes": selectedTime = "1h"
-            case "1-2 hours": selectedTime = "1h30"
-            case "More than 2 hours": selectedTime = "2h+"
-            default: selectedTime = "1h"
-            }
-        }
-        
-        
-        //equipment
-        if selectedEquipment.isEmpty {
-            selectedEquipment = Set(onboardingData.availableEquipment)
-        }
-        
-        //training style
-        if selectedTrainingStyle == nil {
-            switch onboardingData.weeklyTrainingDays {
-            case "2-3 days (light schedule)": selectedTrainingStyle = "game recovery"
-            case "4-5 days (moderate schedule)": selectedTrainingStyle = "medium intensity"
-            case "6-7 days (intense schedule)": selectedTrainingStyle = "high intensity"
-            default: selectedTrainingStyle = "medium intensity"
-            }
-        }
-        
-        //location
-        if selectedLocation == nil && !onboardingData.trainingLocation.isEmpty {
-            selectedLocation = onboardingData.trainingLocation.first
-        }
-        
-        //difficulty
-        if selectedDifficulty == nil {
-            print("difficulty: '\(onboardingData.trainingExperience.lowercased())'")
-            selectedDifficulty = onboardingData.trainingExperience.lowercased()
-        }
+//        //time
+//        if selectedTime == nil {
+//            switch onboardingData.dailyTrainingTime {
+//            case "Less than 15 minutes": selectedTime = "15min"
+//            case "15-30 minutes": selectedTime = "30min"
+//            case "30-60 minutes": selectedTime = "1h"
+//            case "1-2 hours": selectedTime = "1h30"
+//            case "More than 2 hours": selectedTime = "2h+"
+//            default: selectedTime = "1h"
+//            }
+//        }
+//        
+//        
+//        //equipment
+//        if selectedEquipment.isEmpty {
+//            selectedEquipment = Set(onboardingData.availableEquipment)
+//        }
+//        
+//        //training style
+//        if selectedTrainingStyle == nil {
+//            switch onboardingData.weeklyTrainingDays {
+//            case "2-3 days (light schedule)": selectedTrainingStyle = "game recovery"
+//            case "4-5 days (moderate schedule)": selectedTrainingStyle = "medium intensity"
+//            case "6-7 days (intense schedule)": selectedTrainingStyle = "high intensity"
+//            default: selectedTrainingStyle = "medium intensity"
+//            }
+//        }
+//        
+//        //location
+//        if selectedLocation == nil && !onboardingData.trainingLocation.isEmpty {
+//            selectedLocation = onboardingData.trainingLocation.first
+//        }
+//        
+//        //difficulty
+//        if selectedDifficulty == nil {
+//            print("difficulty: '\(onboardingData.trainingExperience.lowercased())'")
+//            selectedDifficulty = onboardingData.trainingExperience.lowercased()
+//        }
         
     
         
@@ -584,7 +584,7 @@ class SessionGeneratorModel: ObservableObject {
     func mapSelectedSkillsToBackend(_ displaySkills: Set<String>) -> Set<String> {
         let skillMap: [String: String] = [
             // Dribbling
-            "Close control": "dribbling-close_control",
+            "Close control": "dribbling-close_control", // close control: dribb
             "Speed dribbling": "dribbling-speed_dribbling",
             "1v1 moves": "dribbling-1v1_moves",
             "Change of direction": "dribbling-change_of_direction",
@@ -637,6 +637,44 @@ class SessionGeneratorModel: ObservableObject {
         } catch {
             print("❌ Failed to sync preferences with backend: \(error)")
         }
+    }
+    
+    // Load preferences from backend
+    func loadPreferencesFromBackend() async {
+        do {
+            let preferences = try await PreferencesUpdateService.shared.fetchPreferences()
+            
+            // Update preferences on the main thread
+            await MainActor.run {
+                // Convert duration to time string
+                selectedTime = PreferencesUpdateService.shared.convertMinutesToTimeString(preferences.duration ?? 0)
+                
+                // Update equipment
+                selectedEquipment = Set(preferences.availableEquipment ?? [])
+                
+                // Update other preferences
+                selectedTrainingStyle = preferences.trainingStyle
+                selectedLocation = preferences.trainingLocation
+                selectedDifficulty = preferences.difficulty
+                
+                // Convert backend skills to frontend format
+                selectedSkills = PreferencesUpdateService.shared.convertBackendSkillsToFrontend(preferences.targetSkills ?? [])
+                
+                print("✅ Successfully loaded preferences from backend")
+            }
+            
+            // Cache the updated preferences
+            cachePreferences()
+        } catch {
+            print("❌ Failed to load preferences from backend: \(error)")
+        }
+    }
+    
+    // Cache current preferences
+    func cachePreferences() {
+        let preferences = Preferences(from: self)
+        cacheManager.cache(preferences, forKey: .filterGroupsCase)
+        print("✅ Cached preferences")
     }
 
 }
