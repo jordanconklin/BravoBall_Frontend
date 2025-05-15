@@ -57,6 +57,41 @@ struct PreferencesUpdateResponse: Codable {
     }
 }
 
+// Structure to match the backend's response format for fetching preferences
+struct PreferencesResponse: Codable {
+    let status: String
+    let message: String
+    let data: PreferencesData
+    
+    struct PreferencesData: Codable {
+        let duration: Int?
+        let availableEquipment: [String]?
+        let trainingStyle: String?
+        let trainingLocation: String?
+        let difficulty: String?
+        let targetSkills: [SkillPreference]?
+        
+        struct SkillPreference: Codable {
+            let category: String?
+            let subSkills: [String]?
+            
+            enum CodingKeys: String, CodingKey {
+                case category
+                case subSkills = "sub_skills"
+            }
+        }
+        
+        enum CodingKeys: String, CodingKey {
+            case duration
+            case availableEquipment = "available_equipment"
+            case trainingStyle = "training_style"
+            case trainingLocation = "training_location"
+            case difficulty
+            case targetSkills = "target_skills"
+        }
+    }
+}
+
 class PreferencesUpdateService {
     static let shared = PreferencesUpdateService()
     private let baseURL = AppSettings.baseURL
@@ -206,6 +241,81 @@ class PreferencesUpdateService {
                 subSkills: Array(subSkills)
             )
         }
+    }
+    
+    func fetchPreferences() async throws -> PreferencesResponse.PreferencesData {
+        let url = URL(string: "\(baseURL)/api/session/preferences")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Add auth token
+        if let token = KeychainWrapper.standard.string(forKey: "authToken") {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            print("🔑 Using auth token: \(token)")
+        } else {
+            print("⚠️ No auth token found!")
+            throw URLError(.userAuthenticationRequired)
+        }
+        
+        print("📤 Fetching preferences from: \(url.absoluteString)")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ Invalid response type")
+            throw URLError(.badServerResponse)
+        }
+        
+        print("📥 Response status code: \(httpResponse.statusCode)")
+        
+        if let responseString = String(data: data, encoding: .utf8) {
+            print("📥 Response body: \(responseString)")
+        }
+        
+        switch httpResponse.statusCode {
+        case 200:
+            print("✅ Successfully fetched preferences")
+            let decoder = JSONDecoder()
+//            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let response = try decoder.decode(PreferencesResponse.self, from: data)
+            print("[DEBUG] Decoded preferences data: \(response.data)")
+            return response.data
+        case 401:
+            print("❌ Unauthorized - Invalid or expired token")
+            throw URLError(.userAuthenticationRequired)
+        case 404:
+            print("❌ Preferences not found")
+            throw URLError(.badURL)
+        default:
+            print("❌ Unexpected status code: \(httpResponse.statusCode)")
+            throw URLError(.badServerResponse)
+        }
+    }
+    
+    // Helper function to convert minutes to time string
+    func convertMinutesToTimeString(_ minutes: Int) -> String {
+        switch minutes {
+        case 0...15: return "15min"
+        case 16...30: return "30min"
+        case 31...45: return "45min"
+        case 46...60: return "1h"
+        case 61...90: return "1h30"
+        default: return "2h+"
+        }
+    }
+    
+    // Helper function to convert backend skills to frontend format
+    func convertBackendSkillsToFrontend(_ skills: [PreferencesResponse.PreferencesData.SkillPreference]) -> Set<String> {
+        var frontendSkills = Set<String>()
+        
+        for skill in skills {
+            for subSkill in skill.subSkills ?? [] {
+                frontendSkills.insert("\(skill.category ?? "")-\(subSkill)")
+            }
+        }
+        
+        return frontendSkills
     }
 }
 

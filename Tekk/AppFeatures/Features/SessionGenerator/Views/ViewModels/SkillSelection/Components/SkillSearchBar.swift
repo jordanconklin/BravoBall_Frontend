@@ -26,6 +26,9 @@ struct SkillSearchBar: View {
                     Button( action: {
                         searchText = ""
                         appModel.viewState.showSkillSearch = false
+                        
+                        sessionModel.selectedSkills = sessionModel.originalSelectedSkills
+                        
                     }) {
                         Image(systemName: "chevron.left")
                             .foregroundColor(.gray)
@@ -46,6 +49,7 @@ struct SkillSearchBar: View {
                                         ForEach(Array(sessionModel.selectedSkills).sorted(), id: \.self) { skill in
                                             SkillButton(
                                                 appModel: appModel,
+                                                sessionModel: sessionModel,
                                                 title: skill,
                                                 isSelected: true
                                             ) {
@@ -107,6 +111,9 @@ struct SkillSearchBar: View {
             SkillSelectorSheet(appModel: appModel, sessionModel: sessionModel)
                 .presentationDragIndicator(.hidden)
                 .interactiveDismissDisabled()
+        }
+        .onTapGesture {
+            sessionModel.originalSelectedSkills = sessionModel.selectedSkills
         }
     }
     private func updateSearchState(isFocused: Bool? = nil, isShowing: Bool? = nil) {

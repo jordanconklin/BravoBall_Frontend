@@ -119,7 +119,8 @@ struct GroupDetailView: View {
             .sheet(isPresented: $appModel.viewState.showGroupFilterOptions) {
                 GroupFilterOptions(
                     appModel: appModel,
-                    sessionModel: sessionModel
+                    sessionModel: sessionModel,
+                    group: group
                 )
                 .presentationDragIndicator(.hidden)
                 .presentationDetents([.height(200)])
@@ -257,86 +258,6 @@ struct GroupDetailView: View {
             currentDrills = group.drills
             print("⚠️ Could not find updated group, using original: \(currentDrills.count) drills")
         }
-    }
-}
-
-
-// MARK: Group Filter Options
-struct GroupFilterOptions: View {
-    @ObservedObject var appModel: MainAppModel
-    @ObservedObject var sessionModel: SessionGeneratorModel
-    
-    @Environment(\.viewGeometry) var geometry
-    
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Button(action: {
-                                
-                withAnimation {
-                    appModel.viewState.showGroupFilterOptions = false
-                }
-            }) {
-                HStack(spacing: 8) {
-                    Image(systemName: "xmark.circle")
-                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                    Text("Delete Group")
-                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                        .font(.custom("Poppins-Bold", size: 12))
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-            }
-            
-            Divider()
-            
-            Button(action: {
-                                
-                withAnimation {
-                    appModel.viewState.showGroupFilterOptions = false
-                }
-            }) {
-                HStack(spacing: 8) {
-                    Image(systemName: "gearshape")
-                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                    Text("Edit Group")
-                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                        .font(.custom("Poppins-Bold", size: 12))
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-            }
-            
-            Divider()
-            
-            Button(action: {
-                // Show add drill sheet
-                withAnimation(.spring(dampingFraction: 0.7)) {
-                    appModel.viewState.showGroupFilterOptions = false
-                    
-                    // Delay to allow the first sheet to close smoothly
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        // This will be handled in the parent view by binding to showAddDrillSheet
-                        NotificationCenter.default.post(name: Notification.Name("ShowAddDrillSheet"), object: nil)
-                    }
-                }
-            }) {
-                HStack(spacing: 8) {
-                    Image(systemName: "plus")
-                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                    Text("Add to Group")
-                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                        .font(.custom("Poppins-Bold", size: 12))
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-            }
-        }
-        .frame(width: geometry.size.width)
-        .padding(8)
-        .background(Color.white)
-        .frame(maxWidth: .infinity)
-
     }
 }
 

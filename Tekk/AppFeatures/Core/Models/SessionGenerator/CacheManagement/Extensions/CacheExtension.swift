@@ -256,6 +256,40 @@ extension SessionGeneratorModel: CacheManagement {
                     }
                 }
                 
+                // Sync preferences
+                group.addTask {
+                    do {
+                        let preferences = try await PreferencesUpdateService.shared.fetchPreferences()
+                        await MainActor.run {
+                            // Convert duration to time string
+                            self.selectedTime = PreferencesUpdateService.shared.convertMinutesToTimeString(preferences.duration ?? 0)
+                            print("[DEBUG] selectedTime set to: \(self.selectedTime ?? "nil") from duration: \(preferences.duration?.description ?? "nil")")
+                            
+                            // Update equipment
+                            self.selectedEquipment = Set(preferences.availableEquipment ?? [])
+                            print("[DEBUG] selectedEquipment set to: \(self.selectedEquipment)")
+                            
+                            // Update other preferences
+                            self.selectedTrainingStyle = preferences.trainingStyle
+                            print("[DEBUG] selectedTrainingStyle set to: \(self.selectedTrainingStyle ?? "nil")")
+                            self.selectedLocation = preferences.trainingLocation
+                            print("[DEBUG] selectedLocation set to: \(self.selectedLocation ?? "nil")")
+                            self.selectedDifficulty = preferences.difficulty
+                            print("[DEBUG] selectedDifficulty set to: \(self.selectedDifficulty ?? "nil")")
+                            
+                            // Convert backend skills to frontend format
+                            self.selectedSkills = PreferencesUpdateService.shared.convertBackendSkillsToFrontend(preferences.targetSkills ?? [])
+                            print("[DEBUG] selectedSkills set to: \(self.selectedSkills)")
+                            
+                            // Cache the updated preferences
+                            self.cachePreferences()
+                            print("✅ Updated preferences from backend")
+                        }
+                    } catch {
+                        print("❌ Failed to sync preferences with backend: \(error)")
+                    }
+                }
+                
                 // Wait for all sync operations to complete
                 try await group.waitForAll()
             }
