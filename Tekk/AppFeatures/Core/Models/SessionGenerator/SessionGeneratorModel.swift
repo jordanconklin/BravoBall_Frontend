@@ -152,16 +152,8 @@ class SessionGeneratorModel: ObservableObject {
         print("OnboardingData at model init: \(onboardingData)")
         
         // Autofill preferences from onboarding data if not already set
-        if selectedDifficulty == nil {
-            print("difficulty: '\(onboardingData.trainingExperience.lowercased())'")
-            selectedDifficulty = onboardingData.trainingExperience.lowercased()
-        }
-        if selectedLocation == nil && !onboardingData.trainingLocation.isEmpty {
-            selectedLocation = onboardingData.trainingLocation.first
-        }
-        if selectedEquipment.isEmpty {
-            selectedEquipment = Set(onboardingData.availableEquipment)
-        }
+        
+        //time
         if selectedTime == nil {
             switch onboardingData.dailyTrainingTime {
             case "Less than 15 minutes": selectedTime = "15min"
@@ -172,6 +164,36 @@ class SessionGeneratorModel: ObservableObject {
             default: selectedTime = "1h"
             }
         }
+        
+        
+        //equipment
+        if selectedEquipment.isEmpty {
+            selectedEquipment = Set(onboardingData.availableEquipment)
+        }
+        
+        //training style
+        if selectedTrainingStyle == nil {
+            switch onboardingData.weeklyTrainingDays {
+            case "2-3 days (light schedule)": selectedTrainingStyle = "game recovery"
+            case "4-5 days (moderate schedule)": selectedTrainingStyle = "medium intensity"
+            case "6-7 days (intense schedule)": selectedTrainingStyle = "high intensity"
+            default: selectedTrainingStyle = "medium intensity"
+            }
+        }
+        
+        //location
+        if selectedLocation == nil && !onboardingData.trainingLocation.isEmpty {
+            selectedLocation = onboardingData.trainingLocation.first
+        }
+        
+        //difficulty
+        if selectedDifficulty == nil {
+            print("difficulty: '\(onboardingData.trainingExperience.lowercased())'")
+            selectedDifficulty = onboardingData.trainingExperience.lowercased()
+        }
+        
+    
+        
         
         // Setup auto-save timer
         autoSaveTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in

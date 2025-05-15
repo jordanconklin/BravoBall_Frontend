@@ -78,9 +78,9 @@ struct SessionCompleteView: View {
         }
     }
     
+    // Keep ordered session drills populated
     private func resetSessionState() {
         
-        sessionModel.orderedSessionDrills = []
         sessionModel.selectedSkills = []
         appModel.viewState.showFieldBehindHomePage = false
         appModel.viewState.showHomePage = true

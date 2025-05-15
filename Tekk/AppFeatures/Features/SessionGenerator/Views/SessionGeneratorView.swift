@@ -326,10 +326,10 @@ struct SessionGeneratorView: View {
                                             GeneratedDrillsSection(appModel: appModel, sessionModel: sessionModel)
                                                 .padding(.horizontal, appModel.layout.contentMinPadding)
                                             
-                                            if sessionModel.selectedSkills.isEmpty {
-                                                RecommendedDrillsSection(appModel: appModel, sessionModel: sessionModel)
-                                                    .padding(.horizontal, appModel.layout.contentMinPadding)
-                                            }
+//                                            if sessionModel.selectedSkills.isEmpty {
+//                                                RecommendedDrillsSection(appModel: appModel, sessionModel: sessionModel)
+//                                                    .padding(.horizontal, appModel.layout.contentMinPadding)
+//                                            }
                                         }
                                     }
                                     .frame(maxWidth: appModel.layout.adaptiveWidth(geometry))
