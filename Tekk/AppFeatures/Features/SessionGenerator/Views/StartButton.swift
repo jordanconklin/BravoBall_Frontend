@@ -32,7 +32,7 @@ struct StartButton: View {
 }
 
 #if DEBUG
-struct GoldenButtonView_Previews: PreviewProvider {
+struct StartButtonView_Previews: PreviewProvider {
     static var previews: some View {
         let appModel = MainAppModel()
         StartButton(appModel: appModel) {
