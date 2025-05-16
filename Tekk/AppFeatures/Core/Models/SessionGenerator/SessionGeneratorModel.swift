@@ -151,48 +151,6 @@ class SessionGeneratorModel: ObservableObject {
         }
         print("OnboardingData at model init: \(onboardingData)")
         
-        // Autofill preferences from onboarding data if not already set
-        
-//        //time
-//        if selectedTime == nil {
-//            switch onboardingData.dailyTrainingTime {
-//            case "Less than 15 minutes": selectedTime = "15min"
-//            case "15-30 minutes": selectedTime = "30min"
-//            case "30-60 minutes": selectedTime = "1h"
-//            case "1-2 hours": selectedTime = "1h30"
-//            case "More than 2 hours": selectedTime = "2h+"
-//            default: selectedTime = "1h"
-//            }
-//        }
-//        
-//        
-//        //equipment
-//        if selectedEquipment.isEmpty {
-//            selectedEquipment = Set(onboardingData.availableEquipment)
-//        }
-//        
-//        //training style
-//        if selectedTrainingStyle == nil {
-//            switch onboardingData.weeklyTrainingDays {
-//            case "2-3 days (light schedule)": selectedTrainingStyle = "game recovery"
-//            case "4-5 days (moderate schedule)": selectedTrainingStyle = "medium intensity"
-//            case "6-7 days (intense schedule)": selectedTrainingStyle = "high intensity"
-//            default: selectedTrainingStyle = "medium intensity"
-//            }
-//        }
-//        
-//        //location
-//        if selectedLocation == nil && !onboardingData.trainingLocation.isEmpty {
-//            selectedLocation = onboardingData.trainingLocation.first
-//        }
-//        
-//        //difficulty
-//        if selectedDifficulty == nil {
-//            print("difficulty: '\(onboardingData.trainingExperience.lowercased())'")
-//            selectedDifficulty = onboardingData.trainingExperience.lowercased()
-//        }
-        
-    
         
         
         // Setup auto-save timer
@@ -580,49 +538,11 @@ class SessionGeneratorModel: ObservableObject {
         // }
     }
 
-    // Helper to map display skill names to backend keys, using - to separate category and subSkill
-    func mapSelectedSkillsToBackend(_ displaySkills: Set<String>) -> Set<String> {
-        let skillMap: [String: String] = [
-            // Dribbling
-            "Close control": "dribbling-close_control", // close control: dribb
-            "Speed dribbling": "dribbling-speed_dribbling",
-            "1v1 moves": "dribbling-1v1_moves",
-            "Change of direction": "dribbling-change_of_direction",
-            "Ball mastery": "dribbling-ball_mastery",
-            // First Touch
-            "Ground control": "first_touch-ground_control",
-            "Aerial control": "first_touch-aerial_control",
-            "Turn with ball": "first_touch-turn_with_ball",
-            "Touch and move": "first_touch-touch_and_move",
-            "Juggling": "first_touch-juggling",
-            // Passing
-            "Short passing": "passing-short_passing",
-            "Long passing": "passing-long_passing",
-            "One touch passing": "passing-one_touch_passing",
-            "Technique": "passing-technique",
-            "Passing with movement": "passing-passing_with_movement",
-            // Shooting
-            "Power shots": "shooting-power_shots",
-            "Finesse shots": "shooting-finesse_shots",
-            "First time shots": "shooting-first_time_shots",
-            "1v1 to shoot": "shooting-1v1_to_shoot",
-            "Shooting on the run": "shooting-shooting_on_the_run",
-            "Volleying": "shooting-volleying",
-            // Defending (add if you have defending skills)
-            "Tackling": "defending-tackling",
-            "Marking": "defending-marking",
-            "Intercepting": "defending-intercepting",
-            "Positioning": "defending-positioning",
-            // Add more as needed...
-        ]
-        return Set(displaySkills.compactMap { skillMap[$0] })
-    }
+    
     
 
     // Update the syncPreferencesWithBackend method
     func syncPreferencesWithBackend() async {
-        // Convert display skill names to backend keys before sending
-        let selectedSkillsSnakeCase = mapSelectedSkillsToBackend(selectedSkills)
         do {
             try await PreferencesUpdateService.shared.updatePreferences(
                 time: selectedTime,
@@ -630,7 +550,7 @@ class SessionGeneratorModel: ObservableObject {
                 trainingStyle: selectedTrainingStyle,
                 location: selectedLocation,
                 difficulty: selectedDifficulty,
-                skills: selectedSkillsSnakeCase,
+                skills: selectedSkills,
                 sessionModel: self
             )
             print("✅ Successfully synced preferences with backend")
@@ -658,7 +578,7 @@ class SessionGeneratorModel: ObservableObject {
                 selectedDifficulty = preferences.difficulty
                 
                 // Convert backend skills to frontend format
-                selectedSkills = PreferencesUpdateService.shared.convertBackendSkillsToFrontend(preferences.targetSkills ?? [])
+                selectedSkills = Set(preferences.targetSkills ?? [])
                 
                 print("✅ Successfully loaded preferences from backend")
             }
