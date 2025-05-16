@@ -47,6 +47,7 @@ struct SessionGeneratorView: View {
                     }
                 }
                 .frame(maxWidth: min(geometry.size.width - 40, appModel.layout.buttonMaxWidth))
+                .offset(y: -10)
             }
             
             // Prompt to save filter

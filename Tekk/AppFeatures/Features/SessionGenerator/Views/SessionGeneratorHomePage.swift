@@ -66,6 +66,7 @@ struct SessionGeneratorHomePage: View {
                         }
                         .frame(maxWidth: geometry.size.width)
                     }
+                    .offset(y: -20)
                 }
                 .transition(.move(edge: .bottom))
             }
