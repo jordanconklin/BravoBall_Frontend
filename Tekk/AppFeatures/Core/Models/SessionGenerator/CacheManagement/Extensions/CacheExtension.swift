@@ -278,7 +278,7 @@ extension SessionGeneratorModel: CacheManagement {
                             print("[DEBUG] selectedDifficulty set to: \(self.selectedDifficulty ?? "nil")")
                             
                             // Convert backend skills to frontend format
-                            self.selectedSkills = PreferencesUpdateService.shared.convertBackendSkillsToFrontend(preferences.targetSkills ?? [])
+                            self.selectedSkills = Set(preferences.targetSkills ?? [])
                             print("[DEBUG] selectedSkills set to: \(self.selectedSkills)")
                             
                             // Cache the updated preferences

@@ -15,17 +15,8 @@ struct SessionPreferencesRequest: Codable {
     let trainingStyle: String?
     let trainingLocation: String?
     let difficulty: String?
-    let targetSkills: [SkillPreference]
+    let targetSkills: [String]
     
-    struct SkillPreference: Codable {
-        let category: String
-        let subSkills: [String]
-        
-        enum CodingKeys: String, CodingKey {
-            case category
-            case subSkills = "sub_skills"
-        }
-    }
     
     enum CodingKeys: String, CodingKey {
         case duration
@@ -69,17 +60,9 @@ struct PreferencesResponse: Codable {
         let trainingStyle: String?
         let trainingLocation: String?
         let difficulty: String?
-        let targetSkills: [SkillPreference]?
+        let targetSkills: [String]?
         
-        struct SkillPreference: Codable {
-            let category: String?
-            let subSkills: [String]?
-            
-            enum CodingKeys: String, CodingKey {
-                case category
-                case subSkills = "sub_skills"
-            }
-        }
+       
         
         enum CodingKeys: String, CodingKey {
             case duration
@@ -124,12 +107,7 @@ class PreferencesUpdateService {
         // Convert time string to minutes
         let duration = convertTimeToMinutes(time)
         
-        // Print selected skills before conversion
-        print("🟡 Selected skills before conversion: \(skills)")
-        // Convert skills to the required format
-        let targetSkills = convertSkillsToPreferences(skills)
-        // Print targetSkills after conversion
-        print("🟢 targetSkills after conversion: \(targetSkills)")
+
         
         // Create the request body
         let preferencesRequest = SessionPreferencesRequest(
@@ -138,7 +116,7 @@ class PreferencesUpdateService {
             trainingStyle: trainingStyle,
             trainingLocation: location,
             difficulty: difficulty,
-            targetSkills: targetSkills
+            targetSkills: Array(skills)
         )
         
         // Encode the request body
@@ -215,33 +193,6 @@ class PreferencesUpdateService {
         }
     }
     
-    // Helper function to convert skills to the required format
-    private func convertSkillsToPreferences(_ skills: Set<String>) -> [SessionPreferencesRequest.SkillPreference] {
-        // Group skills by their main category
-        var skillsByCategory: [String: Set<String>] = [:]
-        
-        for skill in skills {
-            // Split the skill into category and sub-skill using '-'
-            let components = skill.split(separator: "-")
-            if components.count >= 2 {
-                let category = String(components[0])
-                let subSkill = components.dropFirst().joined(separator: "-")
-                
-                if skillsByCategory[category] == nil {
-                    skillsByCategory[category] = []
-                }
-                skillsByCategory[category]?.insert(subSkill)
-            }
-        }
-        
-        // Convert to the required format
-        return skillsByCategory.map { category, subSkills in
-            SessionPreferencesRequest.SkillPreference(
-                category: category,
-                subSkills: Array(subSkills)
-            )
-        }
-    }
     
     func fetchPreferences() async throws -> PreferencesResponse.PreferencesData {
         let url = URL(string: "\(baseURL)/api/session/preferences")!
@@ -305,17 +256,5 @@ class PreferencesUpdateService {
         }
     }
     
-    // Helper function to convert backend skills to frontend format
-    func convertBackendSkillsToFrontend(_ skills: [PreferencesResponse.PreferencesData.SkillPreference]) -> Set<String> {
-        var frontendSkills = Set<String>()
-        
-        for skill in skills {
-            for subSkill in skill.subSkills ?? [] {
-                frontendSkills.insert("\(skill.category ?? "")-\(subSkill)")
-            }
-        }
-        
-        return frontendSkills
-    }
 }
 
