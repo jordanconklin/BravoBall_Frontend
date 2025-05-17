@@ -114,13 +114,6 @@ struct CompletionView: View {
                         lastName: self.onboardingModel.onboardingData.lastName
                     )
                     
-                    // If there's an initial session, load it into the session onboardingModel
-                    if let initialSession = response.initialSession {
-                        // Prefill session filters based on onboarding data
-                        self.sessionModel.prefillSelectedSkills(from: self.onboardingModel.onboardingData)
-                        self.sessionModel.loadInitialSession(from: initialSession)
-                    }
-                    
                     // Set user as logged in
                     self.onboardingModel.isLoggedIn = true
                     
@@ -137,23 +130,23 @@ struct CompletionView: View {
         
         Task {
             do {          
-                // Ensure at least one area to improve is selected
-                if onboardingModel.onboardingData.areasToImprove.isEmpty {
-                    onboardingModel.onboardingData.areasToImprove = ["First touch", "Passing"]
-                    print("⚠️ No areas to improve selected, defaulting to First touch and Passing")
-                }
+                // // Ensure at least one area to improve is selected
+                // if onboardingModel.onboardingData.areasToImprove.isEmpty {
+                //     onboardingModel.onboardingData.areasToImprove = ["First touch", "Passing"]
+                //     print("⚠️ No areas to improve selected, defaulting to First touch and Passing")
+                // }
                 
-                // Ensure equipment is not empty
-                if onboardingModel.onboardingData.availableEquipment.isEmpty {
-                    onboardingModel.onboardingData.availableEquipment = ["Soccer ball"]
-                    print("⚠️ No equipment selected, defaulting to Soccer ball")
-                }
+                // // Ensure equipment is not empty
+                // if onboardingModel.onboardingData.availableEquipment.isEmpty {
+                //     onboardingModel.onboardingData.availableEquipment = ["Soccer ball"]
+                //     print("⚠️ No equipment selected, defaulting to Soccer ball")
+                // }
                 
-                // Ensure training location is not empty
-                if onboardingModel.onboardingData.trainingLocation.isEmpty {
-                    onboardingModel.onboardingData.trainingLocation = ["At a soccer field with goals"]
-                    print("⚠️ No training location selected, defaulting to 'At a soccer field with goals'")
-                }
+                // // Ensure training location is not empty
+                // if onboardingModel.onboardingData.trainingLocation.isEmpty {
+                //     onboardingModel.onboardingData.trainingLocation = ["At a soccer field with goals"]
+                //     print("⚠️ No training location selected, defaulting to 'At a soccer field with goals'")
+                // }
                 
                 print("📤 Sending onboarding data: \(onboardingModel.onboardingData)")
                 
@@ -161,6 +154,20 @@ struct CompletionView: View {
                 let response = try await OnboardingService.shared.submitOnboardingData(data: onboardingModel.onboardingData)
                 print("✅ Onboarding data submitted successfully")
                 print("🔑 Received token: \(response.access_token)")
+                
+                // Prefill subskills for preferences update
+                sessionModel.prefillSelectedSkills(from: onboardingModel.onboardingData)
+                
+                // Update preferences using onboarding data and subskills
+                try await PreferencesUpdateService.shared.updatePreferences(
+                    time: onboardingModel.onboardingData.dailyTrainingTime,
+                    equipment: Set(onboardingModel.onboardingData.availableEquipment),
+                    trainingStyle: onboardingModel.onboardingData.trainingExperience,
+                    location: onboardingModel.onboardingData.trainingLocation.first,
+                    difficulty: onboardingModel.onboardingData.position,
+                    skills: sessionModel.selectedSkills,
+                    sessionModel: sessionModel
+                )
                 
                 await MainActor.run {
                     // Store access token taking access token response from the backend response
@@ -180,17 +187,6 @@ struct CompletionView: View {
                         firstName: onboardingModel.onboardingData.firstName,
                         lastName: onboardingModel.onboardingData.lastName
                     )
-                    
-                    // If there's an initial session, load it into the session onboardingModel
-                    if let initialSession = response.initialSession {
-                        print("✅ Received initial session with \(initialSession.drills.count) drills")
-                        sessionModel.prefillSelectedSkills(from: onboardingModel.onboardingData)
-                        sessionModel.loadInitialSession(from: initialSession)
-                    } else {
-                        print("⚠️ No initial session received from server")
-                        // Create a default session with some drills based on the user's preferences
-                        createDefaultSession()
-                    }
                     
                     // Set user as logged in
                     onboardingModel.isLoggedIn = true

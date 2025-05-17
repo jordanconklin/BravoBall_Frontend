@@ -613,16 +613,18 @@ class SessionGeneratorModel: ObservableObject {
         "Fitness": "conditioning"
     ]
 
-    /// Prefill selectedSkills with default subskills for each main skill
+    /// Prefill selectedSkills with default subskills for each main skill that the user wants to improve
     func prefillSelectedSkills(from onboardingData: OnboardingModel.OnboardingData) {
-        let skills = onboardingData.strengths.isEmpty ? onboardingData.areasToImprove : onboardingData.strengths
-        let prefilled = Set(skills.compactMap { skill in
+        let skillsToImprove = onboardingData.areasToImprove
+        let prefilledSubskillsAfterOnboarding = Set(skillsToImprove.compactMap { skill in
             if let subskill = SessionGeneratorModel.defaultSubskills[skill] {
                 return "\(skill)-\(subskill)"
             }
             return nil
         })
-        selectedSkills = prefilled
+        print("✅ Identified subskills to improve: \(prefilledSubskillsAfterOnboarding)")
+        selectedSkills = prefilledSubskillsAfterOnboarding
+        print("Selected subskills after onboarding: \(selectedSkills)")
     }
 
 }
