@@ -10,7 +10,7 @@ import SwiftUI
 import RiveRuntime 
 
 struct MainTabView: View {
-    @ObservedObject var model: OnboardingModel
+    @ObservedObject var onboardingModel: OnboardingModel
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var userManager: UserManager
     @ObservedObject var sessionModel: SessionGeneratorModel
@@ -22,15 +22,15 @@ struct MainTabView: View {
                 ZStack {
                     switch appModel.mainTabSelected {
                     case 0:
-                        SessionGeneratorView(model: model, appModel: appModel, sessionModel: sessionModel)
+                        SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel)
                     case 1:
                         ProgressionView(appModel: appModel, sessionModel: sessionModel)
                     case 2:
                         SavedDrillsView(appModel: appModel, sessionModel: sessionModel)
                     case 3:
-                        ProfileView(model: model, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
+                        ProfileView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
                     default:
-                        SessionGeneratorView(model: model, appModel: appModel, sessionModel: sessionModel)
+                        SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel)
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -89,7 +89,7 @@ struct MainTabView: View {
     let mockSesGenModel = SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData())
     
     return MainTabView(
-        model: mockOnboardingModel,
+        onboardingModel: mockOnboardingModel,
         appModel: mockMainAppModel,
         userManager: mockUserManager,
         sessionModel: mockSesGenModel

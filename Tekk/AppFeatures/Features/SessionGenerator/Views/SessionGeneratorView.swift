@@ -10,7 +10,7 @@ import RiveRuntime
 
 // Main session page view
 struct SessionGeneratorView: View {
-    @ObservedObject var model: OnboardingModel
+    @ObservedObject var onboardingModel: OnboardingModel
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     @Environment(\.viewGeometry) var geometry
@@ -109,7 +109,7 @@ struct SessionGeneratorView_Previews: PreviewProvider {
         let onboardingModel = OnboardingModel()
         let appModel = MainAppModel()
         let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
-        SessionGeneratorView(model: onboardingModel, appModel: appModel, sessionModel: sessionModel)
+        SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel)
     }
 }
 #endif

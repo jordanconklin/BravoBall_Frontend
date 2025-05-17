@@ -137,7 +137,7 @@ class SavedFiltersService {
                 let decoder = JSONDecoder()
                 let filters = try decoder.decode([SavedFiltersModel].self, from: data)
                 
-                // Convert backend response to our model
+                // Convert backend response to our SavedFiltersModel
                 return filters.map { response in
                     SavedFiltersModel(
                         id: response.id,

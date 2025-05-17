@@ -28,7 +28,7 @@ struct ContentView: View {
         GeometryReader { geometry in
             Group {
                 if onboardingModel.isLoggedIn {
-                    MainTabView(model: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
+                    MainTabView(onboardingModel: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
                         .onAppear {
                             // Reload user data when login state changes to true
                             appModel.loadCachedData()
@@ -36,7 +36,7 @@ struct ContentView: View {
                         }
                     
                 } else {
-                    OnboardingView(model: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
+                    OnboardingView(onboardingModel: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
                 }
     //              DragDropTest()
             }

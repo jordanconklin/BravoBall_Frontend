@@ -11,7 +11,7 @@ extension SessionGeneratorModel: SavedDrillsGroupManagement {
     
     func addDrillToGroup(drill: DrillModel, groupId: UUID) {
         if let index = savedDrills.firstIndex(where: { $0.id == groupId }) {
-            // Add drill to local model
+            // Add drill to local sessionGeneratorModel
             if !savedDrills[index].drills.contains(drill) {
                 savedDrills[index].drills.append(drill)
             }
@@ -42,7 +42,7 @@ extension SessionGeneratorModel: SavedDrillsGroupManagement {
             drills: []
         )
         
-        // Add to local model
+        // Add to local sessionGeneratorModel
         savedDrills.append(groupModel)
         
         // Create on backend
@@ -65,7 +65,7 @@ extension SessionGeneratorModel: SavedDrillsGroupManagement {
     
     // Add a method to delete a group
     func deleteGroup(groupId: UUID) {
-        // Remove from local model
+        // Remove from local sessionGeneratorModel
         savedDrills.removeAll(where: { $0.id == groupId })
         
         // Delete from backend if we have a backend ID
@@ -86,7 +86,7 @@ extension SessionGeneratorModel: SavedDrillsGroupManagement {
     // Updated method to remove drill from group
     func removeDrillFromGroup(drill: DrillModel, groupId: UUID) {
         if let index = savedDrills.firstIndex(where: { $0.id == groupId }) {
-            // Remove drill from local model
+            // Remove drill from local sessionGeneratorModel
             savedDrills[index].drills.removeAll(where: { $0.id == drill.id })
             
             // Remove from backend if we have a backend ID

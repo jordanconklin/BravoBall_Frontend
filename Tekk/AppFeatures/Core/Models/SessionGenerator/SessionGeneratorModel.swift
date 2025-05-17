@@ -473,12 +473,12 @@ class SessionGeneratorModel: ObservableObject {
         var selectedLocation: String?
         var selectedDifficulty: String?
         
-        init(from model: SessionGeneratorModel) {
-            self.selectedTime = model.selectedTime
-            self.selectedEquipment = Array(model.selectedEquipment)
-            self.selectedTrainingStyle = model.selectedTrainingStyle
-            self.selectedLocation = model.selectedLocation
-            self.selectedDifficulty = model.selectedDifficulty
+        init(from sessionGeneratorModel: SessionGeneratorModel) {
+            self.selectedTime = sessionGeneratorModel.selectedTime
+            self.selectedEquipment = Array(sessionGeneratorModel.selectedEquipment)
+            self.selectedTrainingStyle = sessionGeneratorModel.selectedTrainingStyle
+            self.selectedLocation = sessionGeneratorModel.selectedLocation
+            self.selectedDifficulty = sessionGeneratorModel.selectedDifficulty
         }
     }
 
@@ -601,6 +601,28 @@ class SessionGeneratorModel: ObservableObject {
         let preferences = Preferences(from: self)
         cacheManager.cache(preferences, forKey: .filterGroupsCase)
         print("✅ Cached preferences")
+    }
+
+    // MARK: Default subskill mapping
+    static let defaultSubskills: [String: String] = [
+        "Passing": "short_passing",
+        "Shooting": "long_shots",
+        "Dribbling": "1v1_moves",
+        "Defending": "tackling",
+        "First touch": "first_touch",
+        "Fitness": "conditioning"
+    ]
+
+    /// Prefill selectedSkills with default subskills for each main skill
+    func prefillSelectedSkills(from onboardingData: OnboardingModel.OnboardingData) {
+        let skills = onboardingData.strengths.isEmpty ? onboardingData.areasToImprove : onboardingData.strengths
+        let prefilled = Set(skills.compactMap { skill in
+            if let subskill = SessionGeneratorModel.defaultSubskills[skill] {
+                return "\(skill)-\(subskill)"
+            }
+            return nil
+        })
+        selectedSkills = prefilled
     }
 
 }

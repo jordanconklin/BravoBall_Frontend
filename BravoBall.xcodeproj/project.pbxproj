@@ -13,7 +13,6 @@
 		1749361C2C3E102B001163B9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749361B2C3E102B001163B9 /* ContentView.swift */; };
 		1749361E2C3E1031001163B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1749361D2C3E1031001163B9 /* Assets.xcassets */; };
 		174936222C3E1031001163B9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174936212C3E1031001163B9 /* Preview Assets.xcassets */; };
-		1749362C2C3E1032001163B9 /* TekkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749362B2C3E1032001163B9 /* TekkTests.swift */; };
 		174936362C3E1032001163B9 /* TekkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174936352C3E1032001163B9 /* TekkUITests.swift */; };
 		174936382C3E1032001163B9 /* TekkUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174936372C3E1032001163B9 /* TekkUITestsLaunchTests.swift */; };
 		174C676E2D34E9EE003D02EF /* SessionGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174C676D2D34E9EA003D02EF /* SessionGeneratorView.swift */; };
@@ -42,6 +41,8 @@
 		17DB46002DD6D6B6000A76F6 /* SessionGeneratorHomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB45FF2DD6D6AF000A76F6 /* SessionGeneratorHomePage.swift */; };
 		17DB46022DD6D78F000A76F6 /* StartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB46012DD6D789000A76F6 /* StartButton.swift */; };
 		17DB46042DD6D83B000A76F6 /* ResponseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB46032DD6D837000A76F6 /* ResponseModels.swift */; };
+		17DB460B2DD866CB000A76F6 /* BravoBallTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB460A2DD866C7000A76F6 /* BravoBallTests.swift */; };
+		17DB460D2DD8694E000A76F6 /* SessionLoadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB460C2DD86949000A76F6 /* SessionLoadingTests.swift */; };
 		17F5D6542CD3477E008E8C24 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F5D6532CD3477E008E8C24 /* ColorExtension.swift */; };
 		17F5D6562CD347AE008E8C24 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F5D6552CD347AD008E8C24 /* GlobalSettings.swift */; };
 		420DA39A2DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv in Resources */ = {isa = PBXBuildFile; fileRef = 420DA3992DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv */; };
@@ -165,7 +166,6 @@
 		1749361F2C3E1031001163B9 /* Tekk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Tekk.entitlements; sourceTree = "<group>"; };
 		174936212C3E1031001163B9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		174936272C3E1032001163B9 /* BravoBallTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BravoBallTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1749362B2C3E1032001163B9 /* TekkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TekkTests.swift; sourceTree = "<group>"; };
 		174936312C3E1032001163B9 /* BravoBallUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BravoBallUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		174936352C3E1032001163B9 /* TekkUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TekkUITests.swift; sourceTree = "<group>"; };
 		174936372C3E1032001163B9 /* TekkUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TekkUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -195,6 +195,8 @@
 		17DB45FF2DD6D6AF000A76F6 /* SessionGeneratorHomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionGeneratorHomePage.swift; sourceTree = "<group>"; };
 		17DB46012DD6D789000A76F6 /* StartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartButton.swift; sourceTree = "<group>"; };
 		17DB46032DD6D837000A76F6 /* ResponseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseModels.swift; sourceTree = "<group>"; };
+		17DB460A2DD866C7000A76F6 /* BravoBallTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BravoBallTests.swift; sourceTree = "<group>"; };
+		17DB460C2DD86949000A76F6 /* SessionLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionLoadingTests.swift; sourceTree = "<group>"; };
 		17E693182C7435B3006B58A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		17F5D6532CD3477E008E8C24 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		17F5D6552CD347AD008E8C24 /* GlobalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
@@ -329,7 +331,7 @@
 			isa = PBXGroup;
 			children = (
 				174936182C3E102B001163B9 /* Tekk */,
-				1749362A2C3E1032001163B9 /* TekkTests */,
+				1749362A2C3E1032001163B9 /* BravoBallTests */,
 				174936342C3E1032001163B9 /* TekkUITests */,
 				174936172C3E102B001163B9 /* Products */,
 			);
@@ -374,12 +376,13 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		1749362A2C3E1032001163B9 /* TekkTests */ = {
+		1749362A2C3E1032001163B9 /* BravoBallTests */ = {
 			isa = PBXGroup;
 			children = (
-				1749362B2C3E1032001163B9 /* TekkTests.swift */,
+				17DB460A2DD866C7000A76F6 /* BravoBallTests.swift */,
+				17DB460C2DD86949000A76F6 /* SessionLoadingTests.swift */,
 			);
-			path = TekkTests;
+			path = BravoBallTests;
 			sourceTree = "<group>";
 		};
 		174936342C3E1032001163B9 /* TekkUITests */ = {
@@ -1250,7 +1253,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1749362C2C3E1032001163B9 /* TekkTests.swift in Sources */,
+				17DB460B2DD866CB000A76F6 /* BravoBallTests.swift in Sources */,
+				17DB460D2DD8694E000A76F6 /* SessionLoadingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1483,6 +1487,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = J36CXA7LCG;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
@@ -1505,6 +1510,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = J36CXA7LCG;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MACOSX_DEPLOYMENT_TARGET = 14.5;

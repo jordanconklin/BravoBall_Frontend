@@ -9,7 +9,7 @@ import SwiftUI
 
 // Onboarding Step Helper View
 struct OnboardingStepView: View {
-    @ObservedObject var model: OnboardingModel
+    @ObservedObject var onboardingModel: OnboardingModel
     let title: String
     let options: [String]
     @Binding var selection: String
@@ -18,7 +18,7 @@ struct OnboardingStepView: View {
         VStack(alignment: .leading, spacing: 20) {
             Text(title)
                 .font(.custom("Poppins-Bold", size: 18))
-                .foregroundColor(model.globalSettings.primaryDarkColor)
+                .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
             
             ForEach(options, id: \.self) { option in
                 Button(action: {
@@ -42,21 +42,21 @@ struct OnboardingStepView: View {
                     .frame(maxWidth: .infinity)
                     .background(
                         RoundedRectangle(cornerRadius: 25)
-                            .fill(selection == option ? model.globalSettings.primaryYellowColor : .white)
+                            .fill(selection == option ? onboardingModel.globalSettings.primaryYellowColor : .white)
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 25)
                             .stroke(selection == option ? Color.clear : Color.gray.opacity(0.3), lineWidth: 1)
                     )
                 }
-                .foregroundColor(selection == option ? .white : model.globalSettings.primaryDarkColor)
+                .foregroundColor(selection == option ? .white : onboardingModel.globalSettings.primaryDarkColor)
             }
         }
         .padding(.horizontal)
 //            // Ternary operator for if back button is pressed or not, questions move right or left
 //            .transition(.asymmetric(
-//                insertion: .move(edge: model.backTransition ? .leading : .trailing),
-//                removal: .move(edge: model.backTransition ? .trailing : .leading)
+//                insertion: .move(edge: onboardingModel.backTransition ? .leading : .trailing),
+//                removal: .move(edge: onboardingModel.backTransition ? .trailing : .leading)
 //            ))
     }
 }
