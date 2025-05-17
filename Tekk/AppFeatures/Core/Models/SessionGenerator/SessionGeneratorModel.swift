@@ -131,10 +131,7 @@ class SessionGeneratorModel: ObservableObject {
     }
     // didset in savedFilters func
     
-    
 
-    
-    
     // MARK: Init
     
     init(appModel: MainAppModel, onboardingData: OnboardingModel.OnboardingData) {
