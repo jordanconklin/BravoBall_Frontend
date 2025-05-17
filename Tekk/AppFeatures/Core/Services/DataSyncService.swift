@@ -71,7 +71,7 @@ class DataSyncService {
         }
     }
     
-    func syncOrderedSessionDrills(sessionDrills: [EditableDrillModel]) async throws {
+    func syncOrderedSessionDrills(sessionDrills: [EditableDrillModel], sessionId: Int) async throws {
         let url = URL(string: "\(baseURL)/api/sessions/ordered_drills/")!
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
@@ -103,10 +103,11 @@ class DataSyncService {
                     "difficulty": drill.drill.difficulty
                 ],
                 "sets_done": drill.setsDone,
-                "total_sets": drill.totalSets,
-                "total_reps": drill.totalReps,
-                "total_duration": drill.totalDuration,
-                "is_completed": drill.isCompleted
+                "sets": drill.totalSets,
+                "reps": drill.totalReps,
+                "duration": drill.totalDuration,
+                "is_completed": drill.isCompleted,
+                "session_id": sessionId
             ]
         }
         

@@ -29,6 +29,9 @@ class SessionGeneratorModel: ObservableObject {
     // Track the backend ID for the liked group
     var likedGroupBackendId: Int?
     
+    // Add a property to track the current session ID
+    var currentSessionId: Int?
+    
     
     
     
@@ -128,10 +131,7 @@ class SessionGeneratorModel: ObservableObject {
     }
     // didset in savedFilters func
     
-    
 
-    
-    
     // MARK: Init
     
     init(appModel: MainAppModel, onboardingData: OnboardingModel.OnboardingData) {
@@ -288,9 +288,14 @@ class SessionGeneratorModel: ObservableObject {
             do {
                 // Only sync what has changed
                 if changeTracker.orderedDrillsChanged {
-                    try await DataSyncService.shared.syncOrderedSessionDrills(
-                        sessionDrills: orderedSessionDrills
-                    )
+                    if let sessionId = currentSessionId {
+                        try await DataSyncService.shared.syncOrderedSessionDrills(
+                            sessionDrills: orderedSessionDrills,
+                            sessionId: sessionId
+                        )
+                    } else {
+                        print("⚠️ Warning: currentSessionId is nil, cannot sync ordered drills.")
+                    }
                     cacheOrderedDrills()
                 }
                 if changeTracker.savedFiltersChanged {
@@ -480,6 +485,7 @@ class SessionGeneratorModel: ObservableObject {
     func loadInitialSession(from sessionResponse: SessionResponse) {
 
         print("\n🔄 Loading initial session with \(sessionResponse.drills.count) drills")
+        self.currentSessionId = sessionResponse.sessionId
         
         // Instead of directly setting selectedSkills, map the focus areas to their full skill strings
             let newSkills = Set(sessionResponse.focusAreas.compactMap { category in
