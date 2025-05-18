@@ -166,21 +166,21 @@ class OnboardingModel: ObservableObject {
         // Use values that exactly match the questionOptions arrays
         onboardingData = OnboardingData(
             primaryGoal: "Improve my overall skill level",
-            biggestChallenge: "Recovering from injury",
+            biggestChallenge: "Not enough time to train",
             trainingExperience: "Intermediate",
-            position: "Fullback",
+            position: "Goalkeeper",
             playstyle: "Big Bob",  // Match one of the actual options in questionOptions
             ageRange: "Teen (13-16)",
             strengths: ["Defending"],
             areasToImprove: ["Passing", "Dribbling", "First touch"],
-            trainingLocation: ["At a soccer field with goals"],  // Match one of the actual options
+            trainingLocation: ["Full-sized field"],  // Match one of the actual options
             availableEquipment: ["Soccer ball", "Cones", "Wall"],
             dailyTrainingTime: "30-60 minutes",
-            weeklyTrainingDays: "4-5 days (moderate schedule)",
+            weeklyTrainingDays: "3-5 days (moderate schedule)",
             firstName: "Test",
             lastName: "User\(Int.random(in: 100...9999))",  // Random last name to avoid duplicates
             email: randomEmail,
-            password: "password123"
+            password: "123"
         )
         
         print("✅ Test data prefilled with email: \(randomEmail)")

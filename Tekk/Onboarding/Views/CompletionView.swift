@@ -129,24 +129,14 @@ struct CompletionView: View {
         isLoading = true
         
         Task {
-            do {          
-                // // Ensure at least one area to improve is selected
-                // if onboardingModel.onboardingData.areasToImprove.isEmpty {
-                //     onboardingModel.onboardingData.areasToImprove = ["First touch", "Passing"]
-                //     print("⚠️ No areas to improve selected, defaulting to First touch and Passing")
-                // }
-                
-                // // Ensure equipment is not empty
-                // if onboardingModel.onboardingData.availableEquipment.isEmpty {
-                //     onboardingModel.onboardingData.availableEquipment = ["Soccer ball"]
-                //     print("⚠️ No equipment selected, defaulting to Soccer ball")
-                // }
-                
-                // // Ensure training location is not empty
-                // if onboardingModel.onboardingData.trainingLocation.isEmpty {
-                //     onboardingModel.onboardingData.trainingLocation = ["At a soccer field with goals"]
-                //     print("⚠️ No training location selected, defaulting to 'At a soccer field with goals'")
-                // }
+            do {
+                print("--- Onboarding: Starting submitData ---")
+                print("[Before Onboarding] selectedSkills: \(sessionModel.selectedSkills)")
+                print("[Before Onboarding] selectedTime: \(sessionModel.selectedTime ?? "nil")")
+                print("[Before Onboarding] selectedEquipment: \(sessionModel.selectedEquipment)")
+                print("[Before Onboarding] selectedTrainingStyle: \(sessionModel.selectedTrainingStyle ?? "nil")")
+                print("[Before Onboarding] selectedLocation: \(sessionModel.selectedLocation ?? "nil")")
+                print("[Before Onboarding] selectedDifficulty: \(sessionModel.selectedDifficulty ?? "nil")")
                 
                 print("📤 Sending onboarding data: \(onboardingModel.onboardingData)")
                 
@@ -155,10 +145,21 @@ struct CompletionView: View {
                 print("✅ Onboarding data submitted successfully")
                 print("🔑 Received token: \(response.access_token)")
                 
-                // Prefill subskills for preferences update
-                sessionModel.prefillSelectedSkills(from: onboardingModel.onboardingData)
+                // Store access token taking access token response from the backend response
+                let tokenSaved = KeychainWrapper.standard.set(response.access_token, forKey: "authToken")
+                print("🔑 Token saved to keychain: \(tokenSaved)")
+                // Verify token was stored correctly
+                if let storedToken = KeychainWrapper.standard.string(forKey: "authToken") {
+                    print("✅ Verified token in keychain: \(storedToken)")
+                } else {
+                    print("❌ Failed to retrieve token from keychain!")
+                }
                 
-                // Update preferences using onboarding data and subskills
+                // Prefill subskills for preferences update
+                await sessionModel.prefillSelectedSkills(from: onboardingModel.onboardingData)
+                print("[After prefillSelectedSkills] selectedSkills: \(sessionModel.selectedSkills)")
+                
+                // Update preferences using onboarding data and subskills, which will help preload our session after onboarding
                 try await PreferencesUpdateService.shared.updatePreferences(
                     time: onboardingModel.onboardingData.dailyTrainingTime,
                     equipment: Set(onboardingModel.onboardingData.availableEquipment),
@@ -168,19 +169,23 @@ struct CompletionView: View {
                     skills: sessionModel.selectedSkills,
                     sessionModel: sessionModel
                 )
+                print("[After updatePreferences] selectedSkills: \(sessionModel.selectedSkills)")
+                print("[After updatePreferences] selectedTime: \(sessionModel.selectedTime ?? "nil")")
+                print("[After updatePreferences] selectedEquipment: \(sessionModel.selectedEquipment)")
+                print("[After updatePreferences] selectedTrainingStyle: \(sessionModel.selectedTrainingStyle ?? "nil")")
+                print("[After updatePreferences] selectedLocation: \(sessionModel.selectedLocation ?? "nil")")
+                print("[After updatePreferences] selectedDifficulty: \(sessionModel.selectedDifficulty ?? "nil")")
+
+//                // Fetch preferences from backend and update UI
+//                await sessionModel.loadPreferencesFromBackend()
+//                print("[After loadPreferencesFromBackend] selectedSkills: \(sessionModel.selectedSkills)")
+//                print("[After loadPreferencesFromBackend] selectedTime: \(sessionModel.selectedTime ?? "nil")")
+//                print("[After loadPreferencesFromBackend] selectedEquipment: \(sessionModel.selectedEquipment)")
+//                print("[After loadPreferencesFromBackend] selectedTrainingStyle: \(sessionModel.selectedTrainingStyle ?? "nil")")
+//                print("[After loadPreferencesFromBackend] selectedLocation: \(sessionModel.selectedLocation ?? "nil")")
+//                print("[After loadPreferencesFromBackend] selectedDifficulty: \(sessionModel.selectedDifficulty ?? "nil")")
                 
                 await MainActor.run {
-                    // Store access token taking access token response from the backend response
-                    let tokenSaved = KeychainWrapper.standard.set(response.access_token, forKey: "authToken")
-                    print("🔑 Token saved to keychain: \(tokenSaved)")
-                    
-                    // Verify token was stored correctly
-                    if let storedToken = KeychainWrapper.standard.string(forKey: "authToken") {
-                        print("✅ Verified token in keychain: \(storedToken)")
-                    } else {
-                        print("❌ Failed to retrieve token from keychain!")
-                    }
-                    
                     // Update the decoded user info into UserManager, which will store it into Keychain
                     userManager.updateUserKeychain(
                         email: onboardingModel.onboardingData.email,
@@ -192,6 +197,12 @@ struct CompletionView: View {
                     onboardingModel.isLoggedIn = true
                     
                     print("✅ Onboarding complete, user logged in")
+                    print("[UI] selectedSkills: \(sessionModel.selectedSkills)")
+                    print("[UI] selectedTime: \(sessionModel.selectedTime ?? "nil")")
+                    print("[UI] selectedEquipment: \(sessionModel.selectedEquipment)")
+                    print("[UI] selectedTrainingStyle: \(sessionModel.selectedTrainingStyle ?? "nil")")
+                    print("[UI] selectedLocation: \(sessionModel.selectedLocation ?? "nil")")
+                    print("[UI] selectedDifficulty: \(sessionModel.selectedDifficulty ?? "nil")")
                 }
             } catch let error as DecodingError {
                 await MainActor.run {
@@ -270,7 +281,6 @@ struct CompletionView: View {
         )
         
         // Load the mock session
-        sessionModel.prefillSelectedSkills(from: onboardingModel.onboardingData)
         sessionModel.loadInitialSession(from: mockSession)
     }
 }

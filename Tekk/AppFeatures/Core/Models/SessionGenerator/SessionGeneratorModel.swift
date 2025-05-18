@@ -605,26 +605,26 @@ class SessionGeneratorModel: ObservableObject {
 
     // MARK: Default subskill mapping
     static let defaultSubskills: [String: String] = [
-        "Passing": "short_passing",
-        "Shooting": "long_shots",
-        "Dribbling": "1v1_moves",
-        "Defending": "tackling",
-        "First touch": "first_touch",
-        "Fitness": "conditioning"
+        "Passing": "Short passing",
+        "Shooting": "Long passing",
+        "Dribbling": "1v1 moves",
+        "Defending": "Tackling",
+        "First touch": "First touch",
+        "Fitness": "Conditioning"
     ]
 
-    /// Prefill selectedSkills with default subskills for each main skill that the user wants to improve
-    func prefillSelectedSkills(from onboardingData: OnboardingModel.OnboardingData) {
+    @MainActor
+    func prefillSelectedSkills(from onboardingData: OnboardingModel.OnboardingData) async {
         let skillsToImprove = onboardingData.areasToImprove
         let prefilledSubskillsAfterOnboarding = Set(skillsToImprove.compactMap { skill in
             if let subskill = SessionGeneratorModel.defaultSubskills[skill] {
-                return "\(skill)-\(subskill)"
+                return "\(subskill)"
             }
             return nil
         })
         print("✅ Identified subskills to improve: \(prefilledSubskillsAfterOnboarding)")
         selectedSkills = prefilledSubskillsAfterOnboarding
-        print("Selected subskills after onboarding: \(selectedSkills)")
+        print("Prefilled subskills after onboarding: \(selectedSkills)")
     }
 
 }

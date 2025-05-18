@@ -81,21 +81,13 @@ class PreferencesUpdateService {
     
     private init() {}
     
-    func updatePreferences(
-        time: String?,
-        equipment: Set<String>,
-        trainingStyle: String?,
-        location: String?,
-        difficulty: String?,
-        skills: Set<String>,
-        sessionModel: SessionGeneratorModel
-    ) async throws {
+    func updatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel) async throws {
         let url = URL(string: "\(baseURL)/api/session/preferences")!
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        // Add auth token
+        // Add auth token to request
         if let token = KeychainWrapper.standard.string(forKey: "authToken") {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             print("🔑 Using auth token: \(token)")
