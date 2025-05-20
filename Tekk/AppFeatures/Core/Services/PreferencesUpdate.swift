@@ -81,8 +81,34 @@ class PreferencesUpdateService {
     
     private init() {}
     
+    // Debounce properties
+    private var debounceWorkItem: DispatchWorkItem?
+    private let debounceInterval: TimeInterval = 1.0 // seconds
+
     // Update preferences using onboarding data and subskills, which will help preload our session after onboarding
     func updatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel) async throws {
+        // Cancel any pending debounce work
+        debounceWorkItem?.cancel()
+        print("[Debounce] Cancelled previous pending updatePreferences call.")
+
+        // Create a new work item
+        let workItem = DispatchWorkItem { [weak self] in
+            Task {
+                print("[Debounce] Debounced updatePreferences call is now executing.")
+                do {
+                    try await self?.performUpdatePreferences(time: time, equipment: equipment, trainingStyle: trainingStyle, location: location, difficulty: difficulty, skills: skills, sessionModel: sessionModel)
+                } catch {
+                    print("[Debounce] Error in debounced updatePreferences: \(error)")
+                }
+            }
+        }
+        debounceWorkItem = workItem
+        print("[Debounce] Scheduled updatePreferences to run in \(debounceInterval) seconds.")
+        DispatchQueue.main.asyncAfter(deadline: .now() + debounceInterval, execute: workItem)
+    }
+
+    // The actual backend call logic, extracted for debouncing
+    private func performUpdatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel) async throws {
         let url = URL(string: "\(baseURL)/api/session/preferences")!
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
@@ -99,8 +125,6 @@ class PreferencesUpdateService {
         
         // Convert time string to minutes
         let duration = convertTimeToMinutes(time)
-        
-
         
         // Create the request body
         let preferencesRequest = SessionPreferencesRequest(
@@ -129,9 +153,9 @@ class PreferencesUpdateService {
         
         print("📥 Response status code: \(httpResponse.statusCode)")
         
-        if let responseString = String(data: data, encoding: .utf8) {
-            print("📥 Response body: \(responseString)")
-        }
+//        if let responseString = String(data: data, encoding: .utf8) {
+//            print("📥 Response body: \(responseString)")
+//        }
         
         switch httpResponse.statusCode {
         case 200:
@@ -213,9 +237,9 @@ class PreferencesUpdateService {
         
         print("📥 Response status code: \(httpResponse.statusCode)")
         
-        if let responseString = String(data: data, encoding: .utf8) {
-            print("📥 Response body: \(responseString)")
-        }
+//        if let responseString = String(data: data, encoding: .utf8) {
+//            print("📥 Response body: \(responseString)")
+//        }
         
         switch httpResponse.statusCode {
         case 200:
