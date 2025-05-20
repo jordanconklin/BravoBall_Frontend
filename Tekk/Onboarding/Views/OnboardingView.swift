@@ -171,26 +171,26 @@ struct OnboardingView: View {
                         
                         Rectangle()
                             .foregroundColor(onboardingModel.globalSettings.primaryYellowColor)
-                            .frame(width: geometry.size.width * (CGFloat(onboardingModel.currentStep) / 11.0), height: 10)
+                            .frame(width: geometry.size.width * min(CGFloat(onboardingModel.currentStep) / CGFloat(onboardingModel.numberOfOnboardingPages - 1), 1.0), height: 10)
                             .cornerRadius(2)
                     }
                 }
                 .frame(height: 10)
                 
-                // Skip Button
+                // Skip Button (always visible, but grayed out and disabled on registration step)
                 Button(action: {
-                    
-                    
-                    withAnimation {
-                        onboardingModel.backTransition = false
-                        onboardingModel.skipToNext()
-                        
+                    if onboardingModel.currentStep != onboardingModel.questionTitles.count {
+                        withAnimation {
+                            onboardingModel.backTransition = false
+                            onboardingModel.skipToNext()
+                        }
                     }
                 }) {
                     Text("Skip")
                         .font(.custom("Poppins-Bold", size: 16))
-                        .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
+                        .foregroundColor(onboardingModel.currentStep == onboardingModel.questionTitles.count ? Color.gray.opacity(0.4) : onboardingModel.globalSettings.primaryDarkColor)
                 }
+                .disabled(onboardingModel.currentStep == onboardingModel.questionTitles.count)
             }
             .padding(.horizontal)
             .padding(.top, 8)
@@ -315,8 +315,9 @@ struct OnboardingView: View {
                         // Call email pre-check
                         Task {
                             let email = onboardingModel.onboardingData.email
-                            guard !email.isEmpty else {
-                                onboardingModel.errorMessage = "Please enter your email."
+                            let password = onboardingModel.onboardingData.password
+                            guard !email.isEmpty, !password.isEmpty else {
+                                onboardingModel.errorMessage = "Please enter your email and password."
                                 return
                             }
                             onboardingModel.isLoading = true
@@ -388,7 +389,11 @@ struct OnboardingView: View {
                         .font(.custom("Poppins-Bold", size: 16))
                 }
                 .padding(.horizontal)
-                .disabled(!onboardingModel.canMoveNext())
+                .disabled(
+                    onboardingModel.currentStep == 12
+                        ? (!onboardingModel.canMoveNext() || onboardingModel.onboardingData.email.isEmpty || onboardingModel.onboardingData.password.isEmpty)
+                        : !onboardingModel.canMoveNext()
+                )
                 .alert(isPresented: $showEmailExistsAlert) {
                     Alert(
                         title: Text("Email Already Registered"),

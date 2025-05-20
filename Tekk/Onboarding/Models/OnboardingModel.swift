@@ -24,7 +24,7 @@ class OnboardingModel: ObservableObject {
     @Published var numberOfOnboardingPages = 13 // Updated to include registration page
     
     // TESTING: Set this to true to skip onboarding and go straight to completion
-    @Published var skipOnboarding = false
+    @Published var skipOnboarding = true
     
     // Variables for when onboarding data is being submitted
     @Published var isLoading = true
