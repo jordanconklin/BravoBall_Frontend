@@ -116,6 +116,7 @@ struct CompletionView: View {
                     
                     // Set user as logged in
                     self.onboardingModel.isLoggedIn = true
+                    self.onboardingModel.onboardingComplete = true
                     
                 case .failure(let error):
                     self.errorMessage = "Error: \(error.localizedDescription)"
@@ -169,6 +170,10 @@ struct CompletionView: View {
                     skills: sessionModel.selectedSkills,
                     sessionModel: sessionModel
                 )
+                
+                // Prefill preferences for session generator model using onboarding data
+                await sessionModel.prefillPreferences(from: onboardingModel.onboardingData)
+                
                 print("[After updatePreferences] selectedSkills: \(sessionModel.selectedSkills)")
                 print("[After updatePreferences] selectedTime: \(sessionModel.selectedTime ?? "nil")")
                 print("[After updatePreferences] selectedEquipment: \(sessionModel.selectedEquipment)")
@@ -195,6 +200,8 @@ struct CompletionView: View {
                     
                     // Set user as logged in
                     onboardingModel.isLoggedIn = true
+                    // Clear onboarding data
+                    onboardingModel.resetOnboardingData()
                     
                     print("✅ Onboarding complete, user logged in")
                     print("[UI] selectedSkills: \(sessionModel.selectedSkills)")

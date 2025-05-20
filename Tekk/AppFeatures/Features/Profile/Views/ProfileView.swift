@@ -328,10 +328,14 @@ struct ProfileView: View {
     }
     
     private func logOutUser() {
-        // Reset login property
+        // Reset login property and clear onboarding data
         onboardingModel.authToken = "" // TODO: make it so authToken isnt stored here
         onboardingModel.errorMessage = ""
         onboardingModel.isLoggedIn = false
+        onboardingModel.onboardingComplete = false
+        
+        // Reset skiponboarding for when testing with skiponboarding set to true
+        onboardingModel.skipOnboarding = false
         
         // Clear Keychain tokens
         let keychain = KeychainWrapper.standard

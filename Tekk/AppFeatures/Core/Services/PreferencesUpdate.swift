@@ -81,6 +81,7 @@ class PreferencesUpdateService {
     
     private init() {}
     
+    // Update preferences using onboarding data and subskills, which will help preload our session after onboarding
     func updatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel) async throws {
         let url = URL(string: "\(baseURL)/api/session/preferences")!
         var request = URLRequest(url: url)

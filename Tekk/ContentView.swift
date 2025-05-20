@@ -30,15 +30,16 @@ struct ContentView: View {
                 if onboardingModel.isLoggedIn {
                     MainTabView(onboardingModel: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
                         .onAppear {
-                            // Reload user data when login state changes to true
-                            appModel.loadCachedData()
-                            sessionGenModel.loadCachedData()
+                            // Only load cache and sync with backend after onboarding is complete
+                            if onboardingModel.onboardingComplete {
+                                appModel.loadCachedData()
+                                sessionGenModel.loadCachedData()
+                            }
                         }
                     
                 } else {
                     OnboardingView(onboardingModel: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
                 }
-    //              DragDropTest()
             }
             .preferredColorScheme(.light)
             .environment(\.viewGeometry, ViewGeometry(

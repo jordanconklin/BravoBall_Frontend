@@ -24,7 +24,7 @@ class OnboardingModel: ObservableObject {
     @Published var numberOfOnboardingPages = 13 // Updated to include registration page
     
     // TESTING: Set this to true to skip onboarding and go straight to completion
-    @Published var skipOnboarding = true
+    @Published var skipOnboarding = false
     
     // Variables for when onboarding data is being submitted
     @Published var isLoading = true
@@ -32,6 +32,9 @@ class OnboardingModel: ObservableObject {
     
     // Animation scale for intro animation
     @Published var animationScale: CGFloat = 1.5
+
+    // Indicates if the user has completed onboarding and entered the main app
+    @Published var onboardingComplete: Bool = false
     
     // Simple arrays for questions and options
     let questionTitles = [
@@ -161,7 +164,8 @@ class OnboardingModel: ObservableObject {
     // TESTING: Method to prefill onboarding data for testing
     func prefillTestData() {
         // Generate a random email to avoid duplicates
-        let randomEmail = "test\(Int.random(in: 100...999))@example.com"
+        let randomInt = (Int.random(in: 100...9999))
+        let randomEmail = "test\(randomInt)@example.com"
         
         // Use values that exactly match the questionOptions arrays
         onboardingData = OnboardingData(
@@ -175,10 +179,10 @@ class OnboardingModel: ObservableObject {
             areasToImprove: ["Passing", "Dribbling", "First touch"],
             trainingLocation: ["Full-sized field"],  // Match one of the actual options
             availableEquipment: ["Soccer ball", "Cones", "Wall"],
-            dailyTrainingTime: "30-60 minutes",
+            dailyTrainingTime: "15-30 minutes",
             weeklyTrainingDays: "3-5 days (moderate schedule)",
             firstName: "Test",
-            lastName: "User\(Int.random(in: 100...9999))",  // Random last name to avoid duplicates
+            lastName: "User\(randomInt)",  // Random last name to avoid duplicates
             email: randomEmail,
             password: "123"
         )

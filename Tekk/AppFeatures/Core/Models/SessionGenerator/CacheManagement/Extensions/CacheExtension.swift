@@ -77,6 +77,10 @@ extension SessionGeneratorModel: CacheManagement {
             await syncAllWithBackend()
             // Load and cache database drills
             await loadAndCacheDatabaseDrills()
+            // set isInitialLoad to false after all data is loaded and synced with backend 
+            await MainActor.run {
+                isInitialLoad = false
+            }
         }
     }
     

@@ -18,6 +18,7 @@ struct OnboardingView: View {
     
     
     @State private var canTrigger = true
+    @State private var showEmailExistsAlert = false
     
     let riveViewModelOne = RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1")
     let riveViewModelTwo = RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 2", autoPlay: true)
@@ -310,17 +311,73 @@ struct OnboardingView: View {
             // Next button
             if onboardingModel.currentStep < onboardingModel.numberOfOnboardingPages {
                 Button(action: {
-                    
-                    
-                    triggerBravoAnimation()
-                    
-                    withAnimation {
-                        onboardingModel.backTransition = false
-                        onboardingModel.moveNext()
+                    if onboardingModel.currentStep == 12 {
+                        // Call email pre-check
+                        Task {
+                            let email = onboardingModel.onboardingData.email
+                            guard !email.isEmpty else {
+                                onboardingModel.errorMessage = "Please enter your email."
+                                return
+                            }
+                            onboardingModel.isLoading = true
+                            onboardingModel.errorMessage = ""
+                            let url = URL(string: "http://127.0.0.1:8000/check-email/")!
+                            var request = URLRequest(url: url)
+                            request.httpMethod = "POST"
+                            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                            let body = ["email": email]
+                            request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+                            do {
+                                let (data, response) = try await URLSession.shared.data(for: request)
+                                if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                                    if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                                       let exists = json["exists"] as? Bool {
+                                        if exists {
+                                            await MainActor.run {
+                                                onboardingModel.isLoading = false
+                                                showEmailExistsAlert = true
+                                            }
+                                            return
+                                        } else {
+                                            // Email is available, proceed with onboarding
+                                            await MainActor.run {
+                                                onboardingModel.errorMessage = ""
+                                                onboardingModel.isLoading = false
+                                                triggerBravoAnimation()
+                                                withAnimation {
+                                                    onboardingModel.backTransition = false
+                                                    onboardingModel.moveNext()
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        await MainActor.run {
+                                            onboardingModel.errorMessage = "Unexpected response from server."
+                                            onboardingModel.isLoading = false
+                                        }
+                                    }
+                                } else {
+                                    await MainActor.run {
+                                        onboardingModel.errorMessage = "Failed to check email. Please try again."
+                                        onboardingModel.isLoading = false
+                                    }
+                                }
+                            } catch {
+                                await MainActor.run {
+                                    onboardingModel.errorMessage = "Network error. Please try again."
+                                    onboardingModel.isLoading = false
+                                }
+                            }
+                        }
+                    } else {
+                        triggerBravoAnimation()
+                        withAnimation {
+                            onboardingModel.backTransition = false
+                            onboardingModel.moveNext()
+                        }
                     }
-                    
                 }) {
-                    Text(onboardingModel.currentStep == 11 ? "Finish" : "Next")
+                    Text(onboardingModel.currentStep == 12 ? "Submit" : "Next")
                         .frame(maxWidth: .infinity)
                         .frame(height: 50)
                         .background(
@@ -332,6 +389,13 @@ struct OnboardingView: View {
                 }
                 .padding(.horizontal)
                 .disabled(!onboardingModel.canMoveNext())
+                .alert(isPresented: $showEmailExistsAlert) {
+                    Alert(
+                        title: Text("Email Already Registered"),
+                        message: Text("This email is already in use. Please use a different email address."),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
             }
         }
     }
