@@ -45,13 +45,16 @@ struct ProfileView: View {
                     Text("Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0")")
                         .font(.custom("Poppins-Regular", size: 14))
                         .foregroundColor(.gray)
-                        .padding(.top, 20)
-                    
+                        .padding(.top, 12)
+
                     logoutButton
-                        .padding(.top, 30)
                         .padding(.horizontal)
+
                     deleteAccountButton
                         .padding(.horizontal)
+
+                    // Moderate bottom padding so Delete Account is always visible
+                    Spacer().frame(height: 60)
                 }
                 .padding(.vertical)
                 .background(Color.white)
@@ -308,7 +311,7 @@ struct ProfileView: View {
                 .background(onboardingModel.globalSettings.primaryYellowColor)
                 .cornerRadius(10)
         }
-        .padding(.top, 20)
+        .padding(.top, 5)
     }
     
     private var deleteAccountButton: some View {
@@ -324,7 +327,6 @@ struct ProfileView: View {
                 .background(Color.red)
                 .cornerRadius(10)
         }
-        .padding(.top, 20)
     }
     
     private func logOutUser() {
@@ -336,7 +338,7 @@ struct ProfileView: View {
         
         // Reset skiponboarding for when testing with skiponboarding set to true
         onboardingModel.skipOnboarding = false
-        
+
         // Clear Keychain tokens
         let keychain = KeychainWrapper.standard
         keychain.removeObject(forKey: "authToken")
@@ -439,31 +441,6 @@ struct ProfileView: View {
     
     
 }
-
-// Preview code
-//struct ProfileView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        let mockOnboardModel = OnboardingModel()
-//        let mockAppModel = MainAppModel()
-//        let mockUserManager = UserManager()
-//                
-//        // Create a User instance first
-//        mockUserManager.updateUserKeychain(
-//            email: "jordinhoconk@gmail.com",
-//            firstName: "Jordan",
-//            lastName: "Conklin"
-//        )
-//        
-//        return Group {
-//            ProfileView(onboardingModel: mockOnboardModel, appModel: mockAppModel, userManager: mockUserManager, sessionModel: SessionGeneratorModel())
-//                .previewDisplayName("Light Mode")
-//            
-//            ProfileView(onboardingModel: mockOnboardModel, appModel: mockAppModel, userManager: mockUserManager, sessionModel: SessionGeneratorModel())
-//                .preferredColorScheme(.dark)
-//                .previewDisplayName("Dark Mode")
-//        }
-//    }
-//}
 
 struct ChangePasswordView: View {
     @Environment(\.dismiss) private var dismiss
@@ -590,3 +567,32 @@ struct TermsOfServiceView: View {
         }
     }
 }
+
+
+
+#if DEBUG
+struct ProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        // Mock models for preview
+        let onboardingModel = OnboardingModel()
+        let appModel = MainAppModel()
+        let userManager = UserManager()
+        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        
+        // Optionally set some mock data for a more realistic preview
+        onboardingModel.isLoggedIn = true
+        userManager.updateUserKeychain(
+            email: "jordan@example.com",
+            firstName: "Jordan",
+            lastName: "Conklin"
+        )
+        
+        return ProfileView(
+            onboardingModel: onboardingModel,
+            appModel: appModel,
+            sessionModel: sessionModel,
+            userManager: userManager
+        )
+    }
+}
+#endif

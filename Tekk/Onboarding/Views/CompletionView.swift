@@ -21,26 +21,25 @@ struct CompletionView: View {
             if isLoading {
                 // Loading screen with Bravo
                 VStack(spacing: 20) {
-                    // Bravo animation
-                    RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1").view()
-                        .frame(width: 150, height: 150)
-                        .padding(.top, 50)
-                    
+                    // Loading text and spinner directly below Bravo
                     Text("Creating your session...")
                         .font(.custom("Poppins-Bold", size: 20))
                         .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
-                    
+                        .offset(y: -5)
+
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
                         .scaleEffect(1.5)
                         .padding()
-                    
+                        .offset(y: -5)
+
                     Text("We're personalizing drills based on your preferences")
                         .font(.custom("Poppins-Regular", size: 16))
                         .foregroundColor(onboardingModel.globalSettings.primaryGrayColor)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 40)
-                    
+                        .offset(y: -5)
+
                     Spacer()
                 }
                 .padding()
@@ -180,15 +179,6 @@ struct CompletionView: View {
                 print("[After updatePreferences] selectedTrainingStyle: \(sessionModel.selectedTrainingStyle ?? "nil")")
                 print("[After updatePreferences] selectedLocation: \(sessionModel.selectedLocation ?? "nil")")
                 print("[After updatePreferences] selectedDifficulty: \(sessionModel.selectedDifficulty ?? "nil")")
-
-//                // Fetch preferences from backend and update UI
-//                await sessionModel.loadPreferencesFromBackend()
-//                print("[After loadPreferencesFromBackend] selectedSkills: \(sessionModel.selectedSkills)")
-//                print("[After loadPreferencesFromBackend] selectedTime: \(sessionModel.selectedTime ?? "nil")")
-//                print("[After loadPreferencesFromBackend] selectedEquipment: \(sessionModel.selectedEquipment)")
-//                print("[After loadPreferencesFromBackend] selectedTrainingStyle: \(sessionModel.selectedTrainingStyle ?? "nil")")
-//                print("[After loadPreferencesFromBackend] selectedLocation: \(sessionModel.selectedLocation ?? "nil")")
-//                print("[After loadPreferencesFromBackend] selectedDifficulty: \(sessionModel.selectedDifficulty ?? "nil")")
                 
                 await MainActor.run {
                     // Update the decoded user info into UserManager, which will store it into Keychain
@@ -291,4 +281,27 @@ struct CompletionView: View {
         sessionModel.loadInitialSession(from: mockSession)
     }
 }
+
+#if DEBUG
+struct CompletionView_Previews: PreviewProvider {
+    static var previews: some View {
+        // Mock models for preview
+        let onboardingModel = OnboardingModel()
+        let userManager = UserManager()
+        let appModel = MainAppModel()
+        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        
+        // Optionally set some mock data for a more realistic preview
+        onboardingModel.onboardingData.firstName = "Jordan"
+        onboardingModel.onboardingData.lastName = "Conklin"
+        onboardingModel.onboardingData.email = "jordan@example.com"
+        
+        return CompletionView(
+            onboardingModel: onboardingModel,
+            userManager: userManager,
+            sessionModel: sessionModel
+        )
+    }
+}
+#endif
 
