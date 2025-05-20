@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftKeychainWrapper
 
 struct ProfileView: View {
-    @ObservedObject var model: OnboardingModel
+    @ObservedObject var onboardingModel: OnboardingModel
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     @ObservedObject var userManager: UserManager
@@ -305,7 +305,7 @@ struct ProfileView: View {
                 .foregroundColor(.white)
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(model.globalSettings.primaryYellowColor)
+                .background(onboardingModel.globalSettings.primaryYellowColor)
                 .cornerRadius(10)
         }
         .padding(.top, 20)
@@ -328,10 +328,14 @@ struct ProfileView: View {
     }
     
     private func logOutUser() {
-        // Reset login property
-        model.authToken = "" // TODO: make it so authToken isnt stored here
-        model.errorMessage = ""
-        model.isLoggedIn = false
+        // Reset login property and clear onboarding data
+        onboardingModel.authToken = "" // TODO: make it so authToken isnt stored here
+        onboardingModel.errorMessage = ""
+        onboardingModel.isLoggedIn = false
+        onboardingModel.onboardingComplete = false
+        
+        // Reset skiponboarding for when testing with skiponboarding set to true
+        onboardingModel.skipOnboarding = false
         
         // Clear Keychain tokens
         let keychain = KeychainWrapper.standard
@@ -451,10 +455,10 @@ struct ProfileView: View {
 //        )
 //        
 //        return Group {
-//            ProfileView(model: mockOnboardModel, appModel: mockAppModel, userManager: mockUserManager, sessionModel: SessionGeneratorModel())
+//            ProfileView(onboardingModel: mockOnboardModel, appModel: mockAppModel, userManager: mockUserManager, sessionModel: SessionGeneratorModel())
 //                .previewDisplayName("Light Mode")
 //            
-//            ProfileView(model: mockOnboardModel, appModel: mockAppModel, userManager: mockUserManager, sessionModel: SessionGeneratorModel())
+//            ProfileView(onboardingModel: mockOnboardModel, appModel: mockAppModel, userManager: mockUserManager, sessionModel: SessionGeneratorModel())
 //                .preferredColorScheme(.dark)
 //                .previewDisplayName("Dark Mode")
 //        }

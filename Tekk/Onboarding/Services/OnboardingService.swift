@@ -229,7 +229,7 @@ extension OnboardingService {
             "Professional": "professional"
         ]
         
-        return levelMap[level] ?? "intermediate"
+        return levelMap[level] ?? "unesure_experience"
     }
     
     static func mapPositionForBackend(_ position: String) -> String {
@@ -244,7 +244,7 @@ extension OnboardingService {
             "Striker": "striker"
         ]
         
-        return positionMap[position] ?? "center_mid"
+        return positionMap[position] ?? "unsure_position"
     }
     
     static func mapAgeRangeForBackend(_ ageRange: String) -> String {

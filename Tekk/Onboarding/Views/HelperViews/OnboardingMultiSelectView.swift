@@ -9,7 +9,7 @@ import SwiftUI
 
 // For onboarding pages with multi-select options
 struct OnboardingMultiSelectView: View {
-    @ObservedObject var model: OnboardingModel
+    @ObservedObject var onboardingModel: OnboardingModel
     let title: String
     let options: [String]
     @Binding var selections: [String]
@@ -18,7 +18,7 @@ struct OnboardingMultiSelectView: View {
         VStack(alignment: .leading, spacing: 20) {
             Text(title)
                 .font(.custom("Poppins-Bold", size: 18))
-                .foregroundColor(model.globalSettings.primaryDarkColor)
+                .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
             
             ForEach(options, id: \.self) { option in
                 Button(action: {
@@ -42,14 +42,14 @@ struct OnboardingMultiSelectView: View {
                     .frame(maxWidth: .infinity)
                     .background(
                         RoundedRectangle(cornerRadius: 25)
-                            .fill(selections.contains(option) ? model.globalSettings.primaryYellowColor : .white)
+                            .fill(selections.contains(option) ? onboardingModel.globalSettings.primaryYellowColor : .white)
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 25)
                             .stroke(selections.contains(option) ? Color.clear : Color.gray.opacity(0.3), lineWidth: 1)
                     )
                 }
-                .foregroundColor(selections.contains(option) ? .white : model.globalSettings.primaryDarkColor)
+                .foregroundColor(selections.contains(option) ? .white : onboardingModel.globalSettings.primaryDarkColor)
             }
         }
         .padding(.horizontal)

@@ -10,7 +10,7 @@ import RiveRuntime
 import SwiftKeychainWrapper
 
 struct CompletionView: View {
-    @ObservedObject var model: OnboardingModel
+    @ObservedObject var onboardingModel: OnboardingModel
     @ObservedObject var userManager: UserManager
     @ObservedObject var sessionModel: SessionGeneratorModel
     @State private var isLoading = false
@@ -28,7 +28,7 @@ struct CompletionView: View {
                     
                     Text("Creating your session...")
                         .font(.custom("Poppins-Bold", size: 20))
-                        .foregroundColor(model.globalSettings.primaryDarkColor)
+                        .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
                     
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
@@ -37,7 +37,7 @@ struct CompletionView: View {
                     
                     Text("We're personalizing drills based on your preferences")
                         .font(.custom("Poppins-Regular", size: 16))
-                        .foregroundColor(model.globalSettings.primaryGrayColor)
+                        .foregroundColor(onboardingModel.globalSettings.primaryGrayColor)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 40)
                     
@@ -54,11 +54,11 @@ struct CompletionView: View {
                     
                     Text("You're all set!")
                         .font(.custom("Poppins-Bold", size: 24))
-                        .foregroundColor(model.globalSettings.primaryDarkColor)
+                        .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
                     
                     Text("Thanks for completing the onboarding process. We've created a personalized training plan for you.")
                         .font(.custom("Poppins-Regular", size: 16))
-                        .foregroundColor(model.globalSettings.primaryGrayColor)
+                        .foregroundColor(onboardingModel.globalSettings.primaryGrayColor)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 40)
                     
@@ -81,7 +81,7 @@ struct CompletionView: View {
                             .font(.custom("Poppins-Bold", size: 18))
                             .foregroundColor(.white)
                             .frame(width: 280, height: 50)
-                            .background(model.globalSettings.primaryYellowColor)
+                            .background(onboardingModel.globalSettings.primaryYellowColor)
                             .cornerRadius(25)
                     }
                     .padding(.bottom, 50)
@@ -98,29 +98,25 @@ struct CompletionView: View {
         isLoading = true
         errorMessage = ""
         
-        OnboardingService.shared.submitOnboardingData(data: model.onboardingData) { result in
+        OnboardingService.shared.submitOnboardingData(data: onboardingModel.onboardingData) { result in
             DispatchQueue.main.async {
                 self.isLoading = false
                 
                 switch result {
                 case .success(let response):
                     // Save the auth token
-                    self.model.authToken = response.access_token
+                    self.onboardingModel.authToken = response.access_token
                     
                     // Update the decoded user info into UserManager
                     self.userManager.updateUserKeychain(
-                        email: self.model.onboardingData.email,
-                        firstName: self.model.onboardingData.firstName,
-                        lastName: self.model.onboardingData.lastName
+                        email: self.onboardingModel.onboardingData.email,
+                        firstName: self.onboardingModel.onboardingData.firstName,
+                        lastName: self.onboardingModel.onboardingData.lastName
                     )
                     
-                    // If there's an initial session, load it into the session model
-                    if let initialSession = response.initialSession {
-                        self.sessionModel.loadInitialSession(from: initialSession)
-                    }
-                    
                     // Set user as logged in
-                    self.model.isLoggedIn = true
+                    self.onboardingModel.isLoggedIn = true
+                    self.onboardingModel.onboardingComplete = true
                     
                 case .failure(let error):
                     self.errorMessage = "Error: \(error.localizedDescription)"
@@ -134,65 +130,86 @@ struct CompletionView: View {
         isLoading = true
         
         Task {
-            do {          
-                // Ensure at least one area to improve is selected
-                if model.onboardingData.areasToImprove.isEmpty {
-                    model.onboardingData.areasToImprove = ["First touch", "Passing"]
-                    print("⚠️ No areas to improve selected, defaulting to First touch and Passing")
-                }
+            do {
+                print("--- Onboarding: Starting submitData ---")
+                print("[Before Onboarding] selectedSkills: \(sessionModel.selectedSkills)")
+                print("[Before Onboarding] selectedTime: \(sessionModel.selectedTime ?? "nil")")
+                print("[Before Onboarding] selectedEquipment: \(sessionModel.selectedEquipment)")
+                print("[Before Onboarding] selectedTrainingStyle: \(sessionModel.selectedTrainingStyle ?? "nil")")
+                print("[Before Onboarding] selectedLocation: \(sessionModel.selectedLocation ?? "nil")")
+                print("[Before Onboarding] selectedDifficulty: \(sessionModel.selectedDifficulty ?? "nil")")
                 
-                // Ensure equipment is not empty
-                if model.onboardingData.availableEquipment.isEmpty {
-                    model.onboardingData.availableEquipment = ["Soccer ball"]
-                    print("⚠️ No equipment selected, defaulting to Soccer ball")
-                }
-                
-                // Ensure training location is not empty
-                if model.onboardingData.trainingLocation.isEmpty {
-                    model.onboardingData.trainingLocation = ["At a soccer field with goals"]
-                    print("⚠️ No training location selected, defaulting to 'At a soccer field with goals'")
-                }
-                
-                print("📤 Sending onboarding data: \(model.onboardingData)")
+                print("📤 Sending onboarding data: \(onboardingModel.onboardingData)")
                 
                 // Run the OnboardingService function to submit data
-                let response = try await OnboardingService.shared.submitOnboardingData(data: model.onboardingData)
+                let response = try await OnboardingService.shared.submitOnboardingData(data: onboardingModel.onboardingData)
                 print("✅ Onboarding data submitted successfully")
                 print("🔑 Received token: \(response.access_token)")
                 
+                // Store access token taking access token response from the backend response
+                let tokenSaved = KeychainWrapper.standard.set(response.access_token, forKey: "authToken")
+                print("🔑 Token saved to keychain: \(tokenSaved)")
+                // Verify token was stored correctly
+                if let storedToken = KeychainWrapper.standard.string(forKey: "authToken") {
+                    print("✅ Verified token in keychain: \(storedToken)")
+                } else {
+                    print("❌ Failed to retrieve token from keychain!")
+                }
+                
+                // Prefill subskills for preferences update
+                await sessionModel.prefillSelectedSkills(from: onboardingModel.onboardingData)
+                print("[After prefillSelectedSkills] selectedSkills: \(sessionModel.selectedSkills)")
+                
+                // Update preferences using onboarding data and subskills, which will help preload our session after onboarding
+                try await PreferencesUpdateService.shared.updatePreferences(
+                    time: onboardingModel.onboardingData.dailyTrainingTime,
+                    equipment: Set(onboardingModel.onboardingData.availableEquipment),
+                    trainingStyle: onboardingModel.onboardingData.trainingExperience,
+                    location: onboardingModel.onboardingData.trainingLocation.first,
+                    difficulty: onboardingModel.onboardingData.position,
+                    skills: sessionModel.selectedSkills,
+                    sessionModel: sessionModel
+                )
+                
+                // Prefill preferences for session generator model using onboarding data
+                await sessionModel.prefillPreferences(from: onboardingModel.onboardingData)
+                
+                print("[After updatePreferences] selectedSkills: \(sessionModel.selectedSkills)")
+                print("[After updatePreferences] selectedTime: \(sessionModel.selectedTime ?? "nil")")
+                print("[After updatePreferences] selectedEquipment: \(sessionModel.selectedEquipment)")
+                print("[After updatePreferences] selectedTrainingStyle: \(sessionModel.selectedTrainingStyle ?? "nil")")
+                print("[After updatePreferences] selectedLocation: \(sessionModel.selectedLocation ?? "nil")")
+                print("[After updatePreferences] selectedDifficulty: \(sessionModel.selectedDifficulty ?? "nil")")
+
+//                // Fetch preferences from backend and update UI
+//                await sessionModel.loadPreferencesFromBackend()
+//                print("[After loadPreferencesFromBackend] selectedSkills: \(sessionModel.selectedSkills)")
+//                print("[After loadPreferencesFromBackend] selectedTime: \(sessionModel.selectedTime ?? "nil")")
+//                print("[After loadPreferencesFromBackend] selectedEquipment: \(sessionModel.selectedEquipment)")
+//                print("[After loadPreferencesFromBackend] selectedTrainingStyle: \(sessionModel.selectedTrainingStyle ?? "nil")")
+//                print("[After loadPreferencesFromBackend] selectedLocation: \(sessionModel.selectedLocation ?? "nil")")
+//                print("[After loadPreferencesFromBackend] selectedDifficulty: \(sessionModel.selectedDifficulty ?? "nil")")
+                
                 await MainActor.run {
-                    // Store access token taking access token response from the backend response
-                    let tokenSaved = KeychainWrapper.standard.set(response.access_token, forKey: "authToken")
-                    print("🔑 Token saved to keychain: \(tokenSaved)")
-                    
-                    // Verify token was stored correctly
-                    if let storedToken = KeychainWrapper.standard.string(forKey: "authToken") {
-                        print("✅ Verified token in keychain: \(storedToken)")
-                    } else {
-                        print("❌ Failed to retrieve token from keychain!")
-                    }
-                    
                     // Update the decoded user info into UserManager, which will store it into Keychain
                     userManager.updateUserKeychain(
-                        email: model.onboardingData.email,
-                        firstName: model.onboardingData.firstName,
-                        lastName: model.onboardingData.lastName
+                        email: onboardingModel.onboardingData.email,
+                        firstName: onboardingModel.onboardingData.firstName,
+                        lastName: onboardingModel.onboardingData.lastName
                     )
                     
-                    // If there's an initial session, load it into the session model
-                    if let initialSession = response.initialSession {
-                        print("✅ Received initial session with \(initialSession.drills.count) drills")
-                        sessionModel.loadInitialSession(from: initialSession)
-                    } else {
-                        print("⚠️ No initial session received from server")
-                        // Create a default session with some drills based on the user's preferences
-                        createDefaultSession()
-                    }
-                    
                     // Set user as logged in
-                    model.isLoggedIn = true
+                    onboardingModel.isLoggedIn = true
+                    // Clear onboarding data
+                    onboardingModel.resetOnboardingData()
                     
                     print("✅ Onboarding complete, user logged in")
+                    print("[UI] selectedSkills: \(sessionModel.selectedSkills)")
+                    print("[UI] selectedTime: \(sessionModel.selectedTime ?? "nil")")
+                    print("[UI] selectedEquipment: \(sessionModel.selectedEquipment)")
+                    print("[UI] selectedTrainingStyle: \(sessionModel.selectedTrainingStyle ?? "nil")")
+                    print("[UI] selectedLocation: \(sessionModel.selectedLocation ?? "nil")")
+                    print("[UI] selectedDifficulty: \(sessionModel.selectedDifficulty ?? "nil")")
                 }
             } catch let error as DecodingError {
                 await MainActor.run {
@@ -200,7 +217,7 @@ struct CompletionView: View {
                 }
             } catch let error as NSError {
                 await MainActor.run {
-                    model.errorMessage = "Server Error (\(error.code)): \(error.localizedDescription)"
+                    onboardingModel.errorMessage = "Server Error (\(error.code)): \(error.localizedDescription)"
                     print("❌ Detailed error: \(error)")
                     print("❌ Error domain: \(error.domain)")
                     print("❌ Error code: \(error.code)")
@@ -210,12 +227,12 @@ struct CompletionView: View {
                     if error.domain != "CompletionView" {
                         // For server errors, we can still proceed with a default session
                         createDefaultSession()
-                        model.isLoggedIn = true
+                        onboardingModel.isLoggedIn = true
                     }
                 }
             } catch {
                 await MainActor.run {
-                    model.errorMessage = "Error: \(error.localizedDescription)"
+                    onboardingModel.errorMessage = "Error: \(error.localizedDescription)"
                     print("❌ Error submitting onboarding data: \(error)")
                 }
             }
@@ -225,7 +242,7 @@ struct CompletionView: View {
     private func handleDecodingError(_ error: DecodingError) {
         switch error {
         case .typeMismatch(let type, let context):
-            model.errorMessage = "Type mismatch: Expected \(type) but found something else."
+            onboardingModel.errorMessage = "Type mismatch: Expected \(type) but found something else."
             print("❌ Type mismatch at path: \(context.codingPath)")
             print("❌ Debug description: \(context.debugDescription)")
             
@@ -233,10 +250,10 @@ struct CompletionView: View {
             if context.codingPath.contains(where: { $0.stringValue == "initial_session" }) {
                 print("⚠️ Error in initial session data, creating default session")
                 createDefaultSession()
-                model.isLoggedIn = true
+                onboardingModel.isLoggedIn = true
             }
         case .valueNotFound(let type, let context):
-            model.errorMessage = "Value not found: Expected \(type) but found null."
+            onboardingModel.errorMessage = "Value not found: Expected \(type) but found null."
             print("❌ Value not found at path: \(context.codingPath)")
             
             // If the error is related to the initial session, drills, sets, or reps, we can still proceed
@@ -246,16 +263,16 @@ struct CompletionView: View {
                context.codingPath.contains(where: { $0.stringValue == "reps" }) {
                 print("⚠️ Error in initial session data, creating default session")
                 createDefaultSession()
-                model.isLoggedIn = true
+                onboardingModel.isLoggedIn = true
             }
         case .keyNotFound(let key, let context):
-            model.errorMessage = "Key not found: \(key.stringValue)"
+            onboardingModel.errorMessage = "Key not found: \(key.stringValue)"
             print("❌ Key not found at path: \(context.codingPath)")
         case .dataCorrupted(let context):
-            model.errorMessage = "Data corrupted: \(context.debugDescription)"
+            onboardingModel.errorMessage = "Data corrupted: \(context.debugDescription)"
             print("❌ Data corrupted at path: \(context.codingPath)")
         @unknown default:
-            model.errorMessage = "Unknown decoding error"
+            onboardingModel.errorMessage = "Unknown decoding error"
         }
     }
     
@@ -266,7 +283,7 @@ struct CompletionView: View {
         let mockSession = SessionResponse(
             sessionId: 0,
             totalDuration: 45,
-            focusAreas: model.onboardingData.areasToImprove,
+            focusAreas: onboardingModel.onboardingData.areasToImprove,
             drills: []
         )
         

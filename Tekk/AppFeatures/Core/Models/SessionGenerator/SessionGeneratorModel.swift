@@ -23,7 +23,7 @@ class SessionGeneratorModel: ObservableObject {
     var hasUnsavedChanges = false
     var autoSaveTimer: Timer?
     var isLoggingOut = false  // Add flag to prevent caching during logout
-    var isInitialLoad = true  // Add this flag
+    var isInitialLoad = false  // Add this flag
     // Track backend IDs for each group
     var groupBackendIds: [UUID: Int] = [:]
     // Track the backend ID for the liked group
@@ -43,14 +43,17 @@ class SessionGeneratorModel: ObservableObject {
     
     @Published var selectedTime: String? {
         didSet {
+            print("[DEBUG] selectedTime changed to: \(String(describing: selectedTime))")
             if !isInitialLoad && !isLoggingOut {
                 markAsNeedingSave(change: .userPreferences)
             }
+            print("\(isInitialLoad) and \(isLoggingOut)")
         }
     }
 
     @Published var selectedEquipment: Set<String> = [] {
         didSet {
+            print("[DEBUG] selectedEquipment changed to: \(selectedEquipment)")
             if !isInitialLoad && !isLoggingOut {
                 markAsNeedingSave(change: .userPreferences)
             }
@@ -59,6 +62,7 @@ class SessionGeneratorModel: ObservableObject {
 
     @Published var selectedTrainingStyle: String? {
         didSet {
+            print("[DEBUG] selectedTrainingStyle changed to: \(String(describing: selectedTrainingStyle))")
             if !isInitialLoad && !isLoggingOut {
                 markAsNeedingSave(change: .userPreferences)
             }
@@ -67,6 +71,7 @@ class SessionGeneratorModel: ObservableObject {
 
     @Published var selectedLocation: String? {
         didSet {
+            print("[DEBUG] selectedLocation changed to: \(String(describing: selectedLocation))")
             if !isInitialLoad && !isLoggingOut {
                 markAsNeedingSave(change: .userPreferences)
             }
@@ -75,6 +80,7 @@ class SessionGeneratorModel: ObservableObject {
 
     @Published var selectedDifficulty: String? {
         didSet {
+            print("[DEBUG] selectedDifficulty changed to: \(String(describing: selectedDifficulty))")
             if !isInitialLoad && !isLoggingOut {
                 markAsNeedingSave(change: .userPreferences)
             }
@@ -82,7 +88,14 @@ class SessionGeneratorModel: ObservableObject {
     }
 
     // update by selected skills
-    @Published var selectedSkills: Set<String> = []
+    @Published var selectedSkills: Set<String> = [] {
+        didSet {
+            print("[DEBUG] selectedSkills changed to: \(selectedSkills)")
+            if !isInitialLoad && !isLoggingOut {
+                markAsNeedingSave(change: .userPreferences)
+            }
+        }
+    }
     @Published var originalSelectedSkills: Set<String> = []
     
     
@@ -235,6 +248,7 @@ class SessionGeneratorModel: ObservableObject {
     func markAsNeedingSave(change: DataChange) {
         // Don't mark changes during logout
         guard !isLoggingOut else { return }
+        print("DEBUG markAsNeedingSave")
         
         hasUnsavedChanges = true
         
@@ -473,12 +487,12 @@ class SessionGeneratorModel: ObservableObject {
         var selectedLocation: String?
         var selectedDifficulty: String?
         
-        init(from model: SessionGeneratorModel) {
-            self.selectedTime = model.selectedTime
-            self.selectedEquipment = Array(model.selectedEquipment)
-            self.selectedTrainingStyle = model.selectedTrainingStyle
-            self.selectedLocation = model.selectedLocation
-            self.selectedDifficulty = model.selectedDifficulty
+        init(from sessionGeneratorModel: SessionGeneratorModel) {
+            self.selectedTime = sessionGeneratorModel.selectedTime
+            self.selectedEquipment = Array(sessionGeneratorModel.selectedEquipment)
+            self.selectedTrainingStyle = sessionGeneratorModel.selectedTrainingStyle
+            self.selectedLocation = sessionGeneratorModel.selectedLocation
+            self.selectedDifficulty = sessionGeneratorModel.selectedDifficulty
         }
     }
 
@@ -601,6 +615,82 @@ class SessionGeneratorModel: ObservableObject {
         let preferences = Preferences(from: self)
         cacheManager.cache(preferences, forKey: .filterGroupsCase)
         print("✅ Cached preferences")
+    }
+
+    // MARK: Default subskill mapping
+    static let defaultSubskills: [String: String] = [
+        "Passing": "Short passing",
+        "Shooting": "Long passing",
+        "Dribbling": "1v1 moves",
+        "Defending": "Tackling",
+        "First touch": "First touch",
+        "Fitness": "Conditioning"
+    ]
+
+    @MainActor
+    func prefillSelectedSkills(from onboardingData: OnboardingModel.OnboardingData) async {
+        let skillsToImprove = onboardingData.areasToImprove
+        let prefilledSubskillsAfterOnboarding = Set(skillsToImprove.compactMap { skill in
+            if let subskill = SessionGeneratorModel.defaultSubskills[skill] {
+                return "\(subskill)"
+            }
+            return nil
+        })
+        print("✅ Identified subskills to improve: \(prefilledSubskillsAfterOnboarding)")
+        selectedSkills = prefilledSubskillsAfterOnboarding
+        print("Prefilled subskills after onboarding: \(selectedSkills)")
+    }
+    
+    @MainActor
+    func prefillPreferences(from onboardingData: OnboardingModel.OnboardingData) async {
+        // --- TIME ---
+        let timeMap: [String: String] = [
+            "Less than 15 minutes": "15min",
+            "15-30 minutes": "30min",
+            "30-60 minutes": "1h",
+            "1-2 hours": "1h30",
+            "More than 2 hours": "2h+"
+        ]
+    
+        selectedTime = timeMap[onboardingData.dailyTrainingTime] ?? "30min"
+
+        // --- EQUIPMENT ---
+        let allowedEquipment = ["soccer ball", "cones", "goal"]
+        selectedEquipment = Set(onboardingData.availableEquipment.map { $0.lowercased() }
+            .filter { allowedEquipment.contains($0) }
+            .map { $0 == "goal" ? "goal" : $0 }) // normalize
+
+        // --- TRAINING STYLE ---
+        let styleMap: [String: String] = [
+            "Beginner": "medium intensity",
+            "Intermediate": "medium intensity",
+            "Advanced": "high intensity",
+            "Professional": "game prep",
+            "Rest day": "rest day"
+        ]
+        selectedTrainingStyle = styleMap[onboardingData.trainingExperience] ?? "medium intensity"
+
+        // --- LOCATION ---
+        let locationMap: [String: String] = [
+            "At a soccer field with goals": "location with goals",
+            "At home (backyard or indoors)": "small space",
+            "At a park or open field": "full field",
+            "At a gym or indoor court": "medium field"
+        ]
+        selectedLocation = onboardingData.trainingLocation
+            .compactMap { locationMap[$0] }
+            .first ?? "full field"
+
+        // --- DIFFICULTY ---
+        let difficultyMap: [String: String] = [
+            "Beginner": "beginner",
+            "Intermediate": "intermediate",
+            "Advanced": "advanced",
+            "Professional": "advanced"
+        ]
+        selectedDifficulty = difficultyMap[onboardingData.position] ?? "medium"
+
+        print("✅ Prefilled preferences from onboarding data:")
     }
 
 }

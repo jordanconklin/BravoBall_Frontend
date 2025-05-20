@@ -32,6 +32,9 @@ class OnboardingModel: ObservableObject {
     
     // Animation scale for intro animation
     @Published var animationScale: CGFloat = 1.5
+
+    // Indicates if the user has completed onboarding and entered the main app
+    @Published var onboardingComplete: Bool = false
     
     // Simple arrays for questions and options
     let questionTitles = [
@@ -161,26 +164,27 @@ class OnboardingModel: ObservableObject {
     // TESTING: Method to prefill onboarding data for testing
     func prefillTestData() {
         // Generate a random email to avoid duplicates
-        let randomEmail = "test\(Int.random(in: 100...999))@example.com"
+        let randomInt = (Int.random(in: 100...9999))
+        let randomEmail = "test\(randomInt)@example.com"
         
         // Use values that exactly match the questionOptions arrays
         onboardingData = OnboardingData(
             primaryGoal: "Improve my overall skill level",
-            biggestChallenge: "Recovering from injury",
+            biggestChallenge: "Not enough time to train",
             trainingExperience: "Intermediate",
-            position: "Fullback",
+            position: "Goalkeeper",
             playstyle: "Big Bob",  // Match one of the actual options in questionOptions
             ageRange: "Teen (13-16)",
             strengths: ["Defending"],
             areasToImprove: ["Passing", "Dribbling", "First touch"],
-            trainingLocation: ["At a soccer field with goals"],  // Match one of the actual options
+            trainingLocation: ["Full-sized field"],  // Match one of the actual options
             availableEquipment: ["Soccer ball", "Cones", "Wall"],
-            dailyTrainingTime: "30-60 minutes",
-            weeklyTrainingDays: "4-5 days (moderate schedule)",
+            dailyTrainingTime: "15-30 minutes",
+            weeklyTrainingDays: "3-5 days (moderate schedule)",
             firstName: "Test",
-            lastName: "User\(Int.random(in: 100...9999))",  // Random last name to avoid duplicates
+            lastName: "User\(randomInt)",  // Random last name to avoid duplicates
             email: randomEmail,
-            password: "password123"
+            password: "123"
         )
         
         print("✅ Test data prefilled with email: \(randomEmail)")

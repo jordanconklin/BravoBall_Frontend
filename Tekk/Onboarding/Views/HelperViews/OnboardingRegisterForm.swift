@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OnboardingRegisterForm: View {
-    @ObservedObject var model: OnboardingModel
+    @ObservedObject var onboardingModel: OnboardingModel
     
     let title: String
     @Binding var firstName: String
@@ -23,7 +23,7 @@ struct OnboardingRegisterForm: View {
             Text(title)
                 .padding()
                 .font(.custom("Poppins-Bold", size: 18))
-                .foregroundColor(model.globalSettings.primaryDarkColor)
+                .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
             
             // Register Form
             VStack(spacing: 20) {
@@ -32,7 +32,7 @@ struct OnboardingRegisterForm: View {
                     .padding()
                     .disableAutocorrection(true)
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.1)))
-                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(model.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(onboardingModel.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
                     .keyboardType(.default)
                 
                 // Last Name Field
@@ -40,7 +40,7 @@ struct OnboardingRegisterForm: View {
                     .padding()
                     .disableAutocorrection(true)
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.1)))
-                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(model.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(onboardingModel.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
                     .keyboardType(.default)
                 
                 Spacer()
@@ -54,33 +54,33 @@ struct OnboardingRegisterForm: View {
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.1)))
-                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(model.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(onboardingModel.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
                 
                 // Password Field
                 ZStack(alignment: .trailing) {
-                    if model.isPasswordVisible {
+                    if onboardingModel.isPasswordVisible {
                         TextField("Password", text: $password)
                             .padding()
                             .autocapitalization(.none)
                             .disableAutocorrection(true)
                             .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.1)))
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(model.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(onboardingModel.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
                             .keyboardType(.default)
                     } else {
                         SecureField("Password", text: $password)
                             .padding()
                             .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.1)))
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(model.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(onboardingModel.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
                             .keyboardType(.default)
                         
                     }
                     
                     // Eye icon for password visibility toggle
                     Button(action: {
-                        model.isPasswordVisible.toggle()
+                        onboardingModel.isPasswordVisible.toggle()
                     }) {
-                        Image(systemName: model.isPasswordVisible ? "eye.slash.fill" : "eye.fill")
-                            .foregroundColor(model.globalSettings.primaryYellowColor)
+                        Image(systemName: onboardingModel.isPasswordVisible ? "eye.slash.fill" : "eye.fill")
+                            .foregroundColor(onboardingModel.globalSettings.primaryYellowColor)
                     }
                     .padding(.trailing, 10)
                 }
@@ -105,7 +105,7 @@ struct OnboardingRegisterForm_Previews: PreviewProvider {
         let email = Binding<String>(get: { "johndoe@gmail.com" }, set: { _ in })
         let password = Binding<String>(get: { "password123" }, set: { _ in })
         
-        return OnboardingRegisterForm(model: mockModel, title: title, firstName: firstName, lastName: lastName, email: email, password: password)
+        return OnboardingRegisterForm(onboardingModel: mockModel, title: title, firstName: firstName, lastName: lastName, email: email, password: password)
             .previewLayout(.sizeThatFits)
             .padding()
     }

@@ -52,8 +52,8 @@ struct DrillCard: View {
                             .font(.custom("Poppins-Bold", size: layout.isPad ? 18 : 16))
                             .foregroundColor(appModel.globalSettings.primaryDarkColor)
                             .lineLimit(2)
-                        Text("\(editableDrill.totalSets) sets - \(editableDrill.totalReps) reps - \(editableDrill.totalDuration)")
-                            .font(.custom("Poppins-Bold", size: layout.isPad ? 16 : 14))
+                        Text("\(editableDrill.totalSets) sets - \(editableDrill.totalReps) reps - \(editableDrill.totalDuration) mins")
+                            .font(.custom("Poppins-Bold", size: layout.isPad ? 13 : 11))
                             .foregroundColor(appModel.globalSettings.primaryGrayColor)
                             .lineLimit(1)
                     }
@@ -80,3 +80,41 @@ struct DrillCard: View {
         }
     }
 }
+
+#if DEBUG
+struct DrillCard_Previews: PreviewProvider {
+    static var previews: some View {
+        let appModel = MainAppModel()
+        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        // Create a mock drill and editable drill
+        let drill = DrillModel(
+            title: "One-Touch Pass",
+            skill: "Passing",
+            subSkills: ["short_passing"],
+            sets: 3,
+            reps: 10,
+            duration: 15,
+            description: "Practice quick one-touch passes with a partner or wall.",
+            tips: ["Keep your ankle locked", "Follow through"],
+            equipment: ["Soccer ball", "Cones"],
+            trainingStyle: "Medium Intensity",
+            difficulty: "Beginner"
+        )
+        let editableDrill = EditableDrillModel(
+            drill: drill,
+            setsDone: 0,
+            totalSets: 3,
+            totalReps: 10,
+            totalDuration: 15,
+            isCompleted: false
+        )
+        DrillCard(
+            appModel: appModel,
+            sessionModel: sessionModel,
+            editableDrill: .constant(editableDrill)
+        )
+        .previewLayout(.sizeThatFits)
+        .padding()
+    }
+}
+#endif

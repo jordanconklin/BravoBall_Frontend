@@ -115,7 +115,7 @@ class DataSyncService {
         
         print("📤 Sending request to: \(url.absoluteString)")
         print("Request headers: \(request.allHTTPHeaderFields ?? [:])")
-        print("Request body: \(requestData)")
+        print("Request body: \(requestData["ordered_drills"]!)")
         
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: requestData)

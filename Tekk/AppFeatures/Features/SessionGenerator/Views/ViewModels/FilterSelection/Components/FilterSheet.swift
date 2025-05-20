@@ -72,6 +72,12 @@ struct FilterSheet: View {
                 }
             }
         }
+        .onAppear {
+            if type == .equipment {
+                print("[FilterSheet] selectedEquipment: \(sessionModel.selectedEquipment)")
+                print("[FilterSheet] Equipment options: \(FilterData.equipmentOptions)")
+            }
+        }
     }
     
     

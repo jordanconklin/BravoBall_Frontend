@@ -19,9 +19,8 @@ class MainAppModel: ObservableObject {
 
     
     
-    
+    var isInitialLoad = true
     private let cacheManager = CacheManager.shared
-    private var isInitialLoad = true
     private var loadingTask: Task<Void, Never>?  // Track loading task
     
     // Add error state

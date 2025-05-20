@@ -10,7 +10,7 @@ import RiveRuntime
 
 // Main onboarding view
 struct OnboardingView: View {
-    @ObservedObject var model: OnboardingModel
+    @ObservedObject var onboardingModel: OnboardingModel
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var userManager: UserManager
     @ObservedObject var sessionModel: SessionGeneratorModel
@@ -18,6 +18,7 @@ struct OnboardingView: View {
     
     
     @State private var canTrigger = true
+    @State private var showEmailExistsAlert = false
     
     let riveViewModelOne = RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1")
     let riveViewModelTwo = RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 2", autoPlay: true)
@@ -28,16 +29,16 @@ struct OnboardingView: View {
     var body: some View {
         Group {
             // testing instead of onboarding complete
-            if model.isLoggedIn {
-                MainTabView(model: model, appModel: appModel, userManager: userManager, sessionModel: sessionModel)
-            } else if model.skipOnboarding {
+            if onboardingModel.isLoggedIn {
+                MainTabView(onboardingModel: onboardingModel, appModel: appModel, userManager: userManager, sessionModel: sessionModel)
+            } else if onboardingModel.skipOnboarding {
                 // Skip directly to completion view when toggle is on
-                CompletionView(model: model, userManager: userManager, sessionModel: sessionModel)
+                CompletionView(onboardingModel: onboardingModel, userManager: userManager, sessionModel: sessionModel)
                     .onAppear {
                         // Make sure test data is applied when the view appears
-                        if model.onboardingData.firstName.isEmpty {
+                        if onboardingModel.onboardingData.firstName.isEmpty {
                             print("🔄 Applying test data for onboarding...")
-                            model.prefillTestData()
+                            onboardingModel.prefillTestData()
                         }
                     }
             } else {
@@ -51,39 +52,39 @@ struct OnboardingView: View {
             Color.white.ignoresSafeArea()
             
             // Main content (Bravo and create account / login buttons)
-            if !model.showWelcome && !model.showLoginPage {
+            if !onboardingModel.showWelcome && !onboardingModel.showLoginPage {
                 welcomeContent
             }
             
             // Login view with transition
-            if model.showLoginPage {
-                LoginView(model: model, userManager: userManager)
+            if onboardingModel.showLoginPage {
+                LoginView(onboardingModel: onboardingModel, userManager: userManager)
                     .transition(.move(edge: .bottom))
             }
             
             // Welcome/Questionnaire view with transition
-            if model.showWelcome {
+            if onboardingModel.showWelcome {
                 questionnaireContent
                     .transition(.move(edge: .trailing))
             }
             
             // Intro animation overlay
-            if model.showIntroAnimation {
+            if onboardingModel.showIntroAnimation {
                 RiveViewModel(fileName: "BravoBall_Intro").view()
-                    .scaleEffect(model.animationScale)
+                    .scaleEffect(onboardingModel.animationScale)
                     .edgesIgnoringSafeArea(.all)
                     .allowsHitTesting(false)
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 5.7) {
                             withAnimation(.spring()) {
-                                model.showIntroAnimation = false
+                                onboardingModel.showIntroAnimation = false
                             }
                         }
                     }
             }
         }
-        .animation(.spring(), value: model.showWelcome)
-        .animation(.spring(), value: model.showLoginPage)
+        .animation(.spring(), value: onboardingModel.showWelcome)
+        .animation(.spring(), value: onboardingModel.showLoginPage)
     }
     
     // Welcome view for new users
@@ -95,25 +96,25 @@ struct OnboardingView: View {
                 .padding(.bottom, 10)
             
             Text("BravoBall")
-                .foregroundColor(model.globalSettings.primaryYellowColor)
+                .foregroundColor(onboardingModel.globalSettings.primaryYellowColor)
                 .padding(.bottom, 5)
                 .font(.custom("PottaOne-Regular", size: 45))
             
             Text("Start Small. Dream Big")
-                .foregroundColor(model.globalSettings.primaryDarkColor)
+                .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
                 .padding(.bottom, 100)
                 .font(.custom("Poppins-Bold", size: 16))
             
             // Create Account Button
             Button(action: {
                 withAnimation(.spring()) {
-                    model.showWelcome.toggle()
+                    onboardingModel.showWelcome.toggle()
                 }
             }) {
                 Text("Create an account")
                     .frame(width: 325, height: 15)
                     .padding()
-                    .background(model.globalSettings.primaryYellowColor)
+                    .background(onboardingModel.globalSettings.primaryYellowColor)
                     .foregroundColor(.white)
                     .cornerRadius(20)
                     .font(.custom("Poppins-Bold", size: 16))
@@ -124,14 +125,14 @@ struct OnboardingView: View {
             // Login Button
             Button(action: {
                 withAnimation(.spring()) {
-                    model.showLoginPage = true
+                    onboardingModel.showLoginPage = true
                 }
             }) {
                 Text("Login")
                     .frame(width: 325, height: 15)
                     .padding()
                     .background(.gray.opacity(0.2))
-                    .foregroundColor(model.globalSettings.primaryDarkColor)
+                    .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
                     .cornerRadius(20)
                     .font(.custom("Poppins-Bold", size: 16))
             }
@@ -151,12 +152,12 @@ struct OnboardingView: View {
                 // Back Button
                 Button(action: {
                     withAnimation {
-                        model.backTransition = true
-                        model.movePrevious()
+                        onboardingModel.backTransition = true
+                        onboardingModel.movePrevious()
                     }
                 }) {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(model.globalSettings.primaryDarkColor)
+                        .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
                         .imageScale(.large)
                 }
                 
@@ -169,8 +170,8 @@ struct OnboardingView: View {
                             .cornerRadius(2)
                         
                         Rectangle()
-                            .foregroundColor(model.globalSettings.primaryYellowColor)
-                            .frame(width: geometry.size.width * (CGFloat(model.currentStep) / 11.0), height: 10)
+                            .foregroundColor(onboardingModel.globalSettings.primaryYellowColor)
+                            .frame(width: geometry.size.width * (CGFloat(onboardingModel.currentStep) / 11.0), height: 10)
                             .cornerRadius(2)
                     }
                 }
@@ -181,14 +182,14 @@ struct OnboardingView: View {
                     
                     
                     withAnimation {
-                        model.backTransition = false
-                        model.skipToNext()
+                        onboardingModel.backTransition = false
+                        onboardingModel.skipToNext()
                         
                     }
                 }) {
                     Text("Skip")
                         .font(.custom("Poppins-Bold", size: 16))
-                        .foregroundColor(model.globalSettings.primaryDarkColor)
+                        .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
                 }
             }
             .padding(.horizontal)
@@ -202,136 +203,199 @@ struct OnboardingView: View {
             
             // Step Content
             ScrollView(showsIndicators: false) {
-                if model.currentStep < model.questionTitles.count {
-                    switch model.currentStep {
+                if onboardingModel.currentStep < onboardingModel.questionTitles.count {
+                    switch onboardingModel.currentStep {
                     case 0:
                         OnboardingStepView(
-                            model: model,
-                            title: model.questionTitles[0],
-                            options: model.questionOptions[0],
-                            selection: $model.onboardingData.primaryGoal
+                            onboardingModel: onboardingModel,
+                            title: onboardingModel.questionTitles[0],
+                            options: onboardingModel.questionOptions[0],
+                            selection: $onboardingModel.onboardingData.primaryGoal
                         )
                     case 1:
                         OnboardingStepView(
-                            model: model,
-                            title: model.questionTitles[1],
-                            options: model.questionOptions[1],
-                            selection: $model.onboardingData.biggestChallenge
+                            onboardingModel: onboardingModel,
+                            title: onboardingModel.questionTitles[1],
+                            options: onboardingModel.questionOptions[1],
+                            selection: $onboardingModel.onboardingData.biggestChallenge
                         )
                     case 2:
                         OnboardingStepView(
-                            model: model,
-                            title: model.questionTitles[2],
-                            options: model.questionOptions[2],
-                            selection: $model.onboardingData.trainingExperience
+                            onboardingModel: onboardingModel,
+                            title: onboardingModel.questionTitles[2],
+                            options: onboardingModel.questionOptions[2],
+                            selection: $onboardingModel.onboardingData.trainingExperience
                         )
                     case 3:
                         OnboardingStepView(
-                            model: model,
-                            title: model.questionTitles[3],
-                            options: model.questionOptions[3],
-                            selection: $model.onboardingData.position
+                            onboardingModel: onboardingModel,
+                            title: onboardingModel.questionTitles[3],
+                            options: onboardingModel.questionOptions[3],
+                            selection: $onboardingModel.onboardingData.position
                         )
                     case 4:
                         OnboardingStepView(
-                            model: model,
-                            title: model.questionTitles[4],
-                            options: model.questionOptions[4],
-                            selection: $model.onboardingData.playstyle
+                            onboardingModel: onboardingModel,
+                            title: onboardingModel.questionTitles[4],
+                            options: onboardingModel.questionOptions[4],
+                            selection: $onboardingModel.onboardingData.playstyle
                         )
                     case 5:
                         OnboardingStepView(
-                            model: model,
-                            title: model.questionTitles[5],
-                            options: model.questionOptions[5],
-                            selection: $model.onboardingData.ageRange
+                            onboardingModel: onboardingModel,
+                            title: onboardingModel.questionTitles[5],
+                            options: onboardingModel.questionOptions[5],
+                            selection: $onboardingModel.onboardingData.ageRange
                         )
                     case 6:
                         OnboardingMultiSelectView(
-                            model: model,
-                            title: model.questionTitles[6],
-                            options: model.questionOptions[6],
-                            selections: $model.onboardingData.strengths
+                            onboardingModel: onboardingModel,
+                            title: onboardingModel.questionTitles[6],
+                            options: onboardingModel.questionOptions[6],
+                            selections: $onboardingModel.onboardingData.strengths
                         )
                     case 7:
                         OnboardingMultiSelectView(
-                            model: model,
-                            title: model.questionTitles[7],
-                            options: model.questionOptions[7],
-                            selections: $model.onboardingData.areasToImprove
+                            onboardingModel: onboardingModel,
+                            title: onboardingModel.questionTitles[7],
+                            options: onboardingModel.questionOptions[7],
+                            selections: $onboardingModel.onboardingData.areasToImprove
                         )
                     case 8:
                         OnboardingMultiSelectView(
-                            model: model,
-                            title: model.questionTitles[8],
-                            options: model.questionOptions[8],
-                            selections: $model.onboardingData.trainingLocation
+                            onboardingModel: onboardingModel,
+                            title: onboardingModel.questionTitles[8],
+                            options: onboardingModel.questionOptions[8],
+                            selections: $onboardingModel.onboardingData.trainingLocation
                         )
                     case 9:
                         OnboardingMultiSelectView(
-                            model: model,
-                            title: model.questionTitles[9],
-                            options: model.questionOptions[9],
-                            selections: $model.onboardingData.availableEquipment
+                            onboardingModel: onboardingModel,
+                            title: onboardingModel.questionTitles[9],
+                            options: onboardingModel.questionOptions[9],
+                            selections: $onboardingModel.onboardingData.availableEquipment
                         )
                     case 10:
                         OnboardingStepView(
-                            model: model,
-                            title: model.questionTitles[10],
-                            options: model.questionOptions[10],
-                            selection: $model.onboardingData.dailyTrainingTime
+                            onboardingModel: onboardingModel,
+                            title: onboardingModel.questionTitles[10],
+                            options: onboardingModel.questionOptions[10],
+                            selection: $onboardingModel.onboardingData.dailyTrainingTime
                         )
                     case 11:
                         OnboardingStepView(
-                            model: model,
-                            title: model.questionTitles[11],
-                            options: model.questionOptions[11],
-                            selection: $model.onboardingData.weeklyTrainingDays
+                            onboardingModel: onboardingModel,
+                            title: onboardingModel.questionTitles[11],
+                            options: onboardingModel.questionOptions[11],
+                            selection: $onboardingModel.onboardingData.weeklyTrainingDays
                         )
                     default:
                         EmptyView()
                     }
-                } else if model.currentStep == model.questionTitles.count {
+                } else if onboardingModel.currentStep == onboardingModel.questionTitles.count {
                     OnboardingRegisterForm(
-                        model: model,
+                        onboardingModel: onboardingModel,
                         title: "Enter your Registration Info below!",
-                        firstName: $model.onboardingData.firstName,
-                        lastName: $model.onboardingData.lastName,
-                        email: $model.onboardingData.email,
-                        password: $model.onboardingData.password
+                        firstName: $onboardingModel.onboardingData.firstName,
+                        lastName: $onboardingModel.onboardingData.lastName,
+                        email: $onboardingModel.onboardingData.email,
+                        password: $onboardingModel.onboardingData.password
                     )
                 } else {
-                    CompletionView(model: model, userManager: userManager, sessionModel: sessionModel)
+                    CompletionView(onboardingModel: onboardingModel, userManager: userManager, sessionModel: sessionModel)
                 }
             }
             .padding()
 
             
             // Next button
-            if model.currentStep < model.numberOfOnboardingPages {
+            if onboardingModel.currentStep < onboardingModel.numberOfOnboardingPages {
                 Button(action: {
-                    
-                    
-                    triggerBravoAnimation()
-                    
-                    withAnimation {
-                        model.backTransition = false
-                        model.moveNext()
+                    if onboardingModel.currentStep == 12 {
+                        // Call email pre-check
+                        Task {
+                            let email = onboardingModel.onboardingData.email
+                            guard !email.isEmpty else {
+                                onboardingModel.errorMessage = "Please enter your email."
+                                return
+                            }
+                            onboardingModel.isLoading = true
+                            onboardingModel.errorMessage = ""
+                            let url = URL(string: "http://127.0.0.1:8000/check-email/")!
+                            var request = URLRequest(url: url)
+                            request.httpMethod = "POST"
+                            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                            let body = ["email": email]
+                            request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+                            do {
+                                let (data, response) = try await URLSession.shared.data(for: request)
+                                if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                                    if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                                       let exists = json["exists"] as? Bool {
+                                        if exists {
+                                            await MainActor.run {
+                                                onboardingModel.isLoading = false
+                                                showEmailExistsAlert = true
+                                            }
+                                            return
+                                        } else {
+                                            // Email is available, proceed with onboarding
+                                            await MainActor.run {
+                                                onboardingModel.errorMessage = ""
+                                                onboardingModel.isLoading = false
+                                                triggerBravoAnimation()
+                                                withAnimation {
+                                                    onboardingModel.backTransition = false
+                                                    onboardingModel.moveNext()
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        await MainActor.run {
+                                            onboardingModel.errorMessage = "Unexpected response from server."
+                                            onboardingModel.isLoading = false
+                                        }
+                                    }
+                                } else {
+                                    await MainActor.run {
+                                        onboardingModel.errorMessage = "Failed to check email. Please try again."
+                                        onboardingModel.isLoading = false
+                                    }
+                                }
+                            } catch {
+                                await MainActor.run {
+                                    onboardingModel.errorMessage = "Network error. Please try again."
+                                    onboardingModel.isLoading = false
+                                }
+                            }
+                        }
+                    } else {
+                        triggerBravoAnimation()
+                        withAnimation {
+                            onboardingModel.backTransition = false
+                            onboardingModel.moveNext()
+                        }
                     }
-                    
                 }) {
-                    Text(model.currentStep == 10 ? "Finish" : "Next")
+                    Text(onboardingModel.currentStep == 12 ? "Submit" : "Next")
                         .frame(maxWidth: .infinity)
                         .frame(height: 50)
                         .background(
                             RoundedRectangle(cornerRadius: 25)
-                                .fill(model.canMoveNext() ? model.globalSettings.primaryYellowColor : model.globalSettings.primaryLightGrayColor)
+                                .fill(onboardingModel.canMoveNext() ? onboardingModel.globalSettings.primaryYellowColor : onboardingModel.globalSettings.primaryLightGrayColor)
                         )
                         .foregroundColor(.white)
                         .font(.custom("Poppins-Bold", size: 16))
                 }
                 .padding(.horizontal)
-                .disabled(!model.canMoveNext())
+                .disabled(!onboardingModel.canMoveNext())
+                .alert(isPresented: $showEmailExistsAlert) {
+                    Alert(
+                        title: Text("Email Already Registered"),
+                        message: Text("This email is already in use. Please use a different email address."),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
             }
         }
     }

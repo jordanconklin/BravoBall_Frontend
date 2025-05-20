@@ -21,7 +21,7 @@ struct FilterScrollView: View {
                 .offset(y: 30)
             // All filter buttons
             ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: 0) {
+                LazyHStack(spacing: -5) {
                     ForEach(FilterType.allCases, id: \ .self) { type in
                         FilterButton(
                             appModel: appModel,

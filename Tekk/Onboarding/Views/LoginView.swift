@@ -22,7 +22,7 @@ struct LoginResponse: Codable {
 
 // Login page
 struct LoginView: View {
-    @ObservedObject var model: OnboardingModel
+    @ObservedObject var onboardingModel: OnboardingModel
     @ObservedObject var userManager: UserManager
     @State private var email = ""
     @State private var password = ""
@@ -31,7 +31,7 @@ struct LoginView: View {
         VStack(spacing: 20) {
                 Text("Welcome Back!")
                     .font(.custom("PottaOne-Regular", size: 32))
-                    .foregroundColor(model.globalSettings.primaryDarkColor)
+                    .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
                 
             RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1").view()
                     .frame(width: 200, height: 200)
@@ -46,33 +46,33 @@ struct LoginView: View {
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.1)))
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(model.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(onboardingModel.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
                     
                     // Password Field
                     ZStack(alignment: .trailing) {
-                        if model.isPasswordVisible {
+                        if onboardingModel.isPasswordVisible {
                             TextField("Password", text: $password)
                                 .padding()
                                 .autocapitalization(.none)
                                 .disableAutocorrection(true)
                                 .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.1)))
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(model.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
+                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(onboardingModel.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
                                 .keyboardType(.default)
                         } else {
                             SecureField("Password", text: $password)
                                 .padding()
                                 .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.1)))
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(model.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
+                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(onboardingModel.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
                                 .keyboardType(.default)
                             
                         }
                         
                         // Eye icon for password visibility toggle
                         Button(action: {
-                            model.isPasswordVisible.toggle()
+                            onboardingModel.isPasswordVisible.toggle()
                         }) {
-                            Image(systemName: model.isPasswordVisible ? "eye.slash.fill" : "eye.fill")
-                                .foregroundColor(model.globalSettings.primaryYellowColor)
+                            Image(systemName: onboardingModel.isPasswordVisible ? "eye.slash.fill" : "eye.fill")
+                                .foregroundColor(onboardingModel.globalSettings.primaryYellowColor)
                         }
                         .padding(.trailing, 10)
                     }
@@ -81,8 +81,8 @@ struct LoginView: View {
             
                 
                 // Error message
-                if !model.errorMessage.isEmpty {
-                    Text(model.errorMessage)
+                if !onboardingModel.errorMessage.isEmpty {
+                    Text(onboardingModel.errorMessage)
                         .foregroundColor(.red)
                         .font(.system(size: 14))
                         .padding(.horizontal)
@@ -98,7 +98,7 @@ struct LoginView: View {
                     Text("Login")
                         .frame(maxWidth: .infinity)
                         .frame(height: 44)
-                        .background(model.globalSettings.primaryYellowColor)
+                        .background(onboardingModel.globalSettings.primaryYellowColor)
                         .foregroundColor(.white)
                         .cornerRadius(12)
                         .font(.system(size: 16, weight: .semibold))
@@ -117,7 +117,7 @@ struct LoginView: View {
                         .frame(maxWidth: .infinity)
                         .frame(height: 44)
                         .background(.gray.opacity(0.2))
-                        .foregroundColor(model.globalSettings.primaryDarkColor)
+                        .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
                         .cornerRadius(12)
                         .font(.system(size: 16, weight: .semibold))
                 }
@@ -134,10 +134,10 @@ struct LoginView: View {
 
     // Resets login info and error message when user cancels login page
     func resetLoginInfo() {
-        model.showLoginPage = false
+        onboardingModel.showLoginPage = false
         email = ""
         password = ""
-        model.errorMessage = ""
+        onboardingModel.errorMessage = ""
     }
 
     
@@ -145,7 +145,7 @@ struct LoginView: View {
     // function for login user
     func loginUser() {
         guard !email.isEmpty, !password.isEmpty else {
-            self.model.errorMessage = "Please fill in all fields."
+            self.onboardingModel.errorMessage = "Please fill in all fields."
             return
         }
 
@@ -158,7 +158,7 @@ struct LoginView: View {
         let url = URL(string: "http://127.0.0.1:8000/login/")!
         var request = URLRequest(url: url)
 
-        print("current token: \(model.authToken)")
+        print("current token: \(onboardingModel.authToken)")
         // HTTP POST request to login user and receive JWT token
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -172,11 +172,11 @@ struct LoginView: View {
                     if let data = data,
                        let decodedResponse = try? JSONDecoder().decode(LoginResponse.self, from: data) {
                         DispatchQueue.main.async {
-                            model.authToken = decodedResponse.access_token
+                            onboardingModel.authToken = decodedResponse.access_token
                             
-                            KeychainWrapper.standard.set(self.model.authToken, forKey: "authToken")
-                            model.isLoggedIn = true
-                            model.showLoginPage = false
+                            KeychainWrapper.standard.set(self.onboardingModel.authToken, forKey: "authToken")
+                            onboardingModel.isLoggedIn = true
+                            onboardingModel.showLoginPage = false
                             
                             userManager.updateUserKeychain(
                                 email: decodedResponse.email,
@@ -184,8 +184,8 @@ struct LoginView: View {
                                 lastName: decodedResponse.last_name
                             )
                             
-                            print("Auth token: \(self.model.authToken)")
-                            print("Login success: \(self.model.isLoggedIn)")
+                            print("Auth token: \(self.onboardingModel.authToken)")
+                            print("Login success: \(self.onboardingModel.isLoggedIn)")
                             print("Email: \(decodedResponse.email)")
                             print("First name: \(decodedResponse.first_name)")
                             print("Last name: \(decodedResponse.last_name)")
@@ -193,12 +193,12 @@ struct LoginView: View {
                     }
                 case 401:
                     DispatchQueue.main.async {
-                        self.model.errorMessage = "Invalid credentials, please try again."
+                        self.onboardingModel.errorMessage = "Invalid credentials, please try again."
                         print("❌ Login failed: Invalid credentials")
                     }
                 default:
                     DispatchQueue.main.async {
-                        self.model.errorMessage = "Failed to login. Please try again."
+                        self.onboardingModel.errorMessage = "Failed to login. Please try again."
                         if let data = data, let responseString = String(data: data, encoding: .utf8) {
                             print("Response data not fully completed: \(responseString)")
                         }
@@ -206,7 +206,7 @@ struct LoginView: View {
                 }
             } else if let error = error {
                 DispatchQueue.main.async {
-                    self.model.errorMessage = "Network error. Please try again."
+                    self.onboardingModel.errorMessage = "Network error. Please try again."
                     print("Login error: \(error.localizedDescription)")
                 }
             }

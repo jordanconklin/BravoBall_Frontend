@@ -91,10 +91,10 @@ class DrillSearchService {
             throw NSError(domain: "DrillSearchService", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid response"])
         }
         
-        // For debugging - print the response
-        if let responseString = String(data: data, encoding: .utf8) {
-            print("📥 Search API Response: \(responseString)")
-        }
+//        // For debugging - print the response
+//        if let responseString = String(data: data, encoding: .utf8) {
+//            print("📥 Search API Response: \(responseString)")
+//        }
         
         if httpResponse.statusCode == 200 {
             print("✅ Successfully retrieved drill search results")
