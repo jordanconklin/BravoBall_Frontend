@@ -107,7 +107,7 @@ class PreferencesUpdateService {
         DispatchQueue.main.asyncAfter(deadline: .now() + debounceInterval, execute: workItem)
     }
 
-    // The actual backend call logic, extracted for debouncing
+    // The actual call-to-backend logic, extracted for debouncing
     private func performUpdatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel) async throws {
         let url = URL(string: "\(baseURL)/api/session/preferences")!
         var request = URLRequest(url: url)

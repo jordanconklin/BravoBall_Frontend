@@ -144,7 +144,7 @@ class SessionGeneratorModel: ObservableObject {
     }
     // didset in savedFilters func
     
-
+    
     // MARK: Init
     
     init(appModel: MainAppModel, onboardingData: OnboardingModel.OnboardingData) {
@@ -232,7 +232,7 @@ class SessionGeneratorModel: ObservableObject {
         var hasAnyChanges: Bool {
             return
                    orderedDrillsChanged ||
-                   savedFiltersChanged ||
+                   savedFiltersChanged || 
                    progressHistoryChanged || 
                    likedDrillsChanged || 
                    savedDrillsChanged ||
@@ -303,10 +303,10 @@ class SessionGeneratorModel: ObservableObject {
                 // Only sync what has changed
                 if changeTracker.orderedDrillsChanged {
                     if let sessionId = currentSessionId {
-                        try await DataSyncService.shared.syncOrderedSessionDrills(
+                    try await DataSyncService.shared.syncOrderedSessionDrills(
                             sessionDrills: orderedSessionDrills,
                             sessionId: sessionId
-                        )
+                    )
                     } else {
                         print("⚠️ Warning: currentSessionId is nil, cannot sync ordered drills.")
                     }
@@ -510,7 +510,7 @@ class SessionGeneratorModel: ObservableObject {
             // Only update if we found matching skills
             if !newSkills.isEmpty {
                 selectedSkills = newSkills
-                print("✅ Updated focus areas: \(selectedSkills.joined(separator: ", "))")
+        print("✅ Updated focus areas: \(selectedSkills.joined(separator: ", "))")
             }
         
         // Clear any existing drills

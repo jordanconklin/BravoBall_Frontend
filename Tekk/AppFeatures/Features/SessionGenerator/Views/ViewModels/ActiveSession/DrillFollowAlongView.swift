@@ -16,31 +16,34 @@ struct DrillFollowAlongView: View {
     
     @Environment(\.dismiss) private var dismiss
     @State private var isPlaying = false
-    @State private var restartTime: TimeInterval
-    @State private var elapsedTime: TimeInterval
+    @State private var restartTime: TimeInterval = 0
+    @State private var elapsedTime: TimeInterval = 0
     @State private var countdownValue: Int?
     @State private var displayCountdown: Bool = true
     @State private var timer: Timer?
     
     
     init(appModel: MainAppModel, sessionModel: SessionGeneratorModel, editableDrill: Binding<EditableDrillModel>) {
+        // First initialize all properties
         self.appModel = appModel
         self.sessionModel = sessionModel
         self._editableDrill = editableDrill
+        
+        // Calculate set duration
+        let setDuration = calculateSetDuration(
+            totalDuration: editableDrill.wrappedValue.totalDuration,
+            totalSets: editableDrill.wrappedValue.totalSets
+        )
+        
+        // Initialize all @State properties
         self._showDrillDetailView = State(initialValue: false)
         self._isPlaying = State(initialValue: false)
         self._countdownValue = State(initialValue: nil)
         self._displayCountdown = State(initialValue: false)
         self._timer = State(initialValue: nil)
-        // Calculate per-set duration in seconds
-        let totalDurationSeconds = Double(editableDrill.wrappedValue.totalDuration) * 60
-        let totalBreakSeconds = Double((editableDrill.wrappedValue.totalSets - 1)) * 45
-        let perSetDuration = (totalDurationSeconds - totalBreakSeconds) / Double(editableDrill.wrappedValue.totalSets)
-        let roundedDuration = (perSetDuration / 10.0).rounded() * 10.0 // round to nearest 10s
-        self._restartTime = State(initialValue: roundedDuration)
-        self._elapsedTime = State(initialValue: roundedDuration)
+        self._restartTime = State(initialValue: setDuration)
+        self._elapsedTime = State(initialValue: setDuration)
     }
-    
 
     
     var body: some View {
@@ -318,6 +321,45 @@ struct DrillFollowAlongView: View {
         let minutes = Int(timeInterval) / 60
         let seconds = Int(timeInterval) % 60
         return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    func calculateSetDuration(totalDuration: Int, totalSets: Int, breakDuration: Int = 45) -> TimeInterval {
+        // Convert total duration to seconds
+        let totalDurationSeconds = Double(totalDuration) * 60.0
+        
+        // Calculate total break time
+        let totalBreakSeconds = Double(totalSets - 1) * Double(breakDuration)
+        
+        // Calculate available time for sets
+        let availableTimeForSets = totalDurationSeconds - totalBreakSeconds
+        
+        // Ensure minimum set duration (e.g., 30 seconds)
+        let minimumSetDuration: Double = 10.0
+        
+        // Calculate base set duration
+        var setDuration = availableTimeForSets / Double(totalSets)
+        
+        // If set duration is too short, adjust break duration
+        if setDuration < minimumSetDuration {
+            // Calculate how much time we need for minimum sets
+            let requiredTimeForSets = minimumSetDuration * Double(totalSets)
+            
+            // Calculate new break duration that fits within total time
+            let newBreakDuration = (totalDurationSeconds - requiredTimeForSets) / Double(totalSets - 1)
+            
+            // Use the minimum set duration
+            setDuration = minimumSetDuration
+            
+            // Round break duration to nearest 5 seconds
+            let roundedBreakDuration = (newBreakDuration / 5.0).rounded() * 5.0
+            
+            print("⚠️ Adjusted break duration to \(roundedBreakDuration) seconds to maintain minimum set duration")
+            return setDuration
+        }
+        
+        // Round to nearest 10 seconds
+        let roundedDuration = (setDuration / 10.0).rounded() * 10.0
+        return roundedDuration
     }
 }
 

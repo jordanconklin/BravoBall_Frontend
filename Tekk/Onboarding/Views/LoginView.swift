@@ -144,6 +144,8 @@ struct LoginView: View {
     // MARK: - Login user function
     // function for login user
     func loginUser() {
+        
+        
         guard !email.isEmpty, !password.isEmpty else {
             self.onboardingModel.errorMessage = "Please fill in all fields."
             return
@@ -175,6 +177,7 @@ struct LoginView: View {
                             onboardingModel.authToken = decodedResponse.access_token
                             
                             KeychainWrapper.standard.set(self.onboardingModel.authToken, forKey: "authToken")
+                            userManager.userHasAccountHistory = true
                             onboardingModel.isLoggedIn = true
                             onboardingModel.showLoginPage = false
                             

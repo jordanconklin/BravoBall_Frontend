@@ -30,8 +30,8 @@ struct ContentView: View {
                 if onboardingModel.isLoggedIn {
                     MainTabView(onboardingModel: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
                         .onAppear {
-                            // Only load cache and sync with backend after onboarding is complete
-                            if onboardingModel.onboardingComplete {
+                            // Load cached data if user has history
+                            if userInfoManager.userHasAccountHistory {
                                 appModel.loadCachedData()
                                 sessionGenModel.loadCachedData()
                             }

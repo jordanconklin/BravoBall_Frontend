@@ -81,7 +81,6 @@ struct SessionCompleteView: View {
     // Keep ordered session drills populated
     private func resetSessionState() {
         
-        sessionModel.selectedSkills = []
         appModel.viewState.showFieldBehindHomePage = false
         appModel.viewState.showHomePage = true
         appModel.viewState.showPreSessionTextBubble = true
