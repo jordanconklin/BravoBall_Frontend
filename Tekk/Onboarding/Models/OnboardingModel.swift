@@ -60,7 +60,7 @@ class OnboardingModel: ObservableObject {
         ["Beginner", "Intermediate", "Advanced", "Professional"],
         ["Goalkeeper", "Fullback", "Center-back", "Defensive Midfielder", "Center Midfielder",
          "Attacking Midfielder", "Winger", "Striker"],
-        ["Alan Virgilus", "Harry Maguire", "Big Sean", "Big Adam", "Big Bob", "Oscar Bobb"],
+        ["Lionel Messi", "Cristiano Ronaldo", "Neymar Jr", "Jamal Musiala", "Eden Hazard", "Reece James", "William Saliba", "Marta", "Karim Benzema", "Jules Kounde", "Kevin De Bruyne", "Christian Pulisic", "Busquets", "Harry Maguire", "Casemiro", "Bukayo Saka", "Sergio Ramos", "Manuel Neuer", "Alex Balde", "Mo Salah", "Alex Morgan", "Dani Alves", "Aitana Bonmati", "Mesut Ozil", "Jordi Alba", "Joshua Kimmich", "Lamine Yamal", "Antonee Robinson", "Puyol", "Modric", "David Silva", "Rodri", "Bruno Fernandes", "Vivianne Meidema", "Kylian Mbappe", "Xavi", "Allison", "Ngolo Kante", "Harry Kane", "Sergio Aguero", "Erling Haaland", "Gareth Bale", "Thierry Henry", "Thibaut Courtois", "Vinicius Jr", "Iniesta"],
         ["Youth (Under 12)", "Teen (13-16)", "Junior (17-19)", "Adult (20-29)", "Senior (30+)"],
         ["Passing", "Dribbling", "Shooting", "Defending", "First touch", "Fitness"],
         ["Passing", "Dribbling", "Shooting", "Defending", "First touch", "Fitness"],

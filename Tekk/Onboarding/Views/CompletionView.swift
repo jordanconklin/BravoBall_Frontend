@@ -73,7 +73,7 @@ struct CompletionView: View {
                     
                     Button(action: {
                         withAnimation(.spring()) {
-                            submitOnboardingData()
+                            submitData()
                         }
                     }) {
                         Text("Start Training")
@@ -90,38 +90,6 @@ struct CompletionView: View {
         }
         .onAppear {
             submitData()
-        }
-    }
-    
-    private func submitOnboardingData() {
-        isLoading = true
-        errorMessage = ""
-        
-        OnboardingService.shared.submitOnboardingData(data: onboardingModel.onboardingData) { result in
-            DispatchQueue.main.async {
-                self.isLoading = false
-                
-                switch result {
-                case .success(let response):
-                    // Save the auth token
-                    self.onboardingModel.authToken = response.access_token
-                    
-                    // Update the decoded user info into UserManager
-                    self.userManager.updateUserKeychain(
-                        email: self.onboardingModel.onboardingData.email,
-                        firstName: self.onboardingModel.onboardingData.firstName,
-                        lastName: self.onboardingModel.onboardingData.lastName
-                    )
-                    
-                    // Set user as logged in
-                    self.onboardingModel.isLoggedIn = true
-                    self.onboardingModel.onboardingComplete = true
-                    
-                case .failure(let error):
-                    self.errorMessage = "Error: \(error.localizedDescription)"
-                    print("Onboarding submission error: \(error)")
-                }
-            }
         }
     }
     

@@ -17,6 +17,7 @@ class UserManager: ObservableObject {
     @Published var email: String = ""
     @Published var authToken: String = ""
     @Published var isLoggedIn: Bool = false
+    @Published var userHasAccountHistory: Bool = false
     
     private let keychain = KeychainWrapper.standard
     
@@ -100,6 +101,7 @@ class UserManager: ObservableObject {
         email = ""
         authToken = ""
         isLoggedIn = false
+        userHasAccountHistory = false
         
     
         // Remove from UserDefaults and Keychain
