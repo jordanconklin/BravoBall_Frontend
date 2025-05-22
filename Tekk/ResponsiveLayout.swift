@@ -53,6 +53,10 @@ struct ResponsiveLayout {
         isPad ? 30 : 20
     }
     
+    var homePageTopSpacing: CGFloat {
+        isPad ? 40 : 35
+    }
+    
     var largeSpacing: CGFloat {
         isPad ? 40 : 25
     }
