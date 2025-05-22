@@ -13,6 +13,7 @@ struct SearchSkillsView: View {
     @Environment(\.viewGeometry) var geometry
     
     @Binding var searchText: String
+    @FocusState private var isFocused: Bool
     
     var body: some View {
         VStack {
@@ -52,8 +53,11 @@ struct SearchSkillsView: View {
             }
             .disabled(sessionModel.selectedSkills.isEmpty)
             .padding(.horizontal)
-            .padding(.bottom, 80)
+            .padding(.bottom, 30)
         }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
+        .animation(.easeOut(duration: 0.16), value: isFocused)
+        
     }
     
 
@@ -79,5 +83,3 @@ struct SearchSkillsView: View {
         return matchingSkills
     }
 }
-
-
