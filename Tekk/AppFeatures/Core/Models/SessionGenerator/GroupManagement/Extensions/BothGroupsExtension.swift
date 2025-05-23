@@ -56,10 +56,12 @@ extension SessionGeneratorModel: BothGroupsManagement {
                             reps: drillResponse.reps ?? 0,
                             duration: drillResponse.duration,
                             description: drillResponse.description,
+                            instructions: drillResponse.instructions,
                             tips: drillResponse.tips,
                             equipment: drillResponse.equipment,
                             trainingStyle: drillResponse.intensity,
-                            difficulty: drillResponse.difficulty
+                            difficulty: drillResponse.difficulty,
+                            videoURL: drillResponse.videoURL
                         )
                     }
                 )

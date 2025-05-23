@@ -496,19 +496,37 @@ struct PrivacyPolicyView: View {
                     Text("Privacy Policy")
                         .font(.custom("Poppins-Bold", size: 24))
                     
-                    Text("Last updated: \(Date().formatted(date: .long, time: .omitted))")
+                    Text("Last updated: May 2024")
                         .font(.custom("Poppins-Regular", size: 14))
                         .foregroundColor(.gray)
                     
                     Group {
-                        policySection(title: "Information We Collect",
-                                    content: "We collect information that you provide directly to us, including name, email address, and training preferences.")
+                        policySection(title: "1. Introduction",
+                                      content: "BravoBall (the \"App\") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our App.")
                         
-                        policySection(title: "How We Use Your Information",
-                                    content: "We use the information we collect to provide and improve our services, communicate with you, and personalize your training experience.")
+                        policySection(title: "2. Information We Collect",
+                                      content: "We collect information you provide directly to us, such as your name, email address, training preferences, and any other information you choose to provide. We may also collect usage data, device information, and analytics data to improve the App.")
                         
-                        policySection(title: "Data Security",
-                                    content: "We implement appropriate security measures to protect your personal information.")
+                        policySection(title: "3. How We Use Your Information",
+                                      content: "We use your information to: (a) provide and personalize our services; (b) communicate with you; (c) improve and optimize the App; (d) comply with legal obligations; and (e) protect the security and integrity of the App.")
+                        
+                        policySection(title: "4. Sharing Your Information",
+                                      content: "We do not sell your personal information. We may share your information with trusted third-party service providers who assist us in operating the App, as required by law, or to protect our rights. All third parties are required to protect your information and use it only for the purposes we specify.")
+                        
+                        policySection(title: "5. Data Security",
+                                      content: "We implement reasonable security measures to protect your personal information from unauthorized access, disclosure, alteration, or destruction. However, no method of transmission over the Internet or electronic storage is 100% secure.")
+                        
+                        policySection(title: "6. Your Rights",
+                                      content: "You may access, update, or delete your personal information at any time by contacting us at conklinofficialsoccer@gmail.com. You may also request that we stop using your information for certain purposes.")
+                        
+                        policySection(title: "7. Children's Privacy",
+                                      content: "The App is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If we become aware that we have collected such information, we will take steps to delete it.")
+                        
+                        policySection(title: "8. Changes to This Policy",
+                                      content: "We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new policy in the App. Your continued use of the App after changes are posted constitutes your acceptance of those changes.")
+                        
+                        policySection(title: "9. Contact Us",
+                                      content: "If you have any questions or concerns about this Privacy Policy, please contact us at conklinofficialsoccer@gmail.com.")
                     }
                 }
                 .padding()
@@ -537,19 +555,43 @@ struct TermsOfServiceView: View {
                     Text("Terms of Service")
                         .font(.custom("Poppins-Bold", size: 24))
                     
-                    Text("Last updated: \(Date().formatted(date: .long, time: .omitted))")
+                    Text("Last updated: May 2024")
                         .font(.custom("Poppins-Regular", size: 14))
                         .foregroundColor(.gray)
                     
                     Group {
-                        termsSection(title: "Agreement to Terms",
-                                   content: "By accessing or using BravoBall, you agree to be bound by these Terms.")
+                        termsSection(title: "1. Acceptance of Terms",
+                                     content: "By accessing or using BravoBall, you agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree, please do not use the App.")
                         
-                        termsSection(title: "User Responsibilities",
-                                   content: "You are responsible for maintaining the confidentiality of your account and for all activities that occur under your account.")
+                        termsSection(title: "2. Use of the App",
+                                     content: "You agree to use the App only for lawful purposes and in accordance with these Terms. You are responsible for maintaining the confidentiality of your account and for all activities that occur under your account.")
                         
-                        termsSection(title: "Acceptable Use",
-                                   content: "You agree to use the app only for lawful purposes and in accordance with these Terms of Service.")
+                        termsSection(title: "3. User Content",
+                                     content: "You retain ownership of any content you submit to the App, but you grant us a non-exclusive, worldwide, royalty-free license to use, display, and distribute your content as necessary to provide the App's services.")
+                        
+                        termsSection(title: "4. Prohibited Conduct",
+                                     content: "You agree not to: (a) use the App for any unlawful purpose; (b) attempt to gain unauthorized access to any part of the App; (c) interfere with or disrupt the App or its servers; (d) upload viruses or malicious code; or (e) violate any applicable laws or regulations.")
+                        
+                        termsSection(title: "5. Intellectual Property",
+                                     content: "All content, features, and functionality of the App (excluding user content) are the exclusive property of BravoBall and its licensors. You may not copy, modify, or distribute any part of the App without our prior written consent.")
+                        
+                        termsSection(title: "6. Termination",
+                                     content: "We reserve the right to suspend or terminate your access to the App at any time, without notice, for conduct that we believe violates these Terms or is otherwise harmful to other users or the App.")
+                        
+                        termsSection(title: "7. Disclaimer of Warranties",
+                                     content: "The App is provided on an \"as is\" and \"as available\" basis. We make no warranties, express or implied, regarding the App's operation or availability.")
+                        
+                        termsSection(title: "8. Limitation of Liability",
+                                     content: "To the fullest extent permitted by law, BravoBall and its affiliates shall not be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with your use of the App.")
+                        
+                        termsSection(title: "9. Changes to Terms",
+                                     content: "We may update these Terms of Service from time to time. We will notify you of any material changes by posting the new terms in the App. Your continued use of the App after changes are posted constitutes your acceptance of those changes.")
+                        
+                        termsSection(title: "10. Governing Law",
+                                     content: "These Terms are governed by the laws of the United States and the State of California, without regard to conflict of law principles.")
+                        
+                        termsSection(title: "11. Contact Us",
+                                     content: "If you have any questions about these Terms, please contact us at conklinofficialsoccer@gmail.com.")
                     }
                 }
                 .padding()

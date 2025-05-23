@@ -95,10 +95,12 @@ struct DrillCard_Previews: PreviewProvider {
             reps: 10,
             duration: 15,
             description: "Practice quick one-touch passes with a partner or wall.",
+            instructions: [""],
             tips: ["Keep your ankle locked", "Follow through"],
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "Medium Intensity",
-            difficulty: "Beginner"
+            difficulty: "Beginner",
+            videoURL: nil
         )
         let editableDrill = EditableDrillModel(
             drill: drill,

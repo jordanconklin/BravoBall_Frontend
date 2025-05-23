@@ -231,45 +231,57 @@ struct CalendarView: View {
     // MARK: testing function
     private func addDrill(for date: Date) {
         let addedTestDrillsOne = DrillModel(
-            title: "Cone weaves",
-            skill: "Dribbling",
-            subSkills: ["close_control"],
-            sets: 4,
-            reps: 8,
-            duration: 20,
-            description: "Weave through cones to improve close control and agility",
-            tips: ["Keep the ball close", "Use both feet", "Look up while dribbling"],
-            equipment: ["Ball", "Cones"],
-            trainingStyle: "Medium Intensity",
-            difficulty: "Beginner"
+            id: UUID(),
+            backendId: 1,
+            title: "Test Drill 1",
+            skill: "Passing",
+            subSkills: ["short_passing"],
+            sets: 3,
+            reps: 10,
+            duration: 15,
+            description: "Test description 1",
+            instructions: [""],
+            tips: ["Tip 1"],
+            equipment: ["Ball"],
+            trainingStyle: "Medium",
+            difficulty: "Beginner",
+            videoURL: nil
         )
         
         let addedTestDrillsTwo = DrillModel(
-            title: "Toe-taps",
-            skill: "Dribbling",
-            subSkills: ["close_control"],
-            sets: 3,
-            reps: 20,
-            duration: 10,
-            description: "Quick toe-taps to improve foot speed and coordination",
-            tips: ["Stay on your toes", "Maintain rhythm", "Keep balanced"],
-            equipment: ["Ball"],
-            trainingStyle: "High Intensity",
-            difficulty: "Beginner"
+            id: UUID(),
+            backendId: 2,
+            title: "Test Drill 2",
+            skill: "Shooting",
+            subSkills: ["power_shots"],
+            sets: 4,
+            reps: 8,
+            duration: 20,
+            description: "Test description 2",
+            instructions: [""],
+            tips: ["Tip 2"],
+            equipment: ["Ball", "Goal"],
+            trainingStyle: "High",
+            difficulty: "Intermediate",
+            videoURL: nil
         )
         
         let addedTestDrillsThree = DrillModel(
-            title: "Ronaldinho Drill",
+            id: UUID(),
+            backendId: 3,
+            title: "Test Drill 3",
             skill: "Dribbling",
-            subSkills: ["close_control"],
-            sets: 4,
-            reps: 3,
-            duration: 15,
-            description: "Advanced ball control drill inspired by Ronaldinho",
-            tips: ["Focus on technique", "Start slow, build speed", "Practice both directions"],
-            equipment: ["Ball"],
-            trainingStyle: "High Intensity",
-            difficulty: "Advanced"
+            subSkills: ["1v1_moves"],
+            sets: 2,
+            reps: 12,
+            duration: 10,
+            description: "Test description 3",
+            instructions: [""],
+            tips: ["Tip 3"],
+            equipment: ["Ball", "Cones"],
+            trainingStyle: "Low",
+            difficulty: "Advanced",
+            videoURL: nil
         )
         
         let testDrillOne = EditableDrillModel(drill: addedTestDrillsOne, setsDone: 0, totalSets: addedTestDrillsOne.sets, totalReps: addedTestDrillsOne.reps, totalDuration: addedTestDrillsOne.duration, isCompleted: true)

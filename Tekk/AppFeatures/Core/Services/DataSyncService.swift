@@ -476,6 +476,7 @@ class DataSyncService {
         let rest: Int?
         let primarySkill: DrillResponse.Skill?
         let secondarySkills: [DrillResponse.Skill]?
+        let videoURL: String
         
         // Convert to a DrillResponse
         func toDrillResponse() -> DrillResponse {
@@ -495,7 +496,8 @@ class DataSyncService {
                 reps: self.reps,
                 rest: self.rest,
                 primarySkill: self.primarySkill,
-                secondarySkills: self.secondarySkills
+                secondarySkills: self.secondarySkills,
+                videoURL: self.videoURL
             )
         }
     }
