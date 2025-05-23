@@ -60,6 +60,7 @@ struct SessionGeneratorHomePage: View {
 //                                                .padding(.horizontal, appModel.layout.contentMinPadding)
 //                                        }
                                     }
+                                    .padding(.bottom, 120)
                                 }
                                 .frame(maxWidth: appModel.layout.adaptiveWidth(geometry))
                             }

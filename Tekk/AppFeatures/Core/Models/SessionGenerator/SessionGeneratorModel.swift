@@ -380,10 +380,12 @@ class SessionGeneratorModel: ObservableObject {
             reps: 10,
             duration: 15,
             description: "Practice accurate short passes with a partner or wall.",
+            instructions: [""],
             tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "High Intensity",
-            difficulty: "Beginner"
+            difficulty: "Beginner",
+            videoURL: nil
         ),
         DrillModel(
             title: "Short Passing Drill Two",
@@ -393,10 +395,12 @@ class SessionGeneratorModel: ObservableObject {
             reps: 10,
             duration: 15,
             description: "Practice accurate short passes with a partner or wall.",
+            instructions: [""],
             tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "High Intensity",
-            difficulty: "Beginner"
+            difficulty: "Beginner",
+            videoURL: nil
         ),
         DrillModel(
             title: "Short Passing Drill Three",
@@ -406,10 +410,12 @@ class SessionGeneratorModel: ObservableObject {
             reps: 10,
             duration: 15,
             description: "Practice accurate short passes with a partner or wall.",
+            instructions: [""],
             tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "High Intensity",
-            difficulty: "Beginner"
+            difficulty: "Beginner",
+            videoURL: nil
         ),
         DrillModel(
             title: "Short Passing Four",
@@ -419,10 +425,12 @@ class SessionGeneratorModel: ObservableObject {
             reps: 10,
             duration: 15,
             description: "Practice accurate short passes with a partner or wall.",
+            instructions: [""],
             tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "High Intensity",
-            difficulty: "Beginner"
+            difficulty: "Beginner",
+            videoURL: nil
         ),
         DrillModel(
             title: "Long Passing Practice",
@@ -432,10 +440,12 @@ class SessionGeneratorModel: ObservableObject {
             reps: 8,
             duration: 20,
             description: "Improve your long-range passing accuracy.",
+            instructions: [""],
             tips: ["Lock ankle", "Follow through", "Watch ball contact"],
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "Medium Intensity",
-            difficulty: "Intermediate"
+            difficulty: "Intermediate",
+            videoURL: nil
         ),
         DrillModel(
             title: "Through Ball Training",
@@ -445,10 +455,12 @@ class SessionGeneratorModel: ObservableObject {
             reps: 6,
             duration: 15,
             description: "Practice timing and weight of through passes.",
+            instructions: [""],
             tips: ["Look for space", "Time the pass", "Weight it properly"],
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "Medium Intensity",
-            difficulty: "Intermediate"
+            difficulty: "Intermediate",
+            videoURL: nil
         ),
         DrillModel(
             title: "Power Shot Practice",
@@ -458,10 +470,12 @@ class SessionGeneratorModel: ObservableObject {
             reps: 5,
             duration: 20,
             description: "Work on powerful shots on goal.",
+            instructions: [""],
             tips: ["Plant foot beside ball", "Strike with laces", "Follow through"],
             equipment: ["Soccer ball", "Goal"],
             trainingStyle: "High Intensity",
-            difficulty: "Intermediate"
+            difficulty: "Intermediate",
+            videoURL: nil
         ),
         DrillModel(
             title: "1v1 Dribbling Skills",
@@ -471,10 +485,12 @@ class SessionGeneratorModel: ObservableObject {
             reps: 8,
             duration: 15,
             description: "Master close ball control and quick direction changes.",
+            instructions: [""],
             tips: ["Keep ball close", "Use both feet", "Change pace"],
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "High Intensity",
-            difficulty: "Intermediate"
+            difficulty: "Intermediate",
+            videoURL: nil
         )
     ]
 

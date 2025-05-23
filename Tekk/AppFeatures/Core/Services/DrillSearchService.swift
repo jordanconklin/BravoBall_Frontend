@@ -158,6 +158,10 @@ class DrillSearchService {
                             }
                         }
                         
+                        let videoURL = item["video_url"] as? String ?? ""
+                        
+                        
+                        
                         let drillResponse = DrillResponse(
                             id: id,
                             title: title,
@@ -174,7 +178,8 @@ class DrillSearchService {
                             reps: reps,
                             rest: rest,
                             primarySkill: primarySkill,
-                            secondarySkills: secondarySkills
+                            secondarySkills: secondarySkills,
+                            videoURL: videoURL
                         )
                         
                         drillResponses.append(drillResponse)
@@ -268,6 +273,10 @@ class DrillSearchService {
                                 let primarySkill = item["primary_skill"] as? DrillResponse.Skill
                                 let secondarySkills = item["secondary_skills"] as? [DrillResponse.Skill]
                                 
+                                let videoURL = item["video_url"] as? String ?? ""
+                                
+                                
+                                
                                 let drillResponse = DrillResponse(
                                     id: id,
                                     title: title,
@@ -284,7 +293,8 @@ class DrillSearchService {
                                     reps: reps,
                                     rest: rest,
                                     primarySkill: primarySkill,
-                                    secondarySkills: secondarySkills
+                                    secondarySkills: secondarySkills,
+                                    videoURL: videoURL
                                 )
                                 
                                 drillResponses.append(drillResponse)
@@ -347,7 +357,8 @@ class DrillSearchService {
                 secondarySkills: [
                     DrillResponse.Skill(category: "passing", subSkill: "first_touch"),
                     DrillResponse.Skill(category: "passing", subSkill: "ball_control")
-                ]
+                ],
+                videoURL: ""
             ),
             DrillResponse(
                 id: 2,
@@ -368,7 +379,8 @@ class DrillSearchService {
                 secondarySkills: [
                     DrillResponse.Skill(category: "passing", subSkill: "first_touch"),
                     DrillResponse.Skill(category: "passing", subSkill: "ball_control")
-                ]
+                ],
+                videoURL: ""
             ),
             DrillResponse(
                 id: 3,
@@ -389,7 +401,8 @@ class DrillSearchService {
                 secondarySkills: [
                     DrillResponse.Skill(category: "passing", subSkill: "first_touch"),
                     DrillResponse.Skill(category: "passing", subSkill: "ball_control")
-                ]
+                ],
+                videoURL: ""
             ),
             DrillResponse(
                 id: 4,
@@ -410,7 +423,8 @@ class DrillSearchService {
                 secondarySkills: [
                     DrillResponse.Skill(category: "passing", subSkill: "first_touch"),
                     DrillResponse.Skill(category: "passing", subSkill: "ball_control")
-                ]
+                ],
+                videoURL: ""
             ),
             DrillResponse(
                 id: 5,
@@ -431,7 +445,8 @@ class DrillSearchService {
                 secondarySkills: [
                     DrillResponse.Skill(category: "passing", subSkill: "first_touch"),
                     DrillResponse.Skill(category: "passing", subSkill: "ball_control")
-                ]
+                ],
+                videoURL: ""
             )
         ]
         
@@ -463,10 +478,12 @@ class DrillSearchService {
                 reps: drillModel.reps,
                 duration: drillModel.duration,
                 description: drillModel.description,
+                instructions: drillModel.instructions,
                 tips: drillModel.tips,
                 equipment: drillModel.equipment,
                 trainingStyle: drillModel.trainingStyle,
-                difficulty: drillModel.difficulty
+                difficulty: drillModel.difficulty,
+                videoURL: response.videoURL
             )
         }
     }

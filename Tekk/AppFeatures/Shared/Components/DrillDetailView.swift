@@ -8,6 +8,7 @@
 
 import SwiftUI
 import RiveRuntime
+import AVKit
 
 struct DrillDetailView: View {
     
@@ -18,6 +19,7 @@ struct DrillDetailView: View {
     @Environment(\.viewGeometry) var geometry
     @Environment(\.dismiss) private var dismiss
     @State private var showSaveDrill: Bool = false
+    @State private var showVideoPlayer = false
     
     // MARK: Main view
     var body: some View {
@@ -82,19 +84,13 @@ struct DrillDetailView: View {
                         }
                         .padding()
                         
-                        // Video preview
-                        ZStack {
-                            Rectangle()
-                                .fill(Color.black.opacity(0.1))
+                        if let videoURLString = drill.videoURL, !videoURLString.isEmpty,
+                           let videoURL = URL(string: videoURLString) {
+
+                            VideoPlayer(player: AVPlayer(url: videoURL))
                                 .aspectRatio(16/9, contentMode: .fit)
                                 .cornerRadius(12)
-                            
-                            Button(action: { /* Play video preview */ }) {
-                                Image(systemName: "play.circle.fill")
-                                    .font(.system(size: 50))
-                                    .foregroundColor(.white)
-                                    .background(Circle().fill(Color.black.opacity(0.5)))
-                            }
+                                .frame(maxWidth: .infinity)
                         }
                         
                         // Drill information
@@ -120,6 +116,23 @@ struct DrillDetailView: View {
                             Text(drill.description)
                                 .font(.custom("Poppins-Regular", size: 16))
                                 .foregroundColor(appModel.globalSettings.primaryGrayColor)
+                        }
+                        
+                        // Instructions
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Instructions")
+                                .font(.custom("Poppins-Bold", size: 18))
+                                .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                            ForEach(Array(drill.instructions.enumerated()), id: \.element) { index, instruction in
+                                HStack(alignment: .top, spacing: 8) {
+                                    Text("\(index + 1).")
+                                        .font(.custom("Poppins-Bold", size: 16))
+                                        .foregroundColor(appModel.globalSettings.primaryGrayColor)
+                                    Text(instruction)
+                                        .font(.custom("Poppins-Regular", size: 16))
+                                        .foregroundColor(appModel.globalSettings.primaryGrayColor)
+                                }
+                            }
                         }
                         
                         // Tips
@@ -256,6 +269,7 @@ struct DrillDetailView: View {
         reps: 10,
         duration: 15,
         description: "A fast-paced drill designed to improve passing accuracy and ball control under pressure. Players work in pairs to complete a series of quick passes while moving.",
+        instructions: [""],
         tips: [
             "Keep your head up while dribbling",
             "Use both feet for passing",
@@ -269,7 +283,8 @@ struct DrillDetailView: View {
             "Partner"
         ],
         trainingStyle: "Technical",
-        difficulty: "Intermediate"
+        difficulty: "Intermediate",
+        videoURL: nil
     )
     
     let mockAppModel = MainAppModel()
