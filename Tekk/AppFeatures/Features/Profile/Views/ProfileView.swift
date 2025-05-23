@@ -144,7 +144,7 @@ struct ProfileView: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .padding()
+        .padding(.top, geometry.safeAreaInsets.top)
         .background(Color.white)
     }
     
