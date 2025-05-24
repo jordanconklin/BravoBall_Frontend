@@ -19,7 +19,7 @@ struct DrillDetailView: View {
     @Environment(\.viewGeometry) var geometry
     @Environment(\.dismiss) private var dismiss
     @State private var showSaveDrill: Bool = false
-    @State private var showVideoPlayer = false
+
     
     // MARK: Main view
     var body: some View {
