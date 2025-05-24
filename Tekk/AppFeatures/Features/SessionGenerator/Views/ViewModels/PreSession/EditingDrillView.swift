@@ -7,6 +7,7 @@
 
 import SwiftUI
 import RiveRuntime
+import AVKit
 
 // TODO: make this code cleaner, and fix the values passed in for totalsets, totalreps, and totalduration
 
@@ -33,13 +34,12 @@ struct EditingDrillView: View {
                 HStack {
                     Spacer()
                     
-                    Spacer()
                     
                     // Progress header
                     Text("Edit Drill")
                         .font(.custom("Poppins-Bold", size: 18))
                         .foregroundColor(.black)
-                        .padding()
+//                        .padding(.trailing, 20)
                     
                     Spacer()
                     
@@ -50,17 +50,17 @@ struct EditingDrillView: View {
                             .foregroundColor(appModel.globalSettings.primaryDarkColor)
                             .font(.system(size: 16, weight: .medium))
                     }
-                    .padding()
                 }
+                .padding(.vertical)
                 
-                ZStack {
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.1))
+                if let videoURLString = editableDrill.drill.videoURL, !videoURLString.isEmpty,
+                   let videoURL = URL(string: videoURLString) {
+
+                    VideoPlayer(player: AVPlayer(url: videoURL))
                         .aspectRatio(16/9, contentMode: .fit)
                         .cornerRadius(12)
-                    
+                        .frame(maxWidth: .infinity)
                 }
-                .padding(.horizontal, 20)
                 
                 Spacer()
                 
@@ -161,7 +161,7 @@ struct EditingDrillView: View {
                 
                 Spacer()
             }
-            .padding()
+            .padding(.horizontal, 20)
             
         }
         .frame(width: geometry.size.width)
