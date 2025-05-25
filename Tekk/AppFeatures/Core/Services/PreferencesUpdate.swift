@@ -83,25 +83,38 @@ class PreferencesUpdateService {
     
     // Debounce properties
     private var debounceWorkItem: DispatchWorkItem?
-    private let debounceInterval: TimeInterval = 1.0 // seconds
+    private let debounceInterval: TimeInterval = 1.0 // Increased to 2 seconds
+    private var lastUpdateTime: Date = Date()
+    private let minimumUpdateInterval: TimeInterval = 1.0 // Minimum time between updates
 
     // Update preferences using onboarding data and subskills, which will help preload our session after onboarding
     func updatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel) async throws {
+        // Check if enough time has passed since last update
+        let now = Date()
+        guard now.timeIntervalSince(lastUpdateTime) >= minimumUpdateInterval else {
+            print("[Debounce] Skipping update - too soon since last update")
+            return
+        }
+        
         // Cancel any pending debounce work
         debounceWorkItem?.cancel()
         print("[Debounce] Cancelled previous pending updatePreferences call.")
 
         // Create a new work item
         let workItem = DispatchWorkItem { [weak self] in
+            guard let self = self else { return }
+            
             Task {
                 print("[Debounce] Debounced updatePreferences call is now executing.")
                 do {
-                    try await self?.performUpdatePreferences(time: time, equipment: equipment, trainingStyle: trainingStyle, location: location, difficulty: difficulty, skills: skills, sessionModel: sessionModel)
+                    try await self.performUpdatePreferences(time: time, equipment: equipment, trainingStyle: trainingStyle, location: location, difficulty: difficulty, skills: skills, sessionModel: sessionModel)
+                    self.lastUpdateTime = Date()
                 } catch {
                     print("[Debounce] Error in debounced updatePreferences: \(error)")
                 }
             }
         }
+        
         debounceWorkItem = workItem
         print("[Debounce] Scheduled updatePreferences to run in \(debounceInterval) seconds.")
         DispatchQueue.main.asyncAfter(deadline: .now() + debounceInterval, execute: workItem)
