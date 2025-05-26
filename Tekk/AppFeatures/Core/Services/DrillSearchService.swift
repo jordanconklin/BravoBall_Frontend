@@ -158,7 +158,7 @@ class DrillSearchService {
                             }
                         }
                         
-                        let videoURL = item["video_url"] as? String ?? ""
+                        let videoUrl = item["video_url"] as? String ?? ""
                         
                         
                         let drillResponse = DrillResponse(
@@ -178,7 +178,7 @@ class DrillSearchService {
                             rest: rest,
                             primarySkill: primarySkill,
                             secondarySkills: secondarySkills,
-                            videoURL: videoURL
+                            videoUrl: videoUrl
                         )
                         
                         drillResponses.append(drillResponse)
@@ -272,7 +272,7 @@ class DrillSearchService {
                                 let primarySkill = item["primary_skill"] as? DrillResponse.Skill
                                 let secondarySkills = item["secondary_skills"] as? [DrillResponse.Skill]
                                 
-                                let videoURL = item["video_url"] as? String ?? ""
+                                let videoUrl = item["video_url"] as? String ?? ""
                                 
                                 
                                 
@@ -293,7 +293,7 @@ class DrillSearchService {
                                     rest: rest,
                                     primarySkill: primarySkill,
                                     secondarySkills: secondarySkills,
-                                    videoURL: videoURL
+                                    videoUrl: videoUrl
                                 )
                                 
                                 drillResponses.append(drillResponse)
@@ -357,7 +357,7 @@ class DrillSearchService {
                     DrillResponse.Skill(category: "passing", subSkill: "first_touch"),
                     DrillResponse.Skill(category: "passing", subSkill: "ball_control")
                 ],
-                videoURL: ""
+                videoUrl: ""
             ),
             DrillResponse(
                 id: 2,
@@ -379,7 +379,7 @@ class DrillSearchService {
                     DrillResponse.Skill(category: "passing", subSkill: "first_touch"),
                     DrillResponse.Skill(category: "passing", subSkill: "ball_control")
                 ],
-                videoURL: ""
+                videoUrl: ""
             ),
             DrillResponse(
                 id: 3,
@@ -401,7 +401,7 @@ class DrillSearchService {
                     DrillResponse.Skill(category: "passing", subSkill: "first_touch"),
                     DrillResponse.Skill(category: "passing", subSkill: "ball_control")
                 ],
-                videoURL: ""
+                videoUrl: ""
             ),
             DrillResponse(
                 id: 4,
@@ -423,7 +423,7 @@ class DrillSearchService {
                     DrillResponse.Skill(category: "passing", subSkill: "first_touch"),
                     DrillResponse.Skill(category: "passing", subSkill: "ball_control")
                 ],
-                videoURL: ""
+                videoUrl: ""
             ),
             DrillResponse(
                 id: 5,
@@ -445,7 +445,7 @@ class DrillSearchService {
                     DrillResponse.Skill(category: "passing", subSkill: "first_touch"),
                     DrillResponse.Skill(category: "passing", subSkill: "ball_control")
                 ],
-                videoURL: ""
+                videoUrl: ""
             )
         ]
         
@@ -482,7 +482,7 @@ class DrillSearchService {
                 equipment: drillModel.equipment,
                 trainingStyle: drillModel.trainingStyle,
                 difficulty: drillModel.difficulty,
-                videoURL: response.videoURL
+                videoUrl: response.videoUrl
             )
         }
     }

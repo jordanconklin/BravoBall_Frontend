@@ -61,7 +61,7 @@ extension SessionGeneratorModel: BothGroupsManagement {
                             equipment: drillResponse.equipment,
                             trainingStyle: drillResponse.intensity,
                             difficulty: drillResponse.difficulty,
-                            videoURL: drillResponse.videoURL
+                            videoUrl: drillResponse.videoUrl
                         )
                     }
                 )

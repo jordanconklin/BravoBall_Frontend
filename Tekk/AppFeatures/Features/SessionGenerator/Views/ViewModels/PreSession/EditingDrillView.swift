@@ -53,10 +53,8 @@ struct EditingDrillView: View {
                 }
                 .padding(.vertical)
                 
-                if let videoURLString = editableDrill.drill.videoURL, !videoURLString.isEmpty,
-                   let videoURL = URL(string: videoURLString) {
-
-                    VideoPlayer(player: AVPlayer(url: videoURL))
+                if !editableDrill.drill.videoUrl.isEmpty, let videoUrl = URL(string: editableDrill.drill.videoUrl) {
+                    VideoPlayer(player: AVPlayer(url: videoUrl))
                         .aspectRatio(16/9, contentMode: .fit)
                         .cornerRadius(12)
                         .frame(maxWidth: .infinity)

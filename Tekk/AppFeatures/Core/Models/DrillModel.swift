@@ -23,7 +23,7 @@ struct DrillModel: Identifiable, Equatable, Codable {
     let equipment: [String]
     let trainingStyle: String
     let difficulty: String
-    let videoURL: String?
+    let videoUrl: String
     
     init(id: UUID = UUID(),  // Adding initializer with default UUID
          backendId: Int? = nil, // Add backend ID parameter
@@ -39,7 +39,7 @@ struct DrillModel: Identifiable, Equatable, Codable {
          equipment: [String],
          trainingStyle: String,
          difficulty: String,
-         videoURL: String? = nil) {
+         videoUrl: String) {
         self.id = id
         self.backendId = backendId
         self.title = title
@@ -54,7 +54,7 @@ struct DrillModel: Identifiable, Equatable, Codable {
         self.equipment = equipment
         self.trainingStyle = trainingStyle
         self.difficulty = difficulty
-        self.videoURL = videoURL
+        self.videoUrl = videoUrl
     }
     
     static func == (lhs: DrillModel, rhs: DrillModel) -> Bool {

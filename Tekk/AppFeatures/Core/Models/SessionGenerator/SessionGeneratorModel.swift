@@ -408,7 +408,7 @@ class SessionGeneratorModel: ObservableObject {
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "High Intensity",
             difficulty: "Beginner",
-            videoURL: nil
+            videoUrl: "www.example.com"
         ),
         DrillModel(
             title: "Short Passing Drill Two",
@@ -423,7 +423,7 @@ class SessionGeneratorModel: ObservableObject {
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "High Intensity",
             difficulty: "Beginner",
-            videoURL: nil
+            videoUrl: "www.example.com"
         ),
         DrillModel(
             title: "Short Passing Drill Three",
@@ -438,7 +438,7 @@ class SessionGeneratorModel: ObservableObject {
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "High Intensity",
             difficulty: "Beginner",
-            videoURL: nil
+            videoUrl: "www.example.com"
         ),
         DrillModel(
             title: "Short Passing Four",
@@ -453,7 +453,7 @@ class SessionGeneratorModel: ObservableObject {
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "High Intensity",
             difficulty: "Beginner",
-            videoURL: nil
+            videoUrl: "www.example.com"
         ),
         DrillModel(
             title: "Long Passing Practice",
@@ -468,7 +468,7 @@ class SessionGeneratorModel: ObservableObject {
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "Medium Intensity",
             difficulty: "Intermediate",
-            videoURL: nil
+            videoUrl: "www.example.com"
         ),
         DrillModel(
             title: "Through Ball Training",
@@ -483,7 +483,7 @@ class SessionGeneratorModel: ObservableObject {
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "Medium Intensity",
             difficulty: "Intermediate",
-            videoURL: nil
+            videoUrl: "www.example.com"
         ),
         DrillModel(
             title: "Power Shot Practice",
@@ -498,7 +498,7 @@ class SessionGeneratorModel: ObservableObject {
             equipment: ["Soccer ball", "Goal"],
             trainingStyle: "High Intensity",
             difficulty: "Intermediate",
-            videoURL: nil
+            videoUrl: "www.example.com"
         ),
         DrillModel(
             title: "1v1 Dribbling Skills",
@@ -513,7 +513,7 @@ class SessionGeneratorModel: ObservableObject {
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "High Intensity",
             difficulty: "Intermediate",
-            videoURL: nil
+            videoUrl: "www.example.com"
         )
     ]
 
@@ -560,7 +560,7 @@ class SessionGeneratorModel: ObservableObject {
         for apiDrill in sessionResponse.drills {
             do {
                 let drillModel = apiDrill.toDrillModel()
-                print("[Session] Drill loaded: \(drillModel.title), videoURL: \(drillModel.videoURL ?? "nil")")
+                print("[Session] Drill loaded: \(drillModel.title), videoUrl: \(drillModel.videoUrl ?? "nil")")
                 // Create an editable drill model
                 let editableDrill = EditableDrillModel(
                     drill: drillModel,

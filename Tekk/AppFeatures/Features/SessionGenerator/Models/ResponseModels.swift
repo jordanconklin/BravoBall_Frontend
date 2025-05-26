@@ -44,7 +44,7 @@ struct DrillResponse: Codable, Identifiable {
     let rest: Int?
     let primarySkill: DrillResponse.Skill?
     let secondarySkills: [DrillResponse.Skill]?
-    let videoURL: String?
+    let videoUrl: String
     
     struct Skill: Codable, Hashable {
             let category: String
@@ -74,7 +74,7 @@ struct DrillResponse: Codable, Identifiable {
         case rest
         case primarySkill = "primary_skill"
         case secondarySkills = "secondary_skills"
-        case videoURL = "video_url"
+        case videoUrl = "video_url"
     }
     
     // Convert API response to local DrillModel
@@ -106,7 +106,7 @@ struct DrillResponse: Codable, Identifiable {
             equipment: equipment,
             trainingStyle: intensity,
             difficulty: difficulty,
-            videoURL: videoURL
+            videoUrl: videoUrl
         )
     }
     
@@ -145,11 +145,12 @@ struct DrillResponse: Codable, Identifiable {
         
         primarySkill = try container.decodeIfPresent(Skill.self, forKey: .primarySkill)
         secondarySkills = try container.decodeIfPresent([Skill].self, forKey: .secondarySkills)
-        videoURL = try container.decodeIfPresent(String.self, forKey: .videoURL) ?? "www.superexample.com"
+        videoUrl = try container.decodeIfPresent(String.self, forKey: .videoUrl) ?? ""
+        print("videourl in drillresponse: \(videoUrl)")
     }
     
     // Standard initializer for creating instances directly
-    init(id: Int, title: String, description: String, duration: Int, intensity: String, difficulty: String, equipment: [String], suitableLocations: [String], instructions: [String], tips: [String], type: String, sets: Int?, reps: Int?, rest: Int?, primarySkill: Skill?, secondarySkills: [Skill]?, videoURL: String?) {
+    init(id: Int, title: String, description: String, duration: Int, intensity: String, difficulty: String, equipment: [String], suitableLocations: [String], instructions: [String], tips: [String], type: String, sets: Int?, reps: Int?, rest: Int?, primarySkill: Skill?, secondarySkills: [Skill]?, videoUrl: String) {
         self.id = id
         self.title = title
         self.description = description
@@ -166,7 +167,7 @@ struct DrillResponse: Codable, Identifiable {
         self.rest = rest
         self.primarySkill = primarySkill
         self.secondarySkills = secondarySkills
-        self.videoURL = videoURL
+        self.videoUrl = videoUrl
     }
     
     // Map API skill types to app skill types

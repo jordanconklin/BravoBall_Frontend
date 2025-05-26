@@ -245,7 +245,7 @@ struct CalendarView: View {
             equipment: ["Ball"],
             trainingStyle: "Medium",
             difficulty: "Beginner",
-            videoURL: nil
+            videoUrl: "www.example.com"
         )
         
         let addedTestDrillsTwo = DrillModel(
@@ -263,7 +263,7 @@ struct CalendarView: View {
             equipment: ["Ball", "Goal"],
             trainingStyle: "High",
             difficulty: "Intermediate",
-            videoURL: nil
+            videoUrl: "www.example.com"
         )
         
         let addedTestDrillsThree = DrillModel(
@@ -281,7 +281,7 @@ struct CalendarView: View {
             equipment: ["Ball", "Cones"],
             trainingStyle: "Low",
             difficulty: "Advanced",
-            videoURL: nil
+            videoUrl: "www.example.com"
         )
         
         let testDrillOne = EditableDrillModel(drill: addedTestDrillsOne, setsDone: 0, totalSets: addedTestDrillsOne.sets, totalReps: addedTestDrillsOne.reps, totalDuration: addedTestDrillsOne.duration, isCompleted: true)
