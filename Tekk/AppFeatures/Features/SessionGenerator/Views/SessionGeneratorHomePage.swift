@@ -67,7 +67,7 @@ struct SessionGeneratorHomePage: View {
                         }
                         .frame(maxWidth: geometry.size.width)
                     }
-                    .offset(y: -50)
+                    .offset(y: -65)
                 }
 //                .padding(.top, geometry.safeAreaInsets.top + appModel.layout.homePageTopSpacing)
                 .transition(.move(edge: .bottom))

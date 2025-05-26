@@ -20,10 +20,10 @@ struct BravoHeaderView: View {
             RiveViewModel(fileName: "Bravo_Peaking_Home")
                 .view()
                 .frame(width: 90, height: 90)
-                .offset(x: geometry.size.width * 0.1 - 85, y: -50)
+                .offset(x: geometry.size.width * 0.1 - 85, y: -62)
             if appModel.viewState.showPreSessionTextBubble {
                 preSessionMessageBubble
-                    .offset(x: geometry.size.width * 0.1 + 35, y: -40)
+                    .offset(x: geometry.size.width * 0.1 + 35, y: -50)
             }
             Spacer()
         }

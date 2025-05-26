@@ -84,24 +84,53 @@ class PreferencesUpdateService {
     // Debounce properties
     private var debounceWorkItem: DispatchWorkItem?
     private let debounceInterval: TimeInterval = 1.0 // seconds
+    private var lastUpdateTime: Date = Date()
+    private let minimumUpdateInterval: TimeInterval = 1.0 // Minimum time between updates
+    private var isUpdating = false // Track if an update is in progress
 
-    // Update preferences using onboarding data and subskills, which will help preload our session after onboarding
-    func updatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel) async throws {
+    // Update preferences using preference data and subskills, which will help load a session into the SessionGeneratorView
+    func updatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel, isOnboarding: Bool = false) async throws {
+        // If this is onboarding, skip debounce and update immediately
+        if isOnboarding {
+            print("[Onboarding] Performing immediate preferences update")
+            try await performUpdatePreferences(time: time, equipment: equipment, trainingStyle: trainingStyle, location: location, difficulty: difficulty, skills: skills, sessionModel: sessionModel)
+            return
+        }
+        
+        // Check if an update is already in progress
+        guard !isUpdating else {
+            print("[Debounce] Skipping update - another update is in progress")
+            return
+        }
+        
+        // Check if enough time has passed since last update
+        let now = Date()
+        guard now.timeIntervalSince(lastUpdateTime) >= minimumUpdateInterval else {
+            print("[Debounce] Skipping update - too soon since last update")
+            return
+        }
+        
         // Cancel any pending debounce work
         debounceWorkItem?.cancel()
         print("[Debounce] Cancelled previous pending updatePreferences call.")
 
         // Create a new work item
         let workItem = DispatchWorkItem { [weak self] in
+            guard let self = self else { return }
+            
             Task {
                 print("[Debounce] Debounced updatePreferences call is now executing.")
                 do {
-                    try await self?.performUpdatePreferences(time: time, equipment: equipment, trainingStyle: trainingStyle, location: location, difficulty: difficulty, skills: skills, sessionModel: sessionModel)
+                    self.isUpdating = true
+                    try await self.performUpdatePreferences(time: time, equipment: equipment, trainingStyle: trainingStyle, location: location, difficulty: difficulty, skills: skills, sessionModel: sessionModel)
+                    self.lastUpdateTime = Date()
                 } catch {
                     print("[Debounce] Error in debounced updatePreferences: \(error)")
                 }
+                self.isUpdating = false
             }
         }
+        
         debounceWorkItem = workItem
         print("[Debounce] Scheduled updatePreferences to run in \(debounceInterval) seconds.")
         DispatchQueue.main.asyncAfter(deadline: .now() + debounceInterval, execute: workItem)

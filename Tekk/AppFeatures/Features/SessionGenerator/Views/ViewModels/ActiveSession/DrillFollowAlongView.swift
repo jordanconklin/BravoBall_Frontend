@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct DrillFollowAlongView: View {
     @ObservedObject var appModel: MainAppModel
@@ -15,6 +16,8 @@ struct DrillFollowAlongView: View {
     @State private var showDrillDetailView: Bool = false
     
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.viewGeometry) var geometry
+    
     @State private var isPlaying = false
     @State private var restartTime: TimeInterval = 0
     @State private var elapsedTime: TimeInterval = 0
@@ -39,7 +42,7 @@ struct DrillFollowAlongView: View {
         self._showDrillDetailView = State(initialValue: false)
         self._isPlaying = State(initialValue: false)
         self._countdownValue = State(initialValue: nil)
-        self._displayCountdown = State(initialValue: false)
+        self._displayCountdown = State(initialValue: true)
         self._timer = State(initialValue: nil)
         self._restartTime = State(initialValue: setDuration)
         self._elapsedTime = State(initialValue: setDuration)
@@ -77,7 +80,7 @@ struct DrillFollowAlongView: View {
                     }
                     
                 }
-                .padding(.horizontal, 20)
+                
                 .padding(.top, 16)
                 
                 
@@ -141,14 +144,15 @@ struct DrillFollowAlongView: View {
                 Spacer()
 
                 // Video preview in the middle
-                ZStack {
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.1))
+                if let videoURLString = editableDrill.drill.videoURL, !videoURLString.isEmpty,
+                   let videoURL = URL(string: videoURLString) {
+
+                    VideoPlayer(player: AVPlayer(url: videoURL))
                         .aspectRatio(16/9, contentMode: .fit)
                         .cornerRadius(12)
-                    
+                        .frame(maxWidth: .infinity)
                 }
-                .padding(.horizontal, 20)
+                
 
                 
                 Spacer()
@@ -190,18 +194,18 @@ struct DrillFollowAlongView: View {
                                     .fill(Color.red)
                             )
                     }
-                    .padding(.horizontal, 20)
                 }
             }
             
             // Add countdown overlay
             if let countdown = countdownValue {
                 Text("\(countdown)")
-                    .font(.custom("Poppins-Bold", size: 72))
-                    .foregroundColor(.black)
-                    .padding(.bottom, 550)
+                    .font(.custom("Poppins-Bold", size: 60))
+                    .foregroundColor(.white)
+                    .padding(.bottom, 400)
             }
         }
+        .padding(.horizontal, 20)
         .statusBar(hidden: false)
         .navigationBarHidden(true)
         .sheet(isPresented: $showDrillDetailView) {
