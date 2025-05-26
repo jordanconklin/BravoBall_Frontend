@@ -26,7 +26,9 @@ struct SkillButton: View {
                 Button(action: {
                     action()
                     
-                    sessionModel.markAsNeedingSave(change: .userPreferences)
+                    if !appModel.viewState.showSkillSearch {
+                        sessionModel.schedulePreferenceUpdate()
+                    }
                     
                 }) {
                     Image(systemName: "xmark")
