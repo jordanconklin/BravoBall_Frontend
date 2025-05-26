@@ -86,8 +86,11 @@ struct DrillDetailView: View {
                         
                         if let videoURLString = drill.videoURL, !videoURLString.isEmpty,
                            let videoURL = URL(string: videoURLString) {
-                            CustomVideoPlayer(videoURL: videoURL)
-                        }
+                            VideoPlayer(player: AVPlayer(url: videoURL))
+                                .aspectRatio(16/9, contentMode: .fit)
+                                .cornerRadius(12)
+                                .frame(maxWidth: .infinity)
+                            }
                         
                         // Drill information
                         VStack(alignment: .leading, spacing: 16) {

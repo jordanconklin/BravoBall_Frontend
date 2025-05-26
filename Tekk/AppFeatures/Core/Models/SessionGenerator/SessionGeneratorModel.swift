@@ -32,10 +32,33 @@ class SessionGeneratorModel: ObservableObject {
     // Add a property to track the current session ID
     var currentSessionId: Int?
     
+    private var preferenceUpdateTask: Task<Void, Never>?
+    private var isOnboarding = false
     
-    
-    
-    
+    private func schedulePreferenceUpdate() {
+        // If we're in onboarding, update immediately
+        if isOnboarding {
+            Task {
+                await syncPreferencesWithBackend()
+            }
+            return
+        }
+        
+        // Cancel any existing update task
+        preferenceUpdateTask?.cancel()
+        
+        // Create a new task
+        preferenceUpdateTask = Task {
+            // Wait for 0.5 seconds to allow for multiple rapid changes
+            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+            
+            // Only proceed if the task hasn't been cancelled
+            guard !Task.isCancelled else { return }
+            
+            // Perform the update
+            await syncPreferencesWithBackend()
+        }
+    }
     
     // MARK: Filter and Skill Selection
     
@@ -45,7 +68,7 @@ class SessionGeneratorModel: ObservableObject {
         didSet {
             print("[DEBUG] selectedTime changed to: \(String(describing: selectedTime))")
             if !isInitialLoad && !isLoggingOut {
-                markAsNeedingSave(change: .userPreferences)
+                schedulePreferenceUpdate()
             }
             print("\(isInitialLoad) and \(isLoggingOut)")
         }
@@ -55,7 +78,7 @@ class SessionGeneratorModel: ObservableObject {
         didSet {
             print("[DEBUG] selectedEquipment changed to: \(selectedEquipment)")
             if !isInitialLoad && !isLoggingOut {
-                markAsNeedingSave(change: .userPreferences)
+                schedulePreferenceUpdate()
             }
         }
     }
@@ -64,7 +87,7 @@ class SessionGeneratorModel: ObservableObject {
         didSet {
             print("[DEBUG] selectedTrainingStyle changed to: \(String(describing: selectedTrainingStyle))")
             if !isInitialLoad && !isLoggingOut {
-                markAsNeedingSave(change: .userPreferences)
+                schedulePreferenceUpdate()
             }
         }
     }
@@ -73,7 +96,7 @@ class SessionGeneratorModel: ObservableObject {
         didSet {
             print("[DEBUG] selectedLocation changed to: \(String(describing: selectedLocation))")
             if !isInitialLoad && !isLoggingOut {
-                markAsNeedingSave(change: .userPreferences)
+                schedulePreferenceUpdate()
             }
         }
     }
@@ -82,7 +105,7 @@ class SessionGeneratorModel: ObservableObject {
         didSet {
             print("[DEBUG] selectedDifficulty changed to: \(String(describing: selectedDifficulty))")
             if !isInitialLoad && !isLoggingOut {
-                markAsNeedingSave(change: .userPreferences)
+                schedulePreferenceUpdate()
             }
         }
     }
@@ -92,7 +115,7 @@ class SessionGeneratorModel: ObservableObject {
         didSet {
             print("[DEBUG] selectedSkills changed to: \(selectedSkills)")
             if !isInitialLoad && !isLoggingOut {
-                markAsNeedingSave(change: .userPreferences)
+                schedulePreferenceUpdate()
             }
         }
     }
@@ -518,33 +541,26 @@ class SessionGeneratorModel: ObservableObject {
         self.currentSessionId = sessionResponse.sessionId
         
         // Instead of directly setting selectedSkills, map the focus areas to their full skill strings
-            let newSkills = Set(sessionResponse.focusAreas.compactMap { category in
-                // Find any existing skills that match this category
-                selectedSkills.first { $0.starts(with: "\(category)-") }
-            })
-            
-            // Only update if we found matching skills
-            if !newSkills.isEmpty {
-                selectedSkills = newSkills
-        print("✅ Updated focus areas: \(selectedSkills.joined(separator: ", "))")
-            }
+        let newSkills = Set(sessionResponse.focusAreas.compactMap { category in
+            // Find any existing skills that match this category
+            selectedSkills.first { $0.starts(with: "\(category)-") }
+        })
+        
+        // Only update if we found matching skills
+        if !newSkills.isEmpty {
+            selectedSkills = newSkills
+            print("✅ Updated focus areas: \(selectedSkills.joined(separator: ", "))")
+        }
         
         // Clear any existing drills
         orderedSessionDrills.removeAll()
-        
-        // // Check if we have drills to process
-        // guard !sessionResponse.drills.isEmpty else {
-        //     print("⚠️ No drills found in the initial session response")
-        //     addDefaultDrills()
-        //     return
-        // }
         
         // Convert API drills to app's drill models and add them to orderedDrills
         var processedCount = 0
         for apiDrill in sessionResponse.drills {
             do {
                 let drillModel = apiDrill.toDrillModel()
-                
+                print("[Session] Drill loaded: \(drillModel.title), videoURL: \(drillModel.videoURL ?? "nil")")
                 // Create an editable drill model
                 let editableDrill = EditableDrillModel(
                     drill: drillModel,
@@ -554,7 +570,6 @@ class SessionGeneratorModel: ObservableObject {
                     totalDuration: drillModel.duration,
                     isCompleted: false
                 )
-                
                 // Add to ordered drills
                 orderedSessionDrills.append(editableDrill)
                 processedCount += 1
@@ -587,7 +602,8 @@ class SessionGeneratorModel: ObservableObject {
                 location: selectedLocation,
                 difficulty: selectedDifficulty,
                 skills: selectedSkills,
-                sessionModel: self
+                sessionModel: self,
+                isOnboarding: isOnboarding
             )
             print("✅ Successfully synced preferences with backend")
         } catch {
@@ -645,6 +661,7 @@ class SessionGeneratorModel: ObservableObject {
 
     @MainActor
     func prefillSelectedSkills(from onboardingData: OnboardingModel.OnboardingData) async {
+        isOnboarding = true
         let skillsToImprove = onboardingData.areasToImprove
         let prefilledSubskillsAfterOnboarding = Set(skillsToImprove.compactMap { skill in
             if let subskill = SessionGeneratorModel.defaultSubskills[skill] {
@@ -659,6 +676,7 @@ class SessionGeneratorModel: ObservableObject {
     
     @MainActor
     func prefillPreferences(from onboardingData: OnboardingModel.OnboardingData) async {
+        isOnboarding = true
         // --- TIME ---
         let timeMap: [String: String] = [
             "Less than 15 minutes": "15min",
@@ -707,6 +725,9 @@ class SessionGeneratorModel: ObservableObject {
         selectedDifficulty = difficultyMap[onboardingData.position] ?? "medium"
 
         print("✅ Prefilled preferences from onboarding data:")
+
+        // After all preferences are set, update isOnboarding to false
+        isOnboarding = false
     }
 
 }

@@ -145,7 +145,7 @@ struct DrillResponse: Codable, Identifiable {
         
         primarySkill = try container.decodeIfPresent(Skill.self, forKey: .primarySkill)
         secondarySkills = try container.decodeIfPresent([Skill].self, forKey: .secondarySkills)
-        videoURL = try container.decodeIfPresent(String.self, forKey: .videoURL)
+        videoURL = try container.decodeIfPresent(String.self, forKey: .videoURL) ?? "www.superexample.com"
     }
     
     // Standard initializer for creating instances directly

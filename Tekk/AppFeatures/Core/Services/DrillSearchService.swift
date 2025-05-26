@@ -161,7 +161,6 @@ class DrillSearchService {
                         let videoURL = item["video_url"] as? String ?? ""
                         
                         
-                        
                         let drillResponse = DrillResponse(
                             id: id,
                             title: title,
