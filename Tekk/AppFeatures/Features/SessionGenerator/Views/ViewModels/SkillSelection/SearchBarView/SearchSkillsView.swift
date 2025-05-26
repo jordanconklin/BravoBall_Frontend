@@ -40,7 +40,8 @@ struct SearchSkillsView: View {
                 searchText = ""
                 appModel.viewState.showSkillSearch = false
                 
-                sessionModel.markAsNeedingSave(change: .userPreferences)
+                sessionModel.schedulePreferenceUpdate()
+                
             }) {
                 
                     Text("Create Session")

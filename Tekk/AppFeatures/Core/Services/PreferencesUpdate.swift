@@ -182,32 +182,106 @@ class PreferencesUpdateService {
         
         print("📥 Response status code: \(httpResponse.statusCode)")
         
-//        if let responseString = String(data: data, encoding: .utf8) {
-//            print("📥 Response body: \(responseString)")
-//        }
+        if let responseString = String(data: data, encoding: .utf8) {
+            print("📥 Response body: \(responseString)")
+        }
         
         switch httpResponse.statusCode {
         case 200:
             print("✅ Successfully updated preferences")
-            // Decode the response
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            let response = try decoder.decode(PreferencesUpdateResponse.self, from: data)
-            
-            // If we received a session, load it
-            if let sessionData = response.data {
-                print("✅ Received new session with \(sessionData.drills.count) drills")
+            // Manually parse the drills array from the JSON and construct DrillModel objects directly
+            if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let dataDict = json["data"] as? [String: Any],
+               let sessionId = dataDict["session_id"] as? Int,
+               let totalDuration = dataDict["total_duration"] as? Int,
+               let focusAreas = dataDict["focus_areas"] as? [String],
+               let drillsArray = dataDict["drills"] as? [[String: Any]] {
+                let drillModels: [DrillModel] = drillsArray.map { drill in
+                    let id = UUID()
+                    let backendId = drill["id"] as? Int
+                    let title = drill["title"] as? String ?? "Unnamed Drill"
+                    let skill = drill["type"] as? String ?? "other"
+                    let subSkills: [String] = {
+                        var allSubSkills: [String] = []
+                        if let primarySkill = drill["primary_skill"] as? [String: Any],
+                           let subSkill = primarySkill["sub_skill"] as? String {
+                            allSubSkills.append(subSkill)
+                        }
+                        if let secondarySkills = drill["secondary_skills"] as? [[String: Any]] {
+                            allSubSkills.append(contentsOf: secondarySkills.compactMap { $0["sub_skill"] as? String })
+                        }
+                        return allSubSkills
+                    }()
+                    let sets = drill["sets"] as? Int ?? 0
+                    let reps = drill["reps"] as? Int ?? 0
+                    let duration = drill["duration"] as? Int ?? 10
+                    let description = drill["description"] as? String ?? ""
+                    let instructions = drill["instructions"] as? [String] ?? []
+                    let tips = drill["tips"] as? [String] ?? []
+                    let equipment = drill["equipment"] as? [String] ?? []
+                    let trainingStyle = drill["intensity"] as? String ?? "medium"
+                    let difficulty = drill["difficulty"] as? String ?? "beginner"
+                    let videoUrl = drill["video_url"] as? String ?? ""
+                    return DrillModel(
+                        id: id,
+                        backendId: backendId,
+                        title: title,
+                        skill: skill,
+                        subSkills: subSkills,
+                        sets: sets,
+                        reps: reps,
+                        duration: duration,
+                        description: description,
+                        instructions: instructions,
+                        tips: tips,
+                        equipment: equipment,
+                        trainingStyle: trainingStyle,
+                        difficulty: difficulty,
+                        videoUrl: videoUrl
+                    )
+                }
                 let session = SessionResponse(
-                    sessionId: sessionData.sessionId,
-                    totalDuration: sessionData.totalDuration,
-                    focusAreas: sessionData.focusAreas,
-                    drills: sessionData.drills
+                    sessionId: sessionId,
+                    totalDuration: totalDuration,
+                    focusAreas: focusAreas,
+                    drills: drillModels.map { drill in
+                        // Create a dummy DrillResponse just to satisfy the type, but we won't use it
+                        DrillResponse(
+                            id: drill.backendId ?? 0,
+                            title: drill.title,
+                            description: drill.description,
+                            duration: drill.duration,
+                            intensity: drill.trainingStyle,
+                            difficulty: drill.difficulty,
+                            equipment: drill.equipment,
+                            suitableLocations: [],
+                            instructions: drill.instructions,
+                            tips: drill.tips,
+                            type: drill.skill,
+                            sets: drill.sets,
+                            reps: drill.reps,
+                            rest: nil,
+                            primarySkill: nil,
+                            secondarySkills: nil,
+                            videoUrl: drill.videoUrl
+                        )
+                    }
                 )
                 await MainActor.run {
-                    sessionModel.loadInitialSession(from: session)
+                    // Instead of using DrillResponse, pass the DrillModel array directly
+                    sessionModel.orderedSessionDrills = drillModels.map { drill in
+                        EditableDrillModel(
+                            drill: drill,
+                            setsDone: 0,
+                            totalSets: drill.sets,
+                            totalReps: drill.reps,
+                            totalDuration: drill.duration,
+                            isCompleted: false
+                        )
+                    }
                 }
             } else {
-                print("⚠️ No session received in response")
+                print("❌ Failed to manually parse session response JSON")
             }
         case 401:
             print("❌ Unauthorized - Invalid or expired token")

@@ -24,6 +24,7 @@ struct DrillFollowAlongView: View {
     @State private var countdownValue: Int?
     @State private var displayCountdown: Bool = true
     @State private var timer: Timer?
+    @State private var player: AVPlayer? = nil
     
     
     init(appModel: MainAppModel, sessionModel: SessionGeneratorModel, editableDrill: Binding<EditableDrillModel>) {
@@ -53,8 +54,8 @@ struct DrillFollowAlongView: View {
         
         
         
-        ZStack(alignment: .bottom) {
-            Color.white.ignoresSafeArea()
+//        ZStack(alignment: .bottom) {
+//            Color.white.ignoresSafeArea()
             
             
             VStack(spacing: 0) {
@@ -143,17 +144,36 @@ struct DrillFollowAlongView: View {
 
                 Spacer()
 
-                // Video preview in the middle
-                if let videoURLString = editableDrill.drill.videoURL, !videoURLString.isEmpty,
-                   let videoURL = URL(string: videoURLString) {
-
-                    VideoPlayer(player: AVPlayer(url: videoURL))
-                        .aspectRatio(16/9, contentMode: .fit)
-                        .cornerRadius(12)
-                        .frame(maxWidth: .infinity)
+                ZStack {
+                    // Video preview in the middle
+                    if !editableDrill.drill.videoUrl.isEmpty, let videoUrl = URL(string: editableDrill.drill.videoUrl) {
+                        VideoPlayer(player: player)
+                            .aspectRatio(16/9, contentMode: .fit)
+                            .cornerRadius(12)
+                            .frame(maxWidth: .infinity)
+                            .onAppear {
+                                let avPlayer = AVPlayer(url: videoUrl)
+                                player = avPlayer
+                                NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: avPlayer.currentItem, queue: .main) { _ in
+                                    avPlayer.seek(to: .zero)
+                                    avPlayer.play()
+                                }
+                            }
+                            .onDisappear {
+                                player?.pause()
+                                NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
+                            }
+                    }
+                    
+                    // Add countdown overlay
+                    if let countdown = countdownValue {
+                        Text("\(countdown)")
+                            .font(.custom("Poppins-Bold", size: 60))
+                            .foregroundColor(.white)
+                    }
+                    
                 }
                 
-
                 
                 Spacer()
                 
@@ -196,21 +216,20 @@ struct DrillFollowAlongView: View {
                     }
                 }
             }
-            
-            // Add countdown overlay
-            if let countdown = countdownValue {
-                Text("\(countdown)")
-                    .font(.custom("Poppins-Bold", size: 60))
-                    .foregroundColor(.white)
-                    .padding(.bottom, 400)
+            .padding(.horizontal, 20)
+            .statusBar(hidden: false)
+            .navigationBarHidden(true)
+            .sheet(isPresented: $showDrillDetailView) {
+                DrillDetailView(appModel: appModel, sessionModel: sessionModel, drill: editableDrill.drill)
             }
-        }
-        .padding(.horizontal, 20)
-        .statusBar(hidden: false)
-        .navigationBarHidden(true)
-        .sheet(isPresented: $showDrillDetailView) {
-            DrillDetailView(appModel: appModel, sessionModel: sessionModel, drill: editableDrill.drill)
-        }
+            .onChange(of: isPlaying) { newValue in
+                if newValue {
+                    player?.play()
+                } else {
+                    player?.pause()
+                }
+            }
+            
     }
     
     private var backButton: some View {

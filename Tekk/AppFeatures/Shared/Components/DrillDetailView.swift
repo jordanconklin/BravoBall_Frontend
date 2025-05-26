@@ -84,13 +84,12 @@ struct DrillDetailView: View {
                         }
                         .padding()
                         
-                        if let videoURLString = drill.videoURL, !videoURLString.isEmpty,
-                           let videoURL = URL(string: videoURLString) {
-                            VideoPlayer(player: AVPlayer(url: videoURL))
+                        if !drill.videoUrl.isEmpty, let videoUrl = URL(string: drill.videoUrl) {
+                            VideoPlayer(player: AVPlayer(url: videoUrl))
                                 .aspectRatio(16/9, contentMode: .fit)
                                 .cornerRadius(12)
                                 .frame(maxWidth: .infinity)
-                            }
+                        }
                         
                         // Drill information
                         VStack(alignment: .leading, spacing: 16) {
@@ -283,7 +282,7 @@ struct DrillDetailView: View {
         ],
         trainingStyle: "Technical",
         difficulty: "Intermediate",
-        videoURL: nil
+        videoUrl: "www.example.com"
     )
     
     let mockAppModel = MainAppModel()

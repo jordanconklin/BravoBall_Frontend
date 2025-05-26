@@ -100,7 +100,7 @@ struct DrillCard_Previews: PreviewProvider {
             equipment: ["Soccer ball", "Cones"],
             trainingStyle: "Medium Intensity",
             difficulty: "Beginner",
-            videoURL: nil
+            videoUrl: "www.example.com"
         )
         let editableDrill = EditableDrillModel(
             drill: drill,
