@@ -112,14 +112,13 @@ struct SkillSearchBar: View {
                 .presentationDragIndicator(.hidden)
                 .interactiveDismissDisabled()
         }
-        .onTapGesture {
-            sessionModel.originalSelectedSkills = sessionModel.selectedSkills
-        }
     }
     private func updateSearchState(isFocused: Bool? = nil, isShowing: Bool? = nil) {
            if let isFocused = isFocused {
                if isFocused {
                    appModel.viewState.showSkillSearch = true
+                   // When clicking on search bar, original equals the currently selected skills
+                   sessionModel.originalSelectedSkills = sessionModel.selectedSkills
                }
            }
            

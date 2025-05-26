@@ -35,7 +35,7 @@ class SessionGeneratorModel: ObservableObject {
     private var preferenceUpdateTask: Task<Void, Never>?
     private var isOnboarding = false
     
-    private func schedulePreferenceUpdate() {
+    func schedulePreferenceUpdate() {
         // If we're in onboarding, update immediately
         if isOnboarding {
             Task {
@@ -111,14 +111,7 @@ class SessionGeneratorModel: ObservableObject {
     }
 
     // update by selected skills
-    @Published var selectedSkills: Set<String> = [] {
-        didSet {
-            print("[DEBUG] selectedSkills changed to: \(selectedSkills)")
-            if !isInitialLoad && !isLoggingOut {
-                schedulePreferenceUpdate()
-            }
-        }
-    }
+    @Published var selectedSkills: Set<String> = []
     @Published var originalSelectedSkills: Set<String> = []
     
     
