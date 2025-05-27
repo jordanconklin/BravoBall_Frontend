@@ -28,10 +28,12 @@ struct DrillDetailView: View {
                     LazyVStack(alignment: .leading, spacing: 24) {
                         HStack(spacing: 25) {
                             Button(action: {
-                                
+                                dismiss()
                             }) {
-                                Image(systemName: "xmark")
-                                    .foregroundColor(.black)
+                                HStack {
+                                    Image(systemName: "arrow.left")
+                                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                                }
                             }
                             
                             Spacer()
@@ -66,7 +68,6 @@ struct DrillDetailView: View {
                             }
                             
                             Button(action: {
-                                // MARK: testing
                                 withAnimation {
                                     if sessionModel.orderedSessionDrills.contains(where: { $0.drill.id == drill.id }) {
                                         appModel.toastMessage = .notAllowed("Drill is already in session")
@@ -82,7 +83,7 @@ struct DrillDetailView: View {
                                     .frame(width: 20, height: 20)
                             }
                         }
-                        .padding()
+                        .padding(.vertical)
                         
                         if !drill.videoUrl.isEmpty, let videoUrl = URL(string: drill.videoUrl) {
                             VideoPlayer(player: AVPlayer(url: videoUrl))
@@ -166,7 +167,7 @@ struct DrillDetailView: View {
                             }
                         }
                     }
-                    .padding()
+                    .padding(.horizontal, 20)
                 }
                 .frame(width: geometry.size.width)
                 

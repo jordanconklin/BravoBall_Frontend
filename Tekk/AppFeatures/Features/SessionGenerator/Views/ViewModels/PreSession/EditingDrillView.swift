@@ -18,6 +18,7 @@ struct EditingDrillView: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     @Binding var editableDrill: EditableDrillModel
     
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.viewGeometry) var geometry
     
     @State private var showDrillDetailView: Bool = false
@@ -32,6 +33,15 @@ struct EditingDrillView: View {
         ZStack {
             VStack {
                 HStack {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        HStack {
+                            Image(systemName: "xmark")
+                                .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                        }
+                    }
+                    
                     Spacer()
                     
                     
