@@ -26,7 +26,7 @@ struct DrillDetailView: View {
             ZStack {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 24) {
-                        HStack(spacing: 25) {
+                        HStack(spacing: 20) {
                             Button(action: {
                                 dismiss()
                             }) {
@@ -40,6 +40,7 @@ struct DrillDetailView: View {
                             
                             // Like button
                             Button(action: {
+
                                 sessionModel.toggleDrillLike(drillId: drill.id, drill: drill)
                             }) {
                                 Image(systemName: sessionModel.isDrillLiked(drill) ? "heart.fill" : "heart")
@@ -60,13 +61,15 @@ struct DrillDetailView: View {
                             Button(action: {
                                 showSaveDrill = true
                             }) {
-                                Image(systemName: "square.and.arrow.down")
+                                Image(systemName: sessionModel.isDrillInGroup(drill) ? "bookmark.fill" : "bookmark")
                                     .resizable()
                                     .scaledToFit()
                                     .foregroundColor(appModel.globalSettings.primaryDarkColor)
                                     .frame(width: 30, height: 30)
                             }
                             
+                            
+                            // Add drill to session
                             Button(action: {
                                 withAnimation {
                                     if sessionModel.orderedSessionDrills.contains(where: { $0.drill.id == drill.id }) {
@@ -80,7 +83,7 @@ struct DrillDetailView: View {
 
                             }) {
                                 RiveViewModel(fileName: "Plus_Button").view()
-                                    .frame(width: 20, height: 20)
+                                    .frame(width: 30, height: 30)
                             }
                         }
                         .padding(.vertical)
@@ -176,7 +179,6 @@ struct DrillDetailView: View {
                 }
                 
             }
-        // MARK: testing
             .toastOverlay(appModel: appModel)
             
     }
@@ -209,8 +211,7 @@ struct DrillDetailView: View {
                         .foregroundColor(appModel.globalSettings.primaryGrayColor)
                     Spacer()
                 }
-                .padding(.horizontal, 16)
-                .padding(.top, 8)
+                .padding(.top, 15)
                 
                 if sessionModel.savedDrills.isEmpty {
                     Text("No groups created yet")
@@ -221,17 +222,19 @@ struct DrillDetailView: View {
                 } else {
                     // Groups Display
                     ScrollView {
-                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
+
                             ForEach(sessionModel.savedDrills) { group in
                                 GroupCard(group: group)
                                         .onTapGesture {
                                             // MARK: testing
                                             withAnimation {
                                                 if group.drills.contains(where: { $0.id == drill.id }) {
+                                                    showSaveDrill = false
                                                     appModel.toastMessage = .unAdded("Drill unadded from group")
                                                     sessionModel.removeDrillFromGroup(drill: drill, groupId: group.id)
                                                     
                                                 } else {
+                                                    showSaveDrill = false
                                                     appModel.toastMessage = .success("Drill added to group")
                                                     sessionModel.addDrillToGroup(drill: drill, groupId: group.id)
                                                 }
@@ -239,14 +242,12 @@ struct DrillDetailView: View {
                                             showSaveDrill = false
                                         }
                             }
-                        }
-                        .padding()
                     }
                 }
                 
                 Spacer()
             }
-            .padding()
+            .padding(.horizontal, 20)
             .frame(width: 300, height: 470)
             .background(Color.white)
             .cornerRadius(15)

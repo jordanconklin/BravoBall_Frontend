@@ -16,20 +16,21 @@ struct ToastView: View {
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: message.type.icon)
+                .foregroundColor(Color.white)
             Text(message.message)
-                .font(.custom("Poppins-Medium", size: 14))
+                .font(.custom("Poppins-Medium", size: 18))
+                .foregroundColor(Color.white)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .padding(.horizontal, 18)
+        .padding(.vertical, 15)
         .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(message.type.color.opacity(0.1))
+            RoundedRectangle(cornerRadius: 30)
+                .fill(message.type.color)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 12)
+                    RoundedRectangle(cornerRadius: 30)
                         .stroke(message.type.color.opacity(0.2), lineWidth: 1)
                 )
         )
-        .foregroundColor(message.type.color)
         .transition(.move(edge: .bottom).combined(with: .opacity))
     }
 }

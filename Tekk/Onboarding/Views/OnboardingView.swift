@@ -213,11 +213,11 @@ struct OnboardingView: View {
                             selection: $onboardingModel.onboardingData.primaryGoal
                         )
                     case 1:
-                        OnboardingStepView(
+                        OnboardingMultiSelectView(
                             onboardingModel: onboardingModel,
                             title: onboardingModel.questionTitles[1],
                             options: onboardingModel.questionOptions[1],
-                            selection: $onboardingModel.onboardingData.biggestChallenge
+                            selections: $onboardingModel.onboardingData.biggestChallenge
                         )
                     case 2:
                         OnboardingStepView(
@@ -234,11 +234,11 @@ struct OnboardingView: View {
                             selection: $onboardingModel.onboardingData.position
                         )
                     case 4:
-                        OnboardingStepView(
+                        OnboardingMultiSelectView(
                             onboardingModel: onboardingModel,
                             title: onboardingModel.questionTitles[4],
                             options: onboardingModel.questionOptions[4],
-                            selection: $onboardingModel.onboardingData.playstyle
+                            selections: $onboardingModel.onboardingData.playstyle
                         )
                     case 5:
                         OnboardingStepView(

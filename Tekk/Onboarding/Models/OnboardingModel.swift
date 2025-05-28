@@ -39,10 +39,10 @@ class OnboardingModel: ObservableObject {
     // Simple arrays for questions and options
     let questionTitles = [
         "What is your primary soccer goal?",
-        "What's your biggest challenge to achieving this goal?",
+        "What are your biggest challenges to achieving this goal?",
         "How much individual training experience do you have?",
         "What position do you play?",
-        "What player best describes your playstyle?",
+        "Which players best describes your playstyle?",
         "What age range do you fall under?",
         "What are your strengths?",
         "What would you like to work on?",
@@ -56,7 +56,7 @@ class OnboardingModel: ObservableObject {
         ["Improve my overall skill level", "Be the best player on my team", "Get scouted for college",
          "Become a professional footballer", "Improve fitness and conditioning", "Have fun and enjoy the game"],
         ["Lack of time", "Lack of proper training equipment", "Not knowing what to work on",
-         "Staying motivated", "Recovering from injury", "No team or structured training"],
+         "Staying motivated", "Recovering from injury", "No team or structured training", "Lack of confidence"],
         ["Beginner", "Intermediate", "Advanced", "Professional"],
         ["Goalkeeper", "Fullback", "Center-back", "Defensive Midfielder", "Center Midfielder",
          "Attacking Midfielder", "Winger", "Striker"],
@@ -74,10 +74,10 @@ class OnboardingModel: ObservableObject {
     // Onboarding data answers from the user
     struct OnboardingData: Codable {
         var primaryGoal: String = ""
-        var biggestChallenge: String = ""
+        var biggestChallenge: [String] = []
         var trainingExperience: String = ""
         var position: String = ""
-        var playstyle: String = ""
+        var playstyle: [String] = []
         var ageRange: String = ""
         var strengths: [String] = []
         var areasToImprove: [String] = []
@@ -170,10 +170,10 @@ class OnboardingModel: ObservableObject {
         // Use values that exactly match the questionOptions arrays
         onboardingData = OnboardingData(
             primaryGoal: "Improve my overall skill level",
-            biggestChallenge: "Not enough time to train",
+            biggestChallenge: ["Not enough time to train"],
             trainingExperience: "Intermediate",
             position: "Goalkeeper",
-            playstyle: "Big Bob",  // Match one of the actual options in questionOptions
+            playstyle: ["Big Bob"],  // Match one of the actual options in questionOptions
             ageRange: "Teen (13-16)",
             strengths: ["Defending"],
             areasToImprove: ["Passing", "Dribbling", "First touch"],

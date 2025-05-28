@@ -41,9 +41,9 @@ struct ToastMessage: Equatable {
         
         var icon: String {
             switch self {
-            case .success: return "checkmark.circle.fill"
-            case .notAllowed: return "xmark.circle.fill"
-            case .unAdded: return "checkmark.circle.fill"
+            case .success: return "checkmark"
+            case .notAllowed: return "xmark"
+            case .unAdded: return "checkmark"
             case .error: return "info.circle.fill"
             }
         }
