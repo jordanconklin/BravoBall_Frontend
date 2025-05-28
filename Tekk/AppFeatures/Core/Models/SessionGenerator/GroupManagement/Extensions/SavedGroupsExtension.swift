@@ -9,6 +9,15 @@ import Foundation
 
 extension SessionGeneratorModel: SavedDrillsGroupManagement {
     
+    func isDrillInGroup(_ drill: DrillModel) -> Bool {
+        for group in savedDrills {
+            if group.drills.contains(drill) {
+                return true
+            }
+        }
+        return false
+    }
+    
     func addDrillToGroup(drill: DrillModel, groupId: UUID) {
         if let index = savedDrills.firstIndex(where: { $0.id == groupId }) {
             // Add drill to local sessionGeneratorModel

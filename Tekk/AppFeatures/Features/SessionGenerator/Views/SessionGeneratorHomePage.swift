@@ -55,10 +55,17 @@ struct SessionGeneratorHomePage: View {
                                     VStack(spacing: appModel.layout.standardSpacing) {
                                         GeneratedDrillsSection(appModel: appModel, sessionModel: sessionModel)
                                             .padding(.horizontal, appModel.layout.contentMinPadding)
-//                                        if sessionModel.selectedSkills.isEmpty {
-//                                            RecommendedDrillsSection(appModel: appModel, sessionModel: sessionModel)
-//                                                .padding(.horizontal, appModel.layout.contentMinPadding)
-//                                        }
+                                        
+                                        
+                                        
+                                        
+                                        if sessionModel.selectedSkills.isEmpty {
+                                            RecommendedDrillsSection(appModel: appModel, sessionModel: sessionModel)
+                                                .padding(.horizontal, appModel.layout.contentMinPadding)
+                                        }
+                                        
+                                        
+                                        
                                     }
                                     .padding(.bottom, 120)
                                 }

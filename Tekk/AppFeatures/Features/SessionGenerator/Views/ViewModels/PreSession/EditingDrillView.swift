@@ -18,6 +18,7 @@ struct EditingDrillView: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     @Binding var editableDrill: EditableDrillModel
     
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.viewGeometry) var geometry
     
     @State private var showDrillDetailView: Bool = false
@@ -32,6 +33,15 @@ struct EditingDrillView: View {
         ZStack {
             VStack {
                 HStack {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        HStack {
+                            Image(systemName: "xmark")
+                                .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                        }
+                    }
+                    
                     Spacer()
                     
                     
@@ -39,17 +49,32 @@ struct EditingDrillView: View {
                     Text("Edit Drill")
                         .font(.custom("Poppins-Bold", size: 18))
                         .foregroundColor(.black)
-//                        .padding(.trailing, 20)
+                        .padding(.leading, 60)
                     
                     Spacer()
                     
-                    Button(action : {
+                    // How-to button
+                    Button(action: {
                         showDrillDetailView = true
+                        
                     }) {
-                        Image(systemName: "line.horizontal.3")
-                            .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                            .font(.system(size: 16, weight: .medium))
+                        HStack {
+                            Image(systemName: "play.fill")
+                                .foregroundColor(Color.white)
+                                .font(.system(size: 13, weight: .medium))
+                            Text("How-to")
+                                .font(.custom("Poppins-Bold", size: 13))
+                                .foregroundColor(.white)
+                            
+                        }
+                        .padding(.horizontal,5)
+                        .padding(.vertical, 5)
+
+                        .background(appModel.globalSettings.primaryLightGrayColor)
+                        .cornerRadius(12)
+                            
                     }
+                    
                 }
                 .padding(.vertical)
                 

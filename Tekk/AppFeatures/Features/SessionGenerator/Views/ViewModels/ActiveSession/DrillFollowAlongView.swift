@@ -68,16 +68,30 @@ struct DrillFollowAlongView: View {
                     Text("\(editableDrill.drill.title)")
                         .foregroundColor(appModel.globalSettings.primaryDarkColor)
                         .font(.custom("Poppins-Bold", size: 18))
-                        .padding(.horizontal)
+                        .padding(.leading, 60)
                     
                     Spacer()
                     
+                    // How-to button
                     Button(action: {
                         showDrillDetailView = true
+                        
                     }) {
-                        Image(systemName: "line.horizontal.3")
-                            .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                            .font(.system(size: 16, weight: .medium))
+                        HStack {
+                            Image(systemName: "play.fill")
+                                .foregroundColor(Color.white)
+                                .font(.system(size: 13, weight: .medium))
+                            Text("How-to")
+                                .font(.custom("Poppins-Bold", size: 13))
+                                .foregroundColor(.white)
+                            
+                        }
+                        .padding(.horizontal,5)
+                        .padding(.vertical, 5)
+
+                        .background(appModel.globalSettings.primaryLightGrayColor)
+                        .cornerRadius(12)
+                            
                     }
                     
                 }

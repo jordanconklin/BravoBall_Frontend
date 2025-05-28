@@ -208,7 +208,7 @@ extension OnboardingService {
         return goalMap[goal] ?? "improve_skill"
     }
     
-    static func mapChallengeForBackend(_ challenge: String) -> String {
+    static func mapChallengeForBackend(_ challenges: [String]) -> [String] {
         let challengeMap = [
             "Not enough time to train": "lack_of_time",
             "Lack of proper training equipment": "lack_of_equipment",
@@ -218,7 +218,7 @@ extension OnboardingService {
             "No team to play with": "no_team"
         ]
         
-        return challengeMap[challenge] ?? "unsure_focus"
+        return challenges.compactMap { challengeMap[$0] }
     }
     
     static func mapExperienceLevelForBackend(_ level: String) -> String {

@@ -74,16 +74,20 @@ struct AreaBehindHomePage: View {
                                             }
                                         }
                                     }) {
-                                        Image(systemName: "door.left.hand.open")
-                                            .foregroundColor(.black.opacity(0.5))
-                                            .font(.system(size: 35, weight: .semibold))
+                                        VStack {
+                                            Text("Edit \nSession")
+                                                .font(.custom("Poppins-Bold", size: 14))
+                                                .foregroundColor(.black.opacity(0.5))
+                                                .multilineTextAlignment(.leading)
+                                            RiveViewModel(fileName: "Break_Area").view()
+                                                .frame(width: 80, height: 80)
+                                            
+                                        }
+                                        .padding(.bottom,45)
+                                        
                                         
                                     }
                                 }
-                                
-                                
-                                RiveViewModel(fileName: "Break_Area").view()
-                                    .frame(width: 80, height: 80)
                                 
                             }
 
@@ -136,7 +140,7 @@ struct AreaBehindHomePage: View {
         VStack(spacing: 0) {
             
             Text(sessionModel.sessionNotComplete() ? "You have \(sessionModel.sessionsLeftToComplete()) drills left" : "Well done! Click on the trophy to claim your prize")
-                .font(.custom("Poppins-Bold", size: 13))
+                .font(.custom("Poppins-Bold", size: 18))
                 .foregroundColor(.white)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
