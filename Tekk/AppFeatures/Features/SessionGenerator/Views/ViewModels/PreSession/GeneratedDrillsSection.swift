@@ -18,12 +18,16 @@ struct GeneratedDrillsSection: View {
         LazyVStack(alignment: .center, spacing: layout.standardSpacing) {
                 HStack {
                     
-                    Button(action: {
-                        appModel.viewState.showSearchDrills = true
-                    }) {
-                        RiveViewModel(fileName: "Plus_Button").view()
-                            .frame(width: 30, height: 30)
-                    }
+                    Spacer()
+                    
+                    Text("Session")
+                        .font(.custom("Poppins-Bold", size: 20))
+                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                        .padding(.leading, 70)
+                    
+                    Spacer()
+                    
+                    
                     
                     Button(action: {
                         withAnimation(.spring(dampingFraction: 0.7)) {
@@ -44,15 +48,16 @@ struct GeneratedDrillsSection: View {
                                 .font(.system(size: 16, weight: .medium))
                         }
                     }
+                    .disabled(sessionModel.orderedSessionDrills.isEmpty)
+                    
+                    Button(action: {
+                        appModel.viewState.showSearchDrills = true
+                    }) {
+                        RiveViewModel(fileName: "Plus_Button").view()
+                            .frame(width: 30, height: 30)
+                    }
 
-                    Spacer()
                     
-                    Text("Session")
-                        .font(.custom("Poppins-Bold", size: 20))
-                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                        .padding(.trailing, 60)
-                    
-                    Spacer()
 
                 }
  
@@ -75,6 +80,9 @@ struct GeneratedDrillsSection: View {
                             if appModel.viewState.showDeleteButtons {
                                 Button(action: {
                                     sessionModel.deleteDrillFromSession(drill: editableDrill)
+                                    if sessionModel.orderedSessionDrills.isEmpty {
+                                        appModel.viewState.showDeleteButtons = false
+                                    }
                                 }) {
                                     ZStack {
                                         Circle()
@@ -127,4 +135,16 @@ struct GeneratedDrillsSection: View {
                 SearchDrillsSheetView(appModel: appModel, sessionModel: sessionModel, dismiss: { appModel.viewState.showSearchDrills = false })
             }
     }
+    
+//    private func keepDeleteButtonsShowing() -> Bool {
+//        // First check if we have drills to delete
+//        guard !sessionModel.orderedSessionDrills.isEmpty else { return false }
+//        
+//        // Then check if we're in a state where we should hide delete buttons
+//        let shouldHideDeleteButtons = appModel.viewState.showSkillSearch ||
+//                                    !appModel.viewState.showHomePage ||
+//                                    appModel.viewState.showFieldBehindHomePage
+//        
+//        return !shouldHideDeleteButtons
+//    }
 }
