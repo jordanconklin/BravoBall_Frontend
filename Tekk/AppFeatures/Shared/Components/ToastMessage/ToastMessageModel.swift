@@ -49,3 +49,25 @@ struct ToastMessage: Equatable {
         }
     }
 }
+
+class ToastManager: ObservableObject {
+    @Published var toastMessage: ToastMessage? {
+        didSet {
+            if toastMessage != nil {
+                // Automatically dismiss after delay
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    withAnimation {
+                        self.toastMessage = nil
+                    }
+                }
+            }
+        }
+    }
+    
+    func showToast(_ message: ToastMessage) {
+        withAnimation {
+            self.toastMessage = message
+        }
+    }
+}
+

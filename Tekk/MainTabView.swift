@@ -14,6 +14,7 @@ struct MainTabView: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var userManager: UserManager
     @ObservedObject var sessionModel: SessionGeneratorModel
+    @EnvironmentObject var toastManager: ToastManager
     
     var body: some View {
         NavigationView {
@@ -94,4 +95,5 @@ struct MainTabView: View {
         userManager: mockUserManager,
         sessionModel: mockSesGenModel
     )
+    .environmentObject(ToastManager())
 }

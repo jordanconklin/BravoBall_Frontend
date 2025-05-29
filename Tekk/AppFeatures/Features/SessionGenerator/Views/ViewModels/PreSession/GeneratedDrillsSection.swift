@@ -83,6 +83,7 @@ struct GeneratedDrillsSection: View {
                                     if sessionModel.orderedSessionDrills.isEmpty {
                                         appModel.viewState.showDeleteButtons = false
                                     }
+
                                 }) {
                                     ZStack {
                                         Circle()

@@ -100,7 +100,7 @@ struct DrillSearchView: View {
                     Button("Dribbling", action: { selectedCategory = "dribbling" })
                     Button("Passing", action: { selectedCategory = "passing" })
                     Button("Shooting", action: { selectedCategory = "shooting" })
-                    Button("Defending", action: { selectedCategory = "defending" })
+                    Button("First touch", action: { selectedCategory = "first_touch" })
                 } label: {
                     HStack {
                         Text(selectedCategory?.capitalized ?? "Category")
