@@ -49,7 +49,8 @@ class MainAppModel: ObservableObject {
         var showSavedFilters: Bool = false
         var showSaveFiltersPrompt: Bool = false
         var showSearchDrills: Bool = false
-        var showDeleteButtons: Bool = false
+        var showSessionDeleteButtons: Bool = false
+        var showDrillGroupDeleteButtons: Bool = false
         var showingDrillDetail: Bool = false
         var showSkillSearch: Bool = false
         var showSessionComplete: Bool = false
@@ -67,7 +68,7 @@ class MainAppModel: ObservableObject {
                 showSavedFilters = false
                 showSaveFiltersPrompt = false
                 showSearchDrills = false
-                showDeleteButtons = false
+            showSessionDeleteButtons = false
                 showingDrillDetail = false
                 showSkillSearch = false
                 showSessionComplete = false

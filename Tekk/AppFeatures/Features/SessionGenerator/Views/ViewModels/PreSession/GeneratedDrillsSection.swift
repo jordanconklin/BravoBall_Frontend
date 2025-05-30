@@ -31,7 +31,7 @@ struct GeneratedDrillsSection: View {
                     
                     Button(action: {
                         withAnimation(.spring(dampingFraction: 0.7)) {
-                            appModel.viewState.showDeleteButtons.toggle()
+                            appModel.viewState.showSessionDeleteButtons.toggle()
                         }
                     }) {
                         ZStack {
@@ -77,11 +77,11 @@ struct GeneratedDrillsSection: View {
                 } else {
                     ForEach($sessionModel.orderedSessionDrills, id: \.drill.id) { $editableDrill in
                         HStack {
-                            if appModel.viewState.showDeleteButtons {
+                            if appModel.viewState.showSessionDeleteButtons {
                                 Button(action: {
                                     sessionModel.deleteDrillFromSession(drill: editableDrill)
                                     if sessionModel.orderedSessionDrills.isEmpty {
-                                        appModel.viewState.showDeleteButtons = false
+                                        appModel.viewState.showSessionDeleteButtons = false
                                     }
 
                                 }) {

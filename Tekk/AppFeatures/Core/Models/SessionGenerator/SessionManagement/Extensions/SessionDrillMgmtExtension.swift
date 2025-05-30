@@ -23,6 +23,8 @@ extension SessionGeneratorModel: SessionDrillManagement {
     func deleteDrillFromSession(drill: EditableDrillModel) {
         orderedSessionDrills.removeAll(where: { $0.drill.id == drill.drill.id })
     }
+            
+        
     
     func sessionNotComplete() -> Bool {
         orderedSessionDrills.contains(where: { $0.isCompleted == false })

@@ -37,8 +37,9 @@ struct GroupFilterOptions: View {
                     Button("Cancel", role: .cancel) { }
                     Button("Delete", role: .destructive) {
                         sessionModel.deleteGroup(groupId: group.id)
-                        appModel.viewState.showGroupFilterOptions = false
                         dismiss()
+                        appModel.viewState.showGroupFilterOptions = false
+
                     }
                 } message: {
                     Text("Are you sure you want to delete this group? This action cannot be undone.")
@@ -53,6 +54,8 @@ struct GroupFilterOptions: View {
                                 
                 withAnimation {
                     appModel.viewState.showGroupFilterOptions = false
+                    
+                    appModel.viewState.showDrillGroupDeleteButtons.toggle()
                 }
             }) {
                 HStack(spacing: 8) {
