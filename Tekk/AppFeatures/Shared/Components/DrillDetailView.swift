@@ -16,7 +16,7 @@ struct DrillDetailView: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     let drill: DrillModel
     
-    @EnvironmentObject var toastManager: ToastManager
+    @StateObject private var localToastManager = ToastManager()
     @Environment(\.viewGeometry) var geometry
     @Environment(\.dismiss) private var dismiss
     @State private var showSaveDrill: Bool = false
@@ -74,9 +74,9 @@ struct DrillDetailView: View {
                             Button(action: {
                                 withAnimation {
                                     if sessionModel.orderedSessionDrills.contains(where: { $0.drill.id == drill.id }) {
-                                            toastManager.showToast(.notAllowed("Drill is already in session"))
+                                            localToastManager.showToast(.notAllowed("Drill is already in session"))
                                     } else {
-                                        toastManager.showToast( .success("Drill added to session"))
+                                        localToastManager.showToast( .success("Drill added to session"))
                                     }
                                 }
                                 
@@ -181,6 +181,7 @@ struct DrillDetailView: View {
                 
             }
             .toastOverlay()
+            .environmentObject(localToastManager)
             
     }
     
@@ -231,12 +232,12 @@ struct DrillDetailView: View {
                                             withAnimation {
                                                 if group.drills.contains(where: { $0.id == drill.id }) {
                                                     showSaveDrill = false
-                                                    toastManager.toastMessage = .unAdded("Drill unadded from group")
+                                                    localToastManager.toastMessage = .unAdded("Drill unadded from group")
                                                     sessionModel.removeDrillFromGroup(drill: drill, groupId: group.id)
                                                     
                                                 } else {
                                                     showSaveDrill = false
-                                                    toastManager.toastMessage = .success("Drill added to group")
+                                                    localToastManager.toastMessage = .success("Drill added to group")
                                                     sessionModel.addDrillToGroup(drill: drill, groupId: group.id)
                                                 }
                                             }

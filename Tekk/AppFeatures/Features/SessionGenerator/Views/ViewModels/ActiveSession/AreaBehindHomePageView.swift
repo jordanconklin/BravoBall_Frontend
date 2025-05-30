@@ -137,7 +137,7 @@ struct AreaBehindHomePage: View {
     private var sessionMessageBubble: some View {
         VStack(spacing: 0) {
             
-            Text(sessionModel.sessionNotComplete() ? "You have \(sessionModel.sessionsLeftToComplete()) drills left" : "Well done! Click on the trophy to claim your prize")
+            Text(sessionModel.sessionNotComplete() ? "You have \(sessionModel.sessionsLeftToComplete()) drill\(sessionModel.sessionsLeftToComplete() == 1 ? "" : "s") left" : "Well done! Click on the trophy to claim your prize")
                 .font(.custom("Poppins-Bold", size: 18))
                 .foregroundColor(.white)
                 .padding(.horizontal, 16)
