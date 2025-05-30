@@ -54,9 +54,7 @@ struct AreaBehindHomePage: View {
                         }
                         .padding()
                     }
-                    
-                    // TODO: add button that will end session early and save users progress into calendar
-                    
+                                        
                     
                         HStack {
                             VStack(alignment: .leading) {
