@@ -54,7 +54,7 @@ class OnboardingModel: ObservableObject {
     
     let questionOptions = [
         ["Improve my overall skill level", "Be the best player on my team", "Get scouted for college",
-         "Become a professional footballer", "Improve fitness and conditioning", "Have fun and enjoy the game"],
+         "Become a professional footballer", "Have fun and enjoy the game"],
         ["Lack of time", "Lack of proper training equipment", "Not knowing what to work on",
          "Staying motivated", "Recovering from injury", "No team or structured training", "Lack of confidence"],
         ["Beginner", "Intermediate", "Advanced", "Professional"],
@@ -62,8 +62,8 @@ class OnboardingModel: ObservableObject {
          "Attacking Midfielder", "Winger", "Striker"],
         ["Lionel Messi", "Cristiano Ronaldo", "Neymar Jr", "Jamal Musiala", "Eden Hazard", "Reece James", "William Saliba", "Marta", "Karim Benzema", "Jules Kounde", "Kevin De Bruyne", "Christian Pulisic", "Busquets", "Harry Maguire", "Casemiro", "Bukayo Saka", "Sergio Ramos", "Manuel Neuer", "Alex Balde", "Mo Salah", "Alex Morgan", "Dani Alves", "Aitana Bonmati", "Mesut Ozil", "Jordi Alba", "Joshua Kimmich", "Lamine Yamal", "Antonee Robinson", "Puyol", "Modric", "David Silva", "Rodri", "Bruno Fernandes", "Vivianne Meidema", "Kylian Mbappe", "Xavi", "Allison", "Ngolo Kante", "Harry Kane", "Sergio Aguero", "Erling Haaland", "Gareth Bale", "Thierry Henry", "Thibaut Courtois", "Vinicius Jr", "Iniesta"],
         ["Youth (Under 12)", "Teen (13-16)", "Junior (17-19)", "Adult (20-29)", "Senior (30+)"],
-        ["Passing", "Dribbling", "Shooting", "Defending", "First touch", "Fitness"],
-        ["Passing", "Dribbling", "Shooting", "Defending", "First touch", "Fitness"],
+        ["Passing", "Dribbling", "Shooting", "First touch"],
+        ["Passing", "Dribbling", "Shooting", "First touch"],
         ["At a soccer field with goals", "At home (backyard or indoors)", "At a park or open field",
          "At a gym or indoor court"],
         ["Soccer ball", "Cones", "Wall", "Goals"],

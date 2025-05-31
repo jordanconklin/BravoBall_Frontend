@@ -645,7 +645,7 @@ class SessionGeneratorModel: ObservableObject {
     // MARK: Default subskill mapping
     static let defaultSubskills: [String: String] = [
         "Passing": "Short passing",
-        "Shooting": "Long passing",
+        "Shooting": "Power shots",
         "Dribbling": "1v1 moves",
         "Defending": "Tackling",
         "First touch": "First touch",

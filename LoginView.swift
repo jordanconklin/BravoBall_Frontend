@@ -5,7 +5,7 @@ struct LoginView: View {
     
     @State private var email = ""
     @State private var password = ""
-    @State private var errorMessage = ""
+    @State private var errorMessage = "" 
     @State private var conversations: [Conversation] = []
     @Binding var isLoggedIn: Bool
     @Binding var authToken: String

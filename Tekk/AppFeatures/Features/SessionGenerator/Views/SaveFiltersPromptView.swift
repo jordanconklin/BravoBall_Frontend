@@ -10,6 +10,8 @@ import SwiftUI
 struct SaveFiltersPromptView: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
+    
+    @EnvironmentObject var toastManager: ToastManager
     @Binding var savedFiltersName: String
     var dismiss: () -> Void
     
@@ -47,8 +49,9 @@ struct SaveFiltersPromptView: View {
                 // Save filters button
                 Button(action: {
                     withAnimation {
-                        sessionModel.saveFiltersInGroup(name: savedFiltersName)
                         dismiss()
+                        sessionModel.saveFiltersInGroup(name: savedFiltersName)
+                        toastManager.showToast(.success("Filters saved as \"\(savedFiltersName)\""))
                     }
                 }) {
                     Text("Save")

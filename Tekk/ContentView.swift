@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct BravoBallApp: App {
+    @StateObject private var toastManager = ToastManager()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(toastManager)
         }
     }
 }
@@ -22,6 +25,7 @@ struct ContentView: View {
     @StateObject private var appModel = MainAppModel()
     @StateObject private var userInfoManager = UserManager()
     @StateObject private var sessionGenModel = SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData())
+
 
 
     var body: some View {
@@ -46,11 +50,12 @@ struct ContentView: View {
                 size: geometry.size,
                 safeAreaInsets: geometry.safeAreaInsets
             ))
-
+            .toastOverlay()
         }
     }
 }
 
 #Preview {
     ContentView()
+        .environmentObject(ToastManager())
 }

@@ -69,7 +69,7 @@ struct FilterOptions: View {
                 HStack(spacing: 8) {
                     Image(systemName: "list.bullet")
                         .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                    Text("Show Saved Filters")
+                    Text("Select Saved Filters")
                         .foregroundColor(appModel.globalSettings.primaryDarkColor)
                         .font(.custom("Poppins-Bold", size: 12))
                 }

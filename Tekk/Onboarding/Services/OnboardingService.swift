@@ -201,7 +201,6 @@ extension OnboardingService {
             "Be the best player on my team": "best_on_team",
             "Get scouted for college": "college_scouting",
             "Become a professional player": "go_pro",
-            "Improve my fitness": "improve_fitness",
             "Have fun playing soccer": "have_fun"
         ]
         

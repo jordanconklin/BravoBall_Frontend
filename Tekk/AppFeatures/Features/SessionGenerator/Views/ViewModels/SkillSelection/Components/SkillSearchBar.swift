@@ -79,7 +79,7 @@ struct SkillSearchBar: View {
                     if !appModel.viewState.showSkillSearch {
                         Button(action: { showingSkillSelector = true }) {
                             RiveViewModel(fileName: "Plus_Button").view()
-                                .frame(width: 20, height: 20)
+                                .frame(width: 30, height: 30)
                         }
                     }
                     

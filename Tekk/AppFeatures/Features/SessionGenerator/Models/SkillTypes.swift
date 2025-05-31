@@ -58,22 +58,6 @@ extension SessionGeneratorView {
             "Turn with ball",
             "Touch and move",
             "Juggling"
-        ], icon: "figure.stand"),
-        
-        SkillCategory(name: "Defending", subSkills: [
-            "1v1 defending",
-            "Tackling",
-            "Positioning",
-            "Intercepting",
-            "Pressing"
-        ], icon: "figure.soccer"),
-        
-        SkillCategory(name: "Fitness", subSkills: [
-            "Speed",
-            "Agility",
-            "Endurance",
-            "Strength",
-            "Recovery"
-        ], icon: "figure.run")
+        ], icon: "figure.stand")
     ]
 }
