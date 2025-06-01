@@ -419,7 +419,6 @@
 			children = (
 				178208E72D2DEC5400246494 /* HelperViews */,
 				178208E12D2DEBB400246494 /* OnboardingView.swift */,
-				178208F02D2DFD6500246494 /* OnboardingPreview.swift */,
 				178208E52D2DEC2900246494 /* CompletionView.swift */,
 				178208E32D2DEBC800246494 /* LoginView.swift */,
 			);
@@ -433,6 +432,7 @@
 				178208E82D2DEC6D00246494 /* OnboardingStepView.swift */,
 				178208EA2D2DECE300246494 /* OnboardingMultiSelectView.swift */,
 				178208EC2D2DED0800246494 /* OnboardingBooleanView.swift */,
+				178208F02D2DFD6500246494 /* OnboardingPreview.swift */,
 			);
 			path = HelperViews;
 			sourceTree = "<group>";
