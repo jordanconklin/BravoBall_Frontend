@@ -68,7 +68,7 @@ struct GeneratedDrillsSection: View {
                         Image(systemName: "lock.fill")
                             .frame(width: 50, height: 50)
                             .foregroundColor(appModel.globalSettings.primaryLightGrayColor)
-                        Text("Choose a skill or drill to create your session")
+                        Text("Session will show up here once skills or filters are chosen.")
                             .font(.custom("Poppins-Bold", size: 12))
                             .foregroundColor(appModel.globalSettings.primaryLightGrayColor)
                     }

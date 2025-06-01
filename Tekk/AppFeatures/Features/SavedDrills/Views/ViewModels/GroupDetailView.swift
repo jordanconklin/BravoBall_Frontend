@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import RiveRuntime
 
 // MARK: - Group Detail View
 struct GroupDetailView: View {
@@ -106,23 +107,9 @@ struct GroupDetailView: View {
                 }
                 
                 // Floating add button
-                VStack {
-                    Spacer()
-                    HStack {
-                Spacer()
-                        Button(action: {
-                            showAddDrillSheet = true
-                        }) {
-                            Image(systemName: "plus")
-                                .font(.system(size: 20, weight: .bold))
-                                .foregroundColor(.black)
-                                .frame(width: 56, height: 56)
-                                .background(appModel.globalSettings.primaryYellowColor)
-                                .clipShape(Circle())
-                        }
-                        .padding(.trailing, 20)
-                        .padding(.bottom, 20)
-                    }
+                
+                FloatingAddButton{
+                    showAddDrillSheet = true
                 }
                 
                 // Toast message

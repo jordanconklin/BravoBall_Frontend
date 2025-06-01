@@ -41,9 +41,10 @@ struct BravoHeaderView: View {
                 }
                 .fill(Color(hex:"E4FBFF"))
                 .frame(width: 9, height: 20)
-                .offset(y: 1)
+                .offset(x: 2, y: 1)
+                
                 // Text Bubble
-                Text(sessionModel.orderedSessionDrills.isEmpty ? "Choose your skill to improve today" : "Looks like you got \(sessionModel.orderedSessionDrills.count) drills for today!")
+                Text(sessionModel.orderedSessionDrills.isEmpty ? "Create your session with the filters below." : "Looks like you got \(sessionModel.orderedSessionDrills.count) drills for today!")
                     .font(.custom("Poppins-Bold", size: 13))
                     .foregroundColor(appModel.globalSettings.primaryDarkColor)
                     .padding(.horizontal, 16)
@@ -52,9 +53,9 @@ struct BravoHeaderView: View {
                         RoundedRectangle(cornerRadius: 12)
                             .fill(Color(hex:"E4FBFF"))
                     )
-                    .frame(maxWidth: 150)
+                    .frame(maxWidth: 180)
             }
-            .offset(y: -15)
+            .offset(x: 5, y: -15)
             .transition(.opacity.combined(with: .offset(y: 10)))
         }
     }

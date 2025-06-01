@@ -49,6 +49,7 @@
 		420DA39E2DCE935B004CDD7A /* PreferencesUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420DA39D2DCE9357004CDD7A /* PreferencesUpdate.swift */; };
 		420DA3A22DCEAF69004CDD7A /* Grass_Field.riv in Resources */ = {isa = PBXBuildFile; fileRef = 420DA3A12DCEAF69004CDD7A /* Grass_Field.riv */; };
 		420DA3A72DCEEF55004CDD7A /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420DA3A62DCEEF52004CDD7A /* Checkbox.swift */; };
+		4289C57A2DEC3B8F005CC91B /* FloatingAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4289C5792DEC3B81005CC91B /* FloatingAddButton.swift */; };
 		42929F3B2DD2EB5000DA73BB /* GroupFilterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42929F3A2DD2EB4900DA73BB /* GroupFilterOptions.swift */; };
 		430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */; };
 		430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6CC2D3064850016D520 /* MainAppModel.swift */; };
@@ -204,6 +205,7 @@
 		420DA39D2DCE9357004CDD7A /* PreferencesUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesUpdate.swift; sourceTree = "<group>"; };
 		420DA3A12DCEAF69004CDD7A /* Grass_Field.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Grass_Field.riv; sourceTree = "<group>"; };
 		420DA3A62DCEEF52004CDD7A /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
+		4289C5792DEC3B81005CC91B /* FloatingAddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingAddButton.swift; sourceTree = "<group>"; };
 		42929F3A2DD2EB4900DA73BB /* GroupFilterOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupFilterOptions.swift; sourceTree = "<group>"; };
 		430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegisterForm.swift; sourceTree = "<group>"; };
 		430FD6CC2D3064850016D520 /* MainAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppModel.swift; sourceTree = "<group>"; };
@@ -461,6 +463,15 @@
 			path = Checkbox;
 			sourceTree = "<group>";
 		};
+		4289C5782DEC3B6F005CC91B /* DrillDetailPage */ = {
+			isa = PBXGroup;
+			children = (
+				4289C5792DEC3B81005CC91B /* FloatingAddButton.swift */,
+				174C676F2D34EB11003D02EF /* DrillDetailView.swift */,
+			);
+			path = DrillDetailPage;
+			sourceTree = "<group>";
+		};
 		431BDFE82D853E0700F4E6EE /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -612,10 +623,10 @@
 		4399B7252D6D7AB400DA5E84 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				4289C5782DEC3B6F005CC91B /* DrillDetailPage */,
 				420DA3A52DCEEF45004CDD7A /* Checkbox */,
 				43FCC7262D7F8DAA00005ABB /* MainTab */,
 				43C5FC422D6DB6D20064E7D5 /* ToastMessage */,
-				174C676F2D34EB11003D02EF /* DrillDetailView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1226,6 +1237,7 @@
 				17595A9F2D3B3B320015F35D /* ProgressionView.swift in Sources */,
 				43B6877D2D7C2394009CCA8C /* CacheManager.swift in Sources */,
 				43C5FC492D6DB84F0064E7D5 /* EditableDrillModel.swift in Sources */,
+				4289C57A2DEC3B8F005CC91B /* FloatingAddButton.swift in Sources */,
 				43A764992D825FEF004509E5 /* DataSyncService.swift in Sources */,
 				43C5FC742D6DCCF30064E7D5 /* GeneratedDrillsSection.swift in Sources */,
 				4399B6CE2D67CE3B00DA5E84 /* ToastMessageView.swift in Sources */,
@@ -1411,6 +1423,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Tekk/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Tekk/Info.plist;
@@ -1433,6 +1446,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ConklinOfficial.BravoBall;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;

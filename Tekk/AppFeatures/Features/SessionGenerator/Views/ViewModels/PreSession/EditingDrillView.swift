@@ -59,10 +59,10 @@ struct EditingDrillView: View {
                         
                     }) {
                         HStack {
-                            Image(systemName: "play.fill")
+                            Image(systemName: "questionmark.circle.fill")
                                 .foregroundColor(Color.white)
                                 .font(.system(size: 13, weight: .medium))
-                            Text("How-to")
+                            Text("Details")
                                 .font(.custom("Poppins-Bold", size: 13))
                                 .foregroundColor(.white)
                             
@@ -70,7 +70,7 @@ struct EditingDrillView: View {
                         .padding(.horizontal,5)
                         .padding(.vertical, 5)
 
-                        .background(appModel.globalSettings.primaryLightGrayColor)
+                        .background(appModel.globalSettings.primaryGrayColor)
                         .cornerRadius(12)
                             
                     }

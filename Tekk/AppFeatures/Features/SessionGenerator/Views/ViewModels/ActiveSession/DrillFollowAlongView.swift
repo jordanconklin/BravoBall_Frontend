@@ -78,10 +78,10 @@ struct DrillFollowAlongView: View {
                         
                     }) {
                         HStack {
-                            Image(systemName: "play.fill")
+                            Image(systemName: "questionmark.circle.fill")
                                 .foregroundColor(Color.white)
                                 .font(.system(size: 13, weight: .medium))
-                            Text("How-to")
+                            Text("Details")
                                 .font(.custom("Poppins-Bold", size: 13))
                                 .foregroundColor(.white)
                             
@@ -89,7 +89,7 @@ struct DrillFollowAlongView: View {
                         .padding(.horizontal,5)
                         .padding(.vertical, 5)
 
-                        .background(appModel.globalSettings.primaryLightGrayColor)
+                        .background(appModel.globalSettings.primaryGrayColor)
                         .cornerRadius(12)
                             
                     }
@@ -220,14 +220,14 @@ struct DrillFollowAlongView: View {
                     }
                             
                     ){
-                        Text("End Drill")
+                        Text("Done with drill")
                             .font(.custom("Poppins-Bold", size: 16))
                             .foregroundColor(.white)
                             .frame(height: 44)
                             .frame(maxWidth: .infinity)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(doneWithDrill() ? Color.red : appModel.globalSettings.primaryLightGrayColor)
+                                    .fill(doneWithDrill() ? Color.green : appModel.globalSettings.primaryLightGrayColor)
                             )
                     }
                     .disabled(!doneWithDrill())

@@ -35,7 +35,7 @@ struct SessionGeneratorView: View {
 
             // Golden button
             if sessionReady() {
-                StartButton(appModel: appModel) {
+                StartButton(appModel: appModel, sessionModel: sessionModel) {
                     withAnimation(.spring(dampingFraction: 0.7)) {
                         appModel.viewState.showHomePage = false
                         appModel.viewState.showPreSessionTextBubble = false
