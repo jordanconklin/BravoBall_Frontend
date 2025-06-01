@@ -35,21 +35,6 @@ class MainAppModel: ObservableObject {
     @Published var mainTabSelected = 0
     @Published var inSimulationMode: Bool = false
     
-    
-    // Toast messages
-    @Published var toastMessage: ToastMessage? {
-           didSet {
-               if toastMessage != nil {
-                   // Automatically dismiss after delay
-                   DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                       withAnimation {
-                           self.toastMessage = nil
-                       }
-                   }
-               }
-           }
-       }
-
     // View state
     @Published var viewState = ViewState()
     
@@ -64,7 +49,8 @@ class MainAppModel: ObservableObject {
         var showSavedFilters: Bool = false
         var showSaveFiltersPrompt: Bool = false
         var showSearchDrills: Bool = false
-        var showDeleteButtons: Bool = false
+        var showSessionDeleteButtons: Bool = false
+        var showDrillGroupDeleteButtons: Bool = false
         var showingDrillDetail: Bool = false
         var showSkillSearch: Bool = false
         var showSessionComplete: Bool = false
@@ -82,7 +68,7 @@ class MainAppModel: ObservableObject {
                 showSavedFilters = false
                 showSaveFiltersPrompt = false
                 showSearchDrills = false
-                showDeleteButtons = false
+            showSessionDeleteButtons = false
                 showingDrillDetail = false
                 showSkillSearch = false
                 showSessionComplete = false
@@ -419,10 +405,6 @@ class MainAppModel: ObservableObject {
         selectedSession = nil
         showCalendar = false
         showDrillResults = false
-        
-        // Clear any active toast messages
-        toastMessage = nil
-        
         
         allCompletedSessions = []
         currentStreak = 0

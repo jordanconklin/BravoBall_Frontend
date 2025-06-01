@@ -16,6 +16,7 @@ struct DrillDetailView: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     let drill: DrillModel
     
+    @StateObject private var localToastManager = ToastManager()
     @Environment(\.viewGeometry) var geometry
     @Environment(\.dismiss) private var dismiss
     @State private var showSaveDrill: Bool = false
@@ -68,23 +69,6 @@ struct DrillDetailView: View {
                                     .frame(width: 30, height: 30)
                             }
                             
-                            
-                            // Add drill to session
-                            Button(action: {
-                                withAnimation {
-                                    if sessionModel.orderedSessionDrills.contains(where: { $0.drill.id == drill.id }) {
-                                        appModel.toastMessage = .notAllowed("Drill is already in session")
-                                    } else {
-                                        appModel.toastMessage = .success("Drill added to session")
-                                    }
-                                }
-                                
-                                sessionModel.addDrillToSession(drills: [drill])
-
-                            }) {
-                                RiveViewModel(fileName: "Plus_Button").view()
-                                    .frame(width: 30, height: 30)
-                            }
                         }
                         .padding(.vertical)
                         
@@ -174,12 +158,25 @@ struct DrillDetailView: View {
                 }
                 .frame(width: geometry.size.width)
                 
+
+                // Add drill to session button
+                
+                if !isDrillInRunningSession() {
+                    FloatingAddButton{
+                        addDrillWithToast()
+                    }
+                }
+                
+                
+                // save to group view
+                
                 if showSaveDrill {
                     findGroupToSaveToView
                 }
                 
             }
-            .toastOverlay(appModel: appModel)
+            .toastOverlay()
+            .environmentObject(localToastManager)
             
     }
     
@@ -230,12 +227,12 @@ struct DrillDetailView: View {
                                             withAnimation {
                                                 if group.drills.contains(where: { $0.id == drill.id }) {
                                                     showSaveDrill = false
-                                                    appModel.toastMessage = .unAdded("Drill unadded from group")
+                                                    localToastManager.toastMessage = .unAdded("Drill unadded from group")
                                                     sessionModel.removeDrillFromGroup(drill: drill, groupId: group.id)
                                                     
                                                 } else {
                                                     showSaveDrill = false
-                                                    appModel.toastMessage = .success("Drill added to group")
+                                                    localToastManager.toastMessage = .success("Drill added to group")
                                                     sessionModel.addDrillToGroup(drill: drill, groupId: group.id)
                                                 }
                                             }
@@ -253,6 +250,22 @@ struct DrillDetailView: View {
             .cornerRadius(15)
         }
 
+    }
+    
+    func isDrillInRunningSession() -> Bool {
+        return sessionModel.orderedSessionDrills.contains(where: { $0.drill.title == drill.title }) && appModel.viewState.showFieldBehindHomePage == true
+    }
+    
+    private func addDrillWithToast() {
+        withAnimation {
+            if sessionModel.orderedSessionDrills.contains(where: { $0.drill.id == drill.id }) {
+                    localToastManager.showToast(.notAllowed("Drill already in session"))
+            } else {
+                localToastManager.showToast( .success("Drill added to session"))
+            }
+        }
+        
+        sessionModel.addDrillToSession(drills: [drill])
     }
             
 }

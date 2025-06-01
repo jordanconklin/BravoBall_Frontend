@@ -85,6 +85,12 @@ struct SessionCompleteView: View {
         appModel.viewState.showHomePage = true
         appModel.viewState.showPreSessionTextBubble = true
         appModel.viewState.showSessionComplete = false
+        
+        // resets progress of drills in session
+        for index in sessionModel.orderedSessionDrills.indices {
+                sessionModel.orderedSessionDrills[index].setsDone = 0
+                sessionModel.orderedSessionDrills[index].isCompleted = false
+            }
     }
 }
 

@@ -13,7 +13,6 @@ struct SavedDrillsView: View {
     @Environment(\.viewGeometry) var geometry
     
     @State private var showCreateGroup: Bool = false
-    @State private var showGroupDetails: Bool = false
     @State private var savedGroupName: String = ""
     @State private var savedGroupDescription: String = ""
     @State private var selectedGroup: GroupModel? = nil

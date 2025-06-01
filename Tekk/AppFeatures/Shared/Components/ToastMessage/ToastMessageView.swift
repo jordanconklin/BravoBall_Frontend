@@ -31,19 +31,18 @@ struct ToastView: View {
                         .stroke(message.type.color.opacity(0.2), lineWidth: 1)
                 )
         )
-        .transition(.move(edge: .bottom).combined(with: .opacity))
     }
 }
 
 // Overlay modifier for toast
 struct ToastModifier: ViewModifier {
-    @ObservedObject var appModel: MainAppModel
+    @EnvironmentObject var toastManager: ToastManager
     
     func body(content: Content) -> some View {
         ZStack {
             content
             
-            if let toast = appModel.toastMessage {
+            if let toast = toastManager.toastMessage {
                 VStack {
                     Spacer()
                     ToastView(message: toast)
@@ -52,13 +51,13 @@ struct ToastModifier: ViewModifier {
                 .transition(.opacity)
             }
         }
-        .animation(.spring(dampingFraction: 0.7), value: appModel.toastMessage)
+        .animation(.easeInOut(duration: 0.4), value: toastManager.toastMessage)
     }
 }
 
 // Extension for easy usage, displays toastmodifier with toastview
 extension View {
-    func toastOverlay(appModel: MainAppModel) -> some View {
-        modifier(ToastModifier(appModel: appModel))
+    func toastOverlay() -> some View {
+        modifier(ToastModifier())
     }
 }

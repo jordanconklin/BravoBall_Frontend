@@ -305,7 +305,8 @@ struct OnboardingView: View {
                     CompletionView(onboardingModel: onboardingModel, userManager: userManager, sessionModel: sessionModel)
                 }
             }
-            .padding()
+            .padding(.top)
+            .padding(.horizontal)
 
             
             // Next button

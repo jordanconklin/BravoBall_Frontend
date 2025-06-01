@@ -78,10 +78,10 @@ struct DrillFollowAlongView: View {
                         
                     }) {
                         HStack {
-                            Image(systemName: "play.fill")
+                            Image(systemName: "questionmark.circle.fill")
                                 .foregroundColor(Color.white)
                                 .font(.system(size: 13, weight: .medium))
-                            Text("How-to")
+                            Text("Details")
                                 .font(.custom("Poppins-Bold", size: 13))
                                 .foregroundColor(.white)
                             
@@ -89,7 +89,7 @@ struct DrillFollowAlongView: View {
                         .padding(.horizontal,5)
                         .padding(.vertical, 5)
 
-                        .background(appModel.globalSettings.primaryLightGrayColor)
+                        .background(appModel.globalSettings.primaryGrayColor)
                         .cornerRadius(12)
                             
                     }
@@ -204,9 +204,11 @@ struct DrillFollowAlongView: View {
                         .padding(.bottom, 145)
                 }
                 
+                
                 Spacer()
                 
-                if doneWithDrill() {
+                HStack {
+                    // End drill
                     Button(action: {
                         handleDrillCompletion()
                         endDrill()
@@ -218,17 +220,43 @@ struct DrillFollowAlongView: View {
                     }
                             
                     ){
-                        Text("End Drill")
+                        Text("Done with drill")
                             .font(.custom("Poppins-Bold", size: 16))
                             .foregroundColor(.white)
                             .frame(height: 44)
                             .frame(maxWidth: .infinity)
                             .background(
-                                RoundedRectangle(cornerRadius: 22)
-                                    .fill(Color.red)
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(doneWithDrill() ? Color.green : appModel.globalSettings.primaryLightGrayColor)
                             )
                     }
+                    .disabled(!doneWithDrill())
+                    
+                    // Skip button
+                    Button(action: {
+                        handleDrillCompletion()
+                        endDrill()
+                        
+                    }) {
+                        HStack {
+                            Image(systemName: "forward.fill")
+                                .foregroundColor(Color.white)
+                                .font(.system(size: 16, weight: .medium))
+                            Text("Skip Drill")
+                                .font(.custom("Poppins-Bold", size: 16))
+                                .foregroundColor(.white)
+                            
+                        }
+                        .frame(height: 44)
+                        .padding(.horizontal, 8)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(appModel.globalSettings.primaryYellowColor)
+                        )
+                            
+                    }
                 }
+
             }
             .padding(.horizontal, 20)
             .statusBar(hidden: false)
@@ -248,8 +276,7 @@ struct DrillFollowAlongView: View {
     
     private var backButton: some View {
         Button(action: {
-            stopTimer()
-            dismiss()
+            endDrill()
         }) {
             HStack {
                 Image(systemName: "xmark")

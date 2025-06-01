@@ -100,7 +100,7 @@ struct DrillSearchView: View {
                     Button("Dribbling", action: { selectedCategory = "dribbling" })
                     Button("Passing", action: { selectedCategory = "passing" })
                     Button("Shooting", action: { selectedCategory = "shooting" })
-                    Button("Defending", action: { selectedCategory = "defending" })
+                    Button("First touch", action: { selectedCategory = "first_touch" })
                 } label: {
                     HStack {
                         Text(selectedCategory?.capitalized ?? "Category")
@@ -248,6 +248,7 @@ struct DrillSearchView: View {
                         ForEach(searchResults) { drill in
                             DrillRowForSearch(
                                 appModel: appModel,
+                                sessionModel: sessionModel,
                                 drill: drill,
                                 isSelected: selectedDrills.contains(drill),
                                 isDisabled: filterDrills?(drill) ?? false,
@@ -442,70 +443,82 @@ struct DrillSearchView: View {
 // Drill row component specifically for search results
 struct DrillRowForSearch: View {
     @ObservedObject var appModel: MainAppModel
+    @ObservedObject var sessionModel: SessionGeneratorModel
     let drill: DrillModel
     let isSelected: Bool
     let isDisabled: Bool
     let isAlreadySelected: Bool
     let onSelect: () -> Void
     
+    @State var showDrillDetail: Bool = false
+    
     var body: some View {
-        HStack {
-            Image(systemName: "figure.soccer")
-                .font(.system(size: 24))
-                .foregroundColor(.black)
-                .frame(width: 40, height: 40)
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(8)
-            
-            VStack(alignment: .leading) {
-                Text(drill.title)
-                    .font(.custom("Poppins-Bold", size: 14))
-                    .foregroundColor(.black)
-                
-                HStack(spacing: 8) {
-                    // Display category/skill as a pill
-                    Text(drill.skill)
-                        .font(.custom("Poppins-Regular", size: 10))
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(colorForSkill(drill.skill))
-                        .cornerRadius(12)
+        ZStack {
+            Button( action: {
+                showDrillDetail = true
+            }) {
+                HStack {
+                    Image(systemName: "figure.soccer")
+                        .font(.system(size: 24))
+                        .foregroundColor(.black)
+                        .frame(width: 40, height: 40)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(8)
                     
-                    // Display difficulty as a pill
-                    Text(drill.difficulty)
-                        .font(.custom("Poppins-Regular", size: 10))
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(colorForDifficulty(drill.difficulty))
-                        .cornerRadius(12)
+                    VStack(alignment: .leading) {
+                        Text(drill.title)
+                            .font(.custom("Poppins-Bold", size: 14))
+                            .foregroundColor(.black)
+                        
+                        HStack(spacing: 8) {
+                            // Display category/skill as a pill
+                            Text(drill.skill)
+                                .font(.custom("Poppins-Regular", size: 10))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(colorForSkill(drill.skill))
+                                .cornerRadius(12)
+                            
+                            // Display difficulty as a pill
+                            Text(drill.difficulty)
+                                .font(.custom("Poppins-Regular", size: 10))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(colorForDifficulty(drill.difficulty))
+                                .cornerRadius(12)
+                        }
+                        
+                        Text(drill.description)
+                            .font(.custom("Poppins-Regular", size: 12))
+                            .foregroundColor(.gray)
+                            .lineLimit(2)
+                    }
+                    
+                    Spacer()
+                    
+                    if isAlreadySelected {
+                        Text("Already added")
+                            .font(.custom("Poppins-Regular", size: 12))
+                            .foregroundColor(.gray)
+                    } else if isDisabled {
+                        Text("Not available")
+                            .font(.custom("Poppins-Regular", size: 12))
+                            .foregroundColor(.gray)
+                    } else {
+                        Button(action: onSelect) {
+                            Checkbox(appModel: appModel, isSelected: isSelected)
+                        }
+                    }
                 }
-                
-                Text(drill.description)
-                    .font(.custom("Poppins-Regular", size: 12))
-                    .foregroundColor(.gray)
-                    .lineLimit(2)
+                .padding(.vertical, 8)
+                .opacity(isDisabled ? 0.6 : 1.0)
             }
-            
-            Spacer()
-            
-            if isAlreadySelected {
-                Text("Already added")
-                    .font(.custom("Poppins-Regular", size: 12))
-                    .foregroundColor(.gray)
-            } else if isDisabled {
-                Text("Not available")
-                    .font(.custom("Poppins-Regular", size: 12))
-                    .foregroundColor(.gray)
-            } else {
-                Button(action: onSelect) {
-                    Checkbox(appModel: appModel, isSelected: isSelected)
-                }
+            .sheet(isPresented: $showDrillDetail) {
+                DrillDetailView(appModel: appModel,  sessionModel: sessionModel, drill: drill)
             }
         }
-        .padding(.vertical, 8)
-        .opacity(isDisabled ? 0.6 : 1.0)
     }
     
     // Helper methods for coloring

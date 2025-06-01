@@ -38,7 +38,7 @@ struct FieldDrillCard: View {
                 
                 // Drill card
                 ZStack {
-                    if editableDrill.isCompleted {
+                    if editableDrill.isCompleted && editableDrill.totalSets == editableDrill.setsDone {
                         RiveViewModel(fileName: "Drill_Card_Complete").view()
                         .frame(width: 100, height: 50)
                     } else {
@@ -48,7 +48,7 @@ struct FieldDrillCard: View {
                     Image(systemName: "figure.soccer")
                         .font(.system(size: 20))
                         .padding()
-                        .foregroundColor(editableDrill.isCompleted ? Color.white : appModel.globalSettings.primaryDarkColor)
+                        .foregroundColor(editableDrill.isCompleted && editableDrill.totalSets == editableDrill.setsDone ? Color.white : appModel.globalSettings.primaryDarkColor)
 
                 }
             }
@@ -67,7 +67,7 @@ struct FieldDrillCard: View {
     }
     
     var progress: Double {
-            Double(editableDrill.setsDone) / Double(editableDrill.drill.sets)
+            Double(editableDrill.setsDone) / Double(editableDrill.totalSets)
         }
     
     private func isCurrentDrill() -> Bool {

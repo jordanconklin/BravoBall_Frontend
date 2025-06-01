@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import RiveRuntime
 
 // MARK: - Group Detail View
 struct GroupDetailView: View {
@@ -68,8 +69,37 @@ struct GroupDetailView: View {
                         Spacer()
                 } else {
                     List {
-                        ForEach(currentDrills) { drill in
-                            DrillRow(appModel: appModel, sessionModel: sessionModel, drill: drill)
+                        ForEach($currentDrills) { $drill in
+                            HStack {
+                                if appModel.viewState.showDrillGroupDeleteButtons {
+                                    Button(action: {
+                                        
+                                        sessionModel.removeDrillFromGroup(drill: drill, groupId: group.id)
+                                        // Remove from currentDrills
+                                        if let index = currentDrills.firstIndex(where: { $0.id == drill.id }) {
+                                            currentDrills.remove(at: index)
+                                        }
+                                        
+                                        if currentDrills.isEmpty {
+                                            appModel.viewState.showDrillGroupDeleteButtons = false
+                                        }
+
+                                    }) {
+                                        ZStack {
+                                            Circle()
+                                                .fill(Color.red)
+                                                .frame(width: 20, height: 20)
+                                            Rectangle()
+                                                .fill(Color.white)
+                                                .frame(width: 10, height: 2)
+                                        }
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                    .padding(.leading)
+                                }
+                                
+                                DrillRow(appModel: appModel, sessionModel: sessionModel, drill: drill)
+                            }
                         }
                     }
                     .id(UUID()) // Force refresh list when data changes
@@ -77,23 +107,9 @@ struct GroupDetailView: View {
                 }
                 
                 // Floating add button
-                VStack {
-                    Spacer()
-                    HStack {
-                Spacer()
-                        Button(action: {
-                            showAddDrillSheet = true
-                        }) {
-                            Image(systemName: "plus")
-                                .font(.system(size: 20, weight: .bold))
-                                .foregroundColor(.black)
-                                .frame(width: 56, height: 56)
-                                .background(appModel.globalSettings.primaryYellowColor)
-                                .clipShape(Circle())
-                        }
-                        .padding(.trailing, 20)
-                        .padding(.bottom, 20)
-                    }
+                
+                FloatingAddButton{
+                    showAddDrillSheet = true
                 }
                 
                 // Toast message
