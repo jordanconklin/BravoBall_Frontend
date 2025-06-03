@@ -13,6 +13,7 @@ struct GeneratedDrillsSection: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     
     private let layout = ResponsiveLayout.shared
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         LazyVStack(alignment: .center, spacing: layout.standardSpacing) {
@@ -133,19 +134,30 @@ struct GeneratedDrillsSection: View {
             .padding(.top, 10)
             .cornerRadius(15)
             .sheet(isPresented: $appModel.viewState.showSearchDrills) {
-                SearchDrillsSheetView(appModel: appModel, sessionModel: sessionModel, dismiss: { appModel.viewState.showSearchDrills = false })
+                DrillSearchView(
+                    appModel: appModel,
+                    sessionModel: sessionModel,
+                    onDrillsSelected: { selectedDrills in
+                        // Add the selected drills to the session
+                        sessionModel.addDrillToSession(drills: selectedDrills)
+                        
+                        // Close the sheet
+                        appModel.viewState.showSearchDrills = false
+                        
+                        // Call the dismiss callback
+                        dismiss()
+                    },
+                    title: "Search Drills",
+                    actionButtonText: { count in
+                        "Add \(count) \(count == 1 ? "Drill" : "Drills") to Session"
+                    },
+                    filterDrills: { drill in
+                        sessionModel.orderedSessionDrills.contains(where: { $0.drill.id == drill.id })
+                    },
+                    isDrillSelected: { drill in
+                        sessionModel.isDrillSelected(drill)
+                    }
+                )
             }
     }
-    
-//    private func keepDeleteButtonsShowing() -> Bool {
-//        // First check if we have drills to delete
-//        guard !sessionModel.orderedSessionDrills.isEmpty else { return false }
-//        
-//        // Then check if we're in a state where we should hide delete buttons
-//        let shouldHideDeleteButtons = appModel.viewState.showSkillSearch ||
-//                                    !appModel.viewState.showHomePage ||
-//                                    appModel.viewState.showFieldBehindHomePage
-//        
-//        return !shouldHideDeleteButtons
-//    }
 }

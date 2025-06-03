@@ -146,7 +146,7 @@ struct OnboardingView: View {
     
     // Questionnaire view for onboarding new users
     var questionnaireContent: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 30) {
             // Top Navigation Bar
             HStack(spacing: 12) {
                 // Back Button
@@ -236,6 +236,7 @@ struct OnboardingView: View {
                     }
                 }
             }
+            .padding(.bottom, 20)
             
             
             // Step Content

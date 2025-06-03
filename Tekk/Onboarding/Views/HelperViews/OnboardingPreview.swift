@@ -11,7 +11,7 @@ struct OnboardingPreview: View {
     @ObservedObject var appModel: MainAppModel
     
     var body: some View {
-        VStack(spacing: 15) {
+        VStack(spacing: 35) {
             Text("Hello! Im Bravo!")
                 .font(.custom("Poppins-Bold", size: 20))
                 .foregroundColor(appModel.globalSettings.primaryDarkColor)
@@ -20,7 +20,7 @@ struct OnboardingPreview: View {
                 .foregroundColor(appModel.globalSettings.primaryDarkColor)
             Spacer()
         }
-        .padding(.top, 10)
-        .padding(.horizontal)
+        .padding(.top, 50)
+        .padding(.horizontal, 80)
     }
 }

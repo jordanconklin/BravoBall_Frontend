@@ -12,12 +12,11 @@ struct DrillFollowAlongView: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     @Binding var editableDrill: EditableDrillModel
-    
-    @State private var showDrillDetailView: Bool = false
-    
     @Environment(\.dismiss) private var dismiss
     @Environment(\.viewGeometry) var geometry
     
+    
+    @State private var selectedDrill: DrillModel? = nil
     @State private var isPlaying = false
     @State private var restartTime: TimeInterval = 0
     @State private var elapsedTime: TimeInterval = 0
@@ -40,7 +39,7 @@ struct DrillFollowAlongView: View {
         )
         
         // Initialize all @State properties
-        self._showDrillDetailView = State(initialValue: false)
+        self._selectedDrill = State(initialValue: nil)
         self._isPlaying = State(initialValue: false)
         self._countdownValue = State(initialValue: nil)
         self._displayCountdown = State(initialValue: true)
@@ -51,13 +50,7 @@ struct DrillFollowAlongView: View {
 
     
     var body: some View {
-        
-        
-        
-//        ZStack(alignment: .bottom) {
-//            Color.white.ignoresSafeArea()
-            
-            
+        NavigationStack {
             VStack(spacing: 0) {
                 HStack {
                     
@@ -74,8 +67,8 @@ struct DrillFollowAlongView: View {
                     
                     // How-to button
                     Button(action: {
-                        showDrillDetailView = true
-                        
+                        selectedDrill = editableDrill.drill
+
                     }) {
                         HStack {
                             Image(systemName: "questionmark.circle.fill")
@@ -261,9 +254,6 @@ struct DrillFollowAlongView: View {
             .padding(.horizontal, 20)
             .statusBar(hidden: false)
             .navigationBarHidden(true)
-            .sheet(isPresented: $showDrillDetailView) {
-                DrillDetailView(appModel: appModel, sessionModel: sessionModel, drill: editableDrill.drill)
-            }
             .onChange(of: isPlaying) { newValue in
                 if newValue {
                     player?.play()
@@ -271,7 +261,11 @@ struct DrillFollowAlongView: View {
                     player?.pause()
                 }
             }
-            
+            .navigationDestination(item: $selectedDrill) { drill in
+                DrillDetailView(appModel: appModel, sessionModel: sessionModel, drill: drill)
+            }
+
+        }
     }
     
     private var backButton: some View {

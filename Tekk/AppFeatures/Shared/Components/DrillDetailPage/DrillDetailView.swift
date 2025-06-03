@@ -16,9 +16,9 @@ struct DrillDetailView: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     let drill: DrillModel
     
+    @Environment(\.dismiss) private var dismiss
     @StateObject private var localToastManager = ToastManager()
     @Environment(\.viewGeometry) var geometry
-    @Environment(\.dismiss) private var dismiss
     @State private var showSaveDrill: Bool = false
 
     
@@ -156,6 +156,7 @@ struct DrillDetailView: View {
                     }
                     .padding(.horizontal, 20)
                 }
+                .navigationBarBackButtonHidden(true)
                 .frame(width: geometry.size.width)
                 
 
@@ -175,6 +176,7 @@ struct DrillDetailView: View {
                 }
                 
             }
+            .background(Color.white)
             .toastOverlay()
             .environmentObject(localToastManager)
             
@@ -253,7 +255,7 @@ struct DrillDetailView: View {
     }
     
     func isDrillInRunningSession() -> Bool {
-        return sessionModel.orderedSessionDrills.contains(where: { $0.drill.title == drill.title }) && appModel.viewState.showFieldBehindHomePage == true
+        return sessionModel.orderedSessionDrills.contains(where: { $0.drill.title == drill.title })
     }
     
     private func addDrillWithToast() {

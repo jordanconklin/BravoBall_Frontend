@@ -21,7 +21,7 @@ struct EditingDrillView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.viewGeometry) var geometry
     
-    @State private var showDrillDetailView: Bool = false
+    @State private var selectedDrill: DrillModel? = nil
     @State private var editSets: String = ""
     @State private var editReps: String = ""
     @State private var editDuration: String = ""
@@ -30,7 +30,7 @@ struct EditingDrillView: View {
     @FocusState private var isDurationFocused: Bool
     
     var body: some View {
-        ZStack {
+        NavigationStack {
             VStack {
                 HStack {
                     Button(action: {
@@ -55,7 +55,7 @@ struct EditingDrillView: View {
                     
                     // How-to button
                     Button(action: {
-                        showDrillDetailView = true
+                        selectedDrill = editableDrill.drill
                         
                     }) {
                         HStack {
@@ -183,55 +183,59 @@ struct EditingDrillView: View {
                 .padding(.bottom, 100)
                 
                 Spacer()
+                
+                savedChangesButton
+                
             }
             .padding(.horizontal, 20)
+            .navigationDestination(item: $selectedDrill) { drill in
+                DrillDetailView(appModel: appModel, sessionModel: sessionModel, drill: drill)
+            }
             
         }
         .frame(width: geometry.size.width)
-        .sheet(isPresented: $showDrillDetailView) {
-            DrillDetailView(appModel: appModel, sessionModel: sessionModel, drill: editableDrill.drill)
-        }
         
-        // Checks if changes are made
-        .safeAreaInset(edge: .bottom) {
-            let validations = (
-                sets: Int(editSets).map { $0 > 0 && $0 <= 99 } ?? false,
-                reps: Int(editReps).map { $0 > 0 && $0 <= 99 } ?? false,
-                duration: Int(editDuration).map { $0 > 0 && $0 <= 999 } ?? false
-            )
-            let setsValid = validations.sets
-            let repsValid = validations.reps
-            let durationValid = validations.duration
-            
+    }
+    
+    private var savedChangesButton: some View {
+        let validations = (
+            sets: Int(editSets).map { $0 > 0 && $0 <= 99 } ?? false,
+            reps: Int(editReps).map { $0 > 0 && $0 <= 99 } ?? false,
+            duration: Int(editDuration).map { $0 > 0 && $0 <= 999 } ?? false
+        )
+        let setsValid = validations.sets
+        let repsValid = validations.reps
+        let durationValid = validations.duration
+        
+        
+
+        
+        return Button(action: {
             
 
-            
-            Button(action: {
-
-                if let sets = Int(editSets), setsValid {
-                    editableDrill.totalSets = sets
-                }
-                if let reps = Int(editReps), repsValid {
-                    editableDrill.totalReps = reps
-                }
-                if let duration = Int(editDuration), durationValid {
-                    editableDrill.totalDuration = duration
-                }
-                
-                appModel.viewState.showingDrillDetail = false
-                
-            }) {
-                Text("Save Changes")
-                    .font(.custom("Poppins-Bold", size: 18))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(setsValid || repsValid || durationValid ? appModel.globalSettings.primaryYellowColor : Color.gray.opacity(0.5))
-                    .cornerRadius(12)
+            if let sets = Int(editSets), setsValid {
+                editableDrill.totalSets = sets
             }
-            .disabled(!setsValid && !repsValid && !durationValid)
-            .padding()
+            if let reps = Int(editReps), repsValid {
+                editableDrill.totalReps = reps
+            }
+            if let duration = Int(editDuration), durationValid {
+                editableDrill.totalDuration = duration
+            }
+            
+            appModel.viewState.showingDrillDetail = false
+            
+        }) {
+            Text("Save Changes")
+                .font(.custom("Poppins-Bold", size: 18))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(setsValid || repsValid || durationValid ? appModel.globalSettings.primaryYellowColor : Color.gray.opacity(0.5))
+                .cornerRadius(12)
         }
+        .disabled(!setsValid && !repsValid && !durationValid)
+        .padding()
     }
 }
 

@@ -15,12 +15,14 @@ struct DrillCard: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     
     @Binding var editableDrill: EditableDrillModel
+    @State private var showEditingDrillView = false
+
     private let layout = ResponsiveLayout.shared
     
     var body: some View {
         Button(action: {
             sessionModel.selectedDrillForEditing = editableDrill
-            appModel.viewState.showingDrillDetail = true
+            showEditingDrillView = true
         }) {
             ZStack {
                 // Background card
@@ -69,7 +71,7 @@ struct DrillCard: View {
             }
         }
         .buttonStyle(PlainButtonStyle())
-        .sheet(isPresented: $appModel.viewState.showingDrillDetail) {
+        .sheet(isPresented: $showEditingDrillView) {
             if let selectedDrill = sessionModel.selectedDrillForEditing,
                let index = sessionModel.orderedSessionDrills.firstIndex(where: {$0.drill.id == selectedDrill.drill.id}) {
                 EditingDrillView(

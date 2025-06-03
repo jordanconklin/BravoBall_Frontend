@@ -59,7 +59,7 @@ struct AreaBehindHomePage: View {
                         HStack {
                             VStack(alignment: .leading) {
                                 // back button only shows if session not completed
-                                if sessionModel.sessionNotComplete() {
+                                if sessionModel.sessionInProgress() {
                                     Button(action:  {
                                         withAnimation(.spring(dampingFraction: 0.7)) {
                                             appModel.viewState.showFieldBehindHomePage = false
@@ -130,14 +130,14 @@ struct AreaBehindHomePage: View {
                 .frame(width: 80, height: 90)
         }
         .padding(.top, 20)
-        .disabled(sessionModel.sessionNotComplete())
-        .opacity(sessionModel.sessionNotComplete() ? 0.5 : 1.0)
+        .disabled(sessionModel.sessionInProgress())
+        .opacity(sessionModel.sessionInProgress() ? 0.5 : 1.0)
     }
     
     private var sessionMessageBubble: some View {
         VStack(spacing: 0) {
             
-            Text(sessionModel.sessionNotComplete() ? "You have \(sessionModel.sessionsLeftToComplete()) drill\(sessionModel.sessionsLeftToComplete() == 1 ? "" : "s") left" : "Well done! Click on the trophy to claim your prize")
+            Text(sessionModel.sessionInProgress() ? "You have \(sessionModel.sessionsLeftToComplete()) drill\(sessionModel.sessionsLeftToComplete() == 1 ? "" : "s") left" : "Well done! Click on the trophy to claim your prize")
                 .font(.custom("Poppins-Bold", size: 18))
                 .foregroundColor(.white)
                 .padding(.horizontal, 16)
