@@ -223,7 +223,7 @@ struct EditingDrillView: View {
                 editableDrill.totalDuration = duration
             }
             
-            appModel.viewState.showingDrillDetail = false
+            dismiss()
             
         }) {
             Text("Save Changes")

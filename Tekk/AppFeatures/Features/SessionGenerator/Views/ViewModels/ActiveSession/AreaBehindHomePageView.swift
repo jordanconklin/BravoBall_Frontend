@@ -72,11 +72,14 @@ struct AreaBehindHomePage: View {
                                             }
                                         }
                                     }) {
-                                        VStack {
-                                            Text("Edit \nSession")
-                                                .font(.custom("Poppins-Bold", size: 14))
-                                                .foregroundColor(.black.opacity(0.5))
-                                                .multilineTextAlignment(.leading)
+                                        VStack(alignment: .leading) {
+                                            Image(systemName: "pencil")
+                                                .font(.system(size: 30))
+                                                .foregroundColor(Color.white)
+                                                .padding(8)
+                                                .background(appModel.globalSettings.primaryYellowColor)
+                                                .clipShape(Circle())
+                                            
                                             RiveViewModel(fileName: "Break_Area").view()
                                                 .frame(width: 80, height: 80)
                                             
@@ -137,7 +140,7 @@ struct AreaBehindHomePage: View {
     private var sessionMessageBubble: some View {
         VStack(spacing: 0) {
             
-            Text(sessionModel.sessionInProgress() ? "You have \(sessionModel.sessionsLeftToComplete()) drill\(sessionModel.sessionsLeftToComplete() == 1 ? "" : "s") left" : "Well done! Click on the trophy to claim your prize")
+            Text(sessionModel.sessionInProgress() ? "You have \(sessionModel.sessionsLeftToComplete()) drill\(sessionModel.sessionsLeftToComplete() == 1 ? "" : "s") left." : "Well done! Click on the trophy to claim your prize.")
                 .font(.custom("Poppins-Bold", size: 18))
                 .foregroundColor(.white)
                 .padding(.horizontal, 16)

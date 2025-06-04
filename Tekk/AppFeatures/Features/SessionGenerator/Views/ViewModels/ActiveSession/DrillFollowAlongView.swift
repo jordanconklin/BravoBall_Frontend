@@ -65,70 +65,16 @@ struct DrillFollowAlongView: View {
                     
                     Spacer()
                     
-                    // How-to button
-                    Button(action: {
-                        selectedDrill = editableDrill.drill
-
-                    }) {
-                        HStack {
-                            Image(systemName: "questionmark.circle.fill")
-                                .foregroundColor(Color.white)
-                                .font(.system(size: 13, weight: .medium))
-                            Text("Details")
-                                .font(.custom("Poppins-Bold", size: 13))
-                                .foregroundColor(.white)
-                            
-                        }
-                        .padding(.horizontal,5)
-                        .padding(.vertical, 5)
-
-                        .background(appModel.globalSettings.primaryGrayColor)
-                        .cornerRadius(12)
-                            
-                    }
+                    detailsButton
                     
                 }
-                
                 .padding(.top, 16)
                 
                 
-                // Progress stroke rectangle
-                Path { path in
-                    path.move(to: CGPoint(x: 0, y: 0))
-                    path.addLine(to: CGPoint(x: 360, y: 0))
-                }
-                .stroke(
-                    Color.gray.opacity(0.3),
-                    style: StrokeStyle(
-                        lineWidth: 9,
-                        lineCap: .round  // This rounds the ends
-                    )
-                )
-                .overlay(
-                    Path { path in
-                        path.move(to: CGPoint(x: 0, y: 0))
-                        path.addLine(to: CGPoint(x: 360, y: 0))
-                    }
-                    .trim(from: 0, to: Double(editableDrill.setsDone) / Double(editableDrill.totalSets))
-                    .stroke(
-                        appModel.globalSettings.primaryYellowColor,
-                        style: StrokeStyle(
-                            lineWidth: 9,
-                            lineCap: .round  // This rounds the ends
-                        )
-                    )
-                    .animation(.linear, value: Double(editableDrill.setsDone) / Double(editableDrill.totalSets))
-                )
-                .frame(width: 360, height: 20)
-                .padding(.top, 20)
+                progressRectangle
                 
                 
-                Text("Sets \(Int(editableDrill.setsDone)) / \(Int(editableDrill.totalSets))")
-                    .padding(.horizontal)
-                    .padding(.vertical, 3)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                    .font(.custom("Poppins-Bold", size: 16))
+                setsDoneText
                 
                 Spacer()
                 
@@ -139,10 +85,10 @@ struct DrillFollowAlongView: View {
                     // Top timer section
                     VStack(alignment: .center, spacing: 4) {
                         Text("Time")
-                            .font(.custom("Poppins-Bold", size: 24))
+                            .font(.custom("Poppins-Bold", size: 30))
                             .foregroundColor(.gray)
                         Text(timeString(from: elapsedTime))
-                            .font(.custom("Poppins-Bold", size: 26))
+                            .font(.custom("Poppins-Bold", size: 32))
                     }
                     
                     Spacer()
@@ -184,70 +130,17 @@ struct DrillFollowAlongView: View {
                 
                 Spacer()
                 
-                Button(action: togglePlayPause) {
-                    Circle()
-                        .fill(.white)
-                        .frame(width: 60, height: 60)
-                        .shadow(color: .black.opacity(0.1), radius: 10)
-                        .overlay(
-                            Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                                .font(.system(size: 24))
-                                .foregroundColor(.black)
-                        )
-                        .padding(.bottom, 145)
-                }
+                togglePlayButton
+                    .opacity(editableDrill.setsDone != editableDrill.totalSets ? 1.0 : 0.0)
                 
                 
                 Spacer()
                 
                 HStack {
-                    // End drill
-                    Button(action: {
-                        handleDrillCompletion()
-                        endDrill()
-                        
-                        if doneWithSession() {
-                            handleSessionCompletion()
-                        }
-                        
-                    }
-                            
-                    ){
-                        Text("Done with drill")
-                            .font(.custom("Poppins-Bold", size: 16))
-                            .foregroundColor(.white)
-                            .frame(height: 44)
-                            .frame(maxWidth: .infinity)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(doneWithDrill() ? Color.green : appModel.globalSettings.primaryLightGrayColor)
-                            )
-                    }
-                    .disabled(!doneWithDrill())
                     
-                    // Skip button
-                    Button(action: {
-                        handleDrillCompletion()
-                        endDrill()
-                        
-                    }) {
-                        HStack {
-                            Image(systemName: "forward.fill")
-                                .foregroundColor(Color.white)
-                                .font(.system(size: 16, weight: .medium))
-                            Text("Skip Drill")
-                                .font(.custom("Poppins-Bold", size: 16))
-                                .foregroundColor(.white)
-                            
-                        }
-                        .frame(height: 44)
-                        .padding(.horizontal, 8)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(appModel.globalSettings.primaryYellowColor)
-                        )
-                            
-                    }
+                    endDrillButton
+                    
+                    skipButton
                 }
 
             }
@@ -268,6 +161,98 @@ struct DrillFollowAlongView: View {
         }
     }
     
+    private var togglePlayButton: some View {
+        Button(action: togglePlayPause) {
+            Circle()
+                .fill(appModel.globalSettings.primaryGreenColor)
+                .frame(width: 100, height: 100)
+                .shadow(color: .black.opacity(0.1), radius: 10)
+                .overlay(
+                    Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                        .font(.system(size: 40))
+                        .foregroundColor(.white)
+                )
+                .padding(.top, 50)
+                .padding(.bottom, 45)
+        }
+    }
+    
+    private var skipButton: some View {
+        // Skip button
+        Button(action: {
+            handleDrillCompletion()
+            endDrill()
+            
+        }) {
+            HStack {
+                Image(systemName: "forward.fill")
+                    .foregroundColor(Color.white)
+                    .font(.system(size: 16, weight: .medium))
+                Text("Skip Drill")
+                    .font(.custom("Poppins-Bold", size: 16))
+                    .foregroundColor(.white)
+                
+            }
+            .frame(height: 44)
+            .padding(.horizontal, 8)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(appModel.globalSettings.primaryYellowColor)
+            )
+                
+        }
+    }
+    
+    private var detailsButton: some View {
+        // Details button
+        Button(action: {
+            selectedDrill = editableDrill.drill
+
+        }) {
+            HStack {
+                Image(systemName: "questionmark.circle.fill")
+                    .foregroundColor(Color.white)
+                    .font(.system(size: 13, weight: .medium))
+                Text("Details")
+                    .font(.custom("Poppins-Bold", size: 13))
+                    .foregroundColor(.white)
+                
+            }
+            .padding(.horizontal,5)
+            .padding(.vertical, 5)
+
+            .background(appModel.globalSettings.primaryGrayColor)
+            .cornerRadius(12)
+                
+        }
+    }
+    
+    private var endDrillButton: some View {
+        // End drill
+        Button(action: {
+            handleDrillCompletion()
+            endDrill()
+            
+            if doneWithSession() {
+                handleSessionCompletion()
+            }
+            
+        }
+                
+        ){
+            Text("Done with drill")
+                .font(.custom("Poppins-Bold", size: 16))
+                .foregroundColor(.white)
+                .frame(height: 44)
+                .frame(maxWidth: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(doneWithDrill() ? Color.green : appModel.globalSettings.primaryLightGrayColor)
+                )
+        }
+        .disabled(!doneWithDrill())
+    }
+    
     private var backButton: some View {
         Button(action: {
             endDrill()
@@ -277,6 +262,46 @@ struct DrillFollowAlongView: View {
                     .foregroundColor(appModel.globalSettings.primaryDarkColor)
             }
         }
+    }
+    
+    private var progressRectangle: some View {
+        // Progress stroke rectangle
+        Path { path in
+            path.move(to: CGPoint(x: 0, y: 0))
+            path.addLine(to: CGPoint(x: 360, y: 0))
+        }
+        .stroke(
+            Color.gray.opacity(0.3),
+            style: StrokeStyle(
+                lineWidth: 9,
+                lineCap: .round  // This rounds the ends
+            )
+        )
+        .overlay(
+            Path { path in
+                path.move(to: CGPoint(x: 0, y: 0))
+                path.addLine(to: CGPoint(x: 360, y: 0))
+            }
+            .trim(from: 0, to: Double(editableDrill.setsDone) / Double(editableDrill.totalSets))
+            .stroke(
+                appModel.globalSettings.primaryYellowColor,
+                style: StrokeStyle(
+                    lineWidth: 9,
+                    lineCap: .round  // This rounds the ends
+                )
+            )
+            .animation(.linear, value: Double(editableDrill.setsDone) / Double(editableDrill.totalSets))
+        )
+        .frame(width: 360, height: 20)
+        .padding(.top, 20)
+    }
+    
+    private var setsDoneText: some View {
+        Text("Set  \(min(Int(editableDrill.setsDone + 1), Int(editableDrill.totalSets))) / \(Int(editableDrill.totalSets))")
+            .padding(.vertical, 3)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .foregroundColor(appModel.globalSettings.primaryDarkColor)
+            .font(.custom("Poppins-Bold", size: 16))
     }
     
     private func doneWithDrill() -> Bool {
