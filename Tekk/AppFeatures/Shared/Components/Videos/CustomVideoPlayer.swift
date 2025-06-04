@@ -53,4 +53,5 @@ struct CustomVideoPlayer: View {
         )
         player = nil
     }
-} 
+}
+
