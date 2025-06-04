@@ -24,6 +24,7 @@ struct DrillFollowAlongView: View {
     @State private var displayCountdown: Bool = true
     @State private var timer: Timer?
     @State private var player: AVPlayer? = nil
+    @State private var showInfoSheet = false
     
     
     init(appModel: MainAppModel, sessionModel: SessionGeneratorModel, editableDrill: Binding<EditableDrillModel>) {
@@ -51,103 +52,65 @@ struct DrillFollowAlongView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                HStack {
-                    
-                    backButton
-
-                    Spacer()
-                    
-                    Text("\(editableDrill.drill.title)")
-                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                        .font(.custom("Poppins-Bold", size: 18))
-                        .padding(.leading, 60)
-                    
-                    Spacer()
-                    
-                    detailsButton
-                    
-                }
-                .padding(.top, 16)
-                
-                
-                progressRectangle
-                
-                
-                setsDoneText
-                
-                Spacer()
-                
-
-                HStack {
-                    Spacer()
-                    
-                    // Top timer section
-                    VStack(alignment: .center, spacing: 4) {
-                        Text("Time")
-                            .font(.custom("Poppins-Bold", size: 30))
-                            .foregroundColor(.gray)
-                        Text(timeString(from: elapsedTime))
-                            .font(.custom("Poppins-Bold", size: 32))
+            ZStack {
+                VStack(spacing: 0) {
+                    HStack {
+                        backButton
+                        Spacer()
+                        Text("\(editableDrill.drill.title)")
+                            .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                            .font(.custom("Poppins-Bold", size: 18))
+                            .padding(.leading, 60)
+                        Spacer()
+                        detailsButton
                     }
-                    
-                    Spacer()
-                }
+                    .padding(.top, 16)
 
+                    // Set info and progress bar at the top
+                    setsDoneText
+                    progressRectangle
+                    Spacer(minLength: 10)
 
-                Spacer()
-
-                ZStack {
-                    // Video preview in the middle
+                    // Center the video player more visually
                     if !editableDrill.drill.videoUrl.isEmpty, let videoUrl = URL(string: editableDrill.drill.videoUrl) {
-                        VideoPlayer(player: player)
-                            .aspectRatio(16/9, contentMode: .fit)
-                            .cornerRadius(12)
+                        CustomVideoPlayer(videoURL: videoUrl)
                             .frame(maxWidth: .infinity)
-                            .onAppear {
-                                let avPlayer = AVPlayer(url: videoUrl)
-                                player = avPlayer
-                                NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: avPlayer.currentItem, queue: .main) { _ in
-                                    avPlayer.seek(to: .zero)
-                                    avPlayer.play()
-                                }
-                            }
-                            .onDisappear {
-                                player?.pause()
-                                NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
-                            }
+                            .padding(.vertical, 24)
                     }
-                    
-                    // Add countdown overlay
-                    if let countdown = countdownValue {
-                        Text("\(countdown)")
-                            .font(.custom("Poppins-Bold", size: 60))
-                            .foregroundColor(.white)
-                    }
-                    
-                }
-                
-                
-                Spacer()
-                
-                togglePlayButton
-                    .opacity(editableDrill.setsDone != editableDrill.totalSets ? 1.0 : 0.0)
-                
-                
-                Spacer()
-                
-                HStack {
-                    
-                    endDrillButton
-                    
-                    skipButton
-                }
 
+                    // Play button, timer, and info button row
+                    HStack(spacing: 24) {
+                        togglePlayButton
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Time")
+                                .font(.custom("Poppins-Bold", size: 18))
+                                .foregroundColor(.gray)
+                            Text(timeString(from: elapsedTime))
+                                .font(.custom("Poppins-Bold", size: 32))
+                        }
+                        // Info button
+                        Button(action: { showInfoSheet = true }) {
+                            Image(systemName: "info.circle")
+                                .font(.system(size: 28, weight: .regular))
+                                .foregroundColor(appModel.globalSettings.primaryGrayColor)
+                                .padding(.leading, 8)
+                        }
+                        .accessibilityLabel("How this works")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 20)
+
+                    Spacer()
+                    HStack {
+                        endDrillButton
+                        skipButton
+                    }
+                }
             }
             .padding(.horizontal, 20)
             .statusBar(hidden: false)
             .navigationBarHidden(true)
-            .onChange(of: isPlaying) { newValue in
+            .onChange(of: isPlaying) { newValue, _ in
                 if newValue {
                     player?.play()
                 } else {
@@ -157,7 +120,22 @@ struct DrillFollowAlongView: View {
             .navigationDestination(item: $selectedDrill) { drill in
                 DrillDetailView(appModel: appModel, sessionModel: sessionModel, drill: drill)
             }
-
+            .sheet(isPresented: $showInfoSheet) {
+                VStack(spacing: 24) {
+                    Text("How Drill Timer Works")
+                        .font(.title2.bold())
+                        .padding(.top, 24)
+                    Text("• Press play to start the countdown for this set.\n• When the timer is up, you will move to the next set.\n• Complete all sets to finish the drill.")
+                        .font(.body)
+                        .multilineTextAlignment(.leading)
+                        .padding(.horizontal)
+                    Spacer()
+                    Button("Got it!") { showInfoSheet = false }
+                        .font(.headline)
+                        .padding()
+                }
+                .presentationDetents([.medium])
+            }
         }
     }
     
@@ -168,13 +146,22 @@ struct DrillFollowAlongView: View {
                 .frame(width: 100, height: 100)
                 .shadow(color: .black.opacity(0.1), radius: 10)
                 .overlay(
-                    Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                        .font(.system(size: 40))
-                        .foregroundColor(.white)
+                    Group {
+                        if let countdown = countdownValue {
+                            Text("\(countdown)")
+                                .font(.custom("Poppins-Bold", size: 44))
+                                .foregroundColor(.white)
+                        } else {
+                            Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                                .font(.system(size: 40))
+                                .foregroundColor(.white)
+                        }
+                    }
                 )
-                .padding(.top, 50)
-                .padding(.bottom, 45)
+                .padding(.top, 10)
+                .padding(.bottom, 10)
         }
+        .opacity(editableDrill.setsDone != editableDrill.totalSets ? 1.0 : 0.0)
     }
     
     private var skipButton: some View {
@@ -446,36 +433,41 @@ struct DrillFollowAlongView: View {
     }
 }
 
-//#Preview {
-//    struct PreviewWrapper: View {
-//        @State var mockDrill = EditableDrillModel(
-//            drill: DrillModel(
-//                title: "Test Drill",
-//                skill: "Passing",
-//                sets: 2,
-//                reps: 10,
-//                duration: 15,
-//                description: "Test description",
-//                tips: ["Tip 1", "Tip 2"],
-//                equipment: ["Ball"],
-//                trainingStyle: "Medium Intensity",
-//                difficulty: "Beginner"
-//            ),
-//            setsDone: 0,
-//            totalSets: 2,
-//            totalReps: 10,
-//            totalDuration: 15,
-//            isCompleted: false
-//        )
-//        
-//        var body: some View {
-//            DrillFollowAlongView(
-//                appModel: MainAppModel(),
-//                sessionModel: SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData()),
-//                editableDrill: $mockDrill  // This binding will be mutable
-//            )
-//        }
-//    }
-//    
-//    return PreviewWrapper()
-//}
+#if DEBUG
+struct DrillFollowAlongView_Previews: PreviewProvider {
+    static var previews: some View {
+        let appModel = MainAppModel()
+        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        let drill = DrillModel(
+            title: "Pass to Inside Touch",
+            skill: "Passing",
+            subSkills: ["short_passing"],
+            sets: 4,
+            reps: 10,
+            duration: 15,
+            description: "Practice accurate short passes with a partner or wall.",
+            instructions: ["Pass the ball against the wall and control with inside touch."],
+            tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
+            equipment: ["Soccer ball", "Cones"],
+            trainingStyle: "High Intensity",
+            difficulty: "Beginner",
+            videoUrl: "https://bravoball-drills.s3.us-east-2.amazonaws.com/passing-drills/pass-to-inside-touch.mp4"
+        )
+        let editableDrill = EditableDrillModel(
+            drill: drill,
+            setsDone: 0,
+            totalSets: 4,
+            totalReps: 10,
+            totalDuration: 15,
+            isCompleted: false
+        )
+        DrillFollowAlongView(
+            appModel: appModel,
+            sessionModel: sessionModel,
+            editableDrill: .constant(editableDrill)
+        )
+        .previewLayout(.sizeThatFits)
+        .padding()
+    }
+}
+#endif

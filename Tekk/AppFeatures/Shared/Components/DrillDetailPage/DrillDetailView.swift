@@ -73,10 +73,7 @@ struct DrillDetailView: View {
                         .padding(.vertical)
                         
                         if !drill.videoUrl.isEmpty, let videoUrl = URL(string: drill.videoUrl) {
-                            VideoPlayer(player: AVPlayer(url: videoUrl))
-                                .aspectRatio(16/9, contentMode: .fit)
-                                .cornerRadius(12)
-                                .frame(maxWidth: .infinity)
+                            CustomVideoPlayer(videoURL: videoUrl)
                         }
                         
                         // Drill information

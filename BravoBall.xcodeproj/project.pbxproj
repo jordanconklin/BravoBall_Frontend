@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -289,6 +289,10 @@
 		43FCC7222D7F684400005ABB /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		43FCC7242D7F8D6800005ABB /* CustomTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		17CA379D2DF0A903001AD5FA /* Videos */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Videos; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		174936132C3E102B001163B9 /* Frameworks */ = {
@@ -612,6 +616,7 @@
 		4399B7252D6D7AB400DA5E84 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				17CA379D2DF0A903001AD5FA /* Videos */,
 				4289C5782DEC3B6F005CC91B /* DrillDetailPage */,
 				420DA3A52DCEEF45004CDD7A /* Checkbox */,
 				43FCC7262D7F8DAA00005ABB /* MainTab */,
@@ -1006,6 +1011,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				17CA379D2DF0A903001AD5FA /* Videos */,
 			);
 			name = BravoBall;
 			productName = Tekk;
