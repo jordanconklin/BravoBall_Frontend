@@ -52,18 +52,25 @@ class APIService {
         guard let httpResponse = response as? HTTPURLResponse else {
             throw URLError(.badServerResponse)
         }
-        if httpResponse.statusCode == 401, retryOn401 {
-            // Try to refresh token
-            try await refreshAccessToken()
+        
+        // Handle 401 Unauthorized (try refresh logic)
+        if httpResponse.statusCode == 401 && retryOn401, let refreshToken = refreshToken {
+            print("🔄 Access token expired, attempting refresh...")
+            try await refreshAccessToken(refreshToken: refreshToken)
             // Retry the original request once
-            return try await request(endpoint: endpoint, method: method, headers: headers, body: body, retryOn401: false)
+            return try await request(
+                endpoint: endpoint,
+                method: method,
+                headers: headers,
+                body: body,
+                retryOn401: false
+            )
         }
         return (data, httpResponse)
     }
     
     // Refresh token logic
-    func refreshAccessToken() async throws {
-        guard let refreshToken = refreshToken else { throw URLError(.userAuthenticationRequired) }
+    func refreshAccessToken(refreshToken: String) async throws {
         guard let url = URL(string: baseURL + "/refresh/") else { throw URLError(.badURL) }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
@@ -80,36 +87,6 @@ class APIService {
         // Save new tokens
         KeychainWrapper.standard.set(tokenResponse.access_token, forKey: "accessToken")
         KeychainWrapper.standard.set(tokenResponse.refresh_token, forKey: "refreshToken")
-    }
-
-    // Convenience for full URL
-    func requestFullURL(
-        url: URL,
-        method: String = "GET",
-        headers: [String: String]? = nil,
-        body: Data? = nil,
-        retryOn401: Bool = true
-    ) async throws -> (Data, HTTPURLResponse) {
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = method
-        if let accessToken = accessToken {
-            urlRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        }
-        if let headers = headers {
-            for (key, value) in headers {
-                urlRequest.setValue(value, forHTTPHeaderField: key)
-            }
-        }
-        urlRequest.httpBody = body
-        let (data, response) = try await URLSession.shared.data(for: urlRequest)
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw URLError(.badServerResponse)
-        }
-        if httpResponse.statusCode == 401, retryOn401 {
-            try await refreshAccessToken()
-            return try await requestFullURL(url: url, method: method, headers: headers, body: body, retryOn401: false)
-        }
-        return (data, httpResponse)
     }
 
     // Helper for decoding JSON

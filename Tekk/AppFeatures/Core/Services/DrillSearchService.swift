@@ -37,8 +37,8 @@ class DrillSearchService {
         page: Int = 1,
         limit: Int = 20
     ) async throws -> DrillSearchResponse {
-        // Build URL with query parameters
-        var urlComponents = URLComponents(string: "\(baseURL)/api/drills/search")
+        // Build endpoint with query parameters
+        var endpoint = "/api/drills/search"
         var queryItems = [URLQueryItem(name: "query", value: query)]
         
         // Add optional parameters if they exist
@@ -61,17 +61,16 @@ class DrillSearchService {
             queryItems.append(URLQueryItem(name: "limit", value: String(limit)))
         }
         
-        urlComponents?.queryItems = queryItems
-        
-        guard let url = urlComponents?.url else {
-            throw NSError(domain: "DrillSearchService", code: 400, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+        // Add query items to endpoint
+        if !queryItems.isEmpty {
+            endpoint += "?" + queryItems.map { "\($0.name)=\($0.value ?? "")" }.joined(separator: "&")
         }
         
-        print("🔍 Searching drills with URL: \(url.absoluteString)")
+        print("🔍 Searching drills with endpoint: \(endpoint)")
         
         // Use APIService for the request
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "GET",
             headers: ["Content-Type": "application/json"]
         )
@@ -230,7 +229,7 @@ class DrillSearchService {
             
             // Try to parse as a simple JSON object in case the structure is different
             if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                print("�� Raw JSON response: \(json)")
+                print(" Raw JSON response: \(json)")
                 
                 // Try to manually extract data if JSON structure doesn't match our model
                 if let items = json["items"] as? [[String: Any]] {

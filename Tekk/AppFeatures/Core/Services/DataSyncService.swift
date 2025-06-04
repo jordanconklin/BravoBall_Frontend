@@ -16,9 +16,9 @@ class DataSyncService {
     // MARK: - Ordered Session Drills Sync
     
     func fetchOrderedDrills() async throws -> [EditableDrillModel] {
-        let url = URL(string: "\(baseURL)/api/sessions/ordered_drills/")!
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let endpoint = "/api/sessions/ordered_drills/"
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "GET",
             headers: ["Content-Type": "application/json"]
         )
@@ -45,7 +45,7 @@ class DataSyncService {
     }
     
     func syncOrderedSessionDrills(sessionDrills: [EditableDrillModel], sessionId: Int) async throws {
-        let url = URL(string: "\(baseURL)/api/sessions/ordered_drills/")!
+        let endpoint = "/api/sessions/ordered_drills/"
         let drillsData = sessionDrills.map { drill in
             return [
                 "drill": [
@@ -72,8 +72,8 @@ class DataSyncService {
         }
         let requestData = ["ordered_drills": drillsData]
         let body = try JSONSerialization.data(withJSONObject: requestData)
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "PUT",
             headers: ["Content-Type": "application/json"],
             body: body
@@ -95,9 +95,9 @@ class DataSyncService {
     }
     
     func fetchProgressHistory() async throws -> ProgressHistoryResponse {
-        let url = URL(string: "\(baseURL)/api/progress_history/")!
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let endpoint = "/api/progress_history/"
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "GET",
             headers: ["Content-Type": "application/json"]
         )
@@ -114,15 +114,15 @@ class DataSyncService {
     }
 
     func syncProgressHistory(currentStreak: Int, highestStreak: Int, completedSessionsCount: Int) async throws {
-        let url = URL(string: "\(baseURL)/api/progress_history/")!
+        let endpoint = "/api/progress_history/"
         let progressHistory: [String: Any] = [
             "current_streak": currentStreak,
             "highest_streak": highestStreak,
             "completed_sessions_count": completedSessionsCount
         ]
         let body = try JSONSerialization.data(withJSONObject: progressHistory)
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "PUT",
             headers: ["Content-Type": "application/json"],
             body: body
@@ -137,9 +137,9 @@ class DataSyncService {
     // MARK: - Completed Sessions Sync
     
     func fetchCompletedSessions() async throws -> [CompletedSession] {
-        let url = URL(string: "\(baseURL)/api/sessions/completed/")!
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let endpoint = "/api/sessions/completed/"
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "GET",
             headers: ["Content-Type": "application/json"]
         )
@@ -156,7 +156,7 @@ class DataSyncService {
     }
 
     func syncCompletedSession(date: Date, drills: [EditableDrillModel], totalCompleted: Int, total: Int) async throws {
-        let url = URL(string: "\(baseURL)/api/sessions/completed/")!
+        let endpoint = "/api/sessions/completed/"
         let drillsData = drills.map { drill in
             return [
                 "drill": [
@@ -186,8 +186,8 @@ class DataSyncService {
             "total_drills": total
         ] as [String : Any]
         let body = try JSONSerialization.data(withJSONObject: sessionData)
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "POST",
             headers: ["Content-Type": "application/json"],
             body: body

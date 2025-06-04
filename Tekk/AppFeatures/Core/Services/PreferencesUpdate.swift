@@ -258,6 +258,10 @@ class PreferencesUpdateService {
                 }
             )
             await MainActor.run {
+                // Update the current session ID
+                sessionModel.currentSessionId = sessionId
+                print("✅ Updated current session ID to: \(sessionId)")
+                
                 sessionModel.orderedSessionDrills = drillModels.map { drill in
                     EditableDrillModel(
                         drill: drill,

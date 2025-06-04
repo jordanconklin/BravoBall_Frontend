@@ -63,9 +63,9 @@ class DrillGroupService {
     
     /// Get all drill groups for the current user
     func getAllDrillGroups() async throws -> [DrillGroupResponse] {
-        let url = URL(string: "\(baseURL)/api/drill-groups/")!
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let endpoint = "/api/drill-groups/"
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "GET",
             headers: ["Content-Type": "application/json"]
         )
@@ -80,9 +80,9 @@ class DrillGroupService {
     
     /// Get a specific drill group by ID
     func getDrillGroup(groupId: Int) async throws -> DrillGroupResponse {
-        let url = URL(string: "\(baseURL)/api/drill-groups/\(groupId)")!
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let endpoint = "/api/drill-groups/\(groupId)"
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "GET",
             headers: ["Content-Type": "application/json"]
         )
@@ -122,9 +122,9 @@ class DrillGroupService {
     
     /// Delete a drill group
     func deleteDrillGroup(groupId: Int) async throws -> String {
-        let url = URL(string: "\(baseURL)/api/drill-groups/\(groupId)")!
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let endpoint = "/api/drill-groups/\(groupId)"
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "DELETE",
             headers: ["Content-Type": "application/json"]
         )
@@ -142,9 +142,9 @@ class DrillGroupService {
     
     /// Add a drill to a group
     func addDrillToGroup(groupId: Int, drillId: Int) async throws -> String {
-        let url = URL(string: "\(baseURL)/api/drill-groups/\(groupId)/drills/\(drillId)")!
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let endpoint = "/api/drill-groups/\(groupId)/drills/\(drillId)"
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "POST",
             headers: ["Content-Type": "application/json"]
         )
@@ -160,9 +160,9 @@ class DrillGroupService {
     
     /// Remove a drill from a group
     func removeDrillFromGroup(groupId: Int, drillId: Int) async throws -> String {
-        let url = URL(string: "\(baseURL)/api/drill-groups/\(groupId)/drills/\(drillId)")!
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let endpoint = "/api/drill-groups/\(groupId)/drills/\(drillId)"
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "DELETE",
             headers: ["Content-Type": "application/json"]
         )
@@ -180,9 +180,9 @@ class DrillGroupService {
     
     /// Get or create the Liked Drills group
     func getLikedDrillsGroup() async throws -> DrillGroupResponse {
-        let url = URL(string: "\(baseURL)/api/liked-drills")!
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let endpoint = "/api/liked-drills"
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "GET",
             headers: ["Content-Type": "application/json"]
         )
@@ -197,9 +197,9 @@ class DrillGroupService {
     
     /// Toggle like status for a drill
     func toggleDrillLike(drillId: Int) async throws -> DrillLikeResponse {
-        let url = URL(string: "\(baseURL)/api/drills/\(drillId)/like")!
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let endpoint = "/api/drills/\(drillId)/like"
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "POST",
             headers: ["Content-Type": "application/json"]
         )
@@ -214,9 +214,9 @@ class DrillGroupService {
     
     /// Check if a drill is liked
     func checkDrillLiked(drillId: Int) async throws -> Bool {
-        let url = URL(string: "\(baseURL)/api/drills/\(drillId)/like")!
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let endpoint = "/api/drills/\(drillId)/like"
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "GET",
             headers: ["Content-Type": "application/json"]
         )
@@ -232,7 +232,7 @@ class DrillGroupService {
     
     /// Create a new drill group with drill IDs directly
     func createDrillGroupWithIds(name: String, description: String, drillIds: [Int] = [], isLikedGroup: Bool = false) async throws -> DrillGroupResponse {
-        let url = URL(string: "\(baseURL)/api/drill-groups/")!
+        let endpoint = "/api/drill-groups/"
         let groupRequest = DrillGroupRequest(
             name: name,
             description: description,
@@ -240,8 +240,8 @@ class DrillGroupService {
             isLikedGroup: isLikedGroup
         )
         let body = try JSONEncoder().encode(groupRequest)
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "POST",
             headers: ["Content-Type": "application/json"],
             body: body
@@ -257,7 +257,7 @@ class DrillGroupService {
     
     /// Update an existing drill group with drill IDs directly
     func updateDrillGroupWithIds(groupId: Int, name: String, description: String, drillIds: [Int], isLikedGroup: Bool) async throws -> DrillGroupResponse {
-        let url = URL(string: "\(baseURL)/api/drill-groups/\(groupId)")!
+        let endpoint = "/api/drill-groups/\(groupId)"
         let groupRequest = DrillGroupRequest(
             name: name,
             description: description,
@@ -265,8 +265,8 @@ class DrillGroupService {
             isLikedGroup: isLikedGroup
         )
         let body = try JSONEncoder().encode(groupRequest)
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "PUT",
             headers: ["Content-Type": "application/json"],
             body: body
@@ -318,21 +318,21 @@ class DrillGroupService {
     
     /// Unified method to add multiple drills to any group (regular or liked)
     func addMultipleDrillsToAnyGroup(groupId: Int? = nil, drillIds: [Int], isLikedGroup: Bool = false) async throws -> String {
-        let url: URL
+        let endpoint: String
         if isLikedGroup {
-            url = URL(string: "\(baseURL)/api/liked-drills/add")!
+            endpoint = "/api/liked-drills/add"
         } else {
             guard let groupId = groupId else {
                 throw NSError(domain: "DrillGroupService", code: 400, userInfo: [NSLocalizedDescriptionKey: "Group ID is required for regular drill groups"])
             }
-            url = URL(string: "\(baseURL)/api/drill-groups/\(groupId)/drills")!
+            endpoint = "/api/drill-groups/\(groupId)/drills"
         }
         
-        print("🔍 Request URL: \(url.absoluteString)")
+        print("🔍 Request endpoint: \(endpoint)")
         
         let body = try JSONEncoder().encode(drillIds)
-        let (data, response) = try await APIService.shared.requestFullURL(
-            url: url,
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
             method: "POST",
             headers: ["Content-Type": "application/json"],
             body: body

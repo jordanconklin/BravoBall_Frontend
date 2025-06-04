@@ -354,56 +354,21 @@ struct ProfileView: View {
     
     
     private func deleteAccount() {
-        // Create URL for the delete endpoint
-        guard let url = URL(string: "http://127.0.0.1:8000/delete-account/") else {
-            print("❌ Invalid URL")
-            return
-        }
+        let endpoint = "/delete-account/"
         
-        // Get the access token from Keychain storage
-        guard let accessToken = KeychainWrapper.standard.string(forKey: "accessToken") else {
-            print("❌ No access token found")
-            return
-        }
-        
-        // set DELETE method w/ access token stored in the request's value
-        var request = URLRequest(url: url)
-        request.httpMethod = "DELETE"
-        
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        // debug to make sure token is created
-        print("\n🔍 Request Details:")
-        print("URL: \(url)")
-        print("Method: \(request.httpMethod ?? "")")
-        
-        print("headers:")
-        // ?
-        request.allHTTPHeaderFields?.forEach { key, value in
-                print("\(key): \(value)")
-            }
-        
-        
-        // Make the network request to the backend with the created "request"
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    print("❌ Error deleting account: \(error)")
-                    return
-                }
-                
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    print("❌ Invalid response")
-                    return
-                }
-                
-                // Debug print the response
-                print("📥 Backend response status: \(httpResponse.statusCode)")
-                if let data = data, let responseString = String(data: data, encoding: .utf8) {
+        Task {
+            do {
+                let (data, response) = try await APIService.shared.request(
+                    endpoint: endpoint,
+                    method: "DELETE",
+                    headers: ["Content-Type": "application/json"]
+                )
+                print("📥 Backend response status: \(response.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
                     print("Response: \(responseString)")
                 }
                 
-                if httpResponse.statusCode == 200 {
+                if response.statusCode == 200 {
                     // Store email before clearing for logging
                     let userEmail = userManager.email
                     
@@ -430,11 +395,13 @@ struct ProfileView: View {
                     
                     print("✅ Account deleted and all data cleared successfully")
                 } else {
-                    print("❌ Failed to delete account: \(httpResponse.statusCode)")
+                    print("❌ Failed to delete account: \(response.statusCode)")
                     // You might want to show an error message to the user here
                 }
+            } catch {
+                print("❌ Error deleting account: \(error)")
             }
-        }.resume()
+        }
     }
     
     
