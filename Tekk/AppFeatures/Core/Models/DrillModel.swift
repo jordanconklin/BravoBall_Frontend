@@ -8,7 +8,7 @@
 import Foundation
 
 // Drill model
-struct DrillModel: Identifiable, Equatable, Codable {
+struct DrillModel: Identifiable, Equatable, Codable, Hashable {
     let id: UUID
     let backendId: Int? // Backend ID from database (between 1-79)
     let title: String

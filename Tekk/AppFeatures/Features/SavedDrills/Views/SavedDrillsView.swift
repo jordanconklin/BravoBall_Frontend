@@ -56,6 +56,9 @@ struct SavedDrillsView: View {
             }
             .sheet(item: $selectedGroup) { group in
                 GroupDetailView(appModel: appModel, sessionModel: sessionModel, group: group)
+                    .onDisappear {
+                        appModel.viewState.showingDrillDetail = false
+                    }
             }
     }
     

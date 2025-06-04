@@ -37,8 +37,8 @@ struct GroupFilterOptions: View {
                     Button("Cancel", role: .cancel) { }
                     Button("Delete", role: .destructive) {
                         sessionModel.deleteGroup(groupId: group.id)
-                        dismiss()
                         appModel.viewState.showGroupFilterOptions = false
+                        dismiss()
 
                     }
                 } message: {
@@ -93,6 +93,8 @@ struct GroupFilterOptions: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
             }
+            
+            Spacer()
         }
         .frame(width: geometry.size.width)
         .padding(8)

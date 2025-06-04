@@ -219,8 +219,8 @@ class PreferencesUpdateService {
                     let instructions = drill["instructions"] as? [String] ?? []
                     let tips = drill["tips"] as? [String] ?? []
                     let equipment = drill["equipment"] as? [String] ?? []
-                    let trainingStyle = drill["intensity"] as? String ?? "medium"
-                    let difficulty = drill["difficulty"] as? String ?? "beginner"
+                    let trainingStyle = drill["intensity"] as? String ?? ""
+                    let difficulty = drill["difficulty"] as? String ?? ""
                     let videoUrl = drill["video_url"] as? String ?? ""
                     return DrillModel(
                         id: id,

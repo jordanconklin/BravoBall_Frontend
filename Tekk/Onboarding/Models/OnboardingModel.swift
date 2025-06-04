@@ -17,11 +17,11 @@ class OnboardingModel: ObservableObject {
     
     @Published var showLoginPage = false
     @Published var showWelcome = false
-    @Published var showIntroAnimation = false // TESTING, set true after
+    @Published var showIntroAnimation = true // TESTING, toggle when need to
     @Published var isLoggedIn = false
     @Published var authToken = ""
     @Published var isPasswordVisible: Bool = false
-    @Published var numberOfOnboardingPages = 13 // Updated to include registration page
+    @Published var numberOfOnboardingPages = 14 // Updated to include registration page and preview page
     
     // TESTING: Set this to true to skip onboarding and go straight to completion
     @Published var skipOnboarding = true
@@ -94,19 +94,20 @@ class OnboardingModel: ObservableObject {
     // Checks if youre allowed to move to next question (validates data)
     func canMoveNext() -> Bool {
         switch currentStep {
-        case 0: return !onboardingData.primaryGoal.isEmpty
-        case 1: return !onboardingData.biggestChallenge.isEmpty
-        case 2: return !onboardingData.trainingExperience.isEmpty
-        case 3: return !onboardingData.position.isEmpty
-        case 4: return !onboardingData.playstyle.isEmpty
-        case 5: return !onboardingData.ageRange.isEmpty
-        case 6: return !onboardingData.strengths.isEmpty
-        case 7: return !onboardingData.areasToImprove.isEmpty
-        case 8: return !onboardingData.trainingLocation.isEmpty
-        case 9: return !onboardingData.availableEquipment.isEmpty
-        case 10: return !onboardingData.dailyTrainingTime.isEmpty
-        case 11: return !onboardingData.weeklyTrainingDays.isEmpty
-        case 12: return !onboardingData.firstName.isEmpty &&
+        case 0: return true
+        case 1: return !onboardingData.primaryGoal.isEmpty
+        case 2: return !onboardingData.biggestChallenge.isEmpty
+        case 3: return !onboardingData.trainingExperience.isEmpty
+        case 4: return !onboardingData.position.isEmpty
+        case 5: return !onboardingData.playstyle.isEmpty
+        case 6: return !onboardingData.ageRange.isEmpty
+        case 7: return !onboardingData.strengths.isEmpty
+        case 8: return !onboardingData.areasToImprove.isEmpty
+        case 9: return !onboardingData.trainingLocation.isEmpty
+        case 10: return !onboardingData.availableEquipment.isEmpty
+        case 11: return !onboardingData.dailyTrainingTime.isEmpty
+        case 12: return !onboardingData.weeklyTrainingDays.isEmpty
+        case 13: return !onboardingData.firstName.isEmpty &&
                         !onboardingData.lastName.isEmpty &&
                         !onboardingData.email.isEmpty &&
                         !onboardingData.password.isEmpty

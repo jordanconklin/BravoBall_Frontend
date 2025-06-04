@@ -146,7 +146,7 @@ struct OnboardingView: View {
     
     // Questionnaire view for onboarding new users
     var questionnaireContent: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 30) {
             // Top Navigation Bar
             HStack(spacing: 12) {
                 // Back Button
@@ -161,141 +161,168 @@ struct OnboardingView: View {
                         .imageScale(.large)
                 }
                 
-                // Progress Bar
-                GeometryReader { geometry in
-                    ZStack(alignment: .leading) {
-                        Rectangle()
-                            .foregroundColor(Color.gray.opacity(0.3))
-                            .frame(height: 10)
-                            .cornerRadius(2)
-                        
-                        Rectangle()
-                            .foregroundColor(onboardingModel.globalSettings.primaryYellowColor)
-                            .frame(width: geometry.size.width * min(CGFloat(onboardingModel.currentStep) / CGFloat(onboardingModel.numberOfOnboardingPages - 1), 1.0), height: 10)
-                            .cornerRadius(2)
-                    }
-                }
-                .frame(height: 10)
-                
-                // Skip Button (always visible, but grayed out and disabled on registration step)
-                Button(action: {
-                    if onboardingModel.currentStep != onboardingModel.questionTitles.count {
-                        withAnimation {
-                            onboardingModel.backTransition = false
-                            onboardingModel.skipToNext()
+                // if were on the preview page condition
+                if onboardingModel.currentStep > 0 {
+                    // Progress Bar
+                    GeometryReader { geometry in
+                        ZStack(alignment: .leading) {
+                            Rectangle()
+                                .foregroundColor(Color.gray.opacity(0.3))
+                                .frame(height: 10)
+                                .cornerRadius(2)
+                            
+                            Rectangle()
+                                .foregroundColor(onboardingModel.globalSettings.primaryYellowColor)
+                                .frame(width: geometry.size.width * min(CGFloat(onboardingModel.currentStep) / CGFloat(onboardingModel.numberOfOnboardingPages - 1), 1.0), height: 10)
+                                .cornerRadius(2)
                         }
                     }
-                }) {
-                    Text("Skip")
-                        .font(.custom("Poppins-Bold", size: 16))
-                        .foregroundColor(onboardingModel.currentStep == onboardingModel.questionTitles.count ? Color.gray.opacity(0.4) : onboardingModel.globalSettings.primaryDarkColor)
+                    .frame(height: 10)
+                    
+                    // Skip Button (always visible, but grayed out and disabled on registration step)
+                    Button(action: {
+                        if onboardingModel.currentStep != onboardingModel.numberOfOnboardingPages - 1 {
+                            withAnimation {
+                                onboardingModel.backTransition = false
+                                onboardingModel.skipToNext()
+                            }
+                        }
+                    }) {
+                        Text("Skip")
+                            .font(.custom("Poppins-Bold", size: 16))
+                            .foregroundColor(onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 ? Color.gray.opacity(0.4) : onboardingModel.globalSettings.primaryDarkColor)
+                    }
+                    .disabled(onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1)
+                } else {
+                    Spacer()
                 }
-                .disabled(onboardingModel.currentStep == onboardingModel.questionTitles.count)
+                
             }
             .padding(.horizontal)
             .padding(.top, 8)
             
-            
-            // Mascot
-            riveViewModelTwo.view()
-                .frame(width: 100, height: 100)
+            HStack {
+                // Mascot
+                riveViewModelTwo.view()
+                    .frame(width: 100, height: 100)
+                if onboardingModel.currentStep > 0 && onboardingModel.currentStep != onboardingModel.numberOfOnboardingPages {
+                    ZStack(alignment: .leading) {
+                        HStack(spacing: 0) {
+                            // Left Pointer
+                            Path { path in
+                                path.move(to: CGPoint(x: 15, y: 0))
+                                path.addLine(to: CGPoint(x: 0, y: 10))
+                                path.addLine(to: CGPoint(x: 15, y: 20))
+                            }
+                            .fill(appModel.globalSettings.primaryLightestGrayColor)
+                            .frame(width: 9, height: 20)
+                            .offset(x: -5, y: 1)
+                            
+                            // Text Bubble
+                            Text(onboardingModel.currentStep <= 12 ? onboardingModel.questionTitles[onboardingModel.currentStep - 1] : "Enter your Registration Info below!")
+                                .font(.custom("Poppins-Bold", size: 16))
+                                .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(appModel.globalSettings.primaryLightestGrayColor)
+                                        .frame(width: 180)
+                                )
+                                .frame(width: 180)
+                        }
+                        .offset(x: -10)
+                        .transition(.opacity.combined(with: .offset(y: 10)))
+                    }
+                }
+            }
+            .padding(.bottom, 20)
             
             
             // Step Content
-            ScrollView(showsIndicators: false) {
-                if onboardingModel.currentStep < onboardingModel.questionTitles.count {
+                if onboardingModel.currentStep < onboardingModel.numberOfOnboardingPages - 1 {
                     switch onboardingModel.currentStep {
-                    case 0:
+                    case 0: OnboardingPreview(
+                        appModel: appModel
+                    )
+                    case 1:
                         OnboardingStepView(
                             onboardingModel: onboardingModel,
-                            title: onboardingModel.questionTitles[0],
                             options: onboardingModel.questionOptions[0],
                             selection: $onboardingModel.onboardingData.primaryGoal
                         )
-                    case 1:
+                    case 2:
                         OnboardingMultiSelectView(
                             onboardingModel: onboardingModel,
-                            title: onboardingModel.questionTitles[1],
                             options: onboardingModel.questionOptions[1],
                             selections: $onboardingModel.onboardingData.biggestChallenge
-                        )
-                    case 2:
-                        OnboardingStepView(
-                            onboardingModel: onboardingModel,
-                            title: onboardingModel.questionTitles[2],
-                            options: onboardingModel.questionOptions[2],
-                            selection: $onboardingModel.onboardingData.trainingExperience
                         )
                     case 3:
                         OnboardingStepView(
                             onboardingModel: onboardingModel,
-                            title: onboardingModel.questionTitles[3],
+                            options: onboardingModel.questionOptions[2],
+                            selection: $onboardingModel.onboardingData.trainingExperience
+                        )
+                    case 4:
+                        OnboardingStepView(
+                            onboardingModel: onboardingModel,
                             options: onboardingModel.questionOptions[3],
                             selection: $onboardingModel.onboardingData.position
                         )
-                    case 4:
+                    case 5:
                         OnboardingMultiSelectView(
                             onboardingModel: onboardingModel,
-                            title: onboardingModel.questionTitles[4],
                             options: onboardingModel.questionOptions[4],
                             selections: $onboardingModel.onboardingData.playstyle
                         )
-                    case 5:
+                    case 6:
                         OnboardingStepView(
                             onboardingModel: onboardingModel,
-                            title: onboardingModel.questionTitles[5],
                             options: onboardingModel.questionOptions[5],
                             selection: $onboardingModel.onboardingData.ageRange
-                        )
-                    case 6:
-                        OnboardingMultiSelectView(
-                            onboardingModel: onboardingModel,
-                            title: onboardingModel.questionTitles[6],
-                            options: onboardingModel.questionOptions[6],
-                            selections: $onboardingModel.onboardingData.strengths
                         )
                     case 7:
                         OnboardingMultiSelectView(
                             onboardingModel: onboardingModel,
-                            title: onboardingModel.questionTitles[7],
-                            options: onboardingModel.questionOptions[7],
-                            selections: $onboardingModel.onboardingData.areasToImprove
+                            options: onboardingModel.questionOptions[6],
+                            selections: $onboardingModel.onboardingData.strengths
                         )
                     case 8:
                         OnboardingMultiSelectView(
                             onboardingModel: onboardingModel,
-                            title: onboardingModel.questionTitles[8],
-                            options: onboardingModel.questionOptions[8],
-                            selections: $onboardingModel.onboardingData.trainingLocation
+                            options: onboardingModel.questionOptions[7],
+                            selections: $onboardingModel.onboardingData.areasToImprove
                         )
                     case 9:
                         OnboardingMultiSelectView(
                             onboardingModel: onboardingModel,
-                            title: onboardingModel.questionTitles[9],
-                            options: onboardingModel.questionOptions[9],
-                            selections: $onboardingModel.onboardingData.availableEquipment
+                            options: onboardingModel.questionOptions[8],
+                            selections: $onboardingModel.onboardingData.trainingLocation
                         )
                     case 10:
-                        OnboardingStepView(
+                        OnboardingMultiSelectView(
                             onboardingModel: onboardingModel,
-                            title: onboardingModel.questionTitles[10],
-                            options: onboardingModel.questionOptions[10],
-                            selection: $onboardingModel.onboardingData.dailyTrainingTime
+                            options: onboardingModel.questionOptions[9],
+                            selections: $onboardingModel.onboardingData.availableEquipment
                         )
                     case 11:
                         OnboardingStepView(
                             onboardingModel: onboardingModel,
-                            title: onboardingModel.questionTitles[11],
+                            options: onboardingModel.questionOptions[10],
+                            selection: $onboardingModel.onboardingData.dailyTrainingTime
+                        )
+                    case 12:
+                        OnboardingStepView(
+                            onboardingModel: onboardingModel,
                             options: onboardingModel.questionOptions[11],
                             selection: $onboardingModel.onboardingData.weeklyTrainingDays
                         )
                     default:
                         EmptyView()
                     }
-                } else if onboardingModel.currentStep == onboardingModel.questionTitles.count {
+                } else if onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 {
                     OnboardingRegisterForm(
                         onboardingModel: onboardingModel,
-                        title: "Enter your Registration Info below!",
                         firstName: $onboardingModel.onboardingData.firstName,
                         lastName: $onboardingModel.onboardingData.lastName,
                         email: $onboardingModel.onboardingData.email,
@@ -304,15 +331,11 @@ struct OnboardingView: View {
                 } else {
                     CompletionView(onboardingModel: onboardingModel, userManager: userManager, sessionModel: sessionModel)
                 }
-            }
-            .padding(.top)
-            .padding(.horizontal)
-
             
             // Next button
             if onboardingModel.currentStep < onboardingModel.numberOfOnboardingPages {
                 Button(action: {
-                    if onboardingModel.currentStep == 12 {
+                    if onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 {
                         // Call email pre-check
                         Task {
                             let email = onboardingModel.onboardingData.email
@@ -379,7 +402,7 @@ struct OnboardingView: View {
                         }
                     }
                 }) {
-                    Text(onboardingModel.currentStep == 12 ? "Submit" : "Next")
+                    Text(onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 ? "Submit" : "Next")
                         .frame(maxWidth: .infinity)
                         .frame(height: 50)
                         .background(
@@ -391,7 +414,7 @@ struct OnboardingView: View {
                 }
                 .padding(.horizontal)
                 .disabled(
-                    onboardingModel.currentStep == 12
+                    onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1
                         ? (!onboardingModel.canMoveNext() || onboardingModel.onboardingData.email.isEmpty || onboardingModel.onboardingData.password.isEmpty)
                         : !onboardingModel.canMoveNext()
                 )

@@ -21,7 +21,7 @@ struct SessionCompleteView: View {
                 .ignoresSafeArea()
             
             VStack {
-                Text("You've completed your session!")
+                Text(sessionModel.sessionNotComplete() ? "Your session has ended, but it was incomplete." : "You've completed your session!")
                     .foregroundColor(Color.white)
                     .font(.custom("Poppins-Bold", size: 20))
                     .padding()
@@ -62,19 +62,37 @@ struct SessionCompleteView: View {
             }
         }
         .safeAreaInset(edge: .bottom) {
-            Button(action: {
-                resetSessionState()
-            }) {
-                Text("Back to home page")
-                    .font(.custom("Poppins-Bold", size: 16))
-                    .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                    .frame(maxWidth: .infinity)
+            VStack(spacing: 25) {
+                if sessionModel.sessionNotComplete() {
+                    // Note about streak progress
+                    HStack {
+                        Image(systemName: "info.circle.fill")
+                            .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                        Text("Note: your streak progress only increases when you complete all the drills in your session")
+                            .font(.custom("Poppins-Bold", size: 14))
+                            .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                            .multilineTextAlignment(.leading)
+                    }
                     .padding()
                     .background(Color.white)
                     .cornerRadius(12)
+                    .padding(.horizontal)
+                }
                 
+                Button(action: {
+                    resetSessionState()
+                }) {
+                    Text("Back to home page")
+                        .font(.custom("Poppins-Bold", size: 16))
+                        .foregroundColor(Color.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(appModel.globalSettings.primaryGreenColor)
+                        .cornerRadius(12)
+                }
+                .padding(.horizontal)
             }
-            .padding()
+            .padding(.bottom)
         }
     }
     

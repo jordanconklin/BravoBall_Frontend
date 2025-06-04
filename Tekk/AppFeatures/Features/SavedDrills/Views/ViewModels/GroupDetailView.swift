@@ -14,6 +14,9 @@ struct GroupDetailView: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     let group: GroupModel
     
+    
+    @State private var selectedDrill: DrillModel? = nil
+    
     @Environment(\.viewGeometry) var geometry
     @Environment(\.dismiss) private var dismiss
     @State private var showAddDrillSheet = false
@@ -22,87 +25,91 @@ struct GroupDetailView: View {
     @State private var currentDrills: [DrillModel] = []
     
     var body: some View {
+        NavigationStack {
             ZStack {
-            VStack {
-                HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "xmark")
-                    }
-                    .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        appModel.viewState.showGroupFilterOptions = true
-                    }) {
-                        Image(systemName: "ellipsis")
-                    }
-                    .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                    
-                }
-                .padding()
-
-                
-                // Group Info Header
-                VStack(spacing: 8) {
-                    Image(systemName: "figure.soccer")
-                        .font(.system(size: 40))
-                    Text(group.name)
-                        .font(.custom("Poppins-Bold", size: 24))
-                    Text(group.description)
-                        .font(.custom("Poppins-Regular", size: 14))
-                        .foregroundColor(.gray)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                }
-                .padding()
-                
-                // Drills List
-                if currentDrills.isEmpty {
-                    Text("No drills saved yet")
-                        .font(.custom("Poppins-Medium", size: 16))
-                        .foregroundColor(.gray)
-                        .padding()
+                VStack {
+                    HStack {
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            Image(systemName: "xmark")
+                        }
+                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
                         
                         Spacer()
-                } else {
-                    List {
-                        ForEach($currentDrills) { $drill in
-                            HStack {
-                                if appModel.viewState.showDrillGroupDeleteButtons {
-                                    Button(action: {
-                                        
-                                        sessionModel.removeDrillFromGroup(drill: drill, groupId: group.id)
-                                        // Remove from currentDrills
-                                        if let index = currentDrills.firstIndex(where: { $0.id == drill.id }) {
-                                            currentDrills.remove(at: index)
+                        
+                        Button(action: {
+                            appModel.viewState.showGroupFilterOptions = true
+                        }) {
+                            Image(systemName: "ellipsis")
+                        }
+                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                        
+                    }
+                    .padding()
+                    
+                    
+                    // Group Info Header
+                    VStack(spacing: 8) {
+                        Image(systemName: "figure.soccer")
+                            .font(.system(size: 40))
+                        Text(group.name)
+                            .font(.custom("Poppins-Bold", size: 24))
+                        Text(group.description)
+                            .font(.custom("Poppins-Regular", size: 14))
+                            .foregroundColor(.gray)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                    }
+                    .padding()
+                    
+                    // Drills List
+                    if currentDrills.isEmpty {
+                        Text("No drills saved yet")
+                            .font(.custom("Poppins-Medium", size: 16))
+                            .foregroundColor(.gray)
+                            .padding()
+                        
+                        Spacer()
+                    } else {
+                        List {
+                            ForEach($currentDrills) { $drill in
+                                HStack {
+                                    if appModel.viewState.showDrillGroupDeleteButtons {
+                                        Button(action: {
+                                            
+                                            sessionModel.removeDrillFromGroup(drill: drill, groupId: group.id)
+                                            // Remove from currentDrills
+                                            if let index = currentDrills.firstIndex(where: { $0.id == drill.id }) {
+                                                currentDrills.remove(at: index)
+                                            }
+                                            
+                                            if currentDrills.isEmpty {
+                                                appModel.viewState.showDrillGroupDeleteButtons = false
+                                            }
+                                            
+                                        }) {
+                                            ZStack {
+                                                Circle()
+                                                    .fill(Color.red)
+                                                    .frame(width: 20, height: 20)
+                                                Rectangle()
+                                                    .fill(Color.white)
+                                                    .frame(width: 10, height: 2)
+                                            }
                                         }
-                                        
-                                        if currentDrills.isEmpty {
-                                            appModel.viewState.showDrillGroupDeleteButtons = false
-                                        }
-
-                                    }) {
-                                        ZStack {
-                                            Circle()
-                                                .fill(Color.red)
-                                                .frame(width: 20, height: 20)
-                                            Rectangle()
-                                                .fill(Color.white)
-                                                .frame(width: 10, height: 2)
-                                        }
+                                        .buttonStyle(PlainButtonStyle())
+                                        .padding(.leading)
                                     }
-                                    .buttonStyle(PlainButtonStyle())
-                                    .padding(.leading)
+                                    
+                                    DrillRow(appModel: appModel, sessionModel: sessionModel, drill: drill)
+                                        .onTapGesture {
+                                            selectedDrill = drill
+                                        }
                                 }
-                                
-                                DrillRow(appModel: appModel, sessionModel: sessionModel, drill: drill)
                             }
                         }
-                    }
-                    .id(UUID()) // Force refresh list when data changes
+                        .id(UUID()) // Force refresh list when data changes
                     }
                 }
                 
@@ -131,6 +138,9 @@ struct GroupDetailView: View {
                 }
             }
             .frame(width: geometry.size.width)
+            .navigationDestination(item: $selectedDrill) { drill in
+                DrillDetailView(appModel: appModel, sessionModel: sessionModel, drill: drill)
+            }
             // Sheet pop-up for filter option button
             .sheet(isPresented: $appModel.viewState.showGroupFilterOptions) {
                 GroupFilterOptions(
@@ -180,8 +190,7 @@ struct GroupDetailView: View {
                     isDrillSelected: { drill in
                         // Check if the drill is already in the group
                         currentDrills.contains(drill)
-                    },
-                    dismiss: { showAddDrillSheet = false }
+                    }
                 )
             }
             .onAppear {
@@ -255,6 +264,8 @@ struct GroupDetailView: View {
                     object: nil
                 )
             }
+        }
+    
     }
     
     // Function to refresh the drills list from the latest data

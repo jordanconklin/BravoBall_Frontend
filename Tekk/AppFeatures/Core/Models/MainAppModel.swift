@@ -68,7 +68,7 @@ class MainAppModel: ObservableObject {
                 showSavedFilters = false
                 showSaveFiltersPrompt = false
                 showSearchDrills = false
-            showSessionDeleteButtons = false
+                showSessionDeleteButtons = false
                 showingDrillDetail = false
                 showSkillSearch = false
                 showSessionComplete = false
@@ -103,7 +103,7 @@ class MainAppModel: ObservableObject {
     @Published var selectedDifficulty: DifficultyType?
     
 
-
+    
     
     
     // MARK: Calendar
@@ -139,7 +139,7 @@ class MainAppModel: ObservableObject {
             }
         }
     }
-    @Published var selectedSession: CompletedSession? // For selecting into Drill Card View
+    @Published var selectedSession: CompletedSession? // For selecting into Drill Result View
     @Published var showCalendar = false
     @Published var showDrillResults = false
     

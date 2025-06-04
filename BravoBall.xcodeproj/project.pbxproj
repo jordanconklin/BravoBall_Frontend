@@ -50,6 +50,9 @@
 		420DA3A22DCEAF69004CDD7A /* Grass_Field.riv in Resources */ = {isa = PBXBuildFile; fileRef = 420DA3A12DCEAF69004CDD7A /* Grass_Field.riv */; };
 		420DA3A72DCEEF55004CDD7A /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420DA3A62DCEEF52004CDD7A /* Checkbox.swift */; };
 		4289C57A2DEC3B8F005CC91B /* FloatingAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4289C5792DEC3B81005CC91B /* FloatingAddButton.swift */; };
+		4289C5862DEE8BBB005CC91B /* Prereq_Location.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4289C5852DEE8BBB005CC91B /* Prereq_Location.riv */; };
+		4289C58A2DEE8C30005CC91B /* Prereq_Time.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4289C5892DEE8C30005CC91B /* Prereq_Time.riv */; };
+		4289C58E2DEE8FAD005CC91B /* Prereq_Difficulty.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4289C58D2DEE8FAD005CC91B /* Prereq_Difficulty.riv */; };
 		42929F3B2DD2EB5000DA73BB /* GroupFilterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42929F3A2DD2EB4900DA73BB /* GroupFilterOptions.swift */; };
 		430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */; };
 		430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6CC2D3064850016D520 /* MainAppModel.swift */; };
@@ -58,7 +61,6 @@
 		43112E562DBACAA500DEAE59 /* FilterMgmtExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43112E552DBACA9900DEAE59 /* FilterMgmtExtension.swift */; };
 		4351674B2DAE3ECA00E7D964 /* ResponsiveLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */; };
 		43524E772D4D994B00AD897A /* SessionGeneratorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43524E762D4D994400AD897A /* SessionGeneratorModel.swift */; };
-		43524E952D5198C900AD897A /* SearchDrillsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43524E942D5198C300AD897A /* SearchDrillsSheetView.swift */; };
 		4355EEAD2DB234D700D98314 /* GeometryKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4355EEAC2DB234D200D98314 /* GeometryKey.swift */; };
 		4355EEB12DB23FBB00D98314 /* Bravo_Animation.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4355EEB02DB23FBB00D98314 /* Bravo_Animation.riv */; };
 		435A70152CA7AB2600BFCC40 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 435A70142CA7AB2600BFCC40 /* RiveRuntime */; };
@@ -107,11 +109,8 @@
 		43BFAA202D438C7B00B12A6F /* Tab_Calendar.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43BFAA1F2D438C7B00B12A6F /* Tab_Calendar.riv */; };
 		43BFAA222D438D6600B12A6F /* Tab_Saved.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43BFAA212D438D6600B12A6F /* Tab_Saved.riv */; };
 		43BFAA262D43946000B12A6F /* Tab_Dude.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43BFAA252D43946000B12A6F /* Tab_Dude.riv */; };
-		43BFAA2C2D439D2C00B12A6F /* Prereq_Time.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43BFAA2B2D439D2C00B12A6F /* Prereq_Time.riv */; };
 		43BFAA322D44105200B12A6F /* Prereq_Equipment.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43BFAA312D44105200B12A6F /* Prereq_Equipment.riv */; };
 		43BFAA342D44164E00B12A6F /* Prereq_Training_Style.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43BFAA332D44164E00B12A6F /* Prereq_Training_Style.riv */; };
-		43BFAA362D44182400B12A6F /* Prereq_Location.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43BFAA352D44182400B12A6F /* Prereq_Location.riv */; };
-		43BFAA3C2D442BEB00B12A6F /* Prereq_Difficulty.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43BFAA3B2D442BEB00B12A6F /* Prereq_Difficulty.riv */; };
 		43BFAA422D444A2C00B12A6F /* Message_Bubble.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43BFAA412D444A2C00B12A6F /* Message_Bubble.riv */; };
 		43C5773C2D645BBB00D9B587 /* Break_Area.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43C5773B2D645BBB00D9B587 /* Break_Area.riv */; };
 		43C5FC412D6DB59D0064E7D5 /* DrillModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC402D6DB59A0064E7D5 /* DrillModel.swift */; };
@@ -206,6 +205,9 @@
 		420DA3A12DCEAF69004CDD7A /* Grass_Field.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Grass_Field.riv; sourceTree = "<group>"; };
 		420DA3A62DCEEF52004CDD7A /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
 		4289C5792DEC3B81005CC91B /* FloatingAddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingAddButton.swift; sourceTree = "<group>"; };
+		4289C5852DEE8BBB005CC91B /* Prereq_Location.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Location.riv; sourceTree = "<group>"; };
+		4289C5892DEE8C30005CC91B /* Prereq_Time.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Time.riv; sourceTree = "<group>"; };
+		4289C58D2DEE8FAD005CC91B /* Prereq_Difficulty.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Difficulty.riv; sourceTree = "<group>"; };
 		42929F3A2DD2EB4900DA73BB /* GroupFilterOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupFilterOptions.swift; sourceTree = "<group>"; };
 		430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegisterForm.swift; sourceTree = "<group>"; };
 		430FD6CC2D3064850016D520 /* MainAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppModel.swift; sourceTree = "<group>"; };
@@ -213,7 +215,6 @@
 		43112E552DBACA9900DEAE59 /* FilterMgmtExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterMgmtExtension.swift; sourceTree = "<group>"; };
 		4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsiveLayout.swift; sourceTree = "<group>"; };
 		43524E762D4D994400AD897A /* SessionGeneratorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionGeneratorModel.swift; sourceTree = "<group>"; };
-		43524E942D5198C300AD897A /* SearchDrillsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDrillsSheetView.swift; sourceTree = "<group>"; };
 		4355EEAC2DB234D200D98314 /* GeometryKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryKey.swift; sourceTree = "<group>"; };
 		4355EEB02DB23FBB00D98314 /* Bravo_Animation.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Bravo_Animation.riv; sourceTree = "<group>"; };
 		437D1A1E2D94FE4700B875CF /* SavedFiltersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedFiltersService.swift; sourceTree = "<group>"; };
@@ -259,11 +260,8 @@
 		43BFAA1F2D438C7B00B12A6F /* Tab_Calendar.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Tab_Calendar.riv; sourceTree = "<group>"; };
 		43BFAA212D438D6600B12A6F /* Tab_Saved.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Tab_Saved.riv; sourceTree = "<group>"; };
 		43BFAA252D43946000B12A6F /* Tab_Dude.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Tab_Dude.riv; sourceTree = "<group>"; };
-		43BFAA2B2D439D2C00B12A6F /* Prereq_Time.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Time.riv; sourceTree = "<group>"; };
 		43BFAA312D44105200B12A6F /* Prereq_Equipment.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Equipment.riv; sourceTree = "<group>"; };
 		43BFAA332D44164E00B12A6F /* Prereq_Training_Style.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Training_Style.riv; sourceTree = "<group>"; };
-		43BFAA352D44182400B12A6F /* Prereq_Location.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Location.riv; sourceTree = "<group>"; };
-		43BFAA3B2D442BEB00B12A6F /* Prereq_Difficulty.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Difficulty.riv; sourceTree = "<group>"; };
 		43BFAA412D444A2C00B12A6F /* Message_Bubble.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Message_Bubble.riv; sourceTree = "<group>"; };
 		43C5773B2D645BBB00D9B587 /* Break_Area.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Break_Area.riv; sourceTree = "<group>"; };
 		43C5FC402D6DB59A0064E7D5 /* DrillModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrillModel.swift; sourceTree = "<group>"; };
@@ -321,14 +319,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		170167FE2D88F6170078446C /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				170167FF2D88F61D0078446C /* DrillSearchView.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
 		1749360D2C3E102B001163B9 = {
 			isa = PBXGroup;
 			children = (
@@ -419,7 +409,6 @@
 			children = (
 				178208E72D2DEC5400246494 /* HelperViews */,
 				178208E12D2DEBB400246494 /* OnboardingView.swift */,
-				178208F02D2DFD6500246494 /* OnboardingPreview.swift */,
 				178208E52D2DEC2900246494 /* CompletionView.swift */,
 				178208E32D2DEBC800246494 /* LoginView.swift */,
 			);
@@ -433,6 +422,7 @@
 				178208E82D2DEC6D00246494 /* OnboardingStepView.swift */,
 				178208EA2D2DECE300246494 /* OnboardingMultiSelectView.swift */,
 				178208EC2D2DED0800246494 /* OnboardingBooleanView.swift */,
+				178208F02D2DFD6500246494 /* OnboardingPreview.swift */,
 			);
 			path = HelperViews;
 			sourceTree = "<group>";
@@ -512,7 +502,6 @@
 		4399B7142D6D794000DA5E84 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				170167FE2D88F6170078446C /* Components */,
 				4399B7182D6D799700DA5E84 /* Services */,
 				4399B70F2D6D741100DA5E84 /* Models */,
 			);
@@ -693,11 +682,11 @@
 				43BFAA1F2D438C7B00B12A6F /* Tab_Calendar.riv */,
 				43BFAA212D438D6600B12A6F /* Tab_Saved.riv */,
 				43BFAA252D43946000B12A6F /* Tab_Dude.riv */,
-				43BFAA2B2D439D2C00B12A6F /* Prereq_Time.riv */,
+				4289C5892DEE8C30005CC91B /* Prereq_Time.riv */,
 				43BFAA312D44105200B12A6F /* Prereq_Equipment.riv */,
+				4289C5852DEE8BBB005CC91B /* Prereq_Location.riv */,
 				43BFAA332D44164E00B12A6F /* Prereq_Training_Style.riv */,
-				43BFAA352D44182400B12A6F /* Prereq_Location.riv */,
-				43BFAA3B2D442BEB00B12A6F /* Prereq_Difficulty.riv */,
+				4289C58D2DEE8FAD005CC91B /* Prereq_Difficulty.riv */,
 			);
 			path = RiveAssets;
 			sourceTree = "<group>";
@@ -922,7 +911,7 @@
 		43C5FC8F2D6DD1A10064E7D5 /* DrillSheet */ = {
 			isa = PBXGroup;
 			children = (
-				43524E942D5198C300AD897A /* SearchDrillsSheetView.swift */,
+				170167FF2D88F61D0078446C /* DrillSearchView.swift */,
 			);
 			path = DrillSheet;
 			sourceTree = "<group>";
@@ -1112,12 +1101,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				43BFA9F42D40AB8A00B12A6F /* Paw_Gray.riv in Resources */,
+				4289C58A2DEE8C30005CC91B /* Prereq_Time.riv in Resources */,
 				43BFAA422D444A2C00B12A6F /* Message_Bubble.riv in Resources */,
 				17595AAD2D3B44FE0015F35D /* Drill_Card_Complete.riv in Resources */,
-				43BFAA2C2D439D2C00B12A6F /* Prereq_Time.riv in Resources */,
 				420DA39A2DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv in Resources */,
 				43BFA9E82D408B8100B12A6F /* Arrow.riv in Resources */,
-				43BFAA3C2D442BEB00B12A6F /* Prereq_Difficulty.riv in Resources */,
 				43BFA9F62D40ABB600B12A6F /* Paw_Yellow.riv in Resources */,
 				174936222C3E1031001163B9 /* Preview Assets.xcassets in Resources */,
 				43C5773C2D645BBB00D9B587 /* Break_Area.riv in Resources */,
@@ -1128,9 +1116,9 @@
 				43BFA9EA2D40964700B12A6F /* Drill_Card_Incomplete.riv in Resources */,
 				43BFA9D62D3F38B300B12A6F /* Golden_Button.riv in Resources */,
 				43BFAA222D438D6600B12A6F /* Tab_Saved.riv in Resources */,
+				4289C5862DEE8BBB005CC91B /* Prereq_Location.riv in Resources */,
 				43BFA9E62D40885000B12A6F /* Plus_Button.riv in Resources */,
 				43985E522CB51E1100BE2AB6 /* Poppins-Bold.ttf in Resources */,
-				43BFAA362D44182400B12A6F /* Prereq_Location.riv in Resources */,
 				43985E542CB5A9A600BE2AB6 /* PottaOne-Regular.ttf in Resources */,
 				420DA3A22DCEAF69004CDD7A /* Grass_Field.riv in Resources */,
 				43985E472CB4EFA200BE2AB6 /* BravoBall_Intro.riv in Resources */,
@@ -1138,6 +1126,7 @@
 				43BFAA202D438C7B00B12A6F /* Tab_Calendar.riv in Resources */,
 				430FD71F2D334CAF0016D520 /* Day_Null.riv in Resources */,
 				43BFAA322D44105200B12A6F /* Prereq_Equipment.riv in Resources */,
+				4289C58E2DEE8FAD005CC91B /* Prereq_Difficulty.riv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1219,7 +1208,6 @@
 				17F5D6562CD347AE008E8C24 /* GlobalSettings.swift in Sources */,
 				17F5D6542CD3477E008E8C24 /* ColorExtension.swift in Sources */,
 				1782090E2D2E0A1100246494 /* ProfileView.swift in Sources */,
-				43524E952D5198C900AD897A /* SearchDrillsSheetView.swift in Sources */,
 				43C5FC5E2D6DC0E40064E7D5 /* FilterOptionsButton.swift in Sources */,
 				43AC25622DA394B500EDD8C0 /* SavedGroupsExtension.swift in Sources */,
 				43C5FC562D6DBD310064E7D5 /* LikedGroupCard.swift in Sources */,
