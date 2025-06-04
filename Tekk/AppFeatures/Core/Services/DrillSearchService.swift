@@ -29,11 +29,6 @@ class DrillSearchService {
     
     private init() {}
     
-    // Helper method to get auth token
-    private func getAuthToken() -> String? {
-        return KeychainWrapper.standard.string(forKey: "authToken")
-    }
-    
     /// Search for drills with various filter options
     func searchDrills(
         query: String = "",
@@ -42,13 +37,6 @@ class DrillSearchService {
         page: Int = 1,
         limit: Int = 20
     ) async throws -> DrillSearchResponse {
-        guard let token = getAuthToken() else {
-            throw NSError(domain: "DrillSearchService", code: 401, userInfo: [NSLocalizedDescriptionKey: "Authentication token not found"])
-        }
-        
-        // Check if we're trying to load all drills
-        let isInitialLoad = query.isEmpty && category == nil && difficulty == nil
-        
         // Build URL with query parameters
         var urlComponents = URLComponents(string: "\(baseURL)/api/drills/search")
         var queryItems = [URLQueryItem(name: "query", value: query)]
@@ -66,8 +54,8 @@ class DrillSearchService {
         queryItems.append(URLQueryItem(name: "page", value: String(page)))
         
         // Use a larger limit when loading all drills
+        let isInitialLoad = query.isEmpty && category == nil && difficulty == nil
         if isInitialLoad {
-            // Request more drills when showing all
             queryItems.append(URLQueryItem(name: "limit", value: "100"))
         } else {
             queryItems.append(URLQueryItem(name: "limit", value: String(limit)))
@@ -79,127 +67,226 @@ class DrillSearchService {
             throw NSError(domain: "DrillSearchService", code: 400, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
         }
         
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
         print("🔍 Searching drills with URL: \(url.absoluteString)")
         
-        let (data, response) = try await URLSession.shared.data(for: request)
+        // Use APIService for the request
+        let (data, response) = try await APIService.shared.requestFullURL(
+            url: url,
+            method: "GET",
+            headers: ["Content-Type": "application/json"]
+        )
         
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw NSError(domain: "DrillSearchService", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid response"])
+        guard response.statusCode == 200 else {
+            let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data)
+            let errorMessage = errorResponse?.detail ?? "Failed to search drills"
+            print("❌ Search error: \(errorMessage)")
+            if isInitialLoad {
+                print("⚠️ Error on initial load, using mock data temporarily")
+                return createMockSearchResponse(page: page, limit: limit)
+            }
+            throw NSError(domain: "DrillSearchService", code: response.statusCode, userInfo: [NSLocalizedDescriptionKey: errorMessage])
         }
         
-//        // For debugging - print the response
-//        if let responseString = String(data: data, encoding: .utf8) {
-//            print("📥 Search API Response: \(responseString)")
-//        }
-        
-        if httpResponse.statusCode == 200 {
-            print("✅ Successfully retrieved drill search results")
+        // Try to manually parse the response first to handle null values properly
+        if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let items = json["items"] as? [[String: Any]] {
+            print("✅ Manually processing \(items.count) items from JSON")
             
-            // Try to manually parse the response first to handle null values properly
-            if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let items = json["items"] as? [[String: Any]] {
-                
-                print("✅ Manually processing \(items.count) items from JSON")
-                
-                // Create DrillResponse objects from raw JSON with null safety
-                var drillResponses: [DrillResponse] = []
-                
-                for item in items {
-                    do {
-                        let id = item["id"] as? Int ?? 0
-                        let title = item["title"] as? String ?? "Unnamed Drill"
-                        let description = item["description"] as? String ?? ""
-                        
-                        // Handle potentially null numeric values
-                        let duration: Int
-                        if let durationValue = item["duration"] as? Int {
-                            duration = durationValue
-                        } else {
-                            duration = 10 // Default value
-                        }
-                        
-                        let intensity = item["intensity"] as? String ?? "medium"
-                        let difficulty = item["difficulty"] as? String ?? "beginner"
-                        
-                        // Handle array fields safely
-                        let equipment = item["equipment"] as? [String] ?? []
-                        let suitableLocations = item["suitable_locations"] as? [String] ?? []
-                        let instructions = item["instructions"] as? [String] ?? []
-                        let tips = item["tips"] as? [String] ?? []
-                        
-                        let type = item["type"] as? String ?? "other"
-                                                
-                        // Handle nullable integers
-                        let sets: Int? = item["sets"] as? Int
-                        let reps: Int? = item["reps"] as? Int
-                        let rest: Int? = item["rest"] as? Int
-                        
-                        // Handle primary skill
-                        var primarySkill: DrillResponse.Skill? = nil
-                        if let primarySkillData = item["primary_skill"] as? [String: Any] {
-                            primarySkill = DrillResponse.Skill(
-                                category: primarySkillData["category"] as? String ?? "",
-                                subSkill: primarySkillData["sub_skill"] as? String ?? ""
+            // Create DrillResponse objects from raw JSON with null safety
+            var drillResponses: [DrillResponse] = []
+            
+            for item in items {
+                do {
+                    let id = item["id"] as? Int ?? 0
+                    let title = item["title"] as? String ?? "Unnamed Drill"
+                    let description = item["description"] as? String ?? ""
+                    
+                    // Handle potentially null numeric values
+                    let duration: Int
+                    if let durationValue = item["duration"] as? Int {
+                        duration = durationValue
+                    } else {
+                        duration = 10 // Default value
+                    }
+                    
+                    let intensity = item["intensity"] as? String ?? "medium"
+                    let difficulty = item["difficulty"] as? String ?? "beginner"
+                    
+                    // Handle array fields safely
+                    let equipment = item["equipment"] as? [String] ?? []
+                    let suitableLocations = item["suitable_locations"] as? [String] ?? []
+                    let instructions = item["instructions"] as? [String] ?? []
+                    let tips = item["tips"] as? [String] ?? []
+                    
+                    let type = item["type"] as? String ?? "other"
+                    
+                    // Handle nullable integers
+                    let sets: Int? = item["sets"] as? Int
+                    let reps: Int? = item["reps"] as? Int
+                    let rest: Int? = item["rest"] as? Int
+                    
+                    // Handle primary skill
+                    var primarySkill: DrillResponse.Skill? = nil
+                    if let primarySkillData = item["primary_skill"] as? [String: Any] {
+                        primarySkill = DrillResponse.Skill(
+                            category: primarySkillData["category"] as? String ?? "",
+                            subSkill: primarySkillData["sub_skill"] as? String ?? ""
+                        )
+                    }
+                    
+                    // Handle secondary skills
+                    var secondarySkills: [DrillResponse.Skill] = []
+                    if let secondarySkillsData = item["secondary_skills"] as? [[String: Any]] {
+                        secondarySkills = secondarySkillsData.map { skillData in
+                            DrillResponse.Skill(
+                                category: skillData["category"] as? String ?? "",
+                                subSkill: skillData["sub_skill"] as? String ?? ""
                             )
                         }
-                        
-                        // Handle secondary skills
-                        var secondarySkills: [DrillResponse.Skill] = []
-                        if let secondarySkillsData = item["secondary_skills"] as? [[String: Any]] {
-                            secondarySkills = secondarySkillsData.map { skillData in
-                                DrillResponse.Skill(
-                                    category: skillData["category"] as? String ?? "",
-                                    subSkill: skillData["sub_skill"] as? String ?? ""
-                                )
-                            }
-                        }
-                        
-                        let videoUrl = item["video_url"] as? String ?? ""
-                        
-                        
-                        let drillResponse = DrillResponse(
-                            id: id,
-                            title: title,
-                            description: description,
-                            duration: duration,
-                            intensity: intensity,
-                            difficulty: difficulty,
-                            equipment: equipment,
-                            suitableLocations: suitableLocations,
-                            instructions: instructions,
-                            tips: tips,
-                            type: type,
-                            sets: sets,
-                            reps: reps,
-                            rest: rest,
-                            primarySkill: primarySkill,
-                            secondarySkills: secondarySkills,
-                            videoUrl: videoUrl
-                        )
-                        
-                        drillResponses.append(drillResponse)
-                        
-                        // Debug print for the first few drills
-                        if drillResponses.count <= 3 {
-                            print("\nProcessed Drill \(drillResponses.count):")
-                            print("- Title:", drillResponse.title)
-                            print("- Primary Skill:", drillResponse.primarySkill?.category ?? "None")
-                            print("- Primary SubSkill:", drillResponse.primarySkill?.subSkill ?? "None")
-                            print("- Type:", drillResponse.type)
-                            print("- Secondary Skills:", drillResponse.secondarySkills?.map { "\($0.category):\($0.subSkill)" } ?? [])
-                        }
-                    } catch {
-                        print("⚠️ Error processing drill item:", error)
-                        continue
                     }
+                    
+                    let videoUrl = item["video_url"] as? String ?? ""
+                    
+                    
+                    let drillResponse = DrillResponse(
+                        id: id,
+                        title: title,
+                        description: description,
+                        duration: duration,
+                        intensity: intensity,
+                        difficulty: difficulty,
+                        equipment: equipment,
+                        suitableLocations: suitableLocations,
+                        instructions: instructions,
+                        tips: tips,
+                        type: type,
+                        sets: sets,
+                        reps: reps,
+                        rest: rest,
+                        primarySkill: primarySkill,
+                        secondarySkills: secondarySkills,
+                        videoUrl: videoUrl
+                    )
+                    
+                    drillResponses.append(drillResponse)
+                    
+                    // Debug print for the first few drills
+                    if drillResponses.count <= 3 {
+                        print("\nProcessed Drill \(drillResponses.count):")
+                        print("- Title:", drillResponse.title)
+                        print("- Primary Skill:", drillResponse.primarySkill?.category ?? "None")
+                        print("- Primary SubSkill:", drillResponse.primarySkill?.subSkill ?? "None")
+                        print("- Type:", drillResponse.type)
+                        print("- Secondary Skills:", drillResponse.secondarySkills?.map { "\($0.category):\($0.subSkill)" } ?? [])
+                    }
+                } catch {
+                    print("⚠️ Error processing drill item:", error)
+                    continue
                 }
+            }
+            
+            // If we successfully processed at least one drill, return the result
+            if !drillResponses.isEmpty {
+                return DrillSearchResponse(
+                    items: drillResponses,
+                    total: json["total"] as? Int ?? drillResponses.count,
+                    page: json["page"] as? Int ?? page,
+                    pageSize: json["page_size"] as? Int ?? limit,
+                    totalPages: json["total_pages"] as? Int ?? 1
+                )
+            }
+        }
+        
+        // If manual parsing fails, try the standard decoder with error handling
+        do {
+            let decoder = JSONDecoder()
+            // Configure decoder to be more lenient
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            decoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: "Infinity", negativeInfinity: "-Infinity", nan: "NaN")
+            
+            let response = try decoder.decode(DrillSearchResponse.self, from: data)
+            
+            // If items is nil, create a response with empty items
+            if response.items == nil {
+                print("⚠️ Items field was nil in response, using mock data temporarily")
+                return createMockSearchResponse(page: page, limit: limit)
+            }
+            
+            // If items is empty but we're doing an initial load, use mock data
+            if isInitialLoad && (response.items?.isEmpty ?? true) {
+                print("⚠️ Initial load returned empty items, using mock data temporarily")
+                return createMockSearchResponse(page: page, limit: limit)
+            }
+            
+            return response
+        } catch {
+            print("❌ JSON Decoding error: \(error)")
+            
+            // Try to create a fallback response with mock data
+            if isInitialLoad {
+                print("⚠️ Using mock data after decoding failure")
+                return createMockSearchResponse(page: page, limit: limit)
+            }
+            
+            // Try to parse as a simple JSON object in case the structure is different
+            if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                print("�� Raw JSON response: \(json)")
                 
-                // If we successfully processed at least one drill, return the result
-                if !drillResponses.isEmpty {
+                // Try to manually extract data if JSON structure doesn't match our model
+                if let items = json["items"] as? [[String: Any]] {
+                    print("✅ Manually extracted \(items.count) items from JSON")
+                    
+                    // Create DrillResponse objects from raw JSON
+                    var drillResponses: [DrillResponse] = []
+                    
+                    for item in items {
+                        if let id = item["id"] as? Int,
+                           let title = item["title"] as? String {
+                            let description = item["description"] as? String ?? ""
+                            let duration = item["duration"] as? Int ?? 10
+                            let intensity = item["intensity"] as? String ?? "medium"
+                            let difficulty = item["difficulty"] as? String ?? "beginner"
+                            let equipment = item["equipment"] as? [String] ?? []
+                            let suitableLocations = item["suitable_locations"] as? [String] ?? []
+                            let instructions = item["instructions"] as? [String] ?? []
+                            let tips = item["tips"] as? [String] ?? []
+                            let type = item["type"] as? String ?? "passing"
+                                                                
+                            let sets = item["sets"] as? Int
+                            let reps = item["reps"] as? Int
+                            let rest = item["rest"] as? Int
+                            
+                            let primarySkill = item["primary_skill"] as? DrillResponse.Skill
+                            let secondarySkills = item["secondary_skills"] as? [DrillResponse.Skill]
+                            
+                            let videoUrl = item["video_url"] as? String ?? ""
+                            
+                            
+                            
+                            let drillResponse = DrillResponse(
+                                id: id,
+                                title: title,
+                                description: description,
+                                duration: duration,
+                                intensity: intensity,
+                                difficulty: difficulty,
+                                equipment: equipment,
+                                suitableLocations: suitableLocations,
+                                instructions: instructions,
+                                tips: tips,
+                                type: type,
+                                sets: sets,
+                                reps: reps,
+                                rest: rest,
+                                primarySkill: primarySkill,
+                                secondarySkills: secondarySkills,
+                                videoUrl: videoUrl
+                            )
+                            
+                            drillResponses.append(drillResponse)
+                        }
+                    }
+                    
                     return DrillSearchResponse(
                         items: drillResponses,
                         total: json["total"] as? Int ?? drillResponses.count,
@@ -210,127 +297,14 @@ class DrillSearchService {
                 }
             }
             
-            // If manual parsing fails, try the standard decoder with error handling
-            do {
-                let decoder = JSONDecoder()
-                // Configure decoder to be more lenient
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                decoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: "Infinity", negativeInfinity: "-Infinity", nan: "NaN")
-                
-                let response = try decoder.decode(DrillSearchResponse.self, from: data)
-                
-                // If items is nil, create a response with empty items
-                if response.items == nil {
-                    print("⚠️ Items field was nil in response, using mock data temporarily")
-                    return createMockSearchResponse(page: page, limit: limit)
-                }
-                
-                // If items is empty but we're doing an initial load, use mock data
-                if isInitialLoad && (response.items?.isEmpty ?? true) {
-                    print("⚠️ Initial load returned empty items, using mock data temporarily")
-                    return createMockSearchResponse(page: page, limit: limit)
-                }
-                
-                return response
-            } catch {
-                print("❌ JSON Decoding error: \(error)")
-                
-                // Try to create a fallback response with mock data
-                if isInitialLoad {
-                    print("⚠️ Using mock data after decoding failure")
-                    return createMockSearchResponse(page: page, limit: limit)
-                }
-                
-                // Try to parse as a simple JSON object in case the structure is different
-                if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                    print("📊 Raw JSON response: \(json)")
-                    
-                    // Try to manually extract data if JSON structure doesn't match our model
-                    if let items = json["items"] as? [[String: Any]] {
-                        print("✅ Manually extracted \(items.count) items from JSON")
-                        
-                        // Create DrillResponse objects from raw JSON
-                        var drillResponses: [DrillResponse] = []
-                        
-                        for item in items {
-                            if let id = item["id"] as? Int,
-                               let title = item["title"] as? String {
-                                let description = item["description"] as? String ?? ""
-                                let duration = item["duration"] as? Int ?? 10
-                                let intensity = item["intensity"] as? String ?? "medium"
-                                let difficulty = item["difficulty"] as? String ?? "beginner"
-                                let equipment = item["equipment"] as? [String] ?? []
-                                let suitableLocations = item["suitable_locations"] as? [String] ?? []
-                                let instructions = item["instructions"] as? [String] ?? []
-                                let tips = item["tips"] as? [String] ?? []
-                                let type = item["type"] as? String ?? "passing"
-                                                                
-                                let sets = item["sets"] as? Int
-                                let reps = item["reps"] as? Int
-                                let rest = item["rest"] as? Int
-                                
-                                let primarySkill = item["primary_skill"] as? DrillResponse.Skill
-                                let secondarySkills = item["secondary_skills"] as? [DrillResponse.Skill]
-                                
-                                let videoUrl = item["video_url"] as? String ?? ""
-                                
-                                
-                                
-                                let drillResponse = DrillResponse(
-                                    id: id,
-                                    title: title,
-                                    description: description,
-                                    duration: duration,
-                                    intensity: intensity,
-                                    difficulty: difficulty,
-                                    equipment: equipment,
-                                    suitableLocations: suitableLocations,
-                                    instructions: instructions,
-                                    tips: tips,
-                                    type: type,
-                                    sets: sets,
-                                    reps: reps,
-                                    rest: rest,
-                                    primarySkill: primarySkill,
-                                    secondarySkills: secondarySkills,
-                                    videoUrl: videoUrl
-                                )
-                                
-                                drillResponses.append(drillResponse)
-                            }
-                        }
-                        
-                        return DrillSearchResponse(
-                            items: drillResponses,
-                            total: json["total"] as? Int ?? drillResponses.count,
-                            page: json["page"] as? Int ?? page,
-                            pageSize: json["page_size"] as? Int ?? limit,
-                            totalPages: json["total_pages"] as? Int ?? 1
-                        )
-                    }
-                }
-                
-                // If all else fails, return an empty response
-                return DrillSearchResponse(
-                    items: [],
-                    total: 0,
-                    page: page,
-                    pageSize: limit,
-                    totalPages: 0
-                )
-            }
-        } else {
-            let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data)
-            let errorMessage = errorResponse?.detail ?? "Failed to search drills"
-            print("❌ Search error: \(errorMessage)")
-            
-            // If it's an initial load and we get an error, return mock data
-            if isInitialLoad {
-                print("⚠️ Error on initial load, using mock data temporarily")
-                return createMockSearchResponse(page: page, limit: limit)
-            }
-            
-            throw NSError(domain: "DrillSearchService", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: errorMessage])
+            // If all else fails, return an empty response
+            return DrillSearchResponse(
+                items: [],
+                total: 0,
+                page: page,
+                pageSize: limit,
+                totalPages: 0
+            )
         }
     }
     

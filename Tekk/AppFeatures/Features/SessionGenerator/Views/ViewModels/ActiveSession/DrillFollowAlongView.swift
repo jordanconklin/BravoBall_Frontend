@@ -125,7 +125,7 @@ struct DrillFollowAlongView: View {
                     Text("How Drill Timer Works")
                         .font(.title2.bold())
                         .padding(.top, 24)
-                    Text("• Press play to start the countdown for this set.\n• When the timer is up, you will move to the next set.\n• Complete all sets to finish the drill.")
+                    Text("• Press play to start the countdown for this set.\n• When the timer ends, you’ll move to the next set and the timer will reset.\n• Complete all sets to finish the drill and proceed to the next one.\n• You can skip a drill, but your session will be marked as incomplete if you do.")
                         .font(.body)
                         .multilineTextAlignment(.leading)
                         .padding(.horizontal)

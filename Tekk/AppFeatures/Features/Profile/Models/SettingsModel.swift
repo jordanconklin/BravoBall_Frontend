@@ -44,14 +44,14 @@ class SettingsModel: ObservableObject {
             throw URLError(.badURL)
         }
         
-        guard let authToken = KeychainWrapper.standard.string(forKey: "authToken") else {
+        guard let accessToken = KeychainWrapper.standard.string(forKey: "accessToken") else {
             throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No auth token found"])
         }
         
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
         let body = [
             "first_name": firstName,

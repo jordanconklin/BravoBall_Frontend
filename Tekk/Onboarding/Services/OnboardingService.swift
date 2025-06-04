@@ -13,6 +13,7 @@ struct OnboardingResponse: Codable {
     let status: String
     let message: String
     let access_token: String
+    let refresh_token: String?
     let tokenType: String
     let userId: Int
     let initialSession: SessionResponse?
@@ -21,6 +22,7 @@ struct OnboardingResponse: Codable {
         case status
         case message
         case access_token
+        case refresh_token
         case tokenType = "token_type"
         case userId = "user_id"
         case initialSession = "initial_session"

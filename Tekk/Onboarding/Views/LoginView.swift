@@ -17,6 +17,7 @@ struct LoginResponse: Codable {
     let email: String
     let first_name: String
     let last_name: String
+    let refresh_token: String?
 }
 
 
@@ -160,7 +161,7 @@ struct LoginView: View {
         let url = URL(string: "http://127.0.0.1:8000/login/")!
         var request = URLRequest(url: url)
 
-        print("current token: \(onboardingModel.authToken)")
+        print("current token: \(onboardingModel.accessToken)")
         // HTTP POST request to login user and receive JWT token
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -174,20 +175,26 @@ struct LoginView: View {
                     if let data = data,
                        let decodedResponse = try? JSONDecoder().decode(LoginResponse.self, from: data) {
                         DispatchQueue.main.async {
-                            onboardingModel.authToken = decodedResponse.access_token
-                            
-                            KeychainWrapper.standard.set(self.onboardingModel.authToken, forKey: "authToken")
+                            onboardingModel.accessToken = decodedResponse.access_token
+                            // Clear old tokens
+                            KeychainWrapper.standard.removeObject(forKey: "accessToken")
+                            KeychainWrapper.standard.removeObject(forKey: "refreshToken")
+                            // Save new tokens
+                            KeychainWrapper.standard.set(decodedResponse.access_token, forKey: "accessToken")
+                            if let refreshToken = decodedResponse.refresh_token {
+                                KeychainWrapper.standard.set(refreshToken, forKey: "refreshToken")
+                            }
+                            print("🔑 Token saved to keychain: \(KeychainWrapper.standard.string(forKey: "accessToken") ?? "nil")")
+                            print("🔑 Refresh token saved to keychain: \(KeychainWrapper.standard.string(forKey: "refreshToken") ?? "nil")")
                             userManager.userHasAccountHistory = true
                             onboardingModel.isLoggedIn = true
                             onboardingModel.showLoginPage = false
-                            
                             userManager.updateUserKeychain(
                                 email: decodedResponse.email,
                                 firstName: decodedResponse.first_name,
                                 lastName: decodedResponse.last_name
                             )
-                            
-                            print("Auth token: \(self.onboardingModel.authToken)")
+                            print("Auth token: \(self.onboardingModel.accessToken)")
                             print("Login success: \(self.onboardingModel.isLoggedIn)")
                             print("Email: \(decodedResponse.email)")
                             print("First name: \(decodedResponse.first_name)")

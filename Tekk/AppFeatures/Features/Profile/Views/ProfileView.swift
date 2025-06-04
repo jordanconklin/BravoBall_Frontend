@@ -331,7 +331,7 @@ struct ProfileView: View {
     
     private func logOutUser() {
         // Reset login property and clear onboarding data
-        onboardingModel.authToken = "" // TODO: make it so authToken isnt stored here
+        onboardingModel.accessToken = "" // TODO: make it so accessToken isnt stored here
         onboardingModel.errorMessage = ""
         onboardingModel.isLoggedIn = false
         onboardingModel.onboardingComplete = false
@@ -341,7 +341,7 @@ struct ProfileView: View {
 
         // Clear Keychain tokens
         let keychain = KeychainWrapper.standard
-        keychain.removeObject(forKey: "authToken")
+        keychain.removeObject(forKey: "accessToken")
         
         // Clear user's cache and data
         sessionModel.clearUserData()
@@ -361,7 +361,7 @@ struct ProfileView: View {
         }
         
         // Get the access token from Keychain storage
-        guard let authToken = KeychainWrapper.standard.string(forKey: "authToken") else {
+        guard let accessToken = KeychainWrapper.standard.string(forKey: "accessToken") else {
             print("❌ No access token found")
             return
         }
@@ -371,7 +371,7 @@ struct ProfileView: View {
         request.httpMethod = "DELETE"
         
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         // debug to make sure token is created
         print("\n🔍 Request Details:")
         print("URL: \(url)")

@@ -36,6 +36,7 @@
 		1784EB6F2D965FE0001D4F2F /* EditDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1784EB6E2D965FDC001D4F2F /* EditDetailsView.swift */; };
 		17C3B58D2D38E43900D2471F /* DrillFollowAlongView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C3B58C2D38E41C00D2471F /* DrillFollowAlongView.swift */; };
 		17CA37A42DF0B1E5001AD5FA /* CustomVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CA37A32DF0B1DF001AD5FA /* CustomVideoPlayer.swift */; };
+		17CA37A62DF0BA0F001AD5FA /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CA37A52DF0BA0C001AD5FA /* APIService.swift */; };
 		17DB45FA2DD69B2C000A76F6 /* BravoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB45F92DD69B29000A76F6 /* BravoHeaderView.swift */; };
 		17DB45FC2DD69D3C000A76F6 /* FilterScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB45FB2DD69D38000A76F6 /* FilterScrollView.swift */; };
 		17DB45FE2DD6A2D3000A76F6 /* SaveFiltersPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB45FD2DD6A2D0000A76F6 /* SaveFiltersPromptView.swift */; };
@@ -191,6 +192,7 @@
 		1784EB6E2D965FDC001D4F2F /* EditDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDetailsView.swift; sourceTree = "<group>"; };
 		17C3B58C2D38E41C00D2471F /* DrillFollowAlongView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrillFollowAlongView.swift; sourceTree = "<group>"; };
 		17CA37A32DF0B1DF001AD5FA /* CustomVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomVideoPlayer.swift; sourceTree = "<group>"; };
+		17CA37A52DF0BA0C001AD5FA /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		17DB45F92DD69B29000A76F6 /* BravoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BravoHeaderView.swift; sourceTree = "<group>"; };
 		17DB45FB2DD69D38000A76F6 /* FilterScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterScrollView.swift; sourceTree = "<group>"; };
 		17DB45FD2DD6A2D0000A76F6 /* SaveFiltersPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveFiltersPromptView.swift; sourceTree = "<group>"; };
@@ -522,6 +524,7 @@
 			isa = PBXGroup;
 			children = (
 				420DA39D2DCE9357004CDD7A /* PreferencesUpdate.swift */,
+				17CA37A52DF0BA0C001AD5FA /* APIService.swift */,
 				437D1A1E2D94FE4700B875CF /* SavedFiltersService.swift */,
 				43A764982D825FE8004509E5 /* DataSyncService.swift */,
 				43B6877C2D7C2391009CCA8C /* CacheManager.swift */,
@@ -1236,6 +1239,7 @@
 				4399B7422D6D92C100DA5E84 /* FilterTypes.swift in Sources */,
 				17595A9F2D3B3B320015F35D /* ProgressionView.swift in Sources */,
 				43B6877D2D7C2394009CCA8C /* CacheManager.swift in Sources */,
+				17CA37A62DF0BA0F001AD5FA /* APIService.swift in Sources */,
 				43C5FC492D6DB84F0064E7D5 /* EditableDrillModel.swift in Sources */,
 				4289C57A2DEC3B8F005CC91B /* FloatingAddButton.swift in Sources */,
 				43A764992D825FEF004509E5 /* DataSyncService.swift in Sources */,

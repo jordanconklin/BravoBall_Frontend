@@ -38,7 +38,7 @@ class SavedFiltersService {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         // Add auth token
-        if let token = KeychainWrapper.standard.string(forKey: "authToken") {
+        if let token = KeychainWrapper.standard.string(forKey: "accessToken") {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         
@@ -104,7 +104,7 @@ class SavedFiltersService {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         // Add auth token
-        if let token = KeychainWrapper.standard.string(forKey: "authToken") {
+        if let token = KeychainWrapper.standard.string(forKey: "accessToken") {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             print("🔑 Using auth token: \(token)")
         } else {
