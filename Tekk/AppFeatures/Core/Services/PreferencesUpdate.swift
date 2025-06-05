@@ -231,7 +231,7 @@ class PreferencesUpdateService {
                     videoUrl: videoUrl
                 )
             }
-            let session = SessionResponse(
+            let _ = SessionResponse(
                 sessionId: sessionId,
                 totalDuration: totalDuration,
                 focusAreas: focusAreas,

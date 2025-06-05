@@ -19,6 +19,7 @@ struct CalendarView: View {
     @State private var currentDate: Date = Date()
     // testing purposes
     @State private var simulatedDate: Date = Date()
+    @State private var showInfoSheet = false
 
 
     var body: some View {
@@ -48,7 +49,13 @@ struct CalendarView: View {
                 Text("Streak Calendar")
                     .font(.custom("Poppins-Bold", size: 22))
                     .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                
+                // Info button
+                Button(action: { showInfoSheet = true }) {
+                    Image(systemName: "info.circle")
+                        .font(.system(size: 22, weight: .regular))
+                        .foregroundColor(.gray)
+                }
+                .accessibilityLabel("About Streak Calendar")
                 Spacer()
                 
                 // Toggle full calendar button
@@ -181,6 +188,15 @@ struct CalendarView: View {
             
         }
         .padding()
+        .sheet(isPresented: $showInfoSheet) {
+            InfoPopupView(
+                title: "How the Streak Calendar Works",
+                description: "The streak calendar tracks your daily training streaks.\n\nEach day you complete a session, it will be highlighted.\n\nUse the arrows to navigate months and see your progress over time.",
+                onClose: { showInfoSheet = false }
+            )
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
+        }
     }
     
     // MARK: Test Button
@@ -376,3 +392,12 @@ extension Calendar {
         return component(.weekday, from: firstDay)
     }
 }
+
+#if DEBUG
+struct CalendarView_Previews: PreviewProvider {
+    static var previews: some View {
+        let appModel = MainAppModel()
+        CalendarView(appModel: appModel)
+    }
+}
+#endif
