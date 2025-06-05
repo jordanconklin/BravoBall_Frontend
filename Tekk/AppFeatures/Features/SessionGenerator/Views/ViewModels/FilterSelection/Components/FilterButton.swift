@@ -16,6 +16,7 @@ struct FilterButton: View {
     
     var body: some View {
         Button(action: {
+            Haptic.light()
             withAnimation(.spring(dampingFraction: 0.7)) {
                 action()
             }

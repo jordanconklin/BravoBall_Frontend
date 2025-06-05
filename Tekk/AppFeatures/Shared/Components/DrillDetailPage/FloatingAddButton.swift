@@ -16,7 +16,10 @@ struct FloatingAddButton: View {
             Spacer()
             HStack {
         Spacer()
-                Button(action: action) {
+                Button(action: {
+                    Haptic.light()
+                    action()
+                }) {
                     RiveViewModel(fileName: "Plus_Button").view()
                         .frame(width: 60, height: 60)
                 }

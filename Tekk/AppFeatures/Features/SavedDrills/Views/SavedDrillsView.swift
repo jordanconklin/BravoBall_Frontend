@@ -24,7 +24,10 @@ struct SavedDrillsView: View {
             ZStack {
                 VStack {
                     HStack {
-                        Button(action: { showInfoSheet = true }) {
+                        Button(action: { 
+                            Haptic.light()
+                            showInfoSheet = true 
+                        }) {
                             Image(systemName: "info.circle")
                                 .font(.system(size: 22, weight: .regular))
                                 .foregroundColor(.gray)
@@ -43,6 +46,7 @@ struct SavedDrillsView: View {
                         Spacer()
                         
                         Button(action: {
+                            Haptic.light()
                             showCreateGroup = true
                         }) {
                             Image(systemName: "plus")
@@ -93,6 +97,7 @@ struct SavedDrillsView: View {
             VStack {
                 HStack {
                     Button(action: {
+                        Haptic.light()
                         withAnimation {
                             savedGroupName = ""
                             savedGroupDescription = ""
@@ -124,6 +129,7 @@ struct SavedDrillsView: View {
                     .padding(.top, 8)
                 
                 Button(action: {
+                    Haptic.light()
                     withAnimation {
                         sessionModel.createGroup(
                             name: savedGroupName,

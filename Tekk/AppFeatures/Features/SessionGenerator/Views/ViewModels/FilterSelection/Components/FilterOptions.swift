@@ -19,7 +19,7 @@ struct FilterOptions: View {
     var body: some View {
         VStack(alignment: .leading) {
             Button(action: {
-                
+                Haptic.light()
                 clearFilterSelection()
                 
                 withAnimation {
@@ -40,7 +40,7 @@ struct FilterOptions: View {
             Divider()
             
             Button(action: {
-                
+                Haptic.light()
                 showFilterPrompt()
                 
                 withAnimation {
@@ -61,6 +61,7 @@ struct FilterOptions: View {
             Divider()
             
             Button(action: {
+                Haptic.light()
                 withAnimation(.spring(dampingFraction: 0.7)) {
                     appModel.viewState.showSavedFilters.toggle()
                     appModel.viewState.showFilterOptions = false

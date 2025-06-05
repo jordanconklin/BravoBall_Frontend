@@ -47,6 +47,12 @@ struct EditDetailsView: View {
     }
     
     private func saveChanges() {
+        // Email validation before attempting to save
+        guard isValidEmail(email) else {
+            alertMessage = "Please enter a valid email address."
+            showAlert = true
+            return
+        }
         Task {
             do {
                 try await settingsModel.updateUserDetails(
@@ -62,5 +68,12 @@ struct EditDetailsView: View {
                 showAlert = true
             }
         }
+    }
+
+    // Simple email validation using regex
+    private func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        let emailPred = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
     }
 }

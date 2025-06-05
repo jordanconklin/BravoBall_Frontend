@@ -72,6 +72,7 @@ struct CompletionView: View {
                     }
                     
                     Button(action: {
+                        Haptic.light()
                         withAnimation(.spring()) {
                             submitData()
                         }

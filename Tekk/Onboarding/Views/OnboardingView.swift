@@ -108,6 +108,7 @@ struct OnboardingView: View {
             
             // Create Account Button
             Button(action: {
+                Haptic.light()
                 withAnimation(.spring()) {
                     onboardingModel.showWelcome.toggle()
                 }
@@ -125,6 +126,7 @@ struct OnboardingView: View {
             
             // Login Button
             Button(action: {
+                Haptic.light()
                 withAnimation(.spring()) {
                     onboardingModel.showLoginPage = true
                 }
@@ -152,6 +154,7 @@ struct OnboardingView: View {
             HStack(spacing: 12) {
                 // Back Button
                 Button(action: {
+                    Haptic.light()
                     withAnimation {
                         onboardingModel.backTransition = true
                         onboardingModel.movePrevious()
@@ -182,6 +185,7 @@ struct OnboardingView: View {
                     
                     // Skip Button (always visible, but grayed out and disabled on registration step)
                     Button(action: {
+                        Haptic.light()
                         if onboardingModel.currentStep != onboardingModel.numberOfOnboardingPages - 1 {
                             withAnimation {
                                 onboardingModel.backTransition = false
@@ -336,6 +340,7 @@ struct OnboardingView: View {
             // Next button
             if onboardingModel.currentStep < onboardingModel.numberOfOnboardingPages {
                 Button(action: {
+                    Haptic.light()
                     if onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 {
                         hasAttemptedSubmit = true  // Set to true when user attempts to submit
                         

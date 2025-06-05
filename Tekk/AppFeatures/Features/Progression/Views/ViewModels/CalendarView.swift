@@ -50,7 +50,10 @@ struct CalendarView: View {
                     .font(.custom("Poppins-Bold", size: 22))
                     .foregroundColor(appModel.globalSettings.primaryDarkColor)
                 // Info button
-                Button(action: { showInfoSheet = true }) {
+                Button(action: { 
+                    Haptic.light()
+                    showInfoSheet = true 
+                }) {
                     Image(systemName: "info.circle")
                         .font(.system(size: 22, weight: .regular))
                         .foregroundColor(.gray)
@@ -60,6 +63,7 @@ struct CalendarView: View {
                 
                 // Toggle full calendar button
                 Button(action: {
+                    Haptic.light()
                     withAnimation {
                         appModel.showCalendar.toggle()
                     }
@@ -86,7 +90,10 @@ struct CalendarView: View {
                     // Header
                     if appModel.showCalendar {
                         // Left button
-                        Button(action: { moveMonth(by: -1) }) {
+                        Button(action: {
+                            Haptic.light()
+                            moveMonth(by: -1)
+                        }) {
                             Image(systemName: "chevron.left")
                                 .foregroundColor(appModel.globalSettings.primaryGrayColor)
                         }
@@ -102,7 +109,10 @@ struct CalendarView: View {
                         Spacer()
                         
                         // Right button
-                        Button(action: { moveMonth(by: 1) }) {
+                        Button(action: {
+                            Haptic.light()
+                            moveMonth(by: 1)
+                        }) {
                             Image(systemName: "chevron.right")
                                 .foregroundColor(appModel.globalSettings.primaryGrayColor)
                         }
@@ -205,6 +215,7 @@ struct CalendarView: View {
         Group {
                 // test button
                 Button(action: {
+                    Haptic.light()
                     addDrill(for: simulatedDate)
                 
                     // Increase or restart streak

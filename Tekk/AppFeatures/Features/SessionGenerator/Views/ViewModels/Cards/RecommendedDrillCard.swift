@@ -22,6 +22,7 @@
 //    
 //    var body: some View {
 //        Button(action: {
+//            Haptic.light()
 //            showingDrillDetail = true
 //        }) {
 //            ZStack {

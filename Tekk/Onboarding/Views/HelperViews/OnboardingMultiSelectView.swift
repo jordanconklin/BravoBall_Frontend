@@ -19,6 +19,7 @@ struct OnboardingMultiSelectView: View {
                 
                 ForEach(options, id: \.self) { option in
                     Button(action: {
+                        Haptic.light()
                         if selections.contains(option) {
                             selections.removeAll { $0 == option }
                         } else {

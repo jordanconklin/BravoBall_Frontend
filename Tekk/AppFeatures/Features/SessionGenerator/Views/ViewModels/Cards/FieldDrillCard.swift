@@ -16,6 +16,7 @@ struct FieldDrillCard: View {
     
     var body: some View {
         Button(action: {
+            Haptic.light()
             showingFollowAlong = true
         }) {
             ZStack {

@@ -89,7 +89,10 @@ struct DrillFollowAlongView: View {
                                 .font(.custom("Poppins-Bold", size: 32))
                         }
                         // Info button
-                        Button(action: { showInfoSheet = true }) {
+                        Button(action: { 
+                            Haptic.light()
+                            showInfoSheet = true 
+                        }) {
                             Image(systemName: "info.circle")
                                 .font(.system(size: 28, weight: .regular))
                                 .foregroundColor(appModel.globalSettings.primaryGrayColor)
@@ -133,7 +136,10 @@ struct DrillFollowAlongView: View {
     }
     
     private var togglePlayButton: some View {
-        Button(action: togglePlayPause) {
+        Button(action: {
+            Haptic.light()
+            togglePlayPause()
+        }) {
             Circle()
                 .fill(appModel.globalSettings.primaryYellowColor)
                 .frame(width: 100, height: 100)
@@ -160,6 +166,7 @@ struct DrillFollowAlongView: View {
     private var skipButton: some View {
         // Skip button
         Button(action: {
+            Haptic.light()
             handleDrillCompletion()
             endDrill()
             
@@ -186,6 +193,7 @@ struct DrillFollowAlongView: View {
     private var detailsButton: some View {
         // Details button
         Button(action: {
+            Haptic.light()
             selectedDrill = editableDrill.drill
 
         }) {
@@ -210,6 +218,7 @@ struct DrillFollowAlongView: View {
     private var endDrillButton: some View {
         // End drill
         Button(action: {
+            Haptic.light()
             handleDrillCompletion()
             endDrill()
             
@@ -235,6 +244,7 @@ struct DrillFollowAlongView: View {
     
     private var backButton: some View {
         Button(action: {
+            Haptic.light()
             endDrill()
         }) {
             HStack {

@@ -80,6 +80,7 @@ struct SessionCompleteView: View {
                 }
                 
                 Button(action: {
+                    Haptic.light()
                     resetSessionState()
                 }) {
                     Text("Back to home page")

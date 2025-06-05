@@ -78,6 +78,7 @@ struct DrillSearchView: View {
                         
                         if !searchText.isEmpty {
                             Button(action: {
+                                Haptic.light()
                                 searchText = ""
                                 performSearch()
                             }) {
@@ -99,11 +100,21 @@ struct DrillSearchView: View {
                     HStack(spacing: 12) {
                         // Category filter (simplified for now)
                         Menu {
-                            Button("All Categories", action: { selectedCategory = nil })
-                            Button("Dribbling", action: { selectedCategory = "dribbling" })
-                            Button("Passing", action: { selectedCategory = "passing" })
-                            Button("Shooting", action: { selectedCategory = "shooting" })
-                            Button("First touch", action: { selectedCategory = "first_touch" })
+                            Button("All Categories", action: { 
+                                Haptic.light()
+                                selectedCategory = nil })
+                            Button("Dribbling", action: { 
+                                Haptic.light()
+                                selectedCategory = "dribbling" })
+                            Button("Passing", action: { 
+                                Haptic.light()
+                                selectedCategory = "passing" })
+                            Button("Shooting", action: { 
+                                Haptic.light()
+                                selectedCategory = "shooting" })
+                            Button("First touch", action: { 
+                                Haptic.light()
+                                selectedCategory = "first_touch" })
                         } label: {
                             HStack {
                                 Text(selectedCategory?.capitalized ?? "Category")
@@ -119,10 +130,18 @@ struct DrillSearchView: View {
                         
                         // Difficulty filter
                         Menu {
-                            Button("All Difficulties", action: { selectedDifficulty = nil })
-                            Button("Beginner", action: { selectedDifficulty = "beginner" })
-                            Button("Intermediate", action: { selectedDifficulty = "intermediate" })
-                            Button("Advanced", action: { selectedDifficulty = "advanced" })
+                            Button("All Difficulties", action: { 
+                                Haptic.light()
+                                selectedDifficulty = nil })
+                            Button("Beginner", action: { 
+                                Haptic.light()
+                                selectedDifficulty = "beginner" })
+                            Button("Intermediate", action: { 
+                                Haptic.light()
+                                selectedDifficulty = "intermediate" })
+                            Button("Advanced", action: { 
+                                Haptic.light()
+                                selectedDifficulty = "advanced" })
                         } label: {
                             HStack {
                                 Text(selectedDifficulty?.capitalized ?? "Difficulty")
@@ -139,7 +158,10 @@ struct DrillSearchView: View {
                         Spacer()
                         
                         // Search button
-                        Button(action: performSearch) {
+                        Button(action: {
+                            Haptic.light()
+                            performSearch()
+                        }) {
                             Text(searchText.isEmpty && selectedCategory == nil && selectedDifficulty == nil ? "Show All" : "Search")
                                 .font(.custom("Poppins-Bold", size: 12))
                                 .foregroundColor(.white)
@@ -152,6 +174,7 @@ struct DrillSearchView: View {
                         // Clear filters button (only shown when filters are active)
                         if !searchText.isEmpty || selectedCategory != nil || selectedDifficulty != nil {
                             Button(action: {
+                                Haptic.light()
                                 searchText = ""
                                 selectedCategory = nil
                                 selectedDifficulty = nil
@@ -226,6 +249,7 @@ struct DrillSearchView: View {
                                         .padding(.horizontal)
                                     
                                     Button(action: {
+                                        Haptic.light()
                                         searchText = ""
                                         selectedCategory = nil
                                         selectedDifficulty = nil
@@ -270,7 +294,10 @@ struct DrillSearchView: View {
                             if totalPages > 1 {
                                 HStack {
                                     if currentPage > 1 {
-                                        Button(action: { loadPreviousPage() }) {
+                                        Button(action: { 
+                                            Haptic.light()
+                                            loadPreviousPage() 
+                                        }) {
                                             Image(systemName: "chevron.left")
                                                 .foregroundColor(appModel.globalSettings.primaryDarkColor)
                                         }
@@ -284,7 +311,10 @@ struct DrillSearchView: View {
                                         .foregroundColor(.gray)
                                     
                                     if currentPage < totalPages {
-                                        Button(action: { loadNextPage() }) {
+                                        Button(action: { 
+                                            Haptic.light()
+                                            loadNextPage() 
+                                        }) {
                                             Image(systemName: "chevron.right")
                                                 .foregroundColor(appModel.globalSettings.primaryDarkColor)
                                         }
@@ -302,6 +332,7 @@ struct DrillSearchView: View {
                     if !selectedDrills.isEmpty {
                         Button(action: {
                             // Call the callback with the selected drills
+                            Haptic.light()
                             onDrillsSelected(selectedDrills)
                             
                             // Clear selection

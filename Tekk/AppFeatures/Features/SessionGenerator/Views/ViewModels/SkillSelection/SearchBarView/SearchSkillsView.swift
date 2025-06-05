@@ -37,6 +37,7 @@ struct SearchSkillsView: View {
         .safeAreaInset(edge: .bottom) {
                         
             Button(action: {
+                Haptic.light()
                 searchText = ""
                 appModel.viewState.showSkillSearch = false
                 

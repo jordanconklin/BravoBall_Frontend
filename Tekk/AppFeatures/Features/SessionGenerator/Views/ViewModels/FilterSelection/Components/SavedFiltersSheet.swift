@@ -27,6 +27,7 @@ struct SavedFiltersSheet: View {
                 
                 Spacer()
                 Button(action: {
+                    Haptic.light()
                     withAnimation(.spring(dampingFraction: 0.7)) {
                         dismiss()
                     }
@@ -47,6 +48,7 @@ struct SavedFiltersSheet: View {
                     LazyVStack(alignment: .leading, spacing: 8) {
                         ForEach(sessionModel.allSavedFilters) { filter in
                             Button(action: {
+                                Haptic.light()
                                 dismiss()
                                 sessionModel.loadFilter(filter)
                                 toastManager.showToast(.success("Filters updated"))

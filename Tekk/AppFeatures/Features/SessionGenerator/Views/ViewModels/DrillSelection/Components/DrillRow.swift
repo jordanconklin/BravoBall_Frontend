@@ -38,6 +38,7 @@ struct DrillRow: View {
             // Button to select a drill to add in the search drill view
             if appModel.viewState.showSearchDrills {
                 Button(action: {
+                    Haptic.light()
                     sessionModel.drillsToAdd(drill: drill)
                 }) {
                     ZStack {

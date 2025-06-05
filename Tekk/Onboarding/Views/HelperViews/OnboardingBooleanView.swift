@@ -18,6 +18,7 @@ struct OnboardingBooleanView: View {
                 
                 HStack(spacing: 15) {
                     Button(action: {
+                        Haptic.light()
                         selection = true
                     }) {
                         HStack {
@@ -43,6 +44,7 @@ struct OnboardingBooleanView: View {
                     .foregroundColor(selection ? .white : onboardingModel.globalSettings.primaryDarkColor)
                     
                     Button(action: {
+                        Haptic.light()
                         selection = false
                     }) {
                         HStack {

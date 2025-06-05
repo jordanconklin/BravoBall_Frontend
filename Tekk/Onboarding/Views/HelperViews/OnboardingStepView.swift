@@ -18,11 +18,12 @@ struct OnboardingStepView: View {
             VStack {
                 ForEach(options, id: \.self) { option in
                     Button(action: {
-                            if selection == option {
-                                selection = ""
-                            } else {
-                                selection = option
-                            }
+                        Haptic.light()
+                        if selection == option {
+                            selection = ""
+                        } else {
+                            selection = option
+                        }
                         }) {
                         HStack {
                             Text(option)

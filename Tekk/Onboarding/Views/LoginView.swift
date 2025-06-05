@@ -70,9 +70,10 @@ struct LoginView: View {
                         
                         // Eye icon for password visibility toggle
                         Button(action: {
+                            Haptic.light()
                             onboardingModel.isPasswordVisible.toggle()
                         }) {
-                            Image(systemName: onboardingModel.isPasswordVisible ? "eye.slash.fill" : "eye.fill")
+                            Image(systemName: onboardingModel.isPasswordVisible ? "eye.fill" : "eye.slash.fill")
                                 .foregroundColor(onboardingModel.globalSettings.primaryYellowColor)
                         }
                         .padding(.trailing, 10)
@@ -92,6 +93,7 @@ struct LoginView: View {
             
                 // Login button
                 Button(action: {
+                    Haptic.light()
                     withAnimation(.spring()) {
                         loginUser()
                     }
@@ -110,6 +112,7 @@ struct LoginView: View {
             
                 // Cancel button
                 Button(action: {
+                    Haptic.light()
                     withAnimation(.spring()) {
                         resetLoginInfo()
                     }

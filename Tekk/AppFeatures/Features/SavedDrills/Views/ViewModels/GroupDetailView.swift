@@ -30,6 +30,7 @@ struct GroupDetailView: View {
                 VStack {
                     HStack {
                         Button(action: {
+                            Haptic.light()
                             dismiss()
                         }) {
                             Image(systemName: "xmark")
@@ -39,6 +40,7 @@ struct GroupDetailView: View {
                         Spacer()
                         
                         Button(action: {
+                            Haptic.light()
                             appModel.viewState.showGroupFilterOptions = true
                         }) {
                             Image(systemName: "ellipsis")
@@ -77,7 +79,7 @@ struct GroupDetailView: View {
                                 HStack {
                                     if appModel.viewState.showDrillGroupDeleteButtons {
                                         Button(action: {
-                                            
+                                            Haptic.light()
                                             sessionModel.removeDrillFromGroup(drill: drill, groupId: group.id)
                                             // Remove from currentDrills
                                             if let index = currentDrills.firstIndex(where: { $0.id == drill.id }) {

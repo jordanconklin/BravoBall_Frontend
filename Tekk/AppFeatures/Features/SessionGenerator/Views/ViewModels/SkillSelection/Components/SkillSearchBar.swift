@@ -24,6 +24,7 @@ struct SkillSearchBar: View {
             HStack {
                 if appModel.viewState.showSkillSearch {
                     Button( action: {
+                        Haptic.light()
                         searchText = ""
                         appModel.viewState.showSkillSearch = false
                         
@@ -77,7 +78,10 @@ struct SkillSearchBar: View {
                     
 
                     if !appModel.viewState.showSkillSearch {
-                        Button(action: { showingSkillSelector = true }) {
+                        Button(action: { 
+                            Haptic.light()
+                            showingSkillSelector = true 
+                        }) {
                             RiveViewModel(fileName: "Plus_Button").view()
                                 .frame(width: 30, height: 30)
                         }
@@ -86,6 +90,7 @@ struct SkillSearchBar: View {
                     
                     if !searchText.isEmpty {
                         Button(action: {
+                            Haptic.light()
                             searchText = ""
                         }) {
                             

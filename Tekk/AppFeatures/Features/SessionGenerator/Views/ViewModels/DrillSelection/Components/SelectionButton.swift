@@ -12,7 +12,10 @@ struct SelectionButton: View {
     let action: () -> Void
     
     var body: some View {
-        Button(action: action) {
+        Button(action: {
+            Haptic.light()
+            action()
+        }) {
             Text(title)
                 .font(.custom("Poppins-Medium", size: 18))
                 .foregroundColor(.gray)

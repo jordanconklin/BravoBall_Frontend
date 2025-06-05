@@ -61,6 +61,7 @@ struct AreaBehindHomePage: View {
                                 // back button only shows if session not completed
                                 if sessionModel.sessionInProgress() {
                                     Button(action:  {
+                                        Haptic.light()
                                         withAnimation(.spring(dampingFraction: 0.7)) {
                                             appModel.viewState.showFieldBehindHomePage = false
                                         }
@@ -125,6 +126,7 @@ struct AreaBehindHomePage: View {
     
     private var trophyButton: some View {
         Button(action: {
+            Haptic.light()
             appModel.viewState.showSessionComplete = true
         }) {
             Image("BravoBall_Trophy")

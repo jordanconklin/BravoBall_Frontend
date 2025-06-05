@@ -106,6 +106,7 @@ struct DrillResultsView: View {
     
     private var backButton: some View {
         Button(action: {
+            Haptic.light()
             appModel.showDrillResults = false
             appModel.selectedSession = nil
         }) {
