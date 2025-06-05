@@ -72,7 +72,7 @@ class DataSyncService {
         }
         let requestData = ["ordered_drills": drillsData]
         let body = try JSONSerialization.data(withJSONObject: requestData)
-        let (data, response) = try await APIService.shared.request(
+        let (_, response) = try await APIService.shared.request(
             endpoint: endpoint,
             method: "PUT",
             headers: ["Content-Type": "application/json"],
@@ -121,7 +121,7 @@ class DataSyncService {
             "completed_sessions_count": completedSessionsCount
         ]
         let body = try JSONSerialization.data(withJSONObject: progressHistory)
-        let (data, response) = try await APIService.shared.request(
+        let (_, response) = try await APIService.shared.request(
             endpoint: endpoint,
             method: "PUT",
             headers: ["Content-Type": "application/json"],
@@ -186,7 +186,7 @@ class DataSyncService {
             "total_drills": total
         ] as [String : Any]
         let body = try JSONSerialization.data(withJSONObject: sessionData)
-        let (data, response) = try await APIService.shared.request(
+        let (_, response) = try await APIService.shared.request(
             endpoint: endpoint,
             method: "POST",
             headers: ["Content-Type": "application/json"],

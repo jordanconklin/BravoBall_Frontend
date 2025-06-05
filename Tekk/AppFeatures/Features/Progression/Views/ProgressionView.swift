@@ -94,13 +94,15 @@ struct ProgressionView: View {
         }
     }
 
-
 }
 
+#if DEBUG
+struct ProgressionView_Previews: PreviewProvider {
+    static var previews: some View {
+        let appModel = MainAppModel()
+        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        ProgressionView(appModel: appModel, sessionModel: sessionModel)
+    }
+}
+#endif
 
-//#Preview {
-//    let mockAppModel = MainAppModel()
-//    let mockSessionModel = SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData())
-//    
-//    return ProgressionView(appModel: mockAppModel, sessionModel: mockSessionModel)
-//}

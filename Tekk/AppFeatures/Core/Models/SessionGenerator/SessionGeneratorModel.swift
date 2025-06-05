@@ -682,9 +682,12 @@ class SessionGeneratorModel: ObservableObject {
 
         // --- EQUIPMENT ---
         let allowedEquipment = ["soccer ball", "cones", "goal"]
-        selectedEquipment = Set(onboardingData.availableEquipment.map { $0.lowercased() }
+        let selectedEquipmentSet = Set(onboardingData.availableEquipment.map { $0.lowercased() }
             .filter { allowedEquipment.contains($0) }
             .map { $0 == "goal" ? "goal" : $0 }) // normalize
+        
+        // If no equipment was selected, default to soccer ball
+        selectedEquipment = selectedEquipmentSet.isEmpty ? ["soccer ball"] : selectedEquipmentSet
 
         // --- TRAINING STYLE ---
         let styleMap: [String: String] = [

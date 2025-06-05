@@ -15,6 +15,7 @@ struct OnboardingRegisterForm: View {
     @Binding var email: String
     @Binding var password: String
     
+    @State private var hasAttemptedSubmit = false
     
     var body: some View {
             
@@ -79,8 +80,21 @@ struct OnboardingRegisterForm: View {
                 }
                 
                 Spacer()
+                // Show validation error if present and user has attempted to submit
+                if hasAttemptedSubmit, let error = onboardingModel.registrationValidationError {
+                    Text(error)
+                        .foregroundColor(.red)
+                        .font(.custom("Poppins-Regular", size: 14))
+                        .multilineTextAlignment(.center)
+                        .padding(.top, 4)
+                }
             }
             .padding(.horizontal)
+            .onChange(of: onboardingModel.errorMessage) { newValue in
+                if !newValue.isEmpty {
+                    hasAttemptedSubmit = true
+                }
+            }
     }
 }
 

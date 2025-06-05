@@ -39,8 +39,8 @@ class OnboardingModel: ObservableObject {
     // Simple arrays for questions and options
     let questionTitles = [
         "What is your primary soccer goal?",
-        "What are your biggest challenges to achieving this goal?",
-        "How much individual training experience do you have?",
+        "What is stopping you from achieving this goal?",
+        "How much training experience do you have?",
         "What position do you play?",
         "Which players best describes your playstyle?",
         "What age range do you fall under?",
@@ -203,5 +203,33 @@ class OnboardingModel: ObservableObject {
         print("✅ Weekly training days: \(onboardingData.weeklyTrainingDays)")
         print("✅ First name: \(onboardingData.firstName)")
         print("✅ Last name: \(onboardingData.lastName)")
+    }
+
+    // MARK: - Validation
+    func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPred = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
+    }
+
+    func isValidPassword(_ password: String) -> Bool {
+        // At least 8 characters, 1 letter, 1 number
+        let passwordRegEx = ".{8,}" // At least 8 chars
+        let letterRegEx = ".*[A-Za-z]+.*"
+        let numberRegEx = ".*[0-9]+.*"
+        let passPred = NSPredicate(format: "SELF MATCHES %@", passwordRegEx)
+        let letterPred = NSPredicate(format: "SELF MATCHES %@", letterRegEx)
+        let numberPred = NSPredicate(format: "SELF MATCHES %@", numberRegEx)
+        return passPred.evaluate(with: password) && letterPred.evaluate(with: password) && numberPred.evaluate(with: password)
+    }
+
+    var registrationValidationError: String? {
+        if onboardingData.firstName.isEmpty { return "First name is required." }
+        if onboardingData.lastName.isEmpty { return "Last name is required." }
+        if onboardingData.email.isEmpty { return "Email is required." }
+        if !isValidEmail(onboardingData.email) { return "Please enter a valid email address." }
+        if onboardingData.password.isEmpty { return "Password is required." }
+        if !isValidPassword(onboardingData.password) { return "Password must be at least 8 characters, include a letter and a number." }
+        return nil
     }
 }

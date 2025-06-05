@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import RiveRuntime
 
 struct SavedDrillsView: View {
     @ObservedObject var appModel: MainAppModel
@@ -16,13 +17,20 @@ struct SavedDrillsView: View {
     @State private var savedGroupName: String = ""
     @State private var savedGroupDescription: String = ""
     @State private var selectedGroup: GroupModel? = nil
+    @State private var showInfoSheet: Bool = false
     
     // MARK: Main view
     var body: some View {
             ZStack {
                 VStack {
                     HStack {
-                        Spacer()
+                        Button(action: { showInfoSheet = true }) {
+                            Image(systemName: "info.circle")
+                                .font(.system(size: 22, weight: .regular))
+                                .foregroundColor(.gray)
+                        }
+                        .accessibilityLabel("About Saved Drills")
+                        .padding(.horizontal, 20)
                         
                         Spacer()
                         
@@ -53,6 +61,15 @@ struct SavedDrillsView: View {
                     createGroupPrompt
                 }
                 
+            }
+            .sheet(isPresented: $showInfoSheet) {
+                InfoPopupView(
+                    title: "How Saved Drills Work",
+                    description: "Save your favorite drills and organize them into groups for easy access.\n\nTap the plus icon to create a new group, and add drills to keep your training organized.\n\nYou can view, edit, or remove your saved drills at any time.",
+                    onClose: { showInfoSheet = false }
+                )
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
             }
             .sheet(item: $selectedGroup) { group in
                 GroupDetailView(appModel: appModel, sessionModel: sessionModel, group: group)
@@ -135,35 +152,12 @@ struct SavedDrillsView: View {
 
 }
 
-
-//#Preview {
-//    let mockAppModel = MainAppModel()
-//    let mockSesGenModel = SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData())
-//    
-//    // Create a mock drill
-//    let mockDrill = DrillModel(
-//            title: "Quick Passing",
-//            skill: "Passing",
-//            sets: 3,
-//            reps: 5,
-//            duration: 15,
-//            description: "Short passing drill to improve accuracy",
-//            tips: ["no funny beezness"],
-//            equipment: ["ball", "cones"],
-//            trainingStyle: "Medium Intensity",
-//            difficulty: "Beginner"
-//        )
-//        
-//        // Create a mock group with the drill
-//        let mockGroup = GroupModel(
-//            name: "My First Group",
-//            description: "Collection of passing drills",
-//            drills: [mockDrill]
-//        )
-//        
-//        // Add the mock group to savedDrills
-//        mockSesGenModel.savedDrills = [mockGroup]
-//    
-//    
-//    return SavedDrillsView(appModel: mockAppModel, sessionModel: mockSesGenModel)
-//}
+#if DEBUG
+struct SavedDrillsView_Previews: PreviewProvider {
+    static var previews: some View {
+        let appModel = MainAppModel()
+        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        SavedDrillsView(appModel: appModel, sessionModel: sessionModel)
+    }
+}
+#endif

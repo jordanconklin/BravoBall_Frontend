@@ -48,7 +48,7 @@ class SettingsModel: ObservableObject {
         ]
         let body = try JSONSerialization.data(withJSONObject: bodyDict)
         
-        let (data, response) = try await APIService.shared.request(
+        let (_, response) = try await APIService.shared.request(
             endpoint: endpoint,
             method: "PUT",
             headers: ["Content-Type": "application/json"],

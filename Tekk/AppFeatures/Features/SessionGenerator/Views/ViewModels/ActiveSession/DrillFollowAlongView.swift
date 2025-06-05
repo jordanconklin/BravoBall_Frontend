@@ -121,20 +121,13 @@ struct DrillFollowAlongView: View {
                 DrillDetailView(appModel: appModel, sessionModel: sessionModel, drill: drill)
             }
             .sheet(isPresented: $showInfoSheet) {
-                VStack(spacing: 24) {
-                    Text("How Drill Timer Works")
-                        .font(.title2.bold())
-                        .padding(.top, 24)
-                    Text("• Press play to start the countdown for this set.\n• When the timer ends, you’ll move to the next set and the timer will reset.\n• Complete all sets to finish the drill and proceed to the next one.\n• You can skip a drill, but your session will be marked as incomplete if you do.")
-                        .font(.body)
-                        .multilineTextAlignment(.leading)
-                        .padding(.horizontal)
-                    Spacer()
-                    Button("Got it!") { showInfoSheet = false }
-                        .font(.headline)
-                        .padding()
-                }
-                .presentationDetents([.medium])
+                InfoPopupView(
+                    title: "How Drill Timer Works",
+                    description: "Press play to start the countdown for this set.\n\nWhen the timer ends, you'll move to the next set and the timer will reset.\n\nComplete all sets to finish the drill and proceed to the next one.\n\nYou can skip a drill, but your session will be marked as incomplete if you do.",
+                    onClose: { showInfoSheet = false }
+                )
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
             }
         }
     }
@@ -142,9 +135,8 @@ struct DrillFollowAlongView: View {
     private var togglePlayButton: some View {
         Button(action: togglePlayPause) {
             Circle()
-                .fill(appModel.globalSettings.primaryGreenColor)
+                .fill(appModel.globalSettings.primaryYellowColor)
                 .frame(width: 100, height: 100)
-                .shadow(color: .black.opacity(0.1), radius: 10)
                 .overlay(
                     Group {
                         if let countdown = countdownValue {
@@ -162,6 +154,7 @@ struct DrillFollowAlongView: View {
                 .padding(.bottom, 10)
         }
         .opacity(editableDrill.setsDone != editableDrill.totalSets ? 1.0 : 0.0)
+        .disabled(countdownValue != nil)
     }
     
     private var skipButton: some View {
