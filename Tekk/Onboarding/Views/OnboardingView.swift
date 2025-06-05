@@ -346,15 +346,16 @@ struct OnboardingView: View {
                             }
                             onboardingModel.isLoading = true
                             onboardingModel.errorMessage = ""
-                            let url = URL(string: "http://127.0.0.1:8000/check-email/")!
-                            var request = URLRequest(url: url)
-                            request.httpMethod = "POST"
-                            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                             let body = ["email": email]
-                            request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+                            let jsonBody = try? JSONSerialization.data(withJSONObject: body)
                             do {
-                                let (data, response) = try await URLSession.shared.data(for: request)
-                                if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                                let (data, response) = try await APIService.shared.request(
+                                    endpoint: "/check-email/",
+                                    method: "POST",
+                                    headers: ["Content-Type": "application/json"],
+                                    body: jsonBody
+                                )
+                                if response.statusCode == 200 {
                                     if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                                        let exists = json["exists"] as? Bool {
                                         if exists {

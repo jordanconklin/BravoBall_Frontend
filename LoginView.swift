@@ -8,7 +8,7 @@ struct LoginView: View {
     @State private var errorMessage = "" 
     @State private var conversations: [Conversation] = []
     @Binding var isLoggedIn: Bool
-    @Binding var authToken: String
+    @Binding var accessToken: String
     @Binding var showLoginPage: Bool
     
     var body: some View {
@@ -118,7 +118,7 @@ struct LoginView_Previews: PreviewProvider {
         Group {
             LoginView(
                 isLoggedIn: .constant(false),
-                authToken: .constant(""),
+                accessToken: .constant(""),
                 showLoginPage: .constant(true)
             )
             .matchedGeometryEffect(id: "login", in: namespace)
@@ -126,7 +126,7 @@ struct LoginView_Previews: PreviewProvider {
             // Add dark mode preview
             LoginView(
                 isLoggedIn: .constant(false),
-                authToken: .constant(""),
+                accessToken: .constant(""),
                 showLoginPage: .constant(true)
             )
             .matchedGeometryEffect(id: "login", in: namespace)

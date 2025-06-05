@@ -96,6 +96,9 @@ class PreferencesUpdateService {
             try await performUpdatePreferences(time: time, equipment: equipment, trainingStyle: trainingStyle, location: location, difficulty: difficulty, skills: skills, sessionModel: sessionModel)
             return
         }
+
+        print("Current access token: \(KeychainWrapper.standard.string(forKey: "accessToken") ?? "nil")")
+        print("Current refresh token: \(KeychainWrapper.standard.string(forKey: "refreshToken") ?? "nil")")
         
         // Check if an update is already in progress
         guard !isUpdating else {
@@ -138,24 +141,8 @@ class PreferencesUpdateService {
 
     // The actual call-to-backend logic, extracted for debouncing
     private func performUpdatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel) async throws {
-        let url = URL(string: "\(baseURL)/api/session/preferences")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "PUT"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        // Add auth token to request
-        if let token = KeychainWrapper.standard.string(forKey: "authToken") {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            print("🔑 Using auth token: \(token)")
-        } else {
-            print("⚠️ No auth token found!")
-            throw URLError(.userAuthenticationRequired)
-        }
-        
-        // Convert time string to minutes
+        let endpoint = "/api/session/preferences"
         let duration = convertTimeToMinutes(time)
-        
-        // Create the request body
         let preferencesRequest = SessionPreferencesRequest(
             duration: duration,
             availableEquipment: Array(equipment),
@@ -164,137 +151,130 @@ class PreferencesUpdateService {
             difficulty: difficulty,
             targetSkills: Array(skills)
         )
-        
-        // Encode the request body
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
-        request.httpBody = try encoder.encode(preferencesRequest)
-        
-        print("📤 Updating preferences at: \(url.absoluteString)")
-        print("Request body: \(String(data: request.httpBody!, encoding: .utf8) ?? "")")
-        
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            print("❌ Invalid response type")
-            throw URLError(.badServerResponse)
+        let body = try encoder.encode(preferencesRequest)
+
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
+            method: "PUT",
+            headers: ["Content-Type": "application/json"],
+            body: body
+        )
+
+        guard response.statusCode == 200 else {
+            switch response.statusCode {
+            case 401:
+                print("❌ Unauthorized - Invalid or expired token")
+                throw URLError(.userAuthenticationRequired)
+            case 404:
+                print("❌ User not found")
+                throw URLError(.badURL)
+            case 422:
+                print("❌ Invalid request data")
+                throw URLError(.badServerResponse)
+            default:
+                print("❌ Unexpected status code: \(response.statusCode)")
+                throw URLError(.badServerResponse)
+            }
         }
-        
-        print("📥 Response status code: \(httpResponse.statusCode)")
-        
-        if let responseString = String(data: data, encoding: .utf8) {
-            print("📥 Response body: \(responseString)")
-        }
-        
-        switch httpResponse.statusCode {
-        case 200:
-            print("✅ Successfully updated preferences")
-            // Manually parse the drills array from the JSON and construct DrillModel objects directly
-            if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let dataDict = json["data"] as? [String: Any],
-               let sessionId = dataDict["session_id"] as? Int,
-               let totalDuration = dataDict["total_duration"] as? Int,
-               let focusAreas = dataDict["focus_areas"] as? [String],
-               let drillsArray = dataDict["drills"] as? [[String: Any]] {
-                let drillModels: [DrillModel] = drillsArray.map { drill in
-                    let id = UUID()
-                    let backendId = drill["id"] as? Int
-                    let title = drill["title"] as? String ?? "Unnamed Drill"
-                    let skill = drill["type"] as? String ?? "other"
-                    let subSkills: [String] = {
-                        var allSubSkills: [String] = []
-                        if let primarySkill = drill["primary_skill"] as? [String: Any],
-                           let subSkill = primarySkill["sub_skill"] as? String {
-                            allSubSkills.append(subSkill)
-                        }
-                        if let secondarySkills = drill["secondary_skills"] as? [[String: Any]] {
-                            allSubSkills.append(contentsOf: secondarySkills.compactMap { $0["sub_skill"] as? String })
-                        }
-                        return allSubSkills
-                    }()
-                    let sets = drill["sets"] as? Int ?? 0
-                    let reps = drill["reps"] as? Int ?? 0
-                    let duration = drill["duration"] as? Int ?? 10
-                    let description = drill["description"] as? String ?? ""
-                    let instructions = drill["instructions"] as? [String] ?? []
-                    let tips = drill["tips"] as? [String] ?? []
-                    let equipment = drill["equipment"] as? [String] ?? []
-                    let trainingStyle = drill["intensity"] as? String ?? ""
-                    let difficulty = drill["difficulty"] as? String ?? ""
-                    let videoUrl = drill["video_url"] as? String ?? ""
-                    return DrillModel(
-                        id: id,
-                        backendId: backendId,
-                        title: title,
-                        skill: skill,
-                        subSkills: subSkills,
-                        sets: sets,
-                        reps: reps,
-                        duration: duration,
-                        description: description,
-                        instructions: instructions,
-                        tips: tips,
-                        equipment: equipment,
-                        trainingStyle: trainingStyle,
-                        difficulty: difficulty,
-                        videoUrl: videoUrl
+
+        print("✅ Successfully updated preferences")
+        // Manually parse the drills array from the JSON and construct DrillModel objects directly
+        if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let dataDict = json["data"] as? [String: Any],
+           let sessionId = dataDict["session_id"] as? Int,
+           let totalDuration = dataDict["total_duration"] as? Int,
+           let focusAreas = dataDict["focus_areas"] as? [String],
+           let drillsArray = dataDict["drills"] as? [[String: Any]] {
+            let drillModels: [DrillModel] = drillsArray.map { drill in
+                let id = UUID()
+                let backendId = drill["id"] as? Int
+                let title = drill["title"] as? String ?? "Unnamed Drill"
+                let skill = drill["type"] as? String ?? "other"
+                let subSkills: [String] = {
+                    var allSubSkills: [String] = []
+                    if let primarySkill = drill["primary_skill"] as? [String: Any],
+                       let subSkill = primarySkill["sub_skill"] as? String {
+                        allSubSkills.append(subSkill)
+                    }
+                    if let secondarySkills = drill["secondary_skills"] as? [[String: Any]] {
+                        allSubSkills.append(contentsOf: secondarySkills.compactMap { $0["sub_skill"] as? String })
+                    }
+                    return allSubSkills
+                }()
+                let sets = drill["sets"] as? Int ?? 0
+                let reps = drill["reps"] as? Int ?? 0
+                let duration = drill["duration"] as? Int ?? 10
+                let description = drill["description"] as? String ?? ""
+                let instructions = drill["instructions"] as? [String] ?? []
+                let tips = drill["tips"] as? [String] ?? []
+                let equipment = drill["equipment"] as? [String] ?? []
+                let trainingStyle = drill["intensity"] as? String ?? ""
+                let difficulty = drill["difficulty"] as? String ?? ""
+                let videoUrl = drill["video_url"] as? String ?? ""
+                return DrillModel(
+                    id: id,
+                    backendId: backendId,
+                    title: title,
+                    skill: skill,
+                    subSkills: subSkills,
+                    sets: sets,
+                    reps: reps,
+                    duration: duration,
+                    description: description,
+                    instructions: instructions,
+                    tips: tips,
+                    equipment: equipment,
+                    trainingStyle: trainingStyle,
+                    difficulty: difficulty,
+                    videoUrl: videoUrl
+                )
+            }
+            let session = SessionResponse(
+                sessionId: sessionId,
+                totalDuration: totalDuration,
+                focusAreas: focusAreas,
+                drills: drillModels.map { drill in
+                    DrillResponse(
+                        id: drill.backendId ?? 0,
+                        title: drill.title,
+                        description: drill.description,
+                        duration: drill.duration,
+                        intensity: drill.trainingStyle,
+                        difficulty: drill.difficulty,
+                        equipment: drill.equipment,
+                        suitableLocations: [],
+                        instructions: drill.instructions,
+                        tips: drill.tips,
+                        type: drill.skill,
+                        sets: drill.sets,
+                        reps: drill.reps,
+                        rest: nil,
+                        primarySkill: nil,
+                        secondarySkills: nil,
+                        videoUrl: drill.videoUrl
                     )
                 }
-                let session = SessionResponse(
-                    sessionId: sessionId,
-                    totalDuration: totalDuration,
-                    focusAreas: focusAreas,
-                    drills: drillModels.map { drill in
-                        // Create a dummy DrillResponse just to satisfy the type, but we won't use it
-                        DrillResponse(
-                            id: drill.backendId ?? 0,
-                            title: drill.title,
-                            description: drill.description,
-                            duration: drill.duration,
-                            intensity: drill.trainingStyle,
-                            difficulty: drill.difficulty,
-                            equipment: drill.equipment,
-                            suitableLocations: [],
-                            instructions: drill.instructions,
-                            tips: drill.tips,
-                            type: drill.skill,
-                            sets: drill.sets,
-                            reps: drill.reps,
-                            rest: nil,
-                            primarySkill: nil,
-                            secondarySkills: nil,
-                            videoUrl: drill.videoUrl
-                        )
-                    }
-                )
-                await MainActor.run {
-                    // Instead of using DrillResponse, pass the DrillModel array directly
-                    sessionModel.orderedSessionDrills = drillModels.map { drill in
-                        EditableDrillModel(
-                            drill: drill,
-                            setsDone: 0,
-                            totalSets: drill.sets,
-                            totalReps: drill.reps,
-                            totalDuration: drill.duration,
-                            isCompleted: false
-                        )
-                    }
+            )
+            await MainActor.run {
+                // Update the current session ID
+                sessionModel.currentSessionId = sessionId
+                print("✅ Updated current session ID to: \(sessionId)")
+                
+                sessionModel.orderedSessionDrills = drillModels.map { drill in
+                    EditableDrillModel(
+                        drill: drill,
+                        setsDone: 0,
+                        totalSets: drill.sets,
+                        totalReps: drill.reps,
+                        totalDuration: drill.duration,
+                        isCompleted: false
+                    )
                 }
-            } else {
-                print("❌ Failed to manually parse session response JSON")
             }
-        case 401:
-            print("❌ Unauthorized - Invalid or expired token")
-            throw URLError(.userAuthenticationRequired)
-        case 404:
-            print("❌ User not found")
-            throw URLError(.badURL)
-        case 422:
-            print("❌ Invalid request data")
-            throw URLError(.badServerResponse)
-        default:
-            print("❌ Unexpected status code: \(httpResponse.statusCode)")
-            throw URLError(.badServerResponse)
+        } else {
+            print("❌ Failed to manually parse session response JSON")
         }
     }
     
@@ -315,53 +295,30 @@ class PreferencesUpdateService {
     
     
     func fetchPreferences() async throws -> PreferencesResponse.PreferencesData {
-        let url = URL(string: "\(baseURL)/api/session/preferences")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        // Add auth token
-        if let token = KeychainWrapper.standard.string(forKey: "authToken") {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            print("🔑 Using auth token: \(token)")
-        } else {
-            print("⚠️ No auth token found!")
-            throw URLError(.userAuthenticationRequired)
+        let endpoint = "/api/session/preferences"
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
+            method: "GET",
+            headers: ["Content-Type": "application/json"]
+        )
+        guard response.statusCode == 200 else {
+            switch response.statusCode {
+            case 401:
+                print("❌ Unauthorized - Invalid or expired token")
+                throw URLError(.userAuthenticationRequired)
+            case 404:
+                print("❌ Preferences not found")
+                throw URLError(.badURL)
+            default:
+                print("❌ Unexpected status code: \(response.statusCode)")
+                throw URLError(.badServerResponse)
+            }
         }
-        
-        print("📤 Fetching preferences from: \(url.absoluteString)")
-        
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            print("❌ Invalid response type")
-            throw URLError(.badServerResponse)
-        }
-        
-        print("📥 Response status code: \(httpResponse.statusCode)")
-        
-//        if let responseString = String(data: data, encoding: .utf8) {
-//            print("📥 Response body: \(responseString)")
-//        }
-        
-        switch httpResponse.statusCode {
-        case 200:
-            print("✅ Successfully fetched preferences")
-            let decoder = JSONDecoder()
-//            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            let response = try decoder.decode(PreferencesResponse.self, from: data)
-            print("[DEBUG] Decoded preferences data: \(response.data)")
-            return response.data
-        case 401:
-            print("❌ Unauthorized - Invalid or expired token")
-            throw URLError(.userAuthenticationRequired)
-        case 404:
-            print("❌ Preferences not found")
-            throw URLError(.badURL)
-        default:
-            print("❌ Unexpected status code: \(httpResponse.statusCode)")
-            throw URLError(.badServerResponse)
-        }
+        print("✅ Successfully fetched preferences")
+        let decoder = JSONDecoder()
+        let responseObj = try decoder.decode(PreferencesResponse.self, from: data)
+        print("[DEBUG] Decoded preferences data: \(responseObj.data)")
+        return responseObj.data
     }
     
     // Helper function to convert minutes to time string

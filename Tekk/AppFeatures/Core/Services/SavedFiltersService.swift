@@ -31,17 +31,6 @@ class SavedFiltersService {
         
         print("📝 Found \(newFilters.count) new filters to sync")
         
-        // Create new filters
-        let url = URL(string: "\(baseURL)/api/filters/")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        // Add auth token
-        if let token = KeychainWrapper.standard.string(forKey: "authToken") {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
-        
         // Convert only new filters to match backend's expected format
         let filterObjects = newFilters.map { filter -> [String: Any?] in
             [
@@ -61,109 +50,81 @@ class SavedFiltersService {
         ]
         
         // Convert to JSON data
-        request.httpBody = try JSONSerialization.data(withJSONObject: requestData)
+        let body = try JSONSerialization.data(withJSONObject: requestData)
         
         print("📤 Sending \(newFilters.count) new filters")
-        print("📤 Request body: \(String(data: request.httpBody!, encoding: .utf8) ?? "")")
+        print("📤 Request body: \(String(data: body, encoding: .utf8) ?? "")")
         
-        do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            
-            // Print response for debugging
+        let endpoint = "/api/filters/"
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
+            method: "POST",
+            headers: ["Content-Type": "application/json"],
+            body: body
+        )
+        
+        // Print response for debugging
+        if let responseString = String(data: data, encoding: .utf8) {
+            print("📥 Response body: \(responseString)")
+        }
+        
+        switch response.statusCode {
+        case 200:
+            print("✅ Successfully synced \(newFilters.count) new filters")
+        case 500:
             if let responseString = String(data: data, encoding: .utf8) {
-                print("📥 Response body: \(responseString)")
+                print("❌ Server error: \(responseString)")
             }
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                throw URLError(.badServerResponse)
-            }
-            
-            switch httpResponse.statusCode {
-            case 200:
-                print("✅ Successfully synced \(newFilters.count) new filters")
-            case 500:
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ Server error: \(responseString)")
-                }
-                throw URLError(.badServerResponse)
-            default:
-                print("❌ Unexpected status code: \(httpResponse.statusCode)")
-                throw URLError(.badServerResponse)
-            }
-        } catch {
-            print("❌ Error syncing filters: \(error)")
-            throw error
+            throw URLError(.badServerResponse)
+        default:
+            print("❌ Unexpected status code: \(response.statusCode)")
+            throw URLError(.badServerResponse)
         }
     }
 
-    // Add the fetch function to get all saved filters from the backend
     func fetchSavedFilters() async throws -> [SavedFiltersModel] {
-        let url = URL(string: "\(baseURL)/api/filters/")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let endpoint = "/api/filters/"
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
+            method: "GET",
+            headers: ["Content-Type": "application/json"]
+        )
         
-        // Add auth token
-        if let token = KeychainWrapper.standard.string(forKey: "authToken") {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            print("🔑 Using auth token: \(token)")
-        } else {
-            print("⚠️ No auth token found!")
-            throw URLError(.userAuthenticationRequired)
+        print("📥 Response status code: \(response.statusCode)")
+        
+        if let responseString = String(data: data, encoding: .utf8) {
+            print("📥 Response body: \(responseString)")
         }
         
-        print("📤 Fetching saved filters from: \(url.absoluteString)")
-        
-        do {
-            // Send the request and get the response
-            let (data, response) = try await URLSession.shared.data(for: request)
+        // Handle the response
+        switch response.statusCode {
+        case 200:
+            let decoder = JSONDecoder()
+            let filters = try decoder.decode([SavedFiltersModel].self, from: data)
             
-            // Check the response
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ Invalid response type")
-                throw URLError(.badServerResponse)
+            // Convert backend response to our SavedFiltersModel
+            return filters.map { response in
+                SavedFiltersModel(
+                    id: response.id,
+                    backendId: response.backendId,
+                    name: response.name,
+                    savedTime: response.savedTime,
+                    savedEquipment: Set(response.savedEquipment),
+                    savedTrainingStyle: response.savedTrainingStyle,
+                    savedLocation: response.savedLocation,
+                    savedDifficulty: response.savedDifficulty
+                )
             }
             
-            print("📥 Response status code: \(httpResponse.statusCode)")
-            
-            if let responseString = String(data: data, encoding: .utf8) {
-                print("📥 Response body: \(responseString)")
-            }
-            
-            // Handle the response
-            switch httpResponse.statusCode {
-            case 200:
-                
-                let decoder = JSONDecoder()
-                let filters = try decoder.decode([SavedFiltersModel].self, from: data)
-                
-                // Convert backend response to our SavedFiltersModel
-                return filters.map { response in
-                    SavedFiltersModel(
-                        id: response.id,
-                        backendId: response.backendId,
-                        name: response.name,
-                        savedTime: response.savedTime,
-                        savedEquipment: Set(response.savedEquipment),
-                        savedTrainingStyle: response.savedTrainingStyle,
-                        savedLocation: response.savedLocation,
-                        savedDifficulty: response.savedDifficulty
-                    )
-                }
-                
-            case 401:
-                print("❌ Unauthorized - Invalid or expired token")
-                throw URLError(.userAuthenticationRequired)
-            case 404:
-                print("❌ Endpoint not found")
-                throw URLError(.badURL)
-            default:
-                print("❌ Unexpected status code: \(httpResponse.statusCode)")
-                throw URLError(.badServerResponse)
-            }
-        } catch {
-            print("❌ Error fetching saved filters: \(error)")
-            throw error
+        case 401:
+            print("❌ Unauthorized - Invalid or expired token")
+            throw URLError(.userAuthenticationRequired)
+        case 404:
+            print("❌ Endpoint not found")
+            throw URLError(.badURL)
+        default:
+            print("❌ Unexpected status code: \(response.statusCode)")
+            throw URLError(.badServerResponse)
         }
     }
     

@@ -15,7 +15,7 @@ class UserManager: ObservableObject {
     @Published var firstName: String = ""
     @Published var lastName: String = ""
     @Published var email: String = ""
-    @Published var authToken: String = ""
+    @Published var accessToken: String = ""
     @Published var isLoggedIn: Bool = false
     @Published var userHasAccountHistory: Bool = false
     
@@ -66,11 +66,11 @@ class UserManager: ObservableObject {
         UserDefaults.standard.set(lastName, forKey: "lastName")
         UserDefaults.standard.set(email, forKey: "email")
         
-        // Save auth token to Keychain for better security
-        KeychainWrapper.standard.set(authToken, forKey: "authToken")
+        // Save access token to Keychain for better security
+        KeychainWrapper.standard.set(accessToken, forKey: "accessToken")
         
         // Update login state
-        isLoggedIn = !authToken.isEmpty
+        isLoggedIn = !accessToken.isEmpty
         UserDefaults.standard.set(isLoggedIn, forKey: "isLoggedIn")
     }
     
@@ -81,8 +81,8 @@ class UserManager: ObservableObject {
         lastName = UserDefaults.standard.string(forKey: "lastName") ?? ""
         email = UserDefaults.standard.string(forKey: "email") ?? ""
         
-        // Load auth token from Keychain
-        authToken = KeychainWrapper.standard.string(forKey: "authToken") ?? ""
+        // Load access token from Keychain
+        accessToken = KeychainWrapper.standard.string(forKey: "accessToken") ?? ""
         
         // Update login state
         isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
@@ -99,7 +99,7 @@ class UserManager: ObservableObject {
         firstName = ""
         lastName = ""
         email = ""
-        authToken = ""
+        accessToken = ""
         isLoggedIn = false
         userHasAccountHistory = false
         
@@ -110,7 +110,7 @@ class UserManager: ObservableObject {
         UserDefaults.standard.removeObject(forKey: "lastName")
         UserDefaults.standard.removeObject(forKey: "email")
         UserDefaults.standard.removeObject(forKey: "isLoggedIn")
-        KeychainWrapper.standard.removeObject(forKey: "authToken")
+        KeychainWrapper.standard.removeObject(forKey: "accessToken")
         
         // Clear user-specific liked drills UUID
         UserDefaults.standard.removeObject(forKey: "\(previousEmail)_likedDrillsUUID")

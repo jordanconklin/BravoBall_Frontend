@@ -113,15 +113,15 @@ struct CompletionView: View {
                 print("✅ Onboarding data submitted successfully")
                 print("🔑 Received token: \(response.access_token)")
                 
-                // Store access token taking access token response from the backend response
-                let tokenSaved = KeychainWrapper.standard.set(response.access_token, forKey: "authToken")
-                print("🔑 Token saved to keychain: \(tokenSaved)")
-                // Verify token was stored correctly
-                if let storedToken = KeychainWrapper.standard.string(forKey: "authToken") {
-                    print("✅ Verified token in keychain: \(storedToken)")
-                } else {
-                    print("❌ Failed to retrieve token from keychain!")
+                // Store access and refresh tokens from backend response
+                KeychainWrapper.standard.removeObject(forKey: "accessToken")
+                KeychainWrapper.standard.removeObject(forKey: "refreshToken")
+                KeychainWrapper.standard.set(response.access_token, forKey: "accessToken")
+                if let refreshToken = response.refresh_token {
+                    KeychainWrapper.standard.set(refreshToken, forKey: "refreshToken")
                 }
+                print("🔑 Token saved to keychain: \(KeychainWrapper.standard.string(forKey: "accessToken") ?? "nil")")
+                print("🔑 Refresh token saved to keychain: \(KeychainWrapper.standard.string(forKey: "refreshToken") ?? "nil")")
                 
                 // Prefill subskills for preferences update
                 await sessionModel.prefillSelectedSkills(from: onboardingModel.onboardingData)

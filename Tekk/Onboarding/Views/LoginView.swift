@@ -17,6 +17,7 @@ struct LoginResponse: Codable {
     let email: String
     let first_name: String
     let last_name: String
+    let refresh_token: String?
 }
 
 
@@ -144,76 +145,67 @@ struct LoginView: View {
     // MARK: - Login user function
     // function for login user
     func loginUser() {
-        
-        
         guard !email.isEmpty, !password.isEmpty else {
             self.onboardingModel.errorMessage = "Please fill in all fields."
             return
         }
 
-        let loginDetails = [
-            "email": email,
-            "password": password
-        ]
-
-        // sending HTTP POST request to FastAPI app running locally
-        let url = URL(string: "http://127.0.0.1:8000/login/")!
-        var request = URLRequest(url: url)
-
-        print("current token: \(onboardingModel.authToken)")
-        // HTTP POST request to login user and receive JWT token
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try? JSONSerialization.data(withJSONObject: loginDetails)
-
-        // Start URL session to interact with backend
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let httpResponse = response as? HTTPURLResponse {
-                switch httpResponse.statusCode {
-                case 200:
-                    if let data = data,
-                       let decodedResponse = try? JSONDecoder().decode(LoginResponse.self, from: data) {
-                        DispatchQueue.main.async {
-                            onboardingModel.authToken = decodedResponse.access_token
-                            
-                            KeychainWrapper.standard.set(self.onboardingModel.authToken, forKey: "authToken")
-                            userManager.userHasAccountHistory = true
-                            onboardingModel.isLoggedIn = true
-                            onboardingModel.showLoginPage = false
-                            
-                            userManager.updateUserKeychain(
-                                email: decodedResponse.email,
-                                firstName: decodedResponse.first_name,
-                                lastName: decodedResponse.last_name
-                            )
-                            
-                            print("Auth token: \(self.onboardingModel.authToken)")
-                            print("Login success: \(self.onboardingModel.isLoggedIn)")
-                            print("Email: \(decodedResponse.email)")
-                            print("First name: \(decodedResponse.first_name)")
-                            print("Last name: \(decodedResponse.last_name)")
+        Task {
+            let loginDetails = [
+                "email": email,
+                "password": password
+            ]
+            let body = try? JSONSerialization.data(withJSONObject: loginDetails)
+            do {
+                let (data, response) = try await APIService.shared.request(
+                    endpoint: "/login/",
+                    method: "POST",
+                    headers: ["Content-Type": "application/json"],
+                    body: body,
+                    retryOn401: false
+                )
+                if response.statusCode == 200 {
+                    let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
+                    DispatchQueue.main.async {
+                        onboardingModel.accessToken = loginResponse.access_token
+                        KeychainWrapper.standard.set(loginResponse.access_token, forKey: "accessToken")
+                        if let refreshToken = loginResponse.refresh_token {
+                            KeychainWrapper.standard.set(refreshToken, forKey: "refreshToken")
                         }
+                        // Save user info to Keychain
+                        userManager.updateUserKeychain(
+                            email: loginResponse.email,
+                            firstName: loginResponse.first_name,
+                            lastName: loginResponse.last_name
+                        )
+                        userManager.userHasAccountHistory = true
+                        onboardingModel.isLoggedIn = true
+                        onboardingModel.showLoginPage = false
+                        print("🔑 Token saved to keychain: \(KeychainWrapper.standard.string(forKey: "accessToken") ?? "nil")")
+                        print("🔑 Refresh token saved to keychain: \(KeychainWrapper.standard.string(forKey: "refreshToken") ?? "nil")")
+                        print("Auth token: \(self.onboardingModel.accessToken)")
+                        print("Login success: \(self.onboardingModel.isLoggedIn)")
                     }
-                case 401:
+                } else if response.statusCode == 401 {
                     DispatchQueue.main.async {
                         self.onboardingModel.errorMessage = "Invalid credentials, please try again."
                         print("❌ Login failed: Invalid credentials")
                     }
-                default:
+                } else {
                     DispatchQueue.main.async {
                         self.onboardingModel.errorMessage = "Failed to login. Please try again."
-                        if let data = data, let responseString = String(data: data, encoding: .utf8) {
+                        if let responseString = String(data: data, encoding: .utf8) {
                             print("Response data not fully completed: \(responseString)")
                         }
                     }
                 }
-            } else if let error = error {
+            } catch {
                 DispatchQueue.main.async {
                     self.onboardingModel.errorMessage = "Network error. Please try again."
                     print("Login error: \(error.localizedDescription)")
                 }
             }
-        }.resume()
+        }
     }
 
 }

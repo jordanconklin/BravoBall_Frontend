@@ -19,12 +19,12 @@ class OnboardingModel: ObservableObject {
     @Published var showWelcome = false
     @Published var showIntroAnimation = true // TESTING, toggle when need to
     @Published var isLoggedIn = false
-    @Published var authToken = ""
+    @Published var accessToken = ""
     @Published var isPasswordVisible: Bool = false
     @Published var numberOfOnboardingPages = 14 // Updated to include registration page and preview page
     
     // TESTING: Set this to true to skip onboarding and go straight to completion
-    @Published var skipOnboarding = true
+    @Published var skipOnboarding = false
     
     // Variables for when onboarding data is being submitted
     @Published var isLoading = true
@@ -147,7 +147,7 @@ class OnboardingModel: ObservableObject {
         showLoginPage = false
         showWelcome = false
         showIntroAnimation = false // TESTING: set to true after
-        authToken = ""
+        accessToken = ""
         
         // Reset onboardingData to default values
         onboardingData = OnboardingData()  // This creates a new instance with default values
@@ -159,7 +159,7 @@ class OnboardingModel: ObservableObject {
         print("onb email: \(onboardingData.email)")
         print("password: \(onboardingData.password)")
         print("Current step: \(currentStep)")
-        print("auth token nil value: \(authToken)")
+        print("auth token nil value: \(accessToken)")
     }
 
     // TESTING: Method to prefill onboarding data for testing

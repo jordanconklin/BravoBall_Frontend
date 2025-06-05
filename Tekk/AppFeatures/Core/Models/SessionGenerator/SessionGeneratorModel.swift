@@ -359,18 +359,16 @@ class SessionGeneratorModel: ObservableObject {
                     cacheLikedDrills()
                 }
                 
-                // TODO: right now the changeTracker is set on allCompletedSessions directly in mainappmodel, see if can implement changeTracker to here, may have to reorganize main and ses models
-//                if changeTracker.completedSessionsChanged {
-//                    let completedDrills = orderedSessionDrills.filter { $0.isCompleted }.count
-//                    try await DataSyncService.shared.syncCompletedSession(
-//                        date: Date(),
-//                        drills: orderedSessionDrills,
-//                        totalCompleted: completedDrills,
-//                        total: orderedSessionDrills.count
-//                    )
-//                    appModel.cacheCompletedSessions()
-//                    
-//                }
+                if changeTracker.completedSessionsChanged {
+                    let completedDrills = orderedSessionDrills.filter { $0.isCompleted }.count
+                    try await DataSyncService.shared.syncCompletedSession(
+                        date: Date(),
+                        drills: orderedSessionDrills,
+                        totalCompleted: completedDrills,
+                        total: orderedSessionDrills.count
+                    )
+                    appModel.cacheCompletedSessions()
+                }
                 
                 await MainActor.run {
                     changeTracker.reset()
@@ -532,6 +530,7 @@ class SessionGeneratorModel: ObservableObject {
 
         print("\n🔄 Loading initial session with \(sessionResponse.drills.count) drills")
         self.currentSessionId = sessionResponse.sessionId
+        print("✅ Current session ID: \(currentSessionId)")
         
         // Instead of directly setting selectedSkills, map the focus areas to their full skill strings
         let newSkills = Set(sessionResponse.focusAreas.compactMap { category in
