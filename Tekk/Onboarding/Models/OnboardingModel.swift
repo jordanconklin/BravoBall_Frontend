@@ -189,20 +189,6 @@ class OnboardingModel: ObservableObject {
         )
         
         print("✅ Test data prefilled with email: \(randomEmail)")
-        print("✅ Primary goal: \(onboardingData.primaryGoal)")
-        print("✅ Biggest challenge: \(onboardingData.biggestChallenge)")
-        print("✅ Training experience: \(onboardingData.trainingExperience)")
-        print("✅ Position: \(onboardingData.position)")
-        print("✅ Playstyle: \(onboardingData.playstyle)")
-        print("✅ Age range: \(onboardingData.ageRange)")
-        print("✅ Strengths: \(onboardingData.strengths)")
-        print("✅ Areas to improve: \(onboardingData.areasToImprove)")
-        print("✅ Training location: \(onboardingData.trainingLocation)")
-        print("✅ Available equipment: \(onboardingData.availableEquipment)")
-        print("✅ Daily training time: \(onboardingData.dailyTrainingTime)")
-        print("✅ Weekly training days: \(onboardingData.weeklyTrainingDays)")
-        print("✅ First name: \(onboardingData.firstName)")
-        print("✅ Last name: \(onboardingData.lastName)")
     }
 
     // MARK: - Validation
