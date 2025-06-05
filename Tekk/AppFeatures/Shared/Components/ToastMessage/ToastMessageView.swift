@@ -61,3 +61,19 @@ extension View {
         modifier(ToastModifier())
     }
 }
+
+#if DEBUG
+struct ToastView_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack(spacing: 20) {
+            ToastView(message: .success("Success! Your action was completed."))
+            ToastView(message: .notAllowed("Not allowed. Please try again."))
+            ToastView(message: .unAdded("Item was not added."))
+            ToastView(message: ToastMessage(type: .error, message: "An error occurred."))
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .previewLayout(.sizeThatFits)
+    }
+}
+#endif
