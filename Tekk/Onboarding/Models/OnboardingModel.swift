@@ -39,8 +39,8 @@ class OnboardingModel: ObservableObject {
     // Simple arrays for questions and options
     let questionTitles = [
         "What is your primary soccer goal?",
-        "What are your biggest challenges to achieving this goal?",
-        "How much individual training experience do you have?",
+        "What is stopping you from achieving this goal?",
+        "How much training experience do you have?",
         "What position do you play?",
         "Which players best describes your playstyle?",
         "What age range do you fall under?",
