@@ -30,12 +30,11 @@ struct ProfileView: View {
                     actionSection(title: "Account", buttons: [
                         customActionButton(title: "Edit your details", icon: "pencil"),
                         customActionButton(title: "Change Password", icon: "lock.fill"),
-                        customActionButton(title: "Notification Settings", icon: "bell.fill"),
                         customActionButton(title: "Share With a Friend", icon: "square.and.arrow.up.fill")
                     ])
                     
                     actionSection(title: "Support", buttons: [
-                        customActionButton(title: "Report an Error", icon: "exclamationmark.bubble.fill"),
+                        customActionButton(title: "Feature Requests", icon: "lightbulb.fill"),
                         customActionButton(title: "Privacy Policy", icon: "doc.text.fill"),
                         customActionButton(title: "Terms of Service", icon: "doc.fill"),
                         customActionButton(title: "Follow our Socials", icon: "link")
@@ -210,18 +209,14 @@ struct ProfileView: View {
             showEditDetails = true
         case "Change Password":
             showChangePassword = true
-        case "Notification Settings":
-            if let url = URL(string: UIApplication.openSettingsURLString) {
+        case "Feature Requests":
+            if let url = URL(string: "https://bravoball.featurebase.app") {
                 UIApplication.shared.open(url)
             }
         case "Follow our Socials":
             showSocialLinks()
         case "Share With a Friend":
             shareApp()
-        case "Report an Error":
-            sendEmail(subject: "BravoBall Error Report", to: "conklinofficialsoccer@gmail.com")
-        case "Talk to a Founder":
-            sendEmail(subject: "BravoBall Inquiry", to: "conklinofficialsoccer@gmail.com")
         case "Privacy Policy":
             showPrivacyPolicy = true
         case "Terms of Service":
@@ -463,7 +458,7 @@ struct PrivacyPolicyView: View {
                     Text("Privacy Policy")
                         .font(.custom("Poppins-Bold", size: 24))
                     
-                    Text("Last updated: May 2024")
+                    Text("Last updated: May 2025")
                         .font(.custom("Poppins-Regular", size: 14))
                         .foregroundColor(.gray)
                     
@@ -522,7 +517,7 @@ struct TermsOfServiceView: View {
                     Text("Terms of Service")
                         .font(.custom("Poppins-Bold", size: 24))
                     
-                    Text("Last updated: May 2024")
+                    Text("Last updated: May 2025")
                         .font(.custom("Poppins-Regular", size: 14))
                         .foregroundColor(.gray)
                     

@@ -19,6 +19,7 @@ struct OnboardingView: View {
     
     @State private var canTrigger = true
     @State private var showEmailExistsAlert = false
+    @State private var hasAttemptedSubmit = false  // New state variable to track submission attempts
     
     let riveViewModelOne = RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1")
     let riveViewModelTwo = RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 2", autoPlay: true)
@@ -336,6 +337,14 @@ struct OnboardingView: View {
             if onboardingModel.currentStep < onboardingModel.numberOfOnboardingPages {
                 Button(action: {
                     if onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 {
+                        hasAttemptedSubmit = true  // Set to true when user attempts to submit
+                        
+                        // Validate registration form fields
+                        if let validationError = onboardingModel.registrationValidationError {
+                            onboardingModel.errorMessage = validationError
+                            return
+                        }
+                        
                         // Call email pre-check
                         Task {
                             let email = onboardingModel.onboardingData.email

@@ -190,8 +190,8 @@ struct CalendarView: View {
         .padding()
         .sheet(isPresented: $showInfoSheet) {
             InfoPopupView(
-                title: "How the Streak Calendar Works",
-                description: "The streak calendar tracks your daily training streaks.\n\nEach day you complete a session, it will be highlighted.\n\nUse the arrows to navigate months and see your progress over time.",
+                title: "How the Progress Tracker Works",
+                description: "The progress tracker tracks your daily training streaks.\n\nEach day you complete a session, it will be highlighted.\n\nUse the arrows to navigate months and see your progress over time.",
                 onClose: { showInfoSheet = false }
             )
             .presentationDetents([.medium, .large])
