@@ -27,6 +27,7 @@ struct FilterSheet: View {
                 
                 Spacer()
                 Button(action: {
+                    Haptic.light()
                     withAnimation(.spring(dampingFraction: 0.7)) {
                         dismiss()
                     }
@@ -43,6 +44,7 @@ struct FilterSheet: View {
                 LazyVStack(alignment: .leading, spacing: 8) {
                     ForEach(optionsForType, id: \.self) { option in
                         Button(action: {
+                            Haptic.light()
                             selectOption(option)
                         }) {
                             HStack {

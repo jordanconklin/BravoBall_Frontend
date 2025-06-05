@@ -34,6 +34,7 @@ struct EditingDrillView: View {
             VStack {
                 HStack {
                     Button(action: {
+                        Haptic.light()
                         dismiss()
                     }) {
                         HStack {
@@ -55,6 +56,7 @@ struct EditingDrillView: View {
                     
                     // How-to button
                     Button(action: {
+                        Haptic.light()
                         selectedDrill = editableDrill.drill
                         
                     }) {
@@ -208,7 +210,7 @@ struct EditingDrillView: View {
 
         
         return Button(action: {
-            
+            Haptic.light()
 
             if let sets = Int(editSets), setsValid {
                 editableDrill.totalSets = sets

@@ -21,6 +21,7 @@ struct DrillCard: View {
     
     var body: some View {
         Button(action: {
+            Haptic.light()
             sessionModel.selectedDrillForEditing = editableDrill
             showEditingDrillView = true
         }) {

@@ -26,6 +26,7 @@ struct SaveFiltersPromptView: View {
                 HStack {
                     // Exit the prompt
                     Button(action: {
+                        Haptic.light()
                         withAnimation {
                             dismiss()
                         }
@@ -48,6 +49,7 @@ struct SaveFiltersPromptView: View {
                     .padding(.top, 8)
                 // Save filters button
                 Button(action: {
+                    Haptic.light()
                     withAnimation {
                         dismiss()
                         sessionModel.saveFiltersInGroup(name: savedFiltersName)

@@ -15,6 +15,7 @@ struct FilterOptionsButton: View {
     var body: some View {
         VStack {
             Button(action: {
+                Haptic.light()
                 withAnimation {
                     appModel.viewState.showFilterOptions.toggle()
                 }

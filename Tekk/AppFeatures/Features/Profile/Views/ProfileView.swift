@@ -103,6 +103,7 @@ struct ProfileView: View {
      
     private var backButton: some View {
         Button(action: {
+            Haptic.light()
             presentationMode.wrappedValue.dismiss()
         }) {
             HStack {
@@ -175,11 +176,12 @@ struct ProfileView: View {
         .padding(.horizontal)
     }
     
-    // Custom action button
+    // Custom action button for each row in the profile view
     private func customActionButton(title: String, icon: String) -> AnyView {
         AnyView(
             // Button action
             Button(action: {
+                Haptic.light()
                 handleButtonAction(title)
             }) {
                 // Custom button styling
@@ -294,6 +296,7 @@ struct ProfileView: View {
 
     private var logoutButton: some View {
         Button(action: {
+            Haptic.light()
             appModel.alertType = .logout
             appModel.showAlert = true
             
@@ -311,6 +314,7 @@ struct ProfileView: View {
     
     private var deleteAccountButton: some View {
         Button(action: {
+            Haptic.light()
             appModel.alertType = .delete
             appModel.showAlert = true
         }) {

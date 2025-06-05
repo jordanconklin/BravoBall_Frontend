@@ -27,9 +27,10 @@ struct WeekDisplayButton: View {
                 let score = Double(session.totalCompletedDrills) / Double(session.totalDrills)
                 
                 Button(action: {
-                        // Lets DrillResultsView access session
-                        appModel.selectedSession = session
-                        appModel.showDrillResults = true
+                    Haptic.light()
+                    // Lets DrillResultsView access session
+                    appModel.selectedSession = session
+                    appModel.showDrillResults = true
                 }) {
                     ZStack {
                         RiveViewModel(fileName: "Day_Null").view()

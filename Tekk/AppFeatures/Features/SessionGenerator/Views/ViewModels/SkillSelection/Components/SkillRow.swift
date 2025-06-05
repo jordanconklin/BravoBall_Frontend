@@ -15,6 +15,7 @@ struct SkillRow: View {
     
     var body: some View {
         Button( action: {
+            Haptic.light()
             if isSelected {
                 sessionModel.selectedSkills.remove(skill.subSkill)
             } else {

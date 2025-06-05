@@ -21,6 +21,7 @@ struct GroupFilterOptions: View {
         VStack(alignment: .leading) {
             if group.id != sessionModel.likedDrillsGroup.id {
                 Button(action: {
+                    Haptic.light()
                     showDeleteConfirmation = true
                 }) {
                     HStack(spacing: 8) {
@@ -51,7 +52,7 @@ struct GroupFilterOptions: View {
             Divider()
             
             Button(action: {
-                                
+                Haptic.light()
                 withAnimation {
                     appModel.viewState.showGroupFilterOptions = false
                     
@@ -72,6 +73,8 @@ struct GroupFilterOptions: View {
             Divider()
             
             Button(action: {
+                Haptic.light()
+                
                 // Show add drill sheet
                 withAnimation(.spring(dampingFraction: 0.7)) {
                     appModel.viewState.showGroupFilterOptions = false

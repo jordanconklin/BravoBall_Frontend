@@ -24,6 +24,7 @@ struct SkillButton: View {
                     .minimumScaleFactor(0.8)
                 
                 Button(action: {
+                    Haptic.light()
                     action()
                     
                     if !appModel.viewState.showSkillSearch {

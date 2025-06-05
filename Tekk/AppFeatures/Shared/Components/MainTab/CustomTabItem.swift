@@ -12,7 +12,10 @@ struct CustomTabItem: View {
     let action: () -> Void
     
     var body: some View {
-        Button(action: action) {
+        Button(action: {
+            Haptic.medium()
+            action()
+        }) {
             VStack(spacing: 4) {
                 icon
                     .frame(width: 30, height: 30)

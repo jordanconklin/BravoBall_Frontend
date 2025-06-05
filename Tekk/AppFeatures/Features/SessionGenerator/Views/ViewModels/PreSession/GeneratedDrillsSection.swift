@@ -21,7 +21,10 @@ struct GeneratedDrillsSection: View {
         LazyVStack(alignment: .center, spacing: layout.standardSpacing) {
             HStack {
                 // Info button to show explanation popup
-                Button(action: { showInfoSheet = true }) {
+                Button(action: { 
+                    Haptic.light()
+                    showInfoSheet = true 
+                }) {
                     Image(systemName: "info.circle")
                         .font(.system(size: 28, weight: .regular))
                         .foregroundColor(appModel.globalSettings.primaryGrayColor)
@@ -41,6 +44,7 @@ struct GeneratedDrillsSection: View {
                 
                 // Toggle delete mode for drills
                 Button(action: {
+                    Haptic.light()
                     withAnimation(.spring(dampingFraction: 0.7)) {
                         appModel.viewState.showSessionDeleteButtons.toggle()
                     }
@@ -63,6 +67,7 @@ struct GeneratedDrillsSection: View {
                 
                 // Add drill button (opens drill search sheet)
                 Button(action: {
+                    Haptic.light()
                     appModel.viewState.showSearchDrills = true
                 }) {
                     RiveViewModel(fileName: "Plus_Button").view()
@@ -90,6 +95,7 @@ struct GeneratedDrillsSection: View {
                         // Show delete button if in delete mode
                         if appModel.viewState.showSessionDeleteButtons {
                             Button(action: {
+                                Haptic.light()
                                 sessionModel.deleteDrillFromSession(drill: editableDrill)
                                 if sessionModel.orderedSessionDrills.isEmpty {
                                     appModel.viewState.showSessionDeleteButtons = false

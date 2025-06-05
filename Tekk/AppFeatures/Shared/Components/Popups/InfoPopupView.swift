@@ -49,7 +49,10 @@ struct InfoPopupView: View {
                 .frame(height: 40)
                 .allowsHitTesting(false)
             }
-            Button(action: { onClose?() }) {
+            Button(action: { 
+                Haptic.light()
+                onClose?() 
+            }) {
                 Text("Got it!")
                     .font(.custom("Poppins-Bold", size: 16))
                     .foregroundColor(.white)

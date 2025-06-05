@@ -12,7 +12,10 @@ struct TabButton: View {
     let action: () -> Void
     
     var body: some View {
-        Button(action: action) {
+        Button(action: {
+            Haptic.light()
+            action()
+        }) {
             Text(title)
                 .font(.custom("Poppins-Medium", size: 14))
                 .foregroundColor(isSelected ? .white : .gray)

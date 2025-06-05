@@ -38,6 +38,7 @@
 		17CA37A42DF0B1E5001AD5FA /* CustomVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CA37A32DF0B1DF001AD5FA /* CustomVideoPlayer.swift */; };
 		17CA37A62DF0BA0F001AD5FA /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CA37A52DF0BA0C001AD5FA /* APIService.swift */; };
 		17CA37A92DF12FC4001AD5FA /* InfoPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CA37A82DF12FBD001AD5FA /* InfoPopupView.swift */; };
+		17CA37BC2DF24428001AD5FA /* Haptic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CA37BB2DF24424001AD5FA /* Haptic.swift */; };
 		17DB45FA2DD69B2C000A76F6 /* BravoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB45F92DD69B29000A76F6 /* BravoHeaderView.swift */; };
 		17DB45FC2DD69D3C000A76F6 /* FilterScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB45FB2DD69D38000A76F6 /* FilterScrollView.swift */; };
 		17DB45FE2DD6A2D3000A76F6 /* SaveFiltersPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB45FD2DD6A2D0000A76F6 /* SaveFiltersPromptView.swift */; };
@@ -195,6 +196,7 @@
 		17CA37A32DF0B1DF001AD5FA /* CustomVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomVideoPlayer.swift; sourceTree = "<group>"; };
 		17CA37A52DF0BA0C001AD5FA /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		17CA37A82DF12FBD001AD5FA /* InfoPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupView.swift; sourceTree = "<group>"; };
+		17CA37BB2DF24424001AD5FA /* Haptic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptic.swift; sourceTree = "<group>"; };
 		17DB45F92DD69B29000A76F6 /* BravoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BravoHeaderView.swift; sourceTree = "<group>"; };
 		17DB45FB2DD69D38000A76F6 /* FilterScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterScrollView.swift; sourceTree = "<group>"; };
 		17DB45FD2DD6A2D0000A76F6 /* SaveFiltersPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveFiltersPromptView.swift; sourceTree = "<group>"; };
@@ -357,6 +359,7 @@
 				178208D12D2D14D200246494 /* MainTabView.swift */,
 				178208DC2D2DEB7200246494 /* Onboarding */,
 				1749361B2C3E102B001163B9 /* ContentView.swift */,
+				17CA37BA2DF2440A001AD5FA /* Feedback */,
 				1749361D2C3E1031001163B9 /* Assets.xcassets */,
 				43985E502CB51DEC00BE2AB6 /* Font */,
 				439A72632C9FA55700B4C5AD /* RiveAssets */,
@@ -465,6 +468,14 @@
 				17CA37A82DF12FBD001AD5FA /* InfoPopupView.swift */,
 			);
 			path = Popups;
+			sourceTree = "<group>";
+		};
+		17CA37BA2DF2440A001AD5FA /* Feedback */ = {
+			isa = PBXGroup;
+			children = (
+				17CA37BB2DF24424001AD5FA /* Haptic.swift */,
+			);
+			path = Feedback;
 			sourceTree = "<group>";
 		};
 		420DA3A52DCEEF45004CDD7A /* Checkbox */ = {
@@ -1224,6 +1235,7 @@
 				4399B6E92D69407F00DA5E84 /* GroupDetailView.swift in Sources */,
 				1749361C2C3E102B001163B9 /* ContentView.swift in Sources */,
 				437D1A1F2D94FE5600B875CF /* SavedFiltersService.swift in Sources */,
+				17CA37BC2DF24428001AD5FA /* Haptic.swift in Sources */,
 				178208E02D2DEB9C00246494 /* OnboardingModel.swift in Sources */,
 				43C5FC6A2D6DCC130064E7D5 /* RecommendedDrillCard.swift in Sources */,
 				43C5FC542D6DBD0E0064E7D5 /* GroupCard.swift in Sources */,
@@ -1433,13 +1445,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BASE_URL = "http://10.0.3.169:8000";
 				CODE_SIGN_ENTITLEMENTS = Tekk/Tekk.entitlements;
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Tekk/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
+				DEVELOPMENT_TEAM = J36CXA7LCG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Tekk/Info.plist;
@@ -1462,7 +1475,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ConklinOfficial.BravoBall;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1476,12 +1488,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BASE_URL = "http://10.0.3.169:8000";
 				CODE_SIGN_ENTITLEMENTS = Tekk/Tekk.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Tekk/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = J36CXA7LCG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Tekk/Info.plist;

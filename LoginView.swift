@@ -15,6 +15,7 @@ struct LoginView: View {
         VStack(spacing: 20) {
             HStack {
                 Button(action: {
+                    Haptic.light()
                     withAnimation(.spring()) {
                         showLoginPage = false
                     }
@@ -78,7 +79,10 @@ struct LoginView: View {
                     .padding(.horizontal)
             }
 
-            Button(action: loginUser) {
+            Button(action: {
+                Haptic.light()
+                loginUser()
+            }) {
                 Text("Login")
                     .frame(maxWidth: .infinity)
                     .frame(height: 44)
@@ -90,7 +94,9 @@ struct LoginView: View {
             .padding(.horizontal)
             .accessibilityLabel("Login button")
 
-            Button(action: {}) {
+            Button(action: {
+                Haptic.light()
+            }) {
                 Text("Forgot Password")
                     .frame(maxWidth: .infinity)
                     .frame(height: 44)

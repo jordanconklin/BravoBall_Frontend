@@ -29,6 +29,7 @@ struct DrillDetailView: View {
                     LazyVStack(alignment: .leading, spacing: 24) {
                         HStack(spacing: 20) {
                             Button(action: {
+                                Haptic.light()
                                 dismiss()
                             }) {
                                 HStack {
@@ -41,7 +42,7 @@ struct DrillDetailView: View {
                             
                             // Like button
                             Button(action: {
-
+                                Haptic.light()
                                 sessionModel.toggleDrillLike(drillId: drill.id, drill: drill)
                             }) {
                                 Image(systemName: sessionModel.isDrillLiked(drill) ? "heart.fill" : "heart")
@@ -60,6 +61,7 @@ struct DrillDetailView: View {
                             
                             // Add drill to group
                             Button(action: {
+                                Haptic.light()
                                 showSaveDrill = true
                             }) {
                                 Image(systemName: sessionModel.isDrillInGroup(drill) ? "bookmark.fill" : "bookmark")
@@ -161,6 +163,7 @@ struct DrillDetailView: View {
                 
                 if !isDrillInRunningSession() {
                     FloatingAddButton{
+                        Haptic.light()
                         addDrillWithToast()
                     }
                 }
@@ -191,6 +194,7 @@ struct DrillDetailView: View {
             VStack {
                 HStack {
                     Button(action: {
+                        Haptic.light()
                         withAnimation {
                             showSaveDrill = false
                         }
@@ -222,6 +226,7 @@ struct DrillDetailView: View {
                             ForEach(sessionModel.savedDrills) { group in
                                 GroupCard(group: group)
                                         .onTapGesture {
+                                            Haptic.light()
                                             // MARK: testing
                                             withAnimation {
                                                 if group.drills.contains(where: { $0.id == drill.id }) {

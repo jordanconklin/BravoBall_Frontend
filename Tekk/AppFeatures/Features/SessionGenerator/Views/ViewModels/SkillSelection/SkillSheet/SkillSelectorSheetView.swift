@@ -28,6 +28,7 @@ struct SkillSelectorSheet: View {
                         .padding(.leading, 70)
                     Spacer()
                     Button(action: {
+                        Haptic.light()
                         dismiss()
                     }) {
                         Image(systemName: "xmark")
@@ -43,6 +44,7 @@ struct SkillSelectorSheet: View {
                         ForEach(SessionGeneratorView.skillCategories, id: \.name) { category in
                             VStack(alignment: .leading, spacing: 0) {
                                 Button(action: {
+                                    Haptic.light()
                                     withAnimation {
                                         if expandedCategory == category.name {
                                             expandedCategory = nil
@@ -81,6 +83,7 @@ struct SkillSelectorSheet: View {
                                     VStack(spacing: 12) {
                                         ForEach(category.subSkills, id: \.self) { subSkill in
                                             Button(action: {
+                                                Haptic.light()
                                                 if sessionModel.selectedSkills.contains(subSkill) {
                                                     sessionModel.selectedSkills.remove(subSkill)
                                                 } else {
@@ -119,6 +122,7 @@ struct SkillSelectorSheet: View {
             .frame(width: geometry.size.width)
             .safeAreaInset(edge: .bottom) {
                 Button(action: {
+                    Haptic.light()
                     dismiss()
                 
                     sessionModel.schedulePreferenceUpdate()

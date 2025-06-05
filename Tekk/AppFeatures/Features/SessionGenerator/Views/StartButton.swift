@@ -14,7 +14,10 @@ struct StartButton: View {
     var action: () -> Void
     
     var body: some View {
-        Button(action: action) {
+        Button(action: {
+            Haptic.heavy()
+            action()
+        }) {
             ZStack {
                 RiveViewModel(fileName: "Golden_Button").view()
                     .frame(width: 320, height: 80)
