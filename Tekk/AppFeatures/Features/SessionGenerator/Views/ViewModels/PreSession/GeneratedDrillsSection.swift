@@ -17,9 +17,10 @@ struct GeneratedDrillsSection: View {
     @State private var showInfoSheet = false
     
     var body: some View {
+        // Main vertical stack for the drills section
         LazyVStack(alignment: .center, spacing: layout.standardSpacing) {
             HStack {
-                // Info button
+                // Info button to show explanation popup
                 Button(action: { showInfoSheet = true }) {
                     Image(systemName: "info.circle")
                         .font(.system(size: 28, weight: .regular))
@@ -30,6 +31,7 @@ struct GeneratedDrillsSection: View {
                 
                 Spacer()
                 
+                // Section title
                 Text("Session")
                     .font(.custom("Poppins-Bold", size: 20))
                     .foregroundColor(appModel.globalSettings.primaryDarkColor)
@@ -37,6 +39,7 @@ struct GeneratedDrillsSection: View {
                 
                 Spacer()
                 
+                // Toggle delete mode for drills
                 Button(action: {
                     withAnimation(.spring(dampingFraction: 0.7)) {
                         appModel.viewState.showSessionDeleteButtons.toggle()
@@ -58,6 +61,7 @@ struct GeneratedDrillsSection: View {
                 }
                 .disabled(sessionModel.orderedSessionDrills.isEmpty)
                 
+                // Add drill button (opens drill search sheet)
                 Button(action: {
                     appModel.viewState.showSearchDrills = true
                 }) {
@@ -66,7 +70,7 @@ struct GeneratedDrillsSection: View {
                 }
             }
  
-            
+            // Show placeholder if no drills are selected
             if sessionModel.orderedSessionDrills.isEmpty {
                 Spacer()
                 HStack {
@@ -80,8 +84,10 @@ struct GeneratedDrillsSection: View {
                 .padding(30)
                 
             } else {
+                // List each drill card in the session
                 ForEach($sessionModel.orderedSessionDrills, id: \.drill.id) { $editableDrill in
                     HStack {
+                        // Show delete button if in delete mode
                         if appModel.viewState.showSessionDeleteButtons {
                             Button(action: {
                                 sessionModel.deleteDrillFromSession(drill: editableDrill)
@@ -103,6 +109,7 @@ struct GeneratedDrillsSection: View {
                             .padding(.leading)
                         }
                         
+                        // Drill card with drag-and-drop support
                         DrillCard(
                             appModel: appModel,
                             sessionModel: sessionModel,
@@ -116,6 +123,7 @@ struct GeneratedDrillsSection: View {
                             )
                         }
                         .dropDestination(for: String.self) { items, location in
+                            // Handle drag-and-drop reordering
                             guard let sourceTitle = items.first,
                                   let sourceIndex = sessionModel.orderedSessionDrills.firstIndex(where: { $0.drill.title == sourceTitle }),
                                   let destinationIndex = sessionModel.orderedSessionDrills.firstIndex(where: { $0.drill.title == editableDrill.drill.title }) else {
@@ -137,6 +145,7 @@ struct GeneratedDrillsSection: View {
         .padding(.horizontal)
         .padding(.top, 10)
         .cornerRadius(15)
+        // Sheet for searching and adding drills
         .sheet(isPresented: $appModel.viewState.showSearchDrills) {
             DrillSearchView(
                 appModel: appModel,
@@ -163,6 +172,7 @@ struct GeneratedDrillsSection: View {
                 }
             )
         }
+        // Info popup sheet
         .sheet(isPresented: $showInfoSheet) {
             InfoPopupView(
                 title: "What is the Session Generator?",

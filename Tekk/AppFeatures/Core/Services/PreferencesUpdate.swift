@@ -90,6 +90,13 @@ class PreferencesUpdateService {
 
     // Update preferences using preference data and subskills, which will help load a session into the SessionGeneratorView
     func updatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel, isOnboarding: Bool = false) async throws {
+        // SAFETY: Prevent updates if logging out or no valid user
+        let userEmail = KeychainWrapper.standard.string(forKey: "userEmail") ?? ""
+        if sessionModel.isLoggingOut || userEmail.isEmpty {
+            print("[SAFETY] Skipping updatePreferences: isLoggingOut=\(sessionModel.isLoggingOut), userEmail=\(userEmail)")
+            return
+        }
+
         // If this is onboarding, skip debounce and update immediately
         if isOnboarding {
             print("[Onboarding] Performing immediate preferences update")
@@ -141,6 +148,12 @@ class PreferencesUpdateService {
 
     // The actual call-to-backend logic, extracted for debouncing
     private func performUpdatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel) async throws {
+        // SAFETY: Prevent updates if logging out or no valid user
+        let userEmail = KeychainWrapper.standard.string(forKey: "userEmail") ?? ""
+        if sessionModel.isLoggingOut || userEmail.isEmpty {
+            print("[SAFETY] Skipping performUpdatePreferences: isLoggingOut=\(sessionModel.isLoggingOut), userEmail=\(userEmail)")
+            return
+        }
         let endpoint = "/api/session/preferences"
         let duration = convertTimeToMinutes(time)
         let preferencesRequest = SessionPreferencesRequest(
