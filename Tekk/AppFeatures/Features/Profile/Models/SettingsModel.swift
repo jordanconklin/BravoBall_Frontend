@@ -40,36 +40,24 @@ class SettingsModel: ObservableObject {
     }
     
     func updateUserDetails(firstName: String, lastName: String, email: String) async throws {
-        guard let url = URL(string: "http://127.0.0.1:8000/api/user/update") else {
-            throw URLError(.badURL)
-        }
-        
-        guard let accessToken = KeychainWrapper.standard.string(forKey: "accessToken") else {
-            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No auth token found"])
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "PUT"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        
-        let body = [
+        let endpoint = "/api/user/update"
+        let bodyDict: [String: Any] = [
             "first_name": firstName,
             "last_name": lastName,
             "email": email
         ]
+        let body = try JSONSerialization.data(withJSONObject: bodyDict)
         
-        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        let (data, response) = try await APIService.shared.request(
+            endpoint: endpoint,
+            method: "PUT",
+            headers: ["Content-Type": "application/json"],
+            body: body
+        )
         
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw URLError(.badServerResponse)
-        }
-        
-        guard httpResponse.statusCode == 200 else {
-            throw NSError(domain: "", code: httpResponse.statusCode, 
-                        userInfo: [NSLocalizedDescriptionKey: "Failed to update user details"])
+        guard response.statusCode == 200 else {
+            throw NSError(domain: "", code: response.statusCode,
+                          userInfo: [NSLocalizedDescriptionKey: "Failed to update user details"])
         }
         
         // Update UI on the main thread

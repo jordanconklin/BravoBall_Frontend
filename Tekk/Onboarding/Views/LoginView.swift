@@ -165,22 +165,24 @@ struct LoginView: View {
                     retryOn401: false
                 )
                 if response.statusCode == 200 {
-                    let tokenResponse = try JSONDecoder().decode(TokenResponse.self, from: data)
+                    let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
                     DispatchQueue.main.async {
-                        onboardingModel.accessToken = tokenResponse.access_token
-                        // Clear old tokens
-                        KeychainWrapper.standard.removeObject(forKey: "accessToken")
-                        KeychainWrapper.standard.removeObject(forKey: "refreshToken")
-                        // Save new tokens
-                        KeychainWrapper.standard.set(tokenResponse.access_token, forKey: "accessToken")
-                        KeychainWrapper.standard.set(tokenResponse.refresh_token, forKey: "refreshToken")
-                        print("🔑 Token saved to keychain: \(KeychainWrapper.standard.string(forKey: "accessToken") ?? "nil")")
-                        print("🔑 Refresh token saved to keychain: \(KeychainWrapper.standard.string(forKey: "refreshToken") ?? "nil")")
+                        onboardingModel.accessToken = loginResponse.access_token
+                        KeychainWrapper.standard.set(loginResponse.access_token, forKey: "accessToken")
+                        if let refreshToken = loginResponse.refresh_token {
+                            KeychainWrapper.standard.set(refreshToken, forKey: "refreshToken")
+                        }
+                        // Save user info to Keychain
+                        userManager.updateUserKeychain(
+                            email: loginResponse.email,
+                            firstName: loginResponse.first_name,
+                            lastName: loginResponse.last_name
+                        )
                         userManager.userHasAccountHistory = true
                         onboardingModel.isLoggedIn = true
                         onboardingModel.showLoginPage = false
-                        // Optionally update userManager info if available from backend
-                        // userManager.updateUserKeychain(email: ..., firstName: ..., lastName: ...)
+                        print("🔑 Token saved to keychain: \(KeychainWrapper.standard.string(forKey: "accessToken") ?? "nil")")
+                        print("🔑 Refresh token saved to keychain: \(KeychainWrapper.standard.string(forKey: "refreshToken") ?? "nil")")
                         print("Auth token: \(self.onboardingModel.accessToken)")
                         print("Login success: \(self.onboardingModel.isLoggedIn)")
                     }
