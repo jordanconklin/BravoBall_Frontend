@@ -22,6 +22,6 @@ class GlobalSettings: ObservableObject {
 // settings for services, dont need ObservableObject annotation
 struct AppSettings {
     static var baseURL: String {
-        Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? "http://10.0.3.169:8000"
+        Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? "http://127.0.0.1:8000"
     }
 }

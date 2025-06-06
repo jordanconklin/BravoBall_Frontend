@@ -142,7 +142,7 @@ struct GeneratedDrillsSection: View {
                             }
                             return true
                         }
-                        .frame(height: layout.isPad ? 340 : 170)
+                        .frame(height: layout.isPad ? 330 : 160)
                     }
                 }
             }
