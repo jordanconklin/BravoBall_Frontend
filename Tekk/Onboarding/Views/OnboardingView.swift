@@ -107,38 +107,40 @@ struct OnboardingView: View {
                 .font(.custom("Poppins-Bold", size: 16))
             
             // Create Account Button
-            Button(action: {
-                Haptic.light()
-                withAnimation(.spring()) {
-                    onboardingModel.showWelcome.toggle()
-                }
-            }) {
-                Text("Create an account")
-                    .frame(width: 325, height: 15)
-                    .padding()
-                    .background(onboardingModel.globalSettings.primaryYellowColor)
-                    .foregroundColor(.white)
-                    .cornerRadius(20)
-                    .font(.custom("Poppins-Bold", size: 16))
-            }
+            PrimaryButton(
+                title: "Create an account",
+                action: {
+                    Haptic.light()
+                    withAnimation(.spring()) {
+                        onboardingModel.showWelcome.toggle()
+                    }
+                },
+                backgroundColor: onboardingModel.globalSettings.primaryYellowColor,
+                textColor: .white,
+                font: .custom("Poppins-Bold", size: 16),
+                style: .filled,
+                cornerRadius: 20,
+                height: 50
+            )
             .padding(.horizontal)
             .padding(.top, 80)
             
             // Login Button
-            Button(action: {
-                Haptic.light()
-                withAnimation(.spring()) {
-                    onboardingModel.showLoginPage = true
-                }
-            }) {
-                Text("Login")
-                    .frame(width: 325, height: 15)
-                    .padding()
-                    .background(.gray.opacity(0.2))
-                    .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
-                    .cornerRadius(20)
-                    .font(.custom("Poppins-Bold", size: 16))
-            }
+            PrimaryButton(
+                title: "Login",
+                action: {
+                    Haptic.light()
+                    withAnimation(.spring()) {
+                        onboardingModel.showLoginPage = true
+                    }
+                },
+                backgroundColor: .gray.opacity(0.2),
+                textColor: onboardingModel.globalSettings.primaryDarkColor,
+                font: .custom("Poppins-Bold", size: 16),
+                style: .filled,
+                cornerRadius: 20,
+                height: 50
+            )
             .padding(.horizontal)
             
             Spacer()
@@ -461,4 +463,5 @@ struct OnboardingView: View {
             }
         }
 }
+
 

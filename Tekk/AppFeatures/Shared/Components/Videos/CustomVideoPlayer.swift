@@ -27,6 +27,7 @@ struct CustomVideoPlayer: View {
     
     private func setupPlayer() {
         let avPlayer = AVPlayer(url: videoURL)
+        avPlayer.isMuted = true
         player = avPlayer
         
         // Add observer for video end
