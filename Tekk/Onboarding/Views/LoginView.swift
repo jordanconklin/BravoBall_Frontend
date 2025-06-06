@@ -92,39 +92,41 @@ struct LoginView: View {
                 
             
                 // Login button
-                Button(action: {
-                    Haptic.light()
-                    withAnimation(.spring()) {
-                        loginUser()
-                    }
-                }) {
-                    Text("Login")
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 44)
-                        .background(onboardingModel.globalSettings.primaryYellowColor)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                        .font(.system(size: 16, weight: .semibold))
-                }
+                PrimaryButton(
+                    title: "Login",
+                    action: {
+                        Haptic.light()
+                        withAnimation(.spring()) {
+                            loginUser()
+                        }
+                    },
+                    backgroundColor: onboardingModel.globalSettings.primaryYellowColor,
+                    textColor: .white,
+                    font: .system(size: 16, weight: .semibold),
+                    style: .filled,
+                    cornerRadius: 12,
+                    height: 44
+                )
                 .padding(.horizontal)
                 .padding(.top)
                 
             
                 // Cancel button
-                Button(action: {
-                    Haptic.light()
-                    withAnimation(.spring()) {
-                        resetLoginInfo()
-                    }
-                }) {
-                    Text("Cancel")
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 44)
-                        .background(.gray.opacity(0.2))
-                        .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
-                        .cornerRadius(12)
-                        .font(.system(size: 16, weight: .semibold))
-                }
+                PrimaryButton(
+                    title: "Cancel",
+                    action: {
+                        Haptic.light()
+                        withAnimation(.spring()) {
+                            resetLoginInfo()
+                        }
+                    },
+                    backgroundColor: .gray.opacity(0.2),
+                    textColor: onboardingModel.globalSettings.primaryDarkColor,
+                    font: .system(size: 16, weight: .semibold),
+                    style: .filled,
+                    cornerRadius: 12,
+                    height: 44
+                )
                 .padding(.horizontal)
                 
                 Spacer()
@@ -212,3 +214,16 @@ struct LoginView: View {
     }
 
 }
+
+#if DEBUG
+struct LoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        // Provide mock models for preview
+        let onboardingModel = OnboardingModel()
+        let userManager = UserManager()
+        LoginView(onboardingModel: onboardingModel, userManager: userManager)
+            .background(Color(.systemBackground))
+            .previewLayout(.sizeThatFits)
+    }
+}
+#endif

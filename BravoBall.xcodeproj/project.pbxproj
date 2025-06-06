@@ -21,6 +21,7 @@
 		17595AA12D3B3B520015F35D /* DrillResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17595AA02D3B3B4E0015F35D /* DrillResultsView.swift */; };
 		17595AA32D3B3B610015F35D /* WeekDisplayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17595AA22D3B3B5B0015F35D /* WeekDisplayButton.swift */; };
 		17595AAD2D3B44FE0015F35D /* Drill_Card_Complete.riv in Resources */ = {isa = PBXBuildFile; fileRef = 17595AAC2D3B44FE0015F35D /* Drill_Card_Complete.riv */; };
+		177B1BBA2DF2BF5200AF465C /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BB92DF2BF4E00AF465C /* PrimaryButton.swift */; };
 		178208D22D2D14D200246494 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178208D12D2D14D200246494 /* MainTabView.swift */; };
 		178208E02D2DEB9C00246494 /* OnboardingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178208DF2D2DEB9C00246494 /* OnboardingModel.swift */; };
 		178208E22D2DEBB400246494 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178208E12D2DEBB400246494 /* OnboardingView.swift */; };
@@ -179,6 +180,7 @@
 		17595AA02D3B3B4E0015F35D /* DrillResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrillResultsView.swift; sourceTree = "<group>"; };
 		17595AA22D3B3B5B0015F35D /* WeekDisplayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDisplayButton.swift; sourceTree = "<group>"; };
 		17595AAC2D3B44FE0015F35D /* Drill_Card_Complete.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Drill_Card_Complete.riv; sourceTree = "<group>"; };
+		177B1BB92DF2BF4E00AF465C /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
 		178208D12D2D14D200246494 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		178208DF2D2DEB9C00246494 /* OnboardingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingModel.swift; sourceTree = "<group>"; };
 		178208E12D2DEBB400246494 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -393,6 +395,14 @@
 				174936372C3E1032001163B9 /* TekkUITestsLaunchTests.swift */,
 			);
 			path = TekkUITests;
+			sourceTree = "<group>";
+		};
+		177B1BB82DF2BF4A00AF465C /* Folders */ = {
+			isa = PBXGroup;
+			children = (
+				177B1BB92DF2BF4E00AF465C /* PrimaryButton.swift */,
+			);
+			path = Folders;
 			sourceTree = "<group>";
 		};
 		178208DC2D2DEB7200246494 /* Onboarding */ = {
@@ -646,6 +656,7 @@
 		4399B7252D6D7AB400DA5E84 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				177B1BB82DF2BF4A00AF465C /* Folders */,
 				17CA37A72DF12FB2001AD5FA /* Popups */,
 				17CA37A22DF0B1C7001AD5FA /* Videos */,
 				4289C5782DEC3B6F005CC91B /* DrillDetailPage */,
@@ -1249,6 +1260,7 @@
 				1782090E2D2E0A1100246494 /* ProfileView.swift in Sources */,
 				43C5FC5E2D6DC0E40064E7D5 /* FilterOptionsButton.swift in Sources */,
 				43AC25622DA394B500EDD8C0 /* SavedGroupsExtension.swift in Sources */,
+				177B1BBA2DF2BF5200AF465C /* PrimaryButton.swift in Sources */,
 				43C5FC562D6DBD310064E7D5 /* LikedGroupCard.swift in Sources */,
 				1784EB6D2D965F79001D4F2F /* SettingsModel.swift in Sources */,
 				1782090C2D2E09EB00246494 /* SavedDrillsView.swift in Sources */,
