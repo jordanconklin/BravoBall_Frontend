@@ -28,6 +28,7 @@ struct EditingDrillView: View {
     @FocusState private var isSetsFocused: Bool
     @FocusState private var isRepsFocused: Bool
     @FocusState private var isDurationFocused: Bool
+    @State private var showInfoSheet = false
     
     var body: some View {
         NavigationStack {
@@ -44,7 +45,6 @@ struct EditingDrillView: View {
                     }
                     
                     Spacer()
-                    
                     
                     // Progress header
                     Text("Edit Drill")
@@ -65,12 +65,12 @@ struct EditingDrillView: View {
                                 .foregroundColor(Color.white)
                                 .font(.system(size: 13, weight: .medium))
                             Text("Details")
-                                .font(.custom("Poppins-Bold", size: 13))
+                                .font(.custom("Poppins-Bold", size: 16))
                                 .foregroundColor(.white)
                             
                         }
-                        .padding(.horizontal,5)
-                        .padding(.vertical, 5)
+                        .padding(.horizontal,10)
+                        .padding(.vertical, 10)
 
                         .background(appModel.globalSettings.primaryGrayColor)
                         .cornerRadius(12)
@@ -82,6 +82,22 @@ struct EditingDrillView: View {
                 
                 if !editableDrill.drill.videoUrl.isEmpty, let videoUrl = URL(string: editableDrill.drill.videoUrl) {
                     CustomVideoPlayer(videoURL: videoUrl)
+                    // Info button below video, aligned right, with more spacing and larger icon
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            Haptic.light()
+                            showInfoSheet = true
+                        }) {
+                            Image(systemName: "info.circle")
+                                .foregroundColor(appModel.globalSettings.primaryGrayColor)
+                                .font(.system(size: 26, weight: .regular))
+                        }
+                        .accessibilityLabel("About Editing Drill")
+                        .padding(.trailing, 12)
+                        .padding(.top, 8)
+                    }
+                    .padding(.bottom, 8)
                 }
                 
                 Spacer()
@@ -194,6 +210,16 @@ struct EditingDrillView: View {
         }
         .frame(width: geometry.size.width)
         
+        // Info popup sheet for editing help
+        .sheet(isPresented: $showInfoSheet) {
+            InfoPopupView(
+                title: "Editing Drill Details",
+                description: "You can customize the number of sets, reps, and minutes for this drill.\n\nSets: How many times you repeat the drill.\nReps: How many repetitions per set.\nMinutes: Duration for each set.\n\nAdjust these values to match your training needs, then tap 'Save Changes' to update your session.",
+                onClose: { showInfoSheet = false }
+            )
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
+        }
     }
     
     private var savedChangesButton: some View {
@@ -238,30 +264,40 @@ struct EditingDrillView: View {
     }
 }
 
-//#Preview {
-//    let mockDrill = EditableDrillModel(
-//        drill: DrillModel(
-//            title: "Test Drill",
-//            skill: "Passing",
-//            sets: 2,
-//            reps: 10,
-//            duration: 15,
-//            description: "Test description",
-//            tips: ["Tip 1", "Tip 2"],
-//            equipment: ["Ball"],
-//            trainingStyle: "Medium Intensity",
-//            difficulty: "Beginner"
-//        ),
-//        setsDone: 0,
-//        totalSets: 2,
-//        totalReps: 10,
-//        totalDuration: 15,
-//        isCompleted: false
-//    )
-//    
-//    return EditingDrillView(
-//        appModel: MainAppModel(),
-//        sessionModel: SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData()),
-//        editableDrill: .constant(mockDrill)
-//    )
-//}
+#if DEBUG
+struct EditingDrillView_Previews: PreviewProvider {
+    static var previews: some View {
+        let appModel = MainAppModel()
+        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        let mockDrill = EditableDrillModel(
+            drill: DrillModel(
+                title: "Test Drill",
+                skill: "Passing",
+                subSkills: ["short_passing"],
+                sets: 3,
+                reps: 10,
+                duration: 15,
+                description: "Practice short passing technique.",
+                instructions: ["Pass the ball back and forth."],
+                tips: ["Keep your ankle locked."],
+                equipment: ["Soccer ball"],
+                trainingStyle: "Medium Intensity",
+                difficulty: "Beginner",
+                videoUrl: "https://bravoball-drills.s3.us-east-2.amazonaws.com/first-touch-drills/freestyle-juggling-with-wall.mp4"
+            ),
+            setsDone: 0,
+            totalSets: 3,
+            totalReps: 10,
+            totalDuration: 15,
+            isCompleted: false
+        )
+        return EditingDrillView(
+            appModel: appModel,
+            sessionModel: sessionModel,
+            editableDrill: .constant(mockDrill)
+        )
+        .previewLayout(.sizeThatFits)
+        .padding()
+    }
+}
+#endif
