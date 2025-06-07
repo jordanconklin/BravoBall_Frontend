@@ -14,5 +14,7 @@
 		<string>Poppins-Bold.ttf</string>
 		<string>PottaOne-Regular.ttf</string>
 	</array>
+	<key>BASE_URL</key>
+	<string>https://bravoball-backend.onrender.com</string>
 </dict>
 </plist>
