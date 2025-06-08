@@ -226,7 +226,7 @@ struct OnboardingView: View {
                             .offset(x: -5, y: 1)
                             
                             // Text Bubble
-                            Text(onboardingModel.currentStep <= 12 ? onboardingModel.questionTitles[onboardingModel.currentStep - 1] : "Enter your Registration Info below!")
+                            Text(onboardingModel.currentStep < onboardingModel.questionTitles.count + 1 ? onboardingModel.questionTitles[onboardingModel.currentStep - 1] : "Enter your Registration Info below!")
                                 .font(.custom("Poppins-Bold", size: 16))
                                 .foregroundColor(appModel.globalSettings.primaryDarkColor)
                                 .padding(.horizontal, 16)
@@ -259,70 +259,34 @@ struct OnboardingView: View {
                             selection: $onboardingModel.onboardingData.primaryGoal
                         )
                     case 2:
-                        OnboardingMultiSelectView(
+                        OnboardingStepView(
                             onboardingModel: onboardingModel,
                             options: onboardingModel.questionOptions[1],
-                            selections: $onboardingModel.onboardingData.biggestChallenge
+                            selection: $onboardingModel.onboardingData.trainingExperience
                         )
                     case 3:
                         OnboardingStepView(
                             onboardingModel: onboardingModel,
                             options: onboardingModel.questionOptions[2],
-                            selection: $onboardingModel.onboardingData.trainingExperience
+                            selection: $onboardingModel.onboardingData.position
                         )
                     case 4:
                         OnboardingStepView(
                             onboardingModel: onboardingModel,
                             options: onboardingModel.questionOptions[3],
-                            selection: $onboardingModel.onboardingData.position
+                            selection: $onboardingModel.onboardingData.ageRange
                         )
                     case 5:
                         OnboardingMultiSelectView(
                             onboardingModel: onboardingModel,
                             options: onboardingModel.questionOptions[4],
-                            selections: $onboardingModel.onboardingData.playstyle
-                        )
-                    case 6:
-                        OnboardingStepView(
-                            onboardingModel: onboardingModel,
-                            options: onboardingModel.questionOptions[5],
-                            selection: $onboardingModel.onboardingData.ageRange
-                        )
-                    case 7:
-                        OnboardingMultiSelectView(
-                            onboardingModel: onboardingModel,
-                            options: onboardingModel.questionOptions[6],
                             selections: $onboardingModel.onboardingData.strengths
                         )
-                    case 8:
+                    case 6:
                         OnboardingMultiSelectView(
                             onboardingModel: onboardingModel,
-                            options: onboardingModel.questionOptions[7],
+                            options: onboardingModel.questionOptions[5],
                             selections: $onboardingModel.onboardingData.areasToImprove
-                        )
-                    case 9:
-                        OnboardingMultiSelectView(
-                            onboardingModel: onboardingModel,
-                            options: onboardingModel.questionOptions[8],
-                            selections: $onboardingModel.onboardingData.trainingLocation
-                        )
-                    case 10:
-                        OnboardingMultiSelectView(
-                            onboardingModel: onboardingModel,
-                            options: onboardingModel.questionOptions[9],
-                            selections: $onboardingModel.onboardingData.availableEquipment
-                        )
-                    case 11:
-                        OnboardingStepView(
-                            onboardingModel: onboardingModel,
-                            options: onboardingModel.questionOptions[10],
-                            selection: $onboardingModel.onboardingData.dailyTrainingTime
-                        )
-                    case 12:
-                        OnboardingStepView(
-                            onboardingModel: onboardingModel,
-                            options: onboardingModel.questionOptions[11],
-                            selection: $onboardingModel.onboardingData.weeklyTrainingDays
                         )
                     default:
                         EmptyView()
@@ -330,8 +294,6 @@ struct OnboardingView: View {
                 } else if onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 {
                     OnboardingRegisterForm(
                         onboardingModel: onboardingModel,
-                        firstName: $onboardingModel.onboardingData.firstName,
-                        lastName: $onboardingModel.onboardingData.lastName,
                         email: $onboardingModel.onboardingData.email,
                         password: $onboardingModel.onboardingData.password
                     )

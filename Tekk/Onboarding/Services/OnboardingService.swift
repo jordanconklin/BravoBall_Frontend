@@ -87,22 +87,21 @@ class OnboardingService {
     func submitOnboardingData(data: OnboardingModel.OnboardingData) async throws -> OnboardingResponse {
         print("📤 Sending onboarding data: \(data)")
         let requestBody: [String: Any] = [
-            "firstName": data.firstName,
-            "lastName": data.lastName,
             "email": data.email,
             "password": data.password,
             "primaryGoal": OnboardingService.mapPrimaryGoalForBackend(data.primaryGoal),
-            "biggestChallenge": OnboardingService.mapChallengeForBackend(data.biggestChallenge),
             "trainingExperience": OnboardingService.mapExperienceLevelForBackend(data.trainingExperience),
             "position": OnboardingService.mapPositionForBackend(data.position),
-            "playstyle": data.playstyle,
             "ageRange": OnboardingService.mapAgeRangeForBackend(data.ageRange),
             "strengths": OnboardingService.mapSkillsForBackend(data.strengths),
             "areasToImprove": OnboardingService.mapSkillsForBackend(data.areasToImprove),
-            "trainingLocation": OnboardingService.mapTrainingLocationForBackend(data.trainingLocation),
-            "availableEquipment": OnboardingService.mapEquipmentForBackend(data.availableEquipment.isEmpty ? ["Soccer ball"] : data.availableEquipment),
-            "dailyTrainingTime": OnboardingService.mapTrainingDurationForBackend(data.dailyTrainingTime),
-            "weeklyTrainingDays": OnboardingService.mapTrainingFrequencyForBackend(data.weeklyTrainingDays)
+            // Include empty arrays for optional fields to maintain backend compatibility
+            "biggestChallenge": [],
+            "playstyle": [],
+            "trainingLocation": [],
+            "availableEquipment": ["Soccer ball"], // Default to just a soccer ball
+            "dailyTrainingTime": "30", // Default to 30 minutes
+            "weeklyTrainingDays": "moderate" // Default to moderate schedule
         ]
         let jsonData = try JSONSerialization.data(withJSONObject: requestBody)
         let (data, response) = try await APIService.shared.request(

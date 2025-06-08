@@ -87,7 +87,7 @@ struct ProfileView: View {
                 }
             }
             .sheet(isPresented: $showEditDetails) {
-                EditDetailsView(settingsModel: settingsModel)
+                EditDetailsView(globalSettings: appModel.globalSettings, settingsModel: settingsModel)
             }
             .sheet(isPresented: $showChangePassword) {
                 ChangePasswordView()
@@ -128,19 +128,13 @@ struct ProfileView: View {
                 
     
                 
-                Text("\(userData.firstName) \(userData.lastName)")
+                Text("\(userData.email)")
                     .font(.custom("Poppins-Bold", size: 18))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5) // Ensures text is legible
                     .padding(.bottom, 2)
                     .foregroundColor(appModel.globalSettings.primaryDarkColor)
                 
-                Text("\(userData.email)")
-                    .font(.custom("Poppins-Regular", size: 14))
-                    .foregroundColor(.gray)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.5) // Ensures text is legible
-                    .foregroundColor(appModel.globalSettings.primaryDarkColor)
             }
         }
         .frame(maxWidth: .infinity)
