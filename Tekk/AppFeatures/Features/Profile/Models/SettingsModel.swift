@@ -9,12 +9,6 @@ import SwiftUI
 import SwiftKeychainWrapper
 
 class SettingsModel: ObservableObject {
-    @Published var firstName: String {
-        didSet { UserDefaults.standard.set(firstName, forKey: "firstName") }
-    }
-    @Published var lastName: String {
-        didSet { UserDefaults.standard.set(lastName, forKey: "lastName") }
-    }
     @Published var email: String {
         didSet { UserDefaults.standard.set(email, forKey: "email") }
     }
@@ -29,21 +23,15 @@ class SettingsModel: ObservableObject {
         // Try to get user data from KeychainWrapper first
         if let userData = KeychainWrapper.standard.string(forKey: "userEmail") {
             self.email = userData
-            self.firstName = KeychainWrapper.standard.string(forKey: "userFirstName") ?? ""
-            self.lastName = KeychainWrapper.standard.string(forKey: "userLastName") ?? ""
         } else {
             // Fallback to UserDefaults if not found in Keychain
-            self.firstName = UserDefaults.standard.string(forKey: "firstName") ?? ""
-            self.lastName = UserDefaults.standard.string(forKey: "lastName") ?? ""
             self.email = UserDefaults.standard.string(forKey: "email") ?? ""
         }
     }
     
-    func updateUserDetails(firstName: String, lastName: String, email: String) async throws {
+    func updateUserDetails(email: String) async throws {
         let endpoint = "/api/user/update"
         let bodyDict: [String: Any] = [
-            "first_name": firstName,
-            "last_name": lastName,
             "email": email
         ]
         let body = try JSONSerialization.data(withJSONObject: bodyDict)
@@ -63,13 +51,8 @@ class SettingsModel: ObservableObject {
         // Update UI on the main thread
         await MainActor.run {
             // Update local storage
-            self.firstName = firstName
-            self.lastName = lastName
             self.email = email
-            
             // Update UserDefaults
-            UserDefaults.standard.set(firstName, forKey: "firstName")
-            UserDefaults.standard.set(lastName, forKey: "lastName")
             UserDefaults.standard.set(email, forKey: "email")
         }
     }

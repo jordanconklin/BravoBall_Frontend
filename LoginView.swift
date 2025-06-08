@@ -38,19 +38,7 @@ struct LoginView: View {
                 Text("Email")
                     .foregroundColor(.gray)
                     .font(.system(size: 14, weight: .medium))
-                
-                TextField("Enter your email", text: $email)
-                    .textContentType(.emailAddress)
-                    .keyboardType(.emailAddress)
-                    .autocapitalization(.none)
-                    .frame(height: 44)
-                    .padding(.horizontal)
-                    .background(Color.clear)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.gray, lineWidth: 1)
-                    )
-                    .font(.system(size: 16))
+                BravoTextField(placeholder: "Enter your email", text: $email, keyboardType: .emailAddress)
             }
             .padding(.horizontal)
 
@@ -58,17 +46,7 @@ struct LoginView: View {
                 Text("Password")
                     .foregroundColor(.gray)
                     .font(.system(size: 14, weight: .medium))
-                
-                SecureField("Enter your password", text: $password)
-                    .textContentType(.password)
-                    .frame(height: 44)
-                    .padding(.horizontal)
-                    .background(Color.clear)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.gray, lineWidth: 1)
-                    )
-                    .font(.system(size: 16))
+                BravoSecureField(placeholder: "Enter your password", text: $password)
             }
             .padding(.horizontal)
 

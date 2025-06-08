@@ -21,7 +21,7 @@ class OnboardingModel: ObservableObject {
     @Published var isLoggedIn = false
     @Published var accessToken = ""
     @Published var isPasswordVisible: Bool = false
-    @Published var numberOfOnboardingPages = 14 // Updated to include registration page and preview page
+    @Published var numberOfOnboardingPages = 8 // Updated to include registration page and preview page
     
     // TESTING: Set this to true to skip onboarding and go straight to completion
     @Published var skipOnboarding = false
@@ -39,56 +39,44 @@ class OnboardingModel: ObservableObject {
     // Simple arrays for questions and options
     let questionTitles = [
         "What is your primary soccer goal?",
-        "What is stopping you from achieving this goal?",
         "How much training experience do you have?",
         "What position do you play?",
-        "Which players best describes your playstyle?",
         "What age range do you fall under?",
         "What are your strengths?",
-        "What would you like to work on?",
-        "Where do you typically train?",
-        "What equipment do you have available?",
-        "How much time do you have to train daily?",
-        "How many days per week do you want to train?"
+        "What would you like to work on?"
     ]
     
     let questionOptions = [
         ["Improve my overall skill level", "Be the best player on my team", "Get scouted for college",
          "Become a professional footballer", "Have fun and enjoy the game"],
-        ["Lack of time", "Lack of proper training equipment", "Not knowing what to work on",
-         "Staying motivated", "Recovering from injury", "No team or structured training", "Lack of confidence"],
         ["Beginner", "Intermediate", "Advanced", "Professional"],
         ["Goalkeeper", "Fullback", "Center-back", "Defensive Midfielder", "Center Midfielder",
          "Attacking Midfielder", "Winger", "Striker"],
-        ["Lionel Messi", "Cristiano Ronaldo", "Neymar Jr", "Jamal Musiala", "Eden Hazard", "Reece James", "William Saliba", "Marta", "Karim Benzema", "Jules Kounde", "Kevin De Bruyne", "Christian Pulisic", "Busquets", "Harry Maguire", "Casemiro", "Bukayo Saka", "Sergio Ramos", "Manuel Neuer", "Alex Balde", "Mo Salah", "Alex Morgan", "Dani Alves", "Aitana Bonmati", "Mesut Ozil", "Jordi Alba", "Joshua Kimmich", "Lamine Yamal", "Antonee Robinson", "Puyol", "Modric", "David Silva", "Rodri", "Bruno Fernandes", "Vivianne Meidema", "Kylian Mbappe", "Xavi", "Allison", "Ngolo Kante", "Harry Kane", "Sergio Aguero", "Erling Haaland", "Gareth Bale", "Thierry Henry", "Thibaut Courtois", "Vinicius Jr", "Iniesta"],
         ["Youth (Under 12)", "Teen (13-16)", "Junior (17-19)", "Adult (20-29)", "Senior (30+)"],
         ["Passing", "Dribbling", "Shooting", "First touch"],
-        ["Passing", "Dribbling", "Shooting", "First touch"],
-        ["At a soccer field with goals", "At home (backyard or indoors)", "At a park or open field",
-         "At a gym or indoor court"],
-        ["Soccer ball", "Cones", "Wall", "Goals"],
-        ["Less than 15 minutes", "15-30 minutes", "30-60 minutes", "1-2 hours", "More than 2 hours"],
-        ["2-3 days (light schedule)", "4-5 days (moderate schedule)", "6-7 days (intense schedule)"]
+        ["Passing", "Dribbling", "Shooting", "First touch"]
     ]
     
     // Onboarding data answers from the user
     struct OnboardingData: Codable {
         var primaryGoal: String = ""
-        var biggestChallenge: [String] = []
         var trainingExperience: String = ""
         var position: String = ""
-        var playstyle: [String] = []
         var ageRange: String = ""
         var strengths: [String] = []
         var areasToImprove: [String] = []
+        var email: String = ""
+        var password: String = ""
+        
+        // Keep these for future use but they won't be used in the current flow
+        var biggestChallenge: [String] = []
+        var playstyle: [String] = []
         var trainingLocation: [String] = []
         var availableEquipment: [String] = []
         var dailyTrainingTime: String = ""
         var weeklyTrainingDays: String = ""
         var firstName: String = ""
         var lastName: String = ""
-        var email: String = ""
-        var password: String = ""
     }
 
     // Checks if youre allowed to move to next question (validates data)
@@ -96,21 +84,12 @@ class OnboardingModel: ObservableObject {
         switch currentStep {
         case 0: return true
         case 1: return !onboardingData.primaryGoal.isEmpty
-        case 2: return !onboardingData.biggestChallenge.isEmpty
-        case 3: return !onboardingData.trainingExperience.isEmpty
-        case 4: return !onboardingData.position.isEmpty
-        case 5: return !onboardingData.playstyle.isEmpty
-        case 6: return !onboardingData.ageRange.isEmpty
-        case 7: return !onboardingData.strengths.isEmpty
-        case 8: return !onboardingData.areasToImprove.isEmpty
-        case 9: return !onboardingData.trainingLocation.isEmpty
-        case 10: return !onboardingData.availableEquipment.isEmpty
-        case 11: return !onboardingData.dailyTrainingTime.isEmpty
-        case 12: return !onboardingData.weeklyTrainingDays.isEmpty
-        case 13: return !onboardingData.firstName.isEmpty &&
-                        !onboardingData.lastName.isEmpty &&
-                        !onboardingData.email.isEmpty &&
-                        !onboardingData.password.isEmpty
+        case 2: return !onboardingData.trainingExperience.isEmpty
+        case 3: return !onboardingData.position.isEmpty
+        case 4: return !onboardingData.ageRange.isEmpty
+        case 5: return !onboardingData.strengths.isEmpty
+        case 6: return !onboardingData.areasToImprove.isEmpty
+        case 7: return !onboardingData.email.isEmpty && !onboardingData.password.isEmpty
         default: return false
         }
     }
@@ -171,19 +150,11 @@ class OnboardingModel: ObservableObject {
         // Use values that exactly match the questionOptions arrays
         onboardingData = OnboardingData(
             primaryGoal: "Improve my overall skill level",
-            biggestChallenge: ["Not enough time to train"],
             trainingExperience: "Intermediate",
             position: "Goalkeeper",
-            playstyle: ["Big Bob"],  // Match one of the actual options in questionOptions
             ageRange: "Teen (13-16)",
             strengths: ["Defending"],
             areasToImprove: ["Passing", "Dribbling", "First touch"],
-            trainingLocation: ["Full-sized field"],  // Match one of the actual options
-            availableEquipment: ["Soccer ball", "Cones", "Wall"],
-            dailyTrainingTime: "15-30 minutes",
-            weeklyTrainingDays: "3-5 days (moderate schedule)",
-            firstName: "Test",
-            lastName: "User\(randomInt)",  // Random last name to avoid duplicates
             email: randomEmail,
             password: "123"
         )
@@ -192,30 +163,11 @@ class OnboardingModel: ObservableObject {
     }
 
     // MARK: - Validation
-    func isValidEmail(_ email: String) -> Bool {
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let emailPred = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
-        return emailPred.evaluate(with: email)
-    }
-
-    func isValidPassword(_ password: String) -> Bool {
-        // At least 8 characters, 1 letter, 1 number
-        let passwordRegEx = ".{8,}" // At least 8 chars
-        let letterRegEx = ".*[A-Za-z]+.*"
-        let numberRegEx = ".*[0-9]+.*"
-        let passPred = NSPredicate(format: "SELF MATCHES %@", passwordRegEx)
-        let letterPred = NSPredicate(format: "SELF MATCHES %@", letterRegEx)
-        let numberPred = NSPredicate(format: "SELF MATCHES %@", numberRegEx)
-        return passPred.evaluate(with: password) && letterPred.evaluate(with: password) && numberPred.evaluate(with: password)
-    }
-
     var registrationValidationError: String? {
-        if onboardingData.firstName.isEmpty { return "First name is required." }
-        if onboardingData.lastName.isEmpty { return "Last name is required." }
         if onboardingData.email.isEmpty { return "Email is required." }
-        if !isValidEmail(onboardingData.email) { return "Please enter a valid email address." }
+        if !AccountValidation.isValidEmail(onboardingData.email) { return "Please enter a valid email address." }
         if onboardingData.password.isEmpty { return "Password is required." }
-        if !isValidPassword(onboardingData.password) { return "Password must be at least 8 characters, include a letter and a number." }
+        if let passError = AccountValidation.passwordError(onboardingData.password) { return passError }
         return nil
     }
 }

@@ -22,6 +22,9 @@
 		17595AA32D3B3B610015F35D /* WeekDisplayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17595AA22D3B3B5B0015F35D /* WeekDisplayButton.swift */; };
 		17595AAD2D3B44FE0015F35D /* Drill_Card_Complete.riv in Resources */ = {isa = PBXBuildFile; fileRef = 17595AAC2D3B44FE0015F35D /* Drill_Card_Complete.riv */; };
 		177B1BBA2DF2BF5200AF465C /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BB92DF2BF4E00AF465C /* PrimaryButton.swift */; };
+		177B1BBF2DF622A400AF465C /* AccountValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BBE2DF6229E00AF465C /* AccountValidation.swift */; };
+		177B1BC22DF6234D00AF465C /* BravoTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BC12DF6234300AF465C /* BravoTextField.swift */; };
+		177B1BC42DF6235A00AF465C /* BravoSecureField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BC32DF6235400AF465C /* BravoSecureField.swift */; };
 		178208D22D2D14D200246494 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178208D12D2D14D200246494 /* MainTabView.swift */; };
 		178208E02D2DEB9C00246494 /* OnboardingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178208DF2D2DEB9C00246494 /* OnboardingModel.swift */; };
 		178208E22D2DEBB400246494 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178208E12D2DEBB400246494 /* OnboardingView.swift */; };
@@ -181,6 +184,9 @@
 		17595AA22D3B3B5B0015F35D /* WeekDisplayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDisplayButton.swift; sourceTree = "<group>"; };
 		17595AAC2D3B44FE0015F35D /* Drill_Card_Complete.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Drill_Card_Complete.riv; sourceTree = "<group>"; };
 		177B1BB92DF2BF4E00AF465C /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
+		177B1BBE2DF6229E00AF465C /* AccountValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountValidation.swift; sourceTree = "<group>"; };
+		177B1BC12DF6234300AF465C /* BravoTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BravoTextField.swift; sourceTree = "<group>"; };
+		177B1BC32DF6235400AF465C /* BravoSecureField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BravoSecureField.swift; sourceTree = "<group>"; };
 		178208D12D2D14D200246494 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		178208DF2D2DEB9C00246494 /* OnboardingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingModel.swift; sourceTree = "<group>"; };
 		178208E12D2DEBB400246494 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -397,12 +403,29 @@
 			path = TekkUITests;
 			sourceTree = "<group>";
 		};
-		177B1BB82DF2BF4A00AF465C /* Folders */ = {
+		177B1BB82DF2BF4A00AF465C /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
 				177B1BB92DF2BF4E00AF465C /* PrimaryButton.swift */,
 			);
-			path = Folders;
+			path = Buttons;
+			sourceTree = "<group>";
+		};
+		177B1BBD2DF6226C00AF465C /* Logic */ = {
+			isa = PBXGroup;
+			children = (
+				177B1BBE2DF6229E00AF465C /* AccountValidation.swift */,
+			);
+			path = Logic;
+			sourceTree = "<group>";
+		};
+		177B1BC02DF6233700AF465C /* TextBoxes */ = {
+			isa = PBXGroup;
+			children = (
+				177B1BC12DF6234300AF465C /* BravoTextField.swift */,
+				177B1BC32DF6235400AF465C /* BravoSecureField.swift */,
+			);
+			path = TextBoxes;
 			sourceTree = "<group>";
 		};
 		178208DC2D2DEB7200246494 /* Onboarding */ = {
@@ -656,7 +679,9 @@
 		4399B7252D6D7AB400DA5E84 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				177B1BB82DF2BF4A00AF465C /* Folders */,
+				177B1BC02DF6233700AF465C /* TextBoxes */,
+				177B1BBD2DF6226C00AF465C /* Logic */,
+				177B1BB82DF2BF4A00AF465C /* Buttons */,
 				17CA37A72DF12FB2001AD5FA /* Popups */,
 				17CA37A22DF0B1C7001AD5FA /* Videos */,
 				4289C5782DEC3B6F005CC91B /* DrillDetailPage */,
@@ -1276,6 +1301,7 @@
 				17595A9F2D3B3B320015F35D /* ProgressionView.swift in Sources */,
 				43B6877D2D7C2394009CCA8C /* CacheManager.swift in Sources */,
 				17CA37A62DF0BA0F001AD5FA /* APIService.swift in Sources */,
+				177B1BBF2DF622A400AF465C /* AccountValidation.swift in Sources */,
 				43C5FC492D6DB84F0064E7D5 /* EditableDrillModel.swift in Sources */,
 				4289C57A2DEC3B8F005CC91B /* FloatingAddButton.swift in Sources */,
 				43A764992D825FEF004509E5 /* DataSyncService.swift in Sources */,
@@ -1290,11 +1316,13 @@
 				17DB46042DD6D83B000A76F6 /* ResponseModels.swift in Sources */,
 				178208D22D2D14D200246494 /* MainTabView.swift in Sources */,
 				178208ED2D2DED0800246494 /* OnboardingBooleanView.swift in Sources */,
+				177B1BC42DF6235A00AF465C /* BravoSecureField.swift in Sources */,
 				17DB46002DD6D6B6000A76F6 /* SessionGeneratorHomePage.swift in Sources */,
 				4355EEAD2DB234D700D98314 /* GeometryKey.swift in Sources */,
 				4399B6F32D6C854B00DA5E84 /* FilterSheet.swift in Sources */,
 				43AC25792DA39C7200EDD8C0 /* SyncingExtension.swift in Sources */,
 				43524E772D4D994B00AD897A /* SessionGeneratorModel.swift in Sources */,
+				177B1BC22DF6234D00AF465C /* BravoTextField.swift in Sources */,
 				43C5FC762D6DCD1D0064E7D5 /* RecommendedDrillsSection.swift in Sources */,
 				43FCC7252D7F8D6E00005ABB /* CustomTabItem.swift in Sources */,
 				43AC25562DA38F1400EDD8C0 /* GroupProtocols.swift in Sources */,
