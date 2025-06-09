@@ -167,7 +167,9 @@ struct LoginView: View {
                     method: "POST",
                     headers: ["Content-Type": "application/json"],
                     body: body,
-                    retryOn401: false
+                    retryOn401: false,
+                    debounceKey: "login_request",
+                    debounceInterval: 1.0
                 )
                 if response.statusCode == 200 {
                     let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
@@ -204,6 +206,8 @@ struct LoginView: View {
                         }
                     }
                 }
+            } catch URLError.timedOut {
+                print("⏱️ Login request debounced - too soon since last request")
             } catch {
                 DispatchQueue.main.async {
                     self.onboardingModel.errorMessage = "Network error. Please try again."

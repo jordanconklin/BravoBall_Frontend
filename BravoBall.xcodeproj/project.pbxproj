@@ -25,6 +25,10 @@
 		177B1BBF2DF622A400AF465C /* AccountValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BBE2DF6229E00AF465C /* AccountValidation.swift */; };
 		177B1BC22DF6234D00AF465C /* BravoTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BC12DF6234300AF465C /* BravoTextField.swift */; };
 		177B1BC42DF6235A00AF465C /* BravoSecureField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BC32DF6235400AF465C /* BravoSecureField.swift */; };
+		177B1BCA2DF7395C00AF465C /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BC92DF7395500AF465C /* ChangePasswordView.swift */; };
+		177B1BCC2DF739E900AF465C /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BCB2DF739E100AF465C /* PrivacyPolicyView.swift */; };
+		177B1BCE2DF73A2000AF465C /* TermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BCD2DF73A1A00AF465C /* TermsOfServiceView.swift */; };
+		177B1BD02DF741CE00AF465C /* DebounceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BCF2DF741CB00AF465C /* DebounceService.swift */; };
 		178208D22D2D14D200246494 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178208D12D2D14D200246494 /* MainTabView.swift */; };
 		178208E02D2DEB9C00246494 /* OnboardingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178208DF2D2DEB9C00246494 /* OnboardingModel.swift */; };
 		178208E22D2DEBB400246494 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178208E12D2DEBB400246494 /* OnboardingView.swift */; };
@@ -187,6 +191,10 @@
 		177B1BBE2DF6229E00AF465C /* AccountValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountValidation.swift; sourceTree = "<group>"; };
 		177B1BC12DF6234300AF465C /* BravoTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BravoTextField.swift; sourceTree = "<group>"; };
 		177B1BC32DF6235400AF465C /* BravoSecureField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BravoSecureField.swift; sourceTree = "<group>"; };
+		177B1BC92DF7395500AF465C /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
+		177B1BCB2DF739E100AF465C /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
+		177B1BCD2DF73A1A00AF465C /* TermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceView.swift; sourceTree = "<group>"; };
+		177B1BCF2DF741CB00AF465C /* DebounceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebounceService.swift; sourceTree = "<group>"; };
 		178208D12D2D14D200246494 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		178208DF2D2DEB9C00246494 /* OnboardingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingModel.swift; sourceTree = "<group>"; };
 		178208E12D2DEBB400246494 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -532,7 +540,10 @@
 			isa = PBXGroup;
 			children = (
 				1782090D2D2E0A1100246494 /* ProfileView.swift */,
+				177B1BCB2DF739E100AF465C /* PrivacyPolicyView.swift */,
+				177B1BCD2DF73A1A00AF465C /* TermsOfServiceView.swift */,
 				1784EB6E2D965FDC001D4F2F /* EditDetailsView.swift */,
+				177B1BC92DF7395500AF465C /* ChangePasswordView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -579,6 +590,7 @@
 			children = (
 				420DA39D2DCE9357004CDD7A /* PreferencesUpdate.swift */,
 				17CA37A52DF0BA0C001AD5FA /* APIService.swift */,
+				177B1BCF2DF741CB00AF465C /* DebounceService.swift */,
 				437D1A1E2D94FE4700B875CF /* SavedFiltersService.swift */,
 				43A764982D825FE8004509E5 /* DataSyncService.swift */,
 				43B6877C2D7C2391009CCA8C /* CacheManager.swift */,
@@ -1238,6 +1250,7 @@
 				43C5FC9C2D6E54B90064E7D5 /* CircularScore.swift in Sources */,
 				17C3B58D2D38E43900D2471F /* DrillFollowAlongView.swift in Sources */,
 				4399B6FD2D6C878600DA5E84 /* SkillSelectorSheetView.swift in Sources */,
+				177B1BD02DF741CE00AF465C /* DebounceService.swift in Sources */,
 				170167FB2D88B8790078446C /* DrillGroupService.swift in Sources */,
 				17DB45FA2DD69B2C000A76F6 /* BravoHeaderView.swift in Sources */,
 				17CA37A42DF0B1E5001AD5FA /* CustomVideoPlayer.swift in Sources */,
@@ -1264,6 +1277,7 @@
 				420DA39E2DCE935B004CDD7A /* PreferencesUpdate.swift in Sources */,
 				178208EB2D2DECE300246494 /* OnboardingMultiSelectView.swift in Sources */,
 				17DB45FC2DD69D3C000A76F6 /* FilterScrollView.swift in Sources */,
+				177B1BCE2DF73A2000AF465C /* TermsOfServiceView.swift in Sources */,
 				43AC25712DA3996C00EDD8C0 /* SavedFilterExtension.swift in Sources */,
 				430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */,
 				43AC255E2DA393B600EDD8C0 /* BothGroupsExtension.swift in Sources */,
@@ -1294,12 +1308,14 @@
 				4399B6F72D6C85C900DA5E84 /* SkillSearchBar.swift in Sources */,
 				4399B6F52D6C858200DA5E84 /* FilterOptions.swift in Sources */,
 				178208E42D2DEBC800246494 /* LoginView.swift in Sources */,
+				177B1BCA2DF7395C00AF465C /* ChangePasswordView.swift in Sources */,
 				178208E92D2DEC6D00246494 /* OnboardingStepView.swift in Sources */,
 				43FCC7232D7F684900005ABB /* UserManager.swift in Sources */,
 				43C5FC522D6DBCF00064E7D5 /* AllGroupsDisplay.swift in Sources */,
 				4399B7422D6D92C100DA5E84 /* FilterTypes.swift in Sources */,
 				17595A9F2D3B3B320015F35D /* ProgressionView.swift in Sources */,
 				43B6877D2D7C2394009CCA8C /* CacheManager.swift in Sources */,
+				177B1BCC2DF739E900AF465C /* PrivacyPolicyView.swift in Sources */,
 				17CA37A62DF0BA0F001AD5FA /* APIService.swift in Sources */,
 				177B1BBF2DF622A400AF465C /* AccountValidation.swift in Sources */,
 				43C5FC492D6DB84F0064E7D5 /* EditableDrillModel.swift in Sources */,

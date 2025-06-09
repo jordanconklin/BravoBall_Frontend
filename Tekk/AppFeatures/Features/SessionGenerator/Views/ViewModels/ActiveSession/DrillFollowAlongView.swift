@@ -25,6 +25,7 @@ struct DrillFollowAlongView: View {
     @State private var timer: Timer?
     @State private var player: AVPlayer? = nil
     @State private var showInfoSheet = false
+    @State private var hapticGenerator = UINotificationFeedbackGenerator()
     
     
     init(appModel: MainAppModel, sessionModel: SessionGeneratorModel, editableDrill: Binding<EditableDrillModel>) {
@@ -373,6 +374,7 @@ struct DrillFollowAlongView: View {
                 elapsedTime -= 1
             } else {
                 stopTimer()
+                hapticGenerator.notificationOccurred(.success)  // Strong haptic feedback when timer ends
                 if editableDrill.setsDone < editableDrill.totalSets {
                     editableDrill.setsDone += 1
                 }

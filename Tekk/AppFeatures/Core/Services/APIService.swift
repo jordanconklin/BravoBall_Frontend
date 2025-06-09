@@ -31,11 +31,20 @@ class APIService {
         method: String = "GET",
         headers: [String: String]? = nil,
         body: Data? = nil,
-        retryOn401: Bool = true
+        retryOn401: Bool = true,
+        debounceKey: String? = nil,
+        debounceInterval: TimeInterval? = nil
     ) async throws -> (Data, HTTPURLResponse) {
+        // Check if we should debounce this request
+        if let debounceKey = debounceKey,
+           !DebounceService.shared.shouldProceedWithRequest(key: debounceKey, interval: debounceInterval) {
+            throw URLError(.timedOut)
+        }
+        
         guard let url = URL(string: baseURL + endpoint) else {
             throw URLError(.badURL)
         }
+        
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = method
         if let accessToken = accessToken {
@@ -63,7 +72,9 @@ class APIService {
                 method: method,
                 headers: headers,
                 body: body,
-                retryOn401: false
+                retryOn401: false,
+                debounceKey: debounceKey,
+                debounceInterval: debounceInterval
             )
         }
         return (data, httpResponse)

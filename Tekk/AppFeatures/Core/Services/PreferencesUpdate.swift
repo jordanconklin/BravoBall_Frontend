@@ -80,13 +80,6 @@ class PreferencesUpdateService {
     private let baseURL = AppSettings.baseURL
     
     private init() {}
-    
-    // Debounce properties
-    private var debounceWorkItem: DispatchWorkItem?
-    private let debounceInterval: TimeInterval = 1.0 // seconds
-    private var lastUpdateTime: Date = Date()
-    private let minimumUpdateInterval: TimeInterval = 1.0 // Minimum time between updates
-    private var isUpdating = false // Track if an update is in progress
 
     // Update preferences using preference data and subskills, which will help load a session into the SessionGeneratorView
     func updatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel, isOnboarding: Bool = false) async throws {
@@ -107,46 +100,10 @@ class PreferencesUpdateService {
         print("Current access token: \(KeychainWrapper.standard.string(forKey: "accessToken") ?? "nil")")
         print("Current refresh token: \(KeychainWrapper.standard.string(forKey: "refreshToken") ?? "nil")")
         
-        // Check if an update is already in progress
-        guard !isUpdating else {
-            print("[Debounce] Skipping update - another update is in progress")
-            return
-        }
-        
-        // Check if enough time has passed since last update
-        let now = Date()
-        guard now.timeIntervalSince(lastUpdateTime) >= minimumUpdateInterval else {
-            print("[Debounce] Skipping update - too soon since last update")
-            return
-        }
-        
-        // Cancel any pending debounce work
-        debounceWorkItem?.cancel()
-        print("[Debounce] Cancelled previous pending updatePreferences call.")
-
-        // Create a new work item
-        let workItem = DispatchWorkItem { [weak self] in
-            guard let self = self else { return }
-            
-            Task {
-                print("[Debounce] Debounced updatePreferences call is now executing.")
-                do {
-                    self.isUpdating = true
-                    try await self.performUpdatePreferences(time: time, equipment: equipment, trainingStyle: trainingStyle, location: location, difficulty: difficulty, skills: skills, sessionModel: sessionModel)
-                    self.lastUpdateTime = Date()
-                } catch {
-                    print("[Debounce] Error in debounced updatePreferences: \(error)")
-                }
-                self.isUpdating = false
-            }
-        }
-        
-        debounceWorkItem = workItem
-        print("[Debounce] Scheduled updatePreferences to run in \(debounceInterval) seconds.")
-        DispatchQueue.main.asyncAfter(deadline: .now() + debounceInterval, execute: workItem)
+        try await performUpdatePreferences(time: time, equipment: equipment, trainingStyle: trainingStyle, location: location, difficulty: difficulty, skills: skills, sessionModel: sessionModel)
     }
 
-    // The actual call-to-backend logic, extracted for debouncing
+    // The actual call-to-backend logic
     private func performUpdatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel) async throws {
         // SAFETY: Prevent updates if logging out or no valid user
         let userEmail = KeychainWrapper.standard.string(forKey: "userEmail") ?? ""
@@ -172,7 +129,9 @@ class PreferencesUpdateService {
             endpoint: endpoint,
             method: "PUT",
             headers: ["Content-Type": "application/json"],
-            body: body
+            body: body,
+            debounceKey: "update_preferences",
+            debounceInterval: 1.0
         )
 
         guard response.statusCode == 200 else {
@@ -312,7 +271,9 @@ class PreferencesUpdateService {
         let (data, response) = try await APIService.shared.request(
             endpoint: endpoint,
             method: "GET",
-            headers: ["Content-Type": "application/json"]
+            headers: ["Content-Type": "application/json"],
+            debounceKey: "fetch_preferences",
+            debounceInterval: 1.0
         )
         guard response.statusCode == 200 else {
             switch response.statusCode {
