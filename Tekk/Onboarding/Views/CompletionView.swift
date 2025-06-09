@@ -152,9 +152,7 @@ struct CompletionView: View {
                 await MainActor.run {
                     // Update the decoded user info into UserManager, which will store it into Keychain
                     userManager.updateUserKeychain(
-                        email: onboardingModel.onboardingData.email,
-                        firstName: onboardingModel.onboardingData.firstName,
-                        lastName: onboardingModel.onboardingData.lastName
+                        email: onboardingModel.onboardingData.email
                     )
                     
                     // Set user as logged in
@@ -261,8 +259,6 @@ struct CompletionView_Previews: PreviewProvider {
         let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
         
         // Optionally set some mock data for a more realistic preview
-        onboardingModel.onboardingData.firstName = "Jordan"
-        onboardingModel.onboardingData.lastName = "Conklin"
         onboardingModel.onboardingData.email = "jordan@example.com"
         
         return CompletionView(

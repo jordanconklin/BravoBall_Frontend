@@ -127,6 +127,7 @@ struct AreaBehindHomePage: View {
     private var trophyButton: some View {
         Button(action: {
             Haptic.light()
+            AudioManager.shared.playSuccess()
             appModel.viewState.showSessionComplete = true
         }) {
             Image("BravoBall_Trophy")

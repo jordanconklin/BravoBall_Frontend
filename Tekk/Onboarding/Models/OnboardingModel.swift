@@ -52,7 +52,7 @@ class OnboardingModel: ObservableObject {
         ["Beginner", "Intermediate", "Advanced", "Professional"],
         ["Goalkeeper", "Fullback", "Center-back", "Defensive Midfielder", "Center Midfielder",
          "Attacking Midfielder", "Winger", "Striker"],
-        ["Youth (Under 12)", "Teen (13-16)", "Junior (17-19)", "Adult (20-29)", "Senior (30+)"],
+        ["Under 12", "13–16", "17–19", "20–29", "30+"],
         ["Passing", "Dribbling", "Shooting", "First touch"],
         ["Passing", "Dribbling", "Shooting", "First touch"]
     ]
@@ -75,8 +75,6 @@ class OnboardingModel: ObservableObject {
         var availableEquipment: [String] = []
         var dailyTrainingTime: String = ""
         var weeklyTrainingDays: String = ""
-        var firstName: String = ""
-        var lastName: String = ""
     }
 
     // Checks if youre allowed to move to next question (validates data)
@@ -133,10 +131,7 @@ class OnboardingModel: ObservableObject {
         
         // Debug print
         print("OnboardingModel reset completed")
-        print("onb first name: \(onboardingData.firstName)")
-        print("onb last name: \(onboardingData.lastName)")
         print("onb email: \(onboardingData.email)")
-        print("password: \(onboardingData.password)")
         print("Current step: \(currentStep)")
         print("auth token nil value: \(accessToken)")
     }

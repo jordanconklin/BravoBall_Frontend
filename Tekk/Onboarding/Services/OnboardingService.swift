@@ -38,8 +38,6 @@ class OnboardingService {
     
         // Create the request body
         let requestBody: [String: Any] = [
-            "firstName": data.firstName,
-            "lastName": data.lastName,
             "email": data.email,
             "password": data.password,
             "primaryGoal": OnboardingService.mapPrimaryGoalForBackend(data.primaryGoal),
@@ -175,11 +173,11 @@ extension OnboardingService {
     
     static func mapAgeRangeForBackend(_ ageRange: String) -> String {
         let ageMap = [
-            "Youth (8-12)": "youth",
-            "Teen (13-16)": "teen",
-            "Junior (17-19)": "junior",
-            "Adult (20-29)": "adult",
-            "Senior (30+)": "senior"
+            "Under 12": "youth",
+            "13–16": "teen",
+            "17–19": "junior",
+            "20–29": "adult",
+            "30+": "senior"
         ]
         
         return ageMap[ageRange] ?? "adult"

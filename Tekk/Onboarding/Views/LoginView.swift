@@ -15,8 +15,6 @@ struct LoginResponse: Codable {
     let access_token: String
     let token_type: String
     let email: String
-    let first_name: String
-    let last_name: String
     let refresh_token: String?
 }
 
@@ -179,11 +177,9 @@ struct LoginView: View {
                         if let refreshToken = loginResponse.refresh_token {
                             KeychainWrapper.standard.set(refreshToken, forKey: "refreshToken")
                         }
-                        // Save user info to Keychain
+                        // Save user info to Keychain (only email now)
                         userManager.updateUserKeychain(
-                            email: loginResponse.email,
-                            firstName: loginResponse.first_name,
-                            lastName: loginResponse.last_name
+                            email: loginResponse.email
                         )
                         userManager.userHasAccountHistory = true
                         onboardingModel.isLoggedIn = true

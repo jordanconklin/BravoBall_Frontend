@@ -35,13 +35,6 @@ struct OnboardingView: View {
             } else if onboardingModel.skipOnboarding {
                 // Skip directly to completion view when toggle is on
                 CompletionView(onboardingModel: onboardingModel, userManager: userManager, sessionModel: sessionModel)
-                    .onAppear {
-                        // Make sure test data is applied when the view appears
-                        if onboardingModel.onboardingData.firstName.isEmpty {
-                            print("🔄 Applying test data for onboarding...")
-                            onboardingModel.prefillTestData()
-                        }
-                    }
             } else {
                 content
             }
@@ -106,47 +99,49 @@ struct OnboardingView: View {
                 .padding(.bottom, 100)
                 .font(.custom("Poppins-Bold", size: 16))
             
-            // Create Account Button
-            PrimaryButton(
-                title: "Create an account",
-                action: {
-                    Haptic.light()
-                    withAnimation(.spring()) {
-                        onboardingModel.showWelcome.toggle()
-                    }
-                },
-                backgroundColor: onboardingModel.globalSettings.primaryYellowColor,
-                textColor: .white,
-                font: .custom("Poppins-Bold", size: 16),
-                style: .filled,
-                cornerRadius: 20,
-                height: 50
-            )
-            .padding(.horizontal)
-            .padding(.top, 80)
-            
-            // Login Button
-            PrimaryButton(
-                title: "Login",
-                action: {
-                    Haptic.light()
-                    withAnimation(.spring()) {
-                        onboardingModel.showLoginPage = true
-                    }
-                },
-                backgroundColor: .gray.opacity(0.2),
-                textColor: onboardingModel.globalSettings.primaryDarkColor,
-                font: .custom("Poppins-Bold", size: 16),
-                style: .filled,
-                cornerRadius: 20,
-                height: 50
-            )
-            .padding(.horizontal)
-            
             Spacer()
+            
+            VStack(spacing: 16) {
+                // Create Account Button
+                PrimaryButton(
+                    title: "Create an account",
+                    action: {
+                        Haptic.light()
+                        withAnimation(.spring()) {
+                            onboardingModel.showWelcome.toggle()
+                        }
+                    },
+                    backgroundColor: onboardingModel.globalSettings.primaryYellowColor,
+                    textColor: .white,
+                    font: .custom("Poppins-Bold", size: 16),
+                    style: .filled,
+                    cornerRadius: 20,
+                    height: 50
+                )
+                .padding(.horizontal)
+                
+                // Login Button
+                PrimaryButton(
+                    title: "Login",
+                    action: {
+                        Haptic.light()
+                        withAnimation(.spring()) {
+                            onboardingModel.showLoginPage = true
+                        }
+                    },
+                    backgroundColor: .gray.opacity(0.2),
+                    textColor: onboardingModel.globalSettings.primaryDarkColor,
+                    font: .custom("Poppins-Bold", size: 16),
+                    style: .filled,
+                    cornerRadius: 20,
+                    height: 50
+                )
+                .padding(.horizontal)
+            }
+            .padding(.bottom, 24)
         }
-        .padding()
-        .background(.white)
+        .frame(maxHeight: .infinity, alignment: .top)
+        .background(Color.white)
     }
     
     // Questionnaire view for onboarding new users
@@ -392,6 +387,7 @@ struct OnboardingView: View {
                         .font(.custom("Poppins-Bold", size: 16))
                 }
                 .padding(.horizontal)
+                .padding(.bottom, 24)
                 .disabled(
                     onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1
                         ? (!onboardingModel.canMoveNext() || onboardingModel.onboardingData.email.isEmpty || onboardingModel.onboardingData.password.isEmpty)

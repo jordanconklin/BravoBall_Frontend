@@ -15,7 +15,6 @@ struct DrillFollowAlongView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.viewGeometry) var geometry
     
-    
     @State private var selectedDrill: DrillModel? = nil
     @State private var isPlaying = false
     @State private var restartTime: TimeInterval = 0
@@ -26,7 +25,7 @@ struct DrillFollowAlongView: View {
     @State private var player: AVPlayer? = nil
     @State private var showInfoSheet = false
     @State private var hapticGenerator = UINotificationFeedbackGenerator()
-    
+    @State private var impactGenerator = UIImpactFeedbackGenerator(style: .heavy)
     
     init(appModel: MainAppModel, sessionModel: SessionGeneratorModel, editableDrill: Binding<EditableDrillModel>) {
         // First initialize all properties
@@ -354,14 +353,20 @@ struct DrillFollowAlongView: View {
     
     private func startCountdown() {
         countdownValue = 3
+        impactGenerator.prepare()
+        impactGenerator.impactOccurred()
+        AudioManager.shared.play321Start()
+        
         Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             if let count = countdownValue {
                 if count > 1 {
                     countdownValue = count - 1
+                    impactGenerator.impactOccurred()
                 } else {
                     timer.invalidate()
                     countdownValue = nil
                     displayCountdown = false
+                    impactGenerator.impactOccurred(intensity: 1.0)
                     startTimer()
                 }
             }
@@ -371,10 +376,24 @@ struct DrillFollowAlongView: View {
     private func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             if elapsedTime > 0 {
+                // Check for specific time markers
+                if elapsedTime == 30 {
+                    impactGenerator.impactOccurred(intensity: 0.7)
+                } else if elapsedTime == 10 {
+                    impactGenerator.impactOccurred(intensity: 0.8)
+                } else if elapsedTime <= 3 && elapsedTime > 0 {
+                    // Last 3 seconds - increasing intensity
+                    let intensity = 0.6 + (Double(3 - elapsedTime) * 0.15)
+                    impactGenerator.impactOccurred(intensity: intensity)
+                    if elapsedTime == 3 {
+                        AudioManager.shared.play321Done()
+                    }
+                }
+                
                 elapsedTime -= 1
             } else {
                 stopTimer()
-                hapticGenerator.notificationOccurred(.success)  // Strong haptic feedback when timer ends
+                hapticGenerator.notificationOccurred(.success)
                 if editableDrill.setsDone < editableDrill.totalSets {
                     editableDrill.setsDone += 1
                 }

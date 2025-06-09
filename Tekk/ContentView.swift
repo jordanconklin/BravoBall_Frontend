@@ -7,19 +7,6 @@
 
 import SwiftUI
 
-@main
-struct BravoBallApp: App {
-    @StateObject private var toastManager = ToastManager()
-    
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environmentObject(toastManager)
-        }
-    }
-}
-
-
 struct ContentView: View {
     @StateObject private var onboardingModel = OnboardingModel()
     @StateObject private var appModel = MainAppModel()
