@@ -30,9 +30,9 @@ struct AppSettings {
     /// 3: Phone (Wi-Fi IP via Info.plist)
     static let appDevCase = 1
 
-    static var appDevCase: String {
+    static var baseURL: String {
         #if DEBUG
-        switch testingCase {
+        switch appDevCase {
         case 1:
             // Production (simulated during debug)
             return Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? "http://127.0.0.1:8000"
