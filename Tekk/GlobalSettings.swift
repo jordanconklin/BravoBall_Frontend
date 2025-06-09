@@ -28,9 +28,9 @@ struct AppSettings {
     /// 1: Production
     /// 2: Computer (localhost)
     /// 3: Phone (Wi-Fi IP via Info.plist)
-    static let testingCase = 3
+    static let appDevCase = 1
 
-    static var baseURL: String {
+    static var appDevCase: String {
         #if DEBUG
         switch testingCase {
         case 1:
