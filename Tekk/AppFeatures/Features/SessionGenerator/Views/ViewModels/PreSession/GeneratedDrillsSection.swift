@@ -75,8 +75,24 @@ struct GeneratedDrillsSection: View {
                 }
             }
  
-            // Show placeholder if no drills are selected
-            if sessionModel.orderedSessionDrills.isEmpty {
+            // Show loading indicator if loading
+            if sessionModel.isLoadingDrills {
+                VStack(spacing: 20) {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .scaleEffect(1.5)
+                        .tint(appModel.globalSettings.primaryYellowColor)
+                    
+                    Text("Loading drills...")
+                        .font(.custom("Poppins-Regular", size: 14))
+                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding(.vertical, 50)
+                .transition(.opacity)
+            }
+            // Show placeholder if no drills are selected and not loading
+            else if sessionModel.orderedSessionDrills.isEmpty {
                 Spacer()
                 HStack {
                     Image(systemName: "lock.fill")
@@ -87,7 +103,6 @@ struct GeneratedDrillsSection: View {
                         .foregroundColor(appModel.globalSettings.primaryLightGrayColor)
                 }
                 .padding(30)
-                
             } else {
                 // List each drill card in the session
                 ForEach($sessionModel.orderedSessionDrills, id: \.drill.id) { $editableDrill in
@@ -100,7 +115,6 @@ struct GeneratedDrillsSection: View {
                                 if sessionModel.orderedSessionDrills.isEmpty {
                                     appModel.viewState.showSessionDeleteButtons = false
                                 }
-
                             }) {
                                 ZStack {
                                     Circle()
@@ -146,7 +160,6 @@ struct GeneratedDrillsSection: View {
                     }
                 }
             }
-
         }
         .padding(.horizontal)
         .padding(.top, 10)

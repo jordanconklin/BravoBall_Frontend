@@ -15,7 +15,8 @@ class SessionGeneratorModel: ObservableObject {
     
     @ObservedObject var appModel: MainAppModel  // Add this
     
-    
+    // Add loading state
+    @Published var isLoadingDrills: Bool = false
     
     let cacheManager = CacheManager.shared
     private var lastSyncTime: Date = Date()
@@ -527,58 +528,61 @@ class SessionGeneratorModel: ObservableObject {
     }
 
     func loadInitialSession(from sessionResponse: SessionResponse) {
-
-        print("\n🔄 Loading initial session with \(sessionResponse.drills.count) drills")
-        self.currentSessionId = sessionResponse.sessionId
-        print("✅ Current session ID: \(currentSessionId)")
-        
-        // Instead of directly setting selectedSkills, map the focus areas to their full skill strings
-        let newSkills = Set(sessionResponse.focusAreas.compactMap { category in
-            // Find any existing skills that match this category
-            selectedSkills.first { $0.starts(with: "\(category)-") }
-        })
-        
-        // Only update if we found matching skills
-        if !newSkills.isEmpty {
-            selectedSkills = newSkills
-            print("✅ Updated focus areas: \(selectedSkills.joined(separator: ", "))")
-        }
-        
-        // Clear any existing drills
-        orderedSessionDrills.removeAll()
-        
-        // Convert API drills to app's drill models and add them to orderedDrills
-        var processedCount = 0
-        for apiDrill in sessionResponse.drills {
-            do {
-                let drillModel = apiDrill.toDrillModel()
-                print("[Session] Drill loaded: \(drillModel.title), videoUrl: \(drillModel.videoUrl ?? "nil")")
-                // Create an editable drill model
-                let editableDrill = EditableDrillModel(
-                    drill: drillModel,
-                    setsDone: 0,
-                    totalSets: drillModel.sets,
-                    totalReps: drillModel.reps,
-                    totalDuration: drillModel.duration,
-                    isCompleted: false
-                )
-                // Add to ordered drills
-                orderedSessionDrills.append(editableDrill)
-                processedCount += 1
+        Task {
+            await MainActor.run {
+                isLoadingDrills = true
+            }
+            
+            print("\n🔄 Loading initial session with \(sessionResponse.drills.count) drills")
+            self.currentSessionId = sessionResponse.sessionId
+            print("✅ Current session ID: \(currentSessionId)")
+            
+            // Instead of directly setting selectedSkills, map the focus areas to their full skill strings
+            let newSkills = Set(sessionResponse.focusAreas.compactMap { category in
+                // Find any existing skills that match this category
+                selectedSkills.first { $0.starts(with: "\(category)-") }
+            })
+            
+            // Only update if we found matching skills
+            if !newSkills.isEmpty {
+                selectedSkills = newSkills
+                print("✅ Updated focus areas: \(selectedSkills.joined(separator: ", "))")
+            }
+            
+            // Clear any existing drills
+            orderedSessionDrills.removeAll()
+            
+            // Convert API drills to app's drill models and add them to orderedDrills
+            var processedCount = 0
+            for apiDrill in sessionResponse.drills {
+                do {
+                    let drillModel = apiDrill.toDrillModel()
+                    print("[Session] Drill loaded: \(drillModel.title), videoUrl: \(drillModel.videoUrl ?? "nil")")
+                    // Create an editable drill model
+                    let editableDrill = EditableDrillModel(
+                        drill: drillModel,
+                        setsDone: 0,
+                        totalSets: drillModel.sets,
+                        totalReps: drillModel.reps,
+                        totalDuration: drillModel.duration,
+                        isCompleted: false
+                    )
+                    // Add to ordered drills
+                    orderedSessionDrills.append(editableDrill)
+                    processedCount += 1
+                }
+            }
+            
+            print("✅ Processed \(processedCount) drills for session")
+            
+            // Explicitly save to cache since we're in initial load
+            cacheOrderedDrills()
+            saveChanges()
+            
+            await MainActor.run {
+                isLoadingDrills = false
             }
         }
-        
-        print("✅ Processed \(processedCount) drills for session")
-        
-        // Explicitly save to cache since we're in initial load
-        cacheOrderedDrills()
-        saveChanges()
-        
-        // // If no drills were loaded, add some default drills
-        // if orderedSessionDrills.isEmpty {
-        //     print("⚠️ No drills were loaded from the initial session, adding default drills")
-        //     addDefaultDrills()
-        // }
     }
 
     
@@ -586,6 +590,14 @@ class SessionGeneratorModel: ObservableObject {
 
     // Update the syncPreferencesWithBackend method
     func syncPreferencesWithBackend() async {
+        await MainActor.run {
+            isLoadingDrills = true
+        }
+        defer {
+            Task { @MainActor in
+                isLoadingDrills = false
+            }
+        }
         do {
             try await PreferencesUpdateService.shared.updatePreferences(
                 time: selectedTime,
@@ -599,7 +611,7 @@ class SessionGeneratorModel: ObservableObject {
             )
             print("✅ Successfully synced preferences with backend")
         } catch URLError.timedOut {
-            print("⏱️ Request debounced - too soon since last request")
+            print("⏱️ Request debounced – too soon since last request")
         } catch {
             print("❌ Failed to sync preferences with backend: \(error)")
         }
