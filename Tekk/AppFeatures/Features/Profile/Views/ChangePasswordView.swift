@@ -1,21 +1,26 @@
 //
-//  EditDetailsView.swift
+//  ChangePasswordView.swift
 //  BravoBall
 //
-//  Created by Jordan on 3/28/25.
+//  Created by Jordan on 6/9/25.
 //
 
 import SwiftUI
 
-struct EditDetailsView: View {
+struct ChangePasswordView: View {
     @ObservedObject var globalSettings: GlobalSettings
     @ObservedObject var settingsModel: SettingsModel
     @Environment(\.dismiss) private var dismiss
     
-    @State private var email: String = ""
+    @State private var currentPassword: String = ""
+    @State private var newPassword: String = ""
+    @State private var confirmPassword: String = ""
     @State private var showAlert = false
     @State private var alertMessage = ""
     @State private var isAlertError = true
+    @State private var isCurrentPasswordVisible = false
+    @State private var isNewPasswordVisible = false
+    @State private var isConfirmPasswordVisible = false
     
     var body: some View {
         ZStack {
@@ -28,7 +33,7 @@ struct EditDetailsView: View {
                             .foregroundColor(globalSettings.primaryDarkColor)
                     }
                     Spacer()
-                    Text("Edit Email")
+                    Text("Change Password")
                         .font(.custom("Poppins-Bold", size: 22))
                         .foregroundColor(globalSettings.primaryDarkColor)
                     Spacer()
@@ -39,14 +44,16 @@ struct EditDetailsView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
                 
-                Text("Update your email address below.")
+                Text("Update your password below.")
                     .font(.custom("Poppins-Regular", size: 15))
                     .foregroundColor(.gray)
                     .padding(.top, 8)
                     .padding(.bottom, 20)
                 
                 VStack(spacing: 18) {
-                    BravoTextField(placeholder: "Email", text: $email, keyboardType: .emailAddress)
+                    BravoSecureField(placeholder: "Current Password", text: $currentPassword)
+                    BravoSecureField(placeholder: "New Password", text: $newPassword)
+                    BravoSecureField(placeholder: "Confirm New Password", text: $confirmPassword)
                 }
                 .padding(.horizontal, 24)
                 .padding(.vertical, 18)
@@ -64,8 +71,8 @@ struct EditDetailsView: View {
                 }
                 
                 PrimaryButton(
-                    title: "Update Email",
-                    action: { saveEmail() },
+                    title: "Update Password",
+                    action: { savePassword() },
                     backgroundColor: globalSettings.primaryYellowColor,
                     font: .custom("Poppins-Bold", size: 16),
                     cornerRadius: 12
@@ -76,15 +83,36 @@ struct EditDetailsView: View {
                 Spacer()
             }
         }
-        .onAppear {
-            email = settingsModel.email
-        }
     }
     
-    private func saveEmail() {
-        // Email validation before attempting to save
-        guard AccountValidation.isValidEmail(email) else {
-            alertMessage = "Please enter a valid email address."
+    private func savePassword() {
+        // Current password required
+        guard !currentPassword.isEmpty else {
+            alertMessage = "Current password is required."
+            isAlertError = true
+            showAlert = true
+            return
+        }
+        
+        // Validate new password
+        if let passError = AccountValidation.passwordError(newPassword) {
+            alertMessage = passError
+            isAlertError = true
+            showAlert = true
+            return
+        }
+        
+        // Check password confirmation
+        guard newPassword == confirmPassword else {
+            alertMessage = "New passwords do not match."
+            isAlertError = true
+            showAlert = true
+            return
+        }
+        
+        // Check that new password is different from current password
+        guard newPassword != currentPassword else {
+            alertMessage = "New password must be different from current password."
             isAlertError = true
             showAlert = true
             return
@@ -92,15 +120,18 @@ struct EditDetailsView: View {
         
         Task {
             do {
-                try await settingsModel.updateUserEmail(email: email)
-                alertMessage = "Email updated successfully"
+                try await settingsModel.updateUserPassword(
+                    currentPassword: currentPassword,
+                    newPassword: newPassword
+                )
+                alertMessage = "Password updated successfully"
                 isAlertError = false
                 showAlert = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     dismiss()
                 }
             } catch {
-                alertMessage = "Failed to update email: \(error.localizedDescription)"
+                alertMessage = "Failed to update password: \(error.localizedDescription)"
                 isAlertError = true
                 showAlert = true
             }
@@ -109,12 +140,11 @@ struct EditDetailsView: View {
 }
 
 #if DEBUG
-struct EditDetailsView_Previews: PreviewProvider {
+struct ChangePasswordView_Previews: PreviewProvider {
     static var previews: some View {
         let mockSettings = SettingsModel()
         let mockGlobal = GlobalSettings()
-        mockSettings.email = "jordan@example.com"
-        return EditDetailsView(globalSettings: mockGlobal, settingsModel: mockSettings)
+        return ChangePasswordView(globalSettings: mockGlobal, settingsModel: mockSettings)
     }
 }
-#endif
+#endif 

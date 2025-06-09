@@ -19,9 +19,38 @@ class GlobalSettings: ObservableObject {
     @Published var primaryLightestGrayColor: Color = Color(hex:"f0f0f0")
 }
 
-// settings for services, dont need ObservableObject annotation
+
+// Settings for services, no need for ObservableObject
+
+
 struct AppSettings {
+    /// Testing cases
+    /// 1: Production
+    /// 2: Computer (localhost)
+    /// 3: Phone (Wi-Fi IP via Info.plist)
+    static let testingCase = 3
+
     static var baseURL: String {
-        Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? "http://127.0.0.1:8000"
+        #if DEBUG
+        switch testingCase {
+        case 1:
+            // Production (simulated during debug)
+            return Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? "http://127.0.0.1:8000"
+        case 2:
+            // Localhost for simulator or Mac
+            return "http://127.0.0.1:8000"
+        case 3:
+            // Wi-Fi IP for phone, pulled from Info.plist under key "PHONE_WIFI_IP"
+            let wifiIP = Bundle.main.object(forInfoDictionaryKey: "PHONE_WIFI_IP") as? String
+            return wifiIP.map { "http://\($0):8000" } ?? "http://127.0.0.1:8000"
+        default:
+            return "http://127.0.0.1:8000"
+        }
+        #else
+        // Real production build (release)
+        return "https://api.yourproductiondomain.com"
+        #endif
     }
 }
+
+

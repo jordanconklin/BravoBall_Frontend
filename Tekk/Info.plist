@@ -16,5 +16,7 @@
 	</array>
 	<key>BASE_URL</key>
 	<string>https://bravoball-backend.onrender.com</string>
+	<key>PHONE_WIFI_IP</key>
+	<string>10.0.3.169</string>
 </dict>
 </plist>

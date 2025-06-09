@@ -598,6 +598,8 @@ class SessionGeneratorModel: ObservableObject {
                 isOnboarding: isOnboarding
             )
             print("✅ Successfully synced preferences with backend")
+        } catch URLError.timedOut {
+            print("⏱️ Request debounced - too soon since last request")
         } catch {
             print("❌ Failed to sync preferences with backend: \(error)")
         }

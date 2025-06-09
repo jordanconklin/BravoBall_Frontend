@@ -220,6 +220,8 @@ class MainAppModel: ObservableObject {
                     self.loadingError = nil
                     print("✅ Successfully synced progress history with verified values")
                 }
+            } catch URLError.timedOut {
+                print("⏱️ Progress history sync debounced - too soon since last request")
             } catch {
                 await MainActor.run {
                     self.loadingError = error
