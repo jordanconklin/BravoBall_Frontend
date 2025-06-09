@@ -29,6 +29,12 @@
 		177B1BCC2DF739E900AF465C /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BCB2DF739E100AF465C /* PrivacyPolicyView.swift */; };
 		177B1BCE2DF73A2000AF465C /* TermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BCD2DF73A1A00AF465C /* TermsOfServiceView.swift */; };
 		177B1BD02DF741CE00AF465C /* DebounceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BCF2DF741CB00AF465C /* DebounceService.swift */; };
+		177B1BD82DF7530900AF465C /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BD72DF7530600AF465C /* AudioManager.swift */; };
+		177B1BDC2DF7553000AF465C /* AudioTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BDB2DF7552D00AF465C /* AudioTestView.swift */; };
+		177B1BF02DF7682C00AF465C /* 321-start.MP3 in Resources */ = {isa = PBXBuildFile; fileRef = 177B1BEE2DF7682C00AF465C /* 321-start.MP3 */; };
+		177B1BF12DF7682C00AF465C /* success.MP3 in Resources */ = {isa = PBXBuildFile; fileRef = 177B1BEF2DF7682C00AF465C /* success.MP3 */; };
+		177B1BF22DF7682C00AF465C /* 321-done.MP3 in Resources */ = {isa = PBXBuildFile; fileRef = 177B1BED2DF7682C00AF465C /* 321-done.MP3 */; };
+		177B1BF42DF76FCA00AF465C /* BravoBallApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BF32DF76FC500AF465C /* BravoBallApp.swift */; };
 		178208D22D2D14D200246494 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178208D12D2D14D200246494 /* MainTabView.swift */; };
 		178208E02D2DEB9C00246494 /* OnboardingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178208DF2D2DEB9C00246494 /* OnboardingModel.swift */; };
 		178208E22D2DEBB400246494 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178208E12D2DEBB400246494 /* OnboardingView.swift */; };
@@ -195,6 +201,12 @@
 		177B1BCB2DF739E100AF465C /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		177B1BCD2DF73A1A00AF465C /* TermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceView.swift; sourceTree = "<group>"; };
 		177B1BCF2DF741CB00AF465C /* DebounceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebounceService.swift; sourceTree = "<group>"; };
+		177B1BD72DF7530600AF465C /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		177B1BDB2DF7552D00AF465C /* AudioTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTestView.swift; sourceTree = "<group>"; };
+		177B1BED2DF7682C00AF465C /* 321-done.MP3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "321-done.MP3"; sourceTree = "<group>"; };
+		177B1BEE2DF7682C00AF465C /* 321-start.MP3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "321-start.MP3"; sourceTree = "<group>"; };
+		177B1BEF2DF7682C00AF465C /* success.MP3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = success.MP3; sourceTree = "<group>"; };
+		177B1BF32DF76FC500AF465C /* BravoBallApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BravoBallApp.swift; sourceTree = "<group>"; };
 		178208D12D2D14D200246494 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		178208DF2D2DEB9C00246494 /* OnboardingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingModel.swift; sourceTree = "<group>"; };
 		178208E12D2DEBB400246494 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -375,8 +387,11 @@
 				178208D12D2D14D200246494 /* MainTabView.swift */,
 				178208DC2D2DEB7200246494 /* Onboarding */,
 				1749361B2C3E102B001163B9 /* ContentView.swift */,
-				17CA37BA2DF2440A001AD5FA /* Feedback */,
+				177B1BF32DF76FC500AF465C /* BravoBallApp.swift */,
+				17CA37BA2DF2440A001AD5FA /* HapticFeedback */,
 				1749361D2C3E1031001163B9 /* Assets.xcassets */,
+				177B1BEC2DF7680600AF465C /* AudioAssets */,
+				177B1BD62DF752FD00AF465C /* Utilities */,
 				43985E502CB51DEC00BE2AB6 /* Font */,
 				439A72632C9FA55700B4C5AD /* RiveAssets */,
 				1749361F2C3E1031001163B9 /* Tekk.entitlements */,
@@ -434,6 +449,25 @@
 				177B1BC32DF6235400AF465C /* BravoSecureField.swift */,
 			);
 			path = TextBoxes;
+			sourceTree = "<group>";
+		};
+		177B1BD62DF752FD00AF465C /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				177B1BD72DF7530600AF465C /* AudioManager.swift */,
+				177B1BDB2DF7552D00AF465C /* AudioTestView.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		177B1BEC2DF7680600AF465C /* AudioAssets */ = {
+			isa = PBXGroup;
+			children = (
+				177B1BED2DF7682C00AF465C /* 321-done.MP3 */,
+				177B1BEE2DF7682C00AF465C /* 321-start.MP3 */,
+				177B1BEF2DF7682C00AF465C /* success.MP3 */,
+			);
+			path = AudioAssets;
 			sourceTree = "<group>";
 		};
 		178208DC2D2DEB7200246494 /* Onboarding */ = {
@@ -511,12 +545,12 @@
 			path = Popups;
 			sourceTree = "<group>";
 		};
-		17CA37BA2DF2440A001AD5FA /* Feedback */ = {
+		17CA37BA2DF2440A001AD5FA /* HapticFeedback */ = {
 			isa = PBXGroup;
 			children = (
 				17CA37BB2DF24424001AD5FA /* Haptic.swift */,
 			);
-			path = Feedback;
+			path = HapticFeedback;
 			sourceTree = "<group>";
 		};
 		420DA3A52DCEEF45004CDD7A /* Checkbox */ = {
@@ -1185,6 +1219,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				43BFA9F42D40AB8A00B12A6F /* Paw_Gray.riv in Resources */,
+				177B1BF02DF7682C00AF465C /* 321-start.MP3 in Resources */,
+				177B1BF12DF7682C00AF465C /* success.MP3 in Resources */,
+				177B1BF22DF7682C00AF465C /* 321-done.MP3 in Resources */,
 				4289C58A2DEE8C30005CC91B /* Prereq_Time.riv in Resources */,
 				43BFAA422D444A2C00B12A6F /* Message_Bubble.riv in Resources */,
 				17595AAD2D3B44FE0015F35D /* Drill_Card_Complete.riv in Resources */,
@@ -1243,6 +1280,7 @@
 				430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */,
 				170167FD2D88F5C60078446C /* DrillSearchService.swift in Sources */,
 				174C67702D34EB26003D02EF /* DrillDetailView.swift in Sources */,
+				177B1BDC2DF7553000AF465C /* AudioTestView.swift in Sources */,
 				43C5FC852D6DCF530064E7D5 /* TabButton.swift in Sources */,
 				43C5FC5C2D6DBEC90064E7D5 /* RoundedCorner.swift in Sources */,
 				43AC25772DA39C6400EDD8C0 /* SyncingProtocols.swift in Sources */,
@@ -1277,6 +1315,7 @@
 				420DA39E2DCE935B004CDD7A /* PreferencesUpdate.swift in Sources */,
 				178208EB2D2DECE300246494 /* OnboardingMultiSelectView.swift in Sources */,
 				17DB45FC2DD69D3C000A76F6 /* FilterScrollView.swift in Sources */,
+				177B1BF42DF76FCA00AF465C /* BravoBallApp.swift in Sources */,
 				177B1BCE2DF73A2000AF465C /* TermsOfServiceView.swift in Sources */,
 				43AC25712DA3996C00EDD8C0 /* SavedFilterExtension.swift in Sources */,
 				430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */,
@@ -1313,6 +1352,7 @@
 				43FCC7232D7F684900005ABB /* UserManager.swift in Sources */,
 				43C5FC522D6DBCF00064E7D5 /* AllGroupsDisplay.swift in Sources */,
 				4399B7422D6D92C100DA5E84 /* FilterTypes.swift in Sources */,
+				177B1BD82DF7530900AF465C /* AudioManager.swift in Sources */,
 				17595A9F2D3B3B320015F35D /* ProgressionView.swift in Sources */,
 				43B6877D2D7C2394009CCA8C /* CacheManager.swift in Sources */,
 				177B1BCC2DF739E900AF465C /* PrivacyPolicyView.swift in Sources */,

@@ -124,11 +124,11 @@ struct ProfileView: View {
 
             VStack(spacing: 0) {
                 
-                let userData = userManager.getUserFromKeychain()
+                let email = userManager.getUserFromKeychain()
                 
     
                 
-                Text("\(userData.email)")
+                Text("\(email)")
                     .font(.custom("Poppins-Bold", size: 18))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5) // Ensures text is legible
@@ -410,9 +410,7 @@ struct ProfileView_Previews: PreviewProvider {
         // Optionally set some mock data for a more realistic preview
         onboardingModel.isLoggedIn = true
         userManager.updateUserKeychain(
-            email: "jordan@example.com",
-            firstName: "Jordan",
-            lastName: "Conklin"
+            email: "jordan@example.com"
         )
         
         return ProfileView(
