@@ -12,6 +12,7 @@ struct HomePageField: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     @Environment(\.viewGeometry) var geometry
+    @State private var showingFollowAlong: Bool = false
         
     var body: some View {
         
@@ -46,12 +47,22 @@ struct HomePageField: View {
                         
 
                         // "Begin" button centered
-                        Text("Begin")
-                            .font(.custom("Poppins-Bold", size: 18))
-                            .foregroundColor(.white)
-                            .padding(16)
-                            .background(appModel.globalSettings.primaryYellowColor)
-                            .cornerRadius(12)
+                        Button(action: {
+                            Haptic.light()
+                            showingFollowAlong = true
+                        }
+                        
+                        ){
+                            Text("Begin")
+                                .font(.custom("Poppins-Bold", size: 18))
+                                .foregroundColor(.white)
+                                .padding(16)
+                                .background(appModel.globalSettings.primaryYellowColor)
+                                .cornerRadius(12)
+                                .opacity(sessionModel.sessionInProgress() ? 1.0 : 0.5)
+         
+                        }
+                        .disabled(!sessionModel.sessionInProgress())
      
                         
                         VStack(spacing: 15) {
@@ -80,6 +91,18 @@ struct HomePageField: View {
         }
 
         .background(Color(hex: "BEF1FA").ignoresSafeArea())
+        
+        .fullScreenCover(isPresented: $showingFollowAlong) {
+            if let index = sessionModel.orderedSessionDrills.firstIndex(where: { !$0.isCompleted }) {
+                DrillFollowAlongView(
+                    appModel: appModel,
+                    sessionModel: sessionModel,
+                    editableDrill: $sessionModel.orderedSessionDrills[index]
+                )
+            } else {
+                Text("No drills to follow along with!")
+            }
+        }
     }
     
     func BravoTextBubbleDelay() {
@@ -106,14 +129,24 @@ struct HomePageField: View {
                 .frame(width: 80, height: 90)
         }
         .padding(.top, 20)
-        .disabled(sessionModel.sessionInProgress())
-        .opacity(sessionModel.sessionInProgress() ? 0.5 : 1.0)
+        .disabled(sessionModel.sessionInProgress() || sessionModel.orderedSessionDrills.isEmpty)
+        .opacity(sessionModel.sessionInProgress() || sessionModel.orderedSessionDrills.isEmpty ? 0.5 : 1.0)
     }
+
     
     private var sessionMessageBubble: some View {
-        VStack(spacing: 0) {
-            
-            Text(sessionModel.sessionInProgress() ? "You have \(sessionModel.sessionsLeftToComplete()) drill\(sessionModel.sessionsLeftToComplete() == 1 ? "" : "s") left." : "Well done! Click on the trophy to claim your prize.")
+        let state: SessionMessageState
+        let drillsLeft = sessionModel.sessionsLeftToComplete()
+        if sessionModel.orderedSessionDrills.isEmpty {
+            state = .noDrills
+        } else if sessionModel.sessionInProgress() {
+            state = .inProgress(drillsLeft: drillsLeft)
+        } else {
+            state = .completed
+        }
+        
+        return VStack(spacing: 0) {
+            Text(message(for: state))
                 .font(.custom("Poppins-Bold", size: 18))
                 .foregroundColor(.white)
                 .padding(.horizontal, 16)
@@ -124,7 +157,6 @@ struct HomePageField: View {
                 )
                 .frame(maxWidth: 200)
                 .transition(.opacity.combined(with: .offset(y: 10)))
-            
             // Pointer
             Path { path in
                 path.move(to: CGPoint(x: 0, y: 0))
@@ -133,6 +165,23 @@ struct HomePageField: View {
             }
             .fill(Color(hex:"60AE17"))
             .frame(width: 20, height: 10)
+        }
+    }
+    
+    private enum SessionMessageState {
+        case noDrills
+        case inProgress(drillsLeft: Int)
+        case completed
+    }
+    
+    private func message(for state: SessionMessageState) -> String {
+        switch state {
+        case .noDrills:
+            return "Click on the soccer bag to add drills to your session!"
+        case .inProgress(let drillsLeft):
+            return "You have \(drillsLeft) drill\(drillsLeft == 1 ? "" : "s") to complete."
+        case .completed:
+            return "Well done! Click on the trophy to claim your prize."
         }
     }
 }
