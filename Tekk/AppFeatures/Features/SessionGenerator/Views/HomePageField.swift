@@ -15,85 +15,88 @@ struct HomePageField: View {
         
     var body: some View {
         
+        ScrollView(.vertical, showsIndicators: false) {
             VStack {
                 
-                
-                Spacer()
-
                 // When the session begins, the field pops up
-                    ZStack {
-                        RiveViewModel(fileName: "Grass_Field").view()
-                            .frame(width: geometry.size.width)
-                            .padding(.top, 150)
+                ZStack(alignment: .top) {
+                    RiveViewModel(fileName: "Grass_Field").view()
+                        .frame(width: geometry.size.width, height: geometry.size.height * 1.5)
+                        .padding(.zero)
+                    
+                    VStack {
                         
                         HStack {
-                            
-                            VStack {
-                                sessionMessageBubble
-     
-                                RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1").view()
-                                    .frame(width: 90, height: 90)
-                            }
-         
-                            
-                            VStack(spacing: 15) {
-                                
-                                // Ordered drill cards on the field
-                                ForEach(sessionModel.orderedSessionDrills, id: \.drill.id) { editableDrill in
-                                    if let index = sessionModel.orderedSessionDrills.firstIndex(where: {$0.drill.id == editableDrill.drill.id}) {
-                                        FieldDrillCard(
-                                            appModel: appModel,
-                                            sessionModel: sessionModel,
-                                            editableDrill: $sessionModel.orderedSessionDrills[index]
-                                        )
-                                    }
-                                }
-                                
-                                // Trophy button for completionview
-                                trophyButton
-                            }
-                            .padding()
+ 
+                            RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1").view()
+                                .frame(width: 90, height: 90)
+                            sessionMessageBubble
                         }
-                                            
+     
                         
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    // back button only shows if session not completed
-                                        Button(action:  {
-                                            Haptic.light()
+                        VStack(spacing: 15) {
+                            
+                            // Ordered drill cards on the field
+                            ForEach(sessionModel.orderedSessionDrills, id: \.drill.id) { editableDrill in
+                                if let index = sessionModel.orderedSessionDrills.firstIndex(where: {$0.drill.id == editableDrill.drill.id}) {
+                                    FieldDrillCard(
+                                        appModel: appModel,
+                                        sessionModel: sessionModel,
+                                        editableDrill: $sessionModel.orderedSessionDrills[index]
+                                    )
+                                }
+                            }
+                            
+                            // Trophy button for completionview
+                            trophyButton
+                        }
+                        .padding()
+                    }
+                    .padding(.top, 150)
+                    
+                                        
+                    
+                        HStack {
+                            VStack(alignment: .leading) {
+                                // back button only shows if session not completed
+                                    Button(action:  {
+                                        Haptic.light()
 
-                                            appModel.viewState.showHomePage = true
-                                            BravoTextBubbleDelay()
-                                        }) {
-                                            VStack(alignment: .leading) {
-                                                Image(systemName: "pencil")
-                                                    .font(.system(size: 30))
-                                                    .foregroundColor(Color.white)
-                                                    .padding(8)
-                                                    .background(appModel.globalSettings.primaryYellowColor)
-                                                    .clipShape(Circle())
-                                                
-                                                RiveViewModel(fileName: "Break_Area").view()
-                                                    .frame(width: 80, height: 80)
-                                                
-                                            }
-                                            .padding(.bottom,45)
+                                        appModel.viewState.showHomePage = true
+                                        BravoTextBubbleDelay()
+                                    }) {
+                                        VStack(alignment: .leading) {
+                                            Image(systemName: "pencil")
+                                                .font(.system(size: 30))
+                                                .foregroundColor(Color.white)
+                                                .padding(8)
+                                                .background(appModel.globalSettings.primaryYellowColor)
+                                                .clipShape(Circle())
                                             
+                                            RiveViewModel(fileName: "Break_Area").view()
+                                                .frame(width: 80, height: 80)
                                             
                                         }
-                                    
-                                }
-
+                                        .padding(.bottom,45)
+                                        
+                                        
+                                    }
                                 
-                                Spacer()
-
                             }
-                            .padding()
-                            .padding(.top, 500) // TODO: find better way to style this
-                        
-                        
-                    }
+
+                            
+                            Spacer()
+
+                        }
+                        .padding()
+                    
+                    
+                }
             }
+
+        }
+
+        .background(Color(hex: "BEF1FA").ignoresSafeArea())
     }
     
     func BravoTextBubbleDelay() {

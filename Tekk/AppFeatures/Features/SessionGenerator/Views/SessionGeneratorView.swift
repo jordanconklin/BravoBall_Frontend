@@ -17,26 +17,24 @@ struct SessionGeneratorView: View {
     @Environment(\.viewGeometry) var geometry
     
 
-    
-
         
     
     // MARK: Main view
     var body: some View {
         ZStack(alignment: .top) {
             // Sky background color
-            Color(hex:"bef1fa")
+            Color(hex:"BEF1FA")
                 .ignoresSafeArea()
             
             HomePageField(appModel: appModel, sessionModel: sessionModel)
-                .frame(maxWidth: geometry.size.width)
+        
             
             HomePageToolBar(appModel: appModel, sessionModel: sessionModel, userManager: userManager)
                 .frame(maxWidth: geometry.size.width)
             
         }
         .fullScreenCover(isPresented: $appModel.viewState.showHomePage) {
-            SessionGeneratorHomePage(appModel: appModel, sessionModel: sessionModel, geometry: geometry)
+            SessionGeneratorEditPage(appModel: appModel, sessionModel: sessionModel, geometry: geometry)
                 .frame(maxWidth: geometry.size.width)
                 .frame(maxWidth: .infinity)
         }
