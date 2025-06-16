@@ -337,9 +337,6 @@ struct DrillSearchView: View {
                             
                             // Clear selection
                             selectedDrills = []
-                            
-                            // Dismiss view
-                            dismiss()
                         }) {
                             Text(actionButtonText(selectedDrills.count))
                                 .font(.custom("Poppins-Bold", size: 18))

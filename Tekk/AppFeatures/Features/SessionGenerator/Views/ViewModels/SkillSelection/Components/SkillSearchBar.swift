@@ -111,7 +111,6 @@ struct SkillSearchBar: View {
             }
             
         }
-        .padding(.horizontal, 8)
         .sheet(isPresented: $showingSkillSelector) {
             SkillSelectorSheet(appModel: appModel, sessionModel: sessionModel)
                 .presentationDragIndicator(.hidden)

@@ -21,7 +21,7 @@ struct StartButton: View {
             ZStack {
                 RiveViewModel(fileName: "Golden_Button").view()
                     .frame(width: 320, height: 80)
-                Text(isTheSessionInProgress() ? "Return to Session" : "Start Session")
+                Text("Load Session")
                     .font(.custom("Poppins-Bold", size: 22))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -30,7 +30,7 @@ struct StartButton: View {
             }
         }
         .padding(.horizontal)
-        .padding(.bottom, 80)
+        .padding(.bottom, 20)
         .transition(.move(edge: .bottom))
     }
     

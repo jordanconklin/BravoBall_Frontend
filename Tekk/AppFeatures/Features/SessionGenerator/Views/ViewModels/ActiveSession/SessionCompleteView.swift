@@ -100,9 +100,6 @@ struct SessionCompleteView: View {
     // Keep ordered session drills populated
     private func resetSessionState() {
         
-        appModel.viewState.showFieldBehindHomePage = false
-        appModel.viewState.showHomePage = true
-        appModel.viewState.showPreSessionTextBubble = true
         appModel.viewState.showSessionComplete = false
         
         // resets progress of drills in session

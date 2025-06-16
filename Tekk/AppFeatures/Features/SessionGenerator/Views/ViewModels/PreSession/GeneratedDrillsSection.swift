@@ -14,31 +14,11 @@ struct GeneratedDrillsSection: View {
     
     private let layout = ResponsiveLayout.shared
     @Environment(\.dismiss) private var dismiss
-    @State private var showInfoSheet = false
     
     var body: some View {
         // Main vertical stack for the drills section
         LazyVStack(alignment: .center, spacing: layout.standardSpacing) {
             HStack {
-                // Info button to show explanation popup
-                Button(action: { 
-                    Haptic.light()
-                    showInfoSheet = true 
-                }) {
-                    Image(systemName: "info.circle")
-                        .font(.system(size: 28, weight: .regular))
-                        .foregroundColor(appModel.globalSettings.primaryGrayColor)
-                        .padding(.trailing, 8)
-                }
-                .accessibilityLabel("About Session Generator")
-                
-                Spacer()
-                
-                // Section title
-                Text("Session")
-                    .font(.custom("Poppins-Bold", size: 20))
-                    .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                    .padding(.leading, 30)
                 
                 Spacer()
                 
@@ -175,9 +155,6 @@ struct GeneratedDrillsSection: View {
                     
                     // Close the sheet
                     appModel.viewState.showSearchDrills = false
-                    
-                    // Call the dismiss callback
-                    dismiss()
                 },
                 title: "Search Drills",
                 actionButtonText: { count in
@@ -190,16 +167,6 @@ struct GeneratedDrillsSection: View {
                     sessionModel.isDrillSelected(drill)
                 }
             )
-        }
-        // Info popup sheet
-        .sheet(isPresented: $showInfoSheet) {
-            InfoPopupView(
-                title: "What is the Session Generator?",
-                description: "The Session Generator lets you build a custom soccer training session.\n\nUse the filters above to set your available time, equipment, and focus areas. Search for specific skills or browse recommended drills.\n\nAdd drills with the plus button, and remove them with the trash icon. Your selected drills will appear in the session list below.\n\nWhen you're ready, start your session to track your progress and complete your personalized training!",
-                onClose: { showInfoSheet = false }
-            )
-            .presentationDetents([.medium, .large])
-            .presentationDragIndicator(.visible)
         }
     }
 }

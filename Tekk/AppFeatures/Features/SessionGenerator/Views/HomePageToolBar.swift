@@ -10,26 +10,43 @@ import RiveRuntime
 
 struct HomePageToolBar: View {
     @ObservedObject var appModel: MainAppModel
+    @ObservedObject var sessionModel: SessionGeneratorModel
+    @ObservedObject var userManager: UserManager
+    
+    @Environment(\.viewGeometry) var geometry
     
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
+            HStack(spacing: 22) {
+                
+                // this will use userManger object later for profile pic
+                Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 40, height: 40)
+                    .foregroundColor(appModel.globalSettings.primaryYellowColor)
                 
                 Spacer()
                 
-                RiveViewModel(fileName: "Bravo_Peaking_Home")
-                    .view()
-                    .frame(width: 70, height: 70)
-                
-                Spacer()
-                
-                // Title
-                Text("BravoBall")
-                    .font(.custom("PottaOne-Regular", size: 24))
-                    .foregroundColor(.white)
-                    .padding(.trailing, 30)
-                
-                Spacer()
+                HStack {
+                    Label("500", systemImage: "diamond.fill")
+                        .labelStyle(IconOnlyLabelStyle())
+                        .foregroundColor(.blue)
+                        .font(.system(size: 25))
+                    Text("0")
+                        .font(.custom("Poppins-Bold", size: 30))
+                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                }
+
+                HStack {
+                    Label("5", systemImage: "heart.fill")
+                        .labelStyle(IconOnlyLabelStyle())
+                        .foregroundColor(.red)
+                        .font(.system(size: 25))
+                    Text("0")
+                        .font(.custom("Poppins-Bold", size: 30))
+                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                }
                 
                 HStack {
                     Image("Streak_Flame")
@@ -38,19 +55,12 @@ struct HomePageToolBar: View {
                         .frame(width: 30, height: 40)
                     Text("\(appModel.currentStreak)")
                         .font(.custom("Poppins-Bold", size: 30))
-                        .padding(.trailing, 20)
-                        .foregroundColor(Color.white)
+                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
                 }
+                
             }
-            .frame(height: 80)
-            .background(appModel.globalSettings.primaryYellowColor)
-
-            
-            RoundedRectangle(cornerRadius: 0, style: .continuous)
-                .fill(appModel.globalSettings.secondaryYellowColor)
-                            .frame(height: 5)
-                            .padding(.bottom, 0)
-                            .shadow(color: .black.opacity(0.08), radius: 2, y: 2)
+            .frame(height: 45)
         }
+        .padding()
     }
 }
