@@ -24,14 +24,34 @@ struct HomePageField: View {
                         .frame(width: geometry.size.width, height: geometry.size.height * 1.5)
                         .padding(.zero)
                     
-                    VStack {
+                    VStack(spacing: 25) {
                         
-                        HStack {
+                        sessionMessageBubble
+                        
+                        HStack(spacing: 15) {
  
                             RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1").view()
                                 .frame(width: 90, height: 90)
-                            sessionMessageBubble
+                            
+                            Button(action:  {
+                                Haptic.light()
+                                appModel.viewState.showHomePage = true
+                                BravoTextBubbleDelay()
+                            }) {
+                                RiveViewModel(fileName: "Break_Area").view()
+                                    .frame(width: 80, height: 80)
+                                
+                            }
                         }
+                        
+
+                        // "Begin" button centered
+                        Text("Begin")
+                            .font(.custom("Poppins-Bold", size: 18))
+                            .foregroundColor(.white)
+                            .padding(16)
+                            .background(appModel.globalSettings.primaryYellowColor)
+                            .cornerRadius(12)
      
                         
                         VStack(spacing: 15) {
@@ -53,43 +73,6 @@ struct HomePageField: View {
                         .padding()
                     }
                     .padding(.top, 150)
-                    
-                                        
-                    
-                        HStack {
-                            VStack(alignment: .leading) {
-                                // back button only shows if session not completed
-                                    Button(action:  {
-                                        Haptic.light()
-
-                                        appModel.viewState.showHomePage = true
-                                        BravoTextBubbleDelay()
-                                    }) {
-                                        VStack(alignment: .leading) {
-                                            Image(systemName: "pencil")
-                                                .font(.system(size: 30))
-                                                .foregroundColor(Color.white)
-                                                .padding(8)
-                                                .background(appModel.globalSettings.primaryYellowColor)
-                                                .clipShape(Circle())
-                                            
-                                            RiveViewModel(fileName: "Break_Area").view()
-                                                .frame(width: 80, height: 80)
-                                            
-                                        }
-                                        .padding(.bottom,45)
-                                        
-                                        
-                                    }
-                                
-                            }
-
-                            
-                            Spacer()
-
-                        }
-                        .padding()
-                    
                     
                 }
             }
@@ -139,7 +122,7 @@ struct HomePageField: View {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(Color(hex:"60AE17"))
                 )
-                .frame(maxWidth: 150)
+                .frame(maxWidth: 200)
                 .transition(.opacity.combined(with: .offset(y: 10)))
             
             // Pointer
