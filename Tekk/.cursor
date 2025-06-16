@@ -1,0 +1,294 @@
+// MARK: - App Architecture Best Practices
+// This file contains architectural guidelines and best practices for the BravoBall app
+
+// MARK: - Core Principles
+/*
+ 1. Single Responsibility Principle
+    - Each class should have only one reason to change
+    - Separate concerns into distinct modules
+    - Keep classes focused and cohesive
+
+ 2. Dependency Injection
+    - Use protocol-based dependencies
+    - Inject dependencies through initializers
+    - Avoid singleton abuse
+
+ 3. State Management
+    - Use @Published for reactive updates
+    - Centralize state management
+    - Implement proper state restoration
+
+ 4. Error Handling
+    - Use custom error types
+    - Implement proper error recovery
+    - Provide meaningful error messages
+*/
+
+// MARK: - Protocol Definitions
+
+// MARK: Preference Management
+protocol PreferenceManaging {
+    var preferences: UserPreferences { get }
+    func updatePreferences(_ preferences: UserPreferences) async throws
+    func syncWithBackend() async throws
+}
+
+// MARK: Session Management
+protocol SessionManaging {
+    var currentSession: Session? { get }
+    func generateSession(from preferences: UserPreferences) async throws -> Session
+    func updateSession(_ session: Session) async throws
+}
+
+// MARK: Cache Management
+protocol CacheManaging {
+    func cache<T: Codable>(_ value: T, forKey key: CacheKey) throws
+    func retrieve<T: Codable>(forKey key: CacheKey) throws -> T?
+    func clearCache(forKey key: CacheKey)
+}
+
+// MARK: - Model Definitions
+
+// MARK: User Preferences
+struct UserPreferences: Codable {
+    let time: String?
+    let equipment: Set<String>
+    let trainingStyle: String?
+    let location: String?
+    let difficulty: String?
+    let skills: Set<String>
+    
+    // Add validation
+    var isValid: Bool {
+        // Implement validation logic
+        return true
+    }
+}
+
+// MARK: Session
+struct Session: Codable, Identifiable {
+    let id: Int
+    let totalDuration: Int
+    let focusAreas: [String]
+    let drills: [Drill]
+    
+    // Add computed properties
+    var isComplete: Bool {
+        // Implement completion logic
+        return false
+    }
+}
+
+// MARK: - Manager Implementations
+
+// MARK: Preference Manager
+final class PreferenceManager: PreferenceManaging {
+    static let shared = PreferenceManager()
+    
+    @Published private(set) var preferences: UserPreferences
+    private let cacheManager: CacheManaging
+    private let updateScheduler: PreferenceUpdateScheduler
+    
+    init(cacheManager: CacheManaging = CacheManager.shared,
+         updateScheduler: PreferenceUpdateScheduler = PreferenceUpdateScheduler()) {
+        self.cacheManager = cacheManager
+        self.updateScheduler = updateScheduler
+        // Initialize preferences from cache or defaults
+        self.preferences = UserPreferences(time: nil, equipment: [], trainingStyle: nil, location: nil, difficulty: nil, skills: [])
+    }
+    
+    func updatePreferences(_ newPreferences: UserPreferences) async throws {
+        // Validate preferences
+        guard newPreferences.isValid else {
+            throw PreferenceError.invalidData
+        }
+        
+        // Schedule update
+        updateScheduler.scheduleUpdate { [weak self] in
+            try await self?.performUpdate(newPreferences)
+        }
+    }
+    
+    private func performUpdate(_ newPreferences: UserPreferences) async throws {
+        // Update local state
+        await MainActor.run {
+            self.preferences = newPreferences
+        }
+        
+        // Sync with backend
+        try await syncWithBackend()
+        
+        // Cache updated preferences
+        try cacheManager.cache(newPreferences, forKey: .preferences)
+    }
+    
+    func syncWithBackend() async throws {
+        // Implement backend sync
+    }
+}
+
+// MARK: Session Manager
+final class SessionManager: SessionManaging {
+    static let shared = SessionManager()
+    
+    @Published private(set) var currentSession: Session?
+    private let cacheManager: CacheManaging
+    
+    init(cacheManager: CacheManaging = CacheManager.shared) {
+        self.cacheManager = cacheManager
+    }
+    
+    func generateSession(from preferences: UserPreferences) async throws -> Session {
+        // Implement session generation
+        let session = Session(id: 0, totalDuration: 0, focusAreas: [], drills: [])
+        try await updateSession(session)
+        return session
+    }
+    
+    func updateSession(_ session: Session) async throws {
+        await MainActor.run {
+            self.currentSession = session
+        }
+        try cacheManager.cache(session, forKey: .currentSession)
+    }
+}
+
+// MARK: - Supporting Types
+
+// MARK: Cache Keys
+enum CacheKey {
+    case preferences
+    case currentSession
+    case userData
+}
+
+// MARK: Error Types
+enum PreferenceError: LocalizedError {
+    case updateFailed
+    case syncFailed
+    case invalidData
+    case networkError
+    
+    var errorDescription: String? {
+        switch self {
+        case .updateFailed:
+            return "Failed to update preferences"
+        case .syncFailed:
+            return "Failed to sync with backend"
+        case .invalidData:
+            return "Invalid preference data"
+        case .networkError:
+            return "Network error occurred"
+        }
+    }
+}
+
+// MARK: Update Scheduler
+final class PreferenceUpdateScheduler {
+    private var updateTask: Task<Void, Never>?
+    private let debounceInterval: TimeInterval = 0.5
+    
+    func scheduleUpdate(_ update: @escaping () async throws -> Void) {
+        updateTask?.cancel()
+        
+        updateTask = Task {
+            try? await Task.sleep(nanoseconds: UInt64(debounceInterval * 1_000_000_000))
+            guard !Task.isCancelled else { return }
+            try? await update()
+        }
+    }
+}
+
+// MARK: - Usage Examples
+
+/*
+// Example usage in a view model
+class SessionViewModel: ObservableObject {
+    private let preferenceManager: PreferenceManaging
+    private let sessionManager: SessionManaging
+    
+    @Published var isLoading = false
+    @Published var error: Error?
+    
+    init(preferenceManager: PreferenceManaging = PreferenceManager.shared,
+         sessionManager: SessionManaging = SessionManager.shared) {
+        self.preferenceManager = preferenceManager
+        self.sessionManager = sessionManager
+    }
+    
+    func updatePreferences(_ newPreferences: UserPreferences) async {
+        isLoading = true
+        defer { isLoading = false }
+        
+        do {
+            try await preferenceManager.updatePreferences(newPreferences)
+            let session = try await sessionManager.generateSession(from: newPreferences)
+            await MainActor.run {
+                self.error = nil
+            }
+        } catch {
+            await MainActor.run {
+                self.error = error
+            }
+        }
+    }
+}
+*/
+
+// MARK: - Testing Guidelines
+
+/*
+1. Unit Tests
+   - Test each manager in isolation
+   - Mock dependencies
+   - Test error cases
+   - Test state updates
+
+2. Integration Tests
+   - Test manager interactions
+   - Test data flow
+   - Test error propagation
+
+3. UI Tests
+   - Test user flows
+   - Test state restoration
+   - Test error handling
+*/
+
+// MARK: - Performance Considerations
+
+/*
+1. Memory Management
+   - Use weak references where appropriate
+   - Clear caches when needed
+   - Monitor memory usage
+
+2. Network Optimization
+   - Implement proper caching
+   - Use debouncing for updates
+   - Handle offline mode
+
+3. UI Performance
+   - Use lazy loading
+   - Implement proper state updates
+   - Optimize animations
+*/
+
+// MARK: - Security Guidelines
+
+/*
+1. Data Protection
+   - Encrypt sensitive data
+   - Use secure storage
+   - Implement proper authentication
+
+2. Network Security
+   - Use HTTPS
+   - Implement proper token management
+   - Handle session expiration
+
+3. Input Validation
+   - Validate all user input
+   - Sanitize data
+   - Handle edge cases
+*/
