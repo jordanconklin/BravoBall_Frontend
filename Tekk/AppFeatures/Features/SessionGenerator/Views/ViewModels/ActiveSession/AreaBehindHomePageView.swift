@@ -102,7 +102,6 @@ struct AreaBehindHomePage: View {
                     
                     
                 }
-                .transition(.move(edge: .bottom))
             }
         }
         .fullScreenCover(isPresented: $appModel.viewState.showSessionComplete) {

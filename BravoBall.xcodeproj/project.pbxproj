@@ -71,6 +71,7 @@
 		4289C5862DEE8BBB005CC91B /* Prereq_Location.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4289C5852DEE8BBB005CC91B /* Prereq_Location.riv */; };
 		4289C58A2DEE8C30005CC91B /* Prereq_Time.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4289C5892DEE8C30005CC91B /* Prereq_Time.riv */; };
 		4289C58E2DEE8FAD005CC91B /* Prereq_Difficulty.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4289C58D2DEE8FAD005CC91B /* Prereq_Difficulty.riv */; };
+		4289C5902DFF8A2A005CC91B /* HomePageToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4289C58F2DFF8A1E005CC91B /* HomePageToolBar.swift */; };
 		42929F3B2DD2EB5000DA73BB /* GroupFilterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42929F3A2DD2EB4900DA73BB /* GroupFilterOptions.swift */; };
 		430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */; };
 		430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6CC2D3064850016D520 /* MainAppModel.swift */; };
@@ -244,6 +245,7 @@
 		4289C5852DEE8BBB005CC91B /* Prereq_Location.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Location.riv; sourceTree = "<group>"; };
 		4289C5892DEE8C30005CC91B /* Prereq_Time.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Time.riv; sourceTree = "<group>"; };
 		4289C58D2DEE8FAD005CC91B /* Prereq_Difficulty.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Difficulty.riv; sourceTree = "<group>"; };
+		4289C58F2DFF8A1E005CC91B /* HomePageToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageToolBar.swift; sourceTree = "<group>"; };
 		42929F3A2DD2EB4900DA73BB /* GroupFilterOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupFilterOptions.swift; sourceTree = "<group>"; };
 		430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegisterForm.swift; sourceTree = "<group>"; };
 		430FD6CC2D3064850016D520 /* MainAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppModel.swift; sourceTree = "<group>"; };
@@ -707,6 +709,7 @@
 				17DB45FB2DD69D38000A76F6 /* FilterScrollView.swift */,
 				17DB45FF2DD6D6AF000A76F6 /* SessionGeneratorHomePage.swift */,
 				17DB45FD2DD6A2D0000A76F6 /* SaveFiltersPromptView.swift */,
+				4289C58F2DFF8A1E005CC91B /* HomePageToolBar.swift */,
 				17DB46012DD6D789000A76F6 /* StartButton.swift */,
 				17DB45F92DD69B29000A76F6 /* BravoHeaderView.swift */,
 				4399B7282D6D7B3B00DA5E84 /* ViewModels */,
@@ -1304,6 +1307,7 @@
 				43AC252C2DA3261A00EDD8C0 /* SessionDrillMgmtExtension.swift in Sources */,
 				17595AA12D3B3B520015F35D /* DrillResultsView.swift in Sources */,
 				170168002D88F6240078446C /* DrillSearchView.swift in Sources */,
+				4289C5902DFF8A2A005CC91B /* HomePageToolBar.swift in Sources */,
 				43C5FC7D2D6DCE740064E7D5 /* SelectionButton.swift in Sources */,
 				178208F12D2DFD6500246494 /* OnboardingPreview.swift in Sources */,
 				43C5FC662D6DC4800064E7D5 /* SavedFiltersSheet.swift in Sources */,

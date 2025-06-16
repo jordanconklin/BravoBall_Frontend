@@ -36,14 +36,10 @@ struct SessionGeneratorView: View {
             // Golden button
             if sessionReady() {
                 StartButton(appModel: appModel, sessionModel: sessionModel) {
-                    withAnimation(.spring(dampingFraction: 0.7)) {
+                    withAnimation(.easeInOut(duration: 0.4)) {
                         appModel.viewState.showHomePage = false
                         appModel.viewState.showPreSessionTextBubble = false
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                        withAnimation(.spring(dampingFraction: 0.7)) {
-                            appModel.viewState.showFieldBehindHomePage = true
-                        }
+                        appModel.viewState.showFieldBehindHomePage = true
                     }
                 }
                 .frame(maxWidth: min(geometry.size.width - 40, appModel.layout.buttonMaxWidth))
