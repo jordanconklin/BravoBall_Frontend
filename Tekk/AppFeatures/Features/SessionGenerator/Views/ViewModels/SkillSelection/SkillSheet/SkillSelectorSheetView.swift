@@ -60,9 +60,10 @@ struct SkillSelectorSheet: View {
                                         HStack {
                                             Spacer()
                                             
-                                            Image(systemName: category.icon)
-                                                .font(.system(size: 20))
-                                                .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                                            Image(category.icon)
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 70, height: 70)
                                             
                                             Spacer()
 

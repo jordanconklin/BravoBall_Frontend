@@ -25,22 +25,23 @@ struct HomePageField: View {
                         .frame(width: geometry.size.width, height: geometry.size.height * 1.5)
                         .padding(.zero)
                     
-                    VStack(spacing: 25) {
+                    VStack {
                         
                         sessionMessageBubble
                         
                         HStack(spacing: 15) {
  
                             RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1").view()
-                                .frame(width: 90, height: 90)
+                                .frame(width: 110, height: 110)
                             
                             Button(action:  {
                                 Haptic.light()
                                 appModel.viewState.showHomePage = true
-                                BravoTextBubbleDelay()
+                                bravoTextBubbleDelay()
                             }) {
                                 RiveViewModel(fileName: "Break_Area").view()
                                     .frame(width: 80, height: 80)
+                                    .padding(.top, 25)
                                 
                             }
                         }
@@ -53,15 +54,16 @@ struct HomePageField: View {
                         }
                         
                         ){
-                            Text("Begin")
+                            Text(sessionModel.doesSessionHaveAnyProgress() ? "Continue" : "Begin")
                                 .font(.custom("Poppins-Bold", size: 18))
                                 .foregroundColor(.white)
                                 .padding(16)
                                 .background(appModel.globalSettings.primaryYellowColor)
                                 .cornerRadius(12)
-                                .opacity(sessionModel.sessionInProgress() ? 1.0 : 0.5)
+                                .opacity(sessionModel.sessionInProgress() ? 1.0 : 0.6)
          
                         }
+                        .padding(.top, 20)
                         .disabled(!sessionModel.sessionInProgress())
      
                         
@@ -83,7 +85,7 @@ struct HomePageField: View {
                         }
                         .padding()
                     }
-                    .padding(.top, 150)
+                    .padding(.top, 160)
                     
                 }
             }
@@ -99,13 +101,11 @@ struct HomePageField: View {
                     sessionModel: sessionModel,
                     editableDrill: $sessionModel.orderedSessionDrills[index]
                 )
-            } else {
-                Text("No drills to follow along with!")
             }
         }
     }
     
-    func BravoTextBubbleDelay() {
+    func bravoTextBubbleDelay() {
        // Initially hide the bubble
        appModel.viewState.showPreSessionTextBubble = false
        
@@ -130,7 +130,7 @@ struct HomePageField: View {
         }
         .padding(.top, 20)
         .disabled(sessionModel.sessionInProgress() || sessionModel.orderedSessionDrills.isEmpty)
-        .opacity(sessionModel.sessionInProgress() || sessionModel.orderedSessionDrills.isEmpty ? 0.5 : 1.0)
+        .opacity(sessionModel.sessionInProgress() || sessionModel.orderedSessionDrills.isEmpty ? 0.6 : 1.0)
     }
 
     
@@ -147,10 +147,10 @@ struct HomePageField: View {
         
         return VStack(spacing: 0) {
             Text(message(for: state))
-                .font(.custom("Poppins-Bold", size: 18))
+                .font(.custom("Poppins-Bold", size: 15))
                 .foregroundColor(.white)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(Color(hex:"60AE17"))
@@ -166,6 +166,7 @@ struct HomePageField: View {
             .fill(Color(hex:"60AE17"))
             .frame(width: 20, height: 10)
         }
+        .padding(.trailing, 100)
     }
     
     private enum SessionMessageState {

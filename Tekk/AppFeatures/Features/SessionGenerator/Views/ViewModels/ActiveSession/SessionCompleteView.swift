@@ -21,7 +21,7 @@ struct SessionCompleteView: View {
                 .ignoresSafeArea()
             
             VStack {
-                Text(sessionModel.sessionNotComplete() ? "Your session has ended, but it was incomplete." : "You've completed your session!")
+                Text(sessionModel.allSessionSetsNotComplete() ? "Your session has ended, but it was incomplete." : "You've completed your session!")
                     .foregroundColor(Color.white)
                     .font(.custom("Poppins-Bold", size: 20))
                     .padding()
@@ -63,7 +63,7 @@ struct SessionCompleteView: View {
         }
         .safeAreaInset(edge: .bottom) {
             VStack(spacing: 25) {
-                if sessionModel.sessionNotComplete() {
+                if sessionModel.allSessionSetsNotComplete() {
                     // Note about streak progress
                     HStack {
                         Image(systemName: "info.circle.fill")

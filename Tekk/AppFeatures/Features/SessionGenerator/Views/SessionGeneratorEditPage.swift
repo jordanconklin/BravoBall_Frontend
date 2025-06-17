@@ -41,18 +41,15 @@ struct SessionGeneratorEditPage: View {
                         Text("Edit Session")
                             .font(.custom("Poppins-Bold", size: 20))
                             .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                            .padding(.trailing, 20)
+                            .padding(.leading, 5)
                         
                         Spacer()
                         
-                        Button(action: {
+                        Button("Done") {
                             Haptic.light()
+                            appModel.viewState.showSessionDeleteButtons = false
                             dismiss()
-                        }) {
-                            Image(systemName: "xmark")
-                                .foregroundColor(.gray)
                         }
-                        
                         .foregroundColor(appModel.globalSettings.primaryDarkColor)
                         .font(.custom("Poppins-Bold", size: 16))
                     }
@@ -84,19 +81,19 @@ struct SessionGeneratorEditPage: View {
                     }
                 }
                 .background(Color.white)
-            
-            // Golden button
-            if sessionReady() {
-                StartButton(appModel: appModel, sessionModel: sessionModel) {
-                    withAnimation(.easeInOut(duration: 0.4)) {
-                        appModel.viewState.showHomePage = false
-                        appModel.viewState.showPreSessionTextBubble = false
-                        appModel.viewState.showFieldBehindHomePage = true
-                    }
-                }
-                .frame(maxWidth: min(geometry.size.width - 40, appModel.layout.buttonMaxWidth))
-                .offset(y: -10)
-            }
+//            
+//            // Golden button
+//            if sessionReady() {
+//                StartButton(appModel: appModel, sessionModel: sessionModel) {
+//                    withAnimation(.easeInOut(duration: 0.4)) {
+//                        appModel.viewState.showHomePage = false
+//                        appModel.viewState.showPreSessionTextBubble = false
+//                        appModel.viewState.showFieldBehindHomePage = true
+//                    }
+//                }
+//                .frame(maxWidth: min(geometry.size.width - 40, appModel.layout.buttonMaxWidth))
+//                .offset(y: -10)
+//            }
             
             // Prompt to save filter
             if appModel.viewState.showSaveFiltersPrompt {
@@ -168,6 +165,7 @@ struct SessionGeneratorEditPage: View {
             .presentationDragIndicator(.visible)
         }
     }
+    
 
     func BravoTextBubbleDelay() {
         // Initially hide the bubble

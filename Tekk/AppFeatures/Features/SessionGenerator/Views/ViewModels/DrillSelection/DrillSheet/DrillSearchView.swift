@@ -490,15 +490,16 @@ struct DrillRowForSearch: View {
     let isAlreadyInSession: Bool
     let onSelect: () -> Void
     
+    private let layout = ResponsiveLayout.shared
+    
     
     var body: some View {
         HStack {
-            Image(systemName: "figure.soccer")
-                .font(.system(size: 24))
-                .foregroundColor(.black)
-                .frame(width: 40, height: 40)
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(8)
+            Image(sessionModel.skillIconName(for: drill.skill))
+                .resizable()
+                .scaledToFit()
+                .frame(width: layout.isPad ? 44 : 40, height: layout.isPad ? 44 : 40)
+                .padding(6)
             
             VStack(alignment: .leading) {
                 Text(drill.title)

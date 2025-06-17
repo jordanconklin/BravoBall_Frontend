@@ -19,6 +19,7 @@ struct DrillCard: View {
 
     private let layout = ResponsiveLayout.shared
     
+    
     var body: some View {
         Button(action: {
             Haptic.light()
@@ -39,13 +40,12 @@ struct DrillCard: View {
                             .foregroundColor(appModel.globalSettings.primaryGrayColor)
                             .font(.system(size: layout.isPad ? 16 : 14))
                         
-                        // Soccer icon
-                        Image(systemName: "figure.soccer")
-                            .font(.system(size: layout.isPad ? 28 : 24))
-                            .padding(layout.isPad ? 12 : 8)
-                            .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(10)
+                        // Skill-specific icon
+                        Image(sessionModel.skillIconName(for: editableDrill.drill.skill))
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: layout.isPad ? 44 : 40, height: layout.isPad ? 44 : 40)
+                            .padding(6)
                     }
                     .padding(.leading, layout.isPad ? 24 : 16)
                     
@@ -82,6 +82,7 @@ struct DrillCard: View {
             }
         }
     }
+    
 }
 
 #if DEBUG

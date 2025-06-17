@@ -23,12 +23,10 @@ struct SkillRow: View {
             }
         }) {
             HStack {
-                Image(systemName: "figure.soccer")
-                    .font(.system(size: 24))
-                    .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                    .frame(width: 40, height: 40)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(8)
+                Image(sessionModel.skillIconName(for: skill.category))
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 30, height: 30)
                 
                 VStack(alignment: .leading) {
                     Text(skill.subSkill)
