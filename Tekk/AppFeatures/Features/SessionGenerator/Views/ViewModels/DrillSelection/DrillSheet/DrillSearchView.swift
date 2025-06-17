@@ -58,7 +58,7 @@ struct DrillSearchView: View {
                             dismiss()
                         }
                         .padding()
-                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                        .foregroundColor(Color.blue)
                         .font(.custom("Poppins-Bold", size: 16))
                     }
                     

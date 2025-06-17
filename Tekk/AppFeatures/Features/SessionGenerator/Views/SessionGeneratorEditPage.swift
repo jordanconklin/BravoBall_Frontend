@@ -50,7 +50,7 @@ struct SessionGeneratorEditPage: View {
                             appModel.viewState.showSessionDeleteButtons = false
                             dismiss()
                         }
-                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                        .foregroundColor(Color.blue)
                         .font(.custom("Poppins-Bold", size: 16))
                     }
                     .padding()
@@ -141,7 +141,7 @@ struct SessionGeneratorEditPage: View {
                 dismiss: { appModel.viewState.showSavedFilters = false }
             )
             .presentationDragIndicator(.visible)
-            .presentationDetents([.height(appModel.layout.sheetHeight)])
+            .presentationDetents([.medium, .large])
             .frame(width: geometry.size.width)
         }
         // Sheet pop-up for filter option button

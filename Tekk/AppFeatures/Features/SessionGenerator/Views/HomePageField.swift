@@ -12,6 +12,7 @@ struct HomePageField: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     @Environment(\.viewGeometry) var geometry
+    
     @State private var showingFollowAlong: Bool = false
         
     var body: some View {
@@ -21,9 +22,12 @@ struct HomePageField: View {
                 
                 // When the session begins, the field pops up
                 ZStack(alignment: .top) {
-                    RiveViewModel(fileName: "Grass_Field").view()
-                        .frame(width: geometry.size.width, height: geometry.size.height * 1.5)
-                        .padding(.zero)
+                    VStack(spacing: 0) {
+                        RiveViewModel(fileName: "Grass_Field").view()
+                            .frame(width: geometry.size.width, height: geometry.size.height * 1.5)
+                            .padding(.zero)
+                    }
+                    
                     
                     VStack {
                         
