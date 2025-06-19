@@ -21,10 +21,14 @@ struct SessionGeneratorView: View {
     
     // MARK: Main view
     var body: some View {
+        
         ZStack(alignment: .top) {
-            // Sky background color
-            Color(hex:"BEF1FA")
-                .ignoresSafeArea()
+            
+            VStack {
+                Color(hex:"70D412")
+                .edgesIgnoringSafeArea(.all)
+            }
+            
             
             HomePageField(appModel: appModel, sessionModel: sessionModel)
         
@@ -47,15 +51,16 @@ struct SessionGeneratorView: View {
     
 
 }
-//
-//#if DEBUG
-//struct SessionGeneratorView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        let onboardingModel = OnboardingModel()
-//        let appModel = MainAppModel()
-//        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
-//        SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
-//    }
-//}
-//#endif
+
+#if DEBUG
+struct SessionGeneratorView_Previews: PreviewProvider {
+    static var previews: some View {
+        let onboardingModel = OnboardingModel()
+        let appModel = MainAppModel()
+        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        let userManager = UserManager()
+        SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
+    }
+}
+#endif
 

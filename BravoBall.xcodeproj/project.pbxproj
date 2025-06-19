@@ -72,7 +72,9 @@
 		4289C5902DFF8A2A005CC91B /* HomePageToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4289C58F2DFF8A1E005CC91B /* HomePageToolBar.swift */; };
 		4289C5992E000315005CC91B /* HomePageField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4289C5982E000310005CC91B /* HomePageField.swift */; };
 		4289C59B2E0006F0005CC91B /* SessionGeneratorEditPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4289C59A2E0006E8005CC91B /* SessionGeneratorEditPage.swift */; };
-		4289C5B12E010463005CC91B /* Grass_Field.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4289C5B02E010463005CC91B /* Grass_Field.riv */; };
+		4289C5B72E0339E5005CC91B /* Grass_Field.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4289C5B62E0339E5005CC91B /* Grass_Field.riv */; };
+		4289C5BB2E036F8B005CC91B /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4289C5BA2E036F8A005CC91B /* test.swift */; };
+		4289C5BF2E037E4A005CC91B /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 4289C5BE2E037E4A005CC91B /* RiveRuntime */; };
 		42929F3B2DD2EB5000DA73BB /* GroupFilterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42929F3A2DD2EB4900DA73BB /* GroupFilterOptions.swift */; };
 		430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */; };
 		430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6CC2D3064850016D520 /* MainAppModel.swift */; };
@@ -246,7 +248,8 @@
 		4289C58F2DFF8A1E005CC91B /* HomePageToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageToolBar.swift; sourceTree = "<group>"; };
 		4289C5982E000310005CC91B /* HomePageField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageField.swift; sourceTree = "<group>"; };
 		4289C59A2E0006E8005CC91B /* SessionGeneratorEditPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionGeneratorEditPage.swift; sourceTree = "<group>"; };
-		4289C5B02E010463005CC91B /* Grass_Field.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Grass_Field.riv; sourceTree = "<group>"; };
+		4289C5B62E0339E5005CC91B /* Grass_Field.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Grass_Field.riv; sourceTree = "<group>"; };
+		4289C5BA2E036F8A005CC91B /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
 		42929F3A2DD2EB4900DA73BB /* GroupFilterOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupFilterOptions.swift; sourceTree = "<group>"; };
 		430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegisterForm.swift; sourceTree = "<group>"; };
 		430FD6CC2D3064850016D520 /* MainAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppModel.swift; sourceTree = "<group>"; };
@@ -333,6 +336,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4289C5BF2E037E4A005CC91B /* RiveRuntime in Frameworks */,
 				430FD6D32D307AEC0016D520 /* SwiftKeychainWrapper in Frameworks */,
 				43AC25812DA798FF00EDD8C0 /* RiveRuntime in Frameworks */,
 				435A70152CA7AB2600BFCC40 /* RiveRuntime in Frameworks */,
@@ -413,6 +417,7 @@
 		1749362A2C3E1032001163B9 /* BravoBallTests */ = {
 			isa = PBXGroup;
 			children = (
+				4289C5BA2E036F8A005CC91B /* test.swift */,
 				17DB460A2DD866C7000A76F6 /* BravoBallTests.swift */,
 				17DB460C2DD86949000A76F6 /* SessionLoadingTests.swift */,
 			);
@@ -800,10 +805,10 @@
 				43BFAA412D444A2C00B12A6F /* Message_Bubble.riv */,
 				43BFA9F52D40ABB600B12A6F /* Paw_Yellow.riv */,
 				43BFAA0F2D43291E00B12A6F /* Tab_House.riv */,
+				4289C5B62E0339E5005CC91B /* Grass_Field.riv */,
 				43BFAA1F2D438C7B00B12A6F /* Tab_Calendar.riv */,
 				43BFAA212D438D6600B12A6F /* Tab_Saved.riv */,
 				43BFAA252D43946000B12A6F /* Tab_Dude.riv */,
-				4289C5B02E010463005CC91B /* Grass_Field.riv */,
 				4289C5892DEE8C30005CC91B /* Prereq_Time.riv */,
 				43BFAA312D44105200B12A6F /* Prereq_Equipment.riv */,
 				4289C5852DEE8BBB005CC91B /* Prereq_Location.riv */,
@@ -1224,7 +1229,7 @@
 				43BFA9F42D40AB8A00B12A6F /* Paw_Gray.riv in Resources */,
 				177B1BF02DF7682C00AF465C /* 321-start.MP3 in Resources */,
 				177B1BF12DF7682C00AF465C /* success.MP3 in Resources */,
-				4289C5B12E010463005CC91B /* Grass_Field.riv in Resources */,
+				4289C5B72E0339E5005CC91B /* Grass_Field.riv in Resources */,
 				177B1BF22DF7682C00AF465C /* 321-done.MP3 in Resources */,
 				4289C58A2DEE8C30005CC91B /* Prereq_Time.riv in Resources */,
 				43BFAA422D444A2C00B12A6F /* Message_Bubble.riv in Resources */,
@@ -1344,6 +1349,7 @@
 				177B1BBA2DF2BF5200AF465C /* PrimaryButton.swift in Sources */,
 				43C5FC562D6DBD310064E7D5 /* LikedGroupCard.swift in Sources */,
 				1784EB6D2D965F79001D4F2F /* SettingsModel.swift in Sources */,
+				4289C5BB2E036F8B005CC91B /* test.swift in Sources */,
 				1782090C2D2E09EB00246494 /* SavedDrillsView.swift in Sources */,
 				43AC256F2DA3992B00EDD8C0 /* FilterProtocols.swift in Sources */,
 				178208E22D2DEBB400246494 /* OnboardingView.swift in Sources */,
@@ -1781,6 +1787,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4289C5BE2E037E4A005CC91B /* RiveRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 430FD6B82D2E12640016D520 /* XCRemoteSwiftPackageReference "rive-ios" */;
+			productName = RiveRuntime;
+		};
 		430FD6D22D307AEC0016D520 /* SwiftKeychainWrapper */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 430FD6D12D307AEC0016D520 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;

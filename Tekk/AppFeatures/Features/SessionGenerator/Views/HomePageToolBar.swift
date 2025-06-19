@@ -60,7 +60,7 @@ struct HomePageToolBar: View {
         }
         .frame(height: 45)
         .padding()
-        .background(Color.clear)  // Transparent, but blocks touches
+        .background(Color.white)  // Transparent, but blocks touches
         .contentShape(Rectangle())
     }
 }
