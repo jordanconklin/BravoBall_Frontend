@@ -35,6 +35,7 @@
 		177B1BF12DF7682C00AF465C /* success.MP3 in Resources */ = {isa = PBXBuildFile; fileRef = 177B1BEF2DF7682C00AF465C /* success.MP3 */; };
 		177B1BF22DF7682C00AF465C /* 321-done.MP3 in Resources */ = {isa = PBXBuildFile; fileRef = 177B1BED2DF7682C00AF465C /* 321-done.MP3 */; };
 		177B1BF42DF76FCA00AF465C /* BravoBallApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B1BF32DF76FC500AF465C /* BravoBallApp.swift */; };
+		177B1BF62DF8CC8200AF465C /* .cursor in Resources */ = {isa = PBXBuildFile; fileRef = 177B1BF52DF8CC7D00AF465C /* .cursor */; };
 		178208D22D2D14D200246494 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178208D12D2D14D200246494 /* MainTabView.swift */; };
 		178208E02D2DEB9C00246494 /* OnboardingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178208DF2D2DEB9C00246494 /* OnboardingModel.swift */; };
 		178208E22D2DEBB400246494 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178208E12D2DEBB400246494 /* OnboardingView.swift */; };
@@ -212,6 +213,7 @@
 		177B1BEE2DF7682C00AF465C /* 321-start.MP3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "321-start.MP3"; sourceTree = "<group>"; };
 		177B1BEF2DF7682C00AF465C /* success.MP3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = success.MP3; sourceTree = "<group>"; };
 		177B1BF32DF76FC500AF465C /* BravoBallApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BravoBallApp.swift; sourceTree = "<group>"; };
+		177B1BF52DF8CC7D00AF465C /* .cursor */ = {isa = PBXFileReference; lastKnownFileType = text; path = .cursor; sourceTree = "<group>"; };
 		178208D12D2D14D200246494 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		178208DF2D2DEB9C00246494 /* OnboardingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingModel.swift; sourceTree = "<group>"; };
 		178208E12D2DEBB400246494 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -398,6 +400,7 @@
 				178208DC2D2DEB7200246494 /* Onboarding */,
 				1749361B2C3E102B001163B9 /* ContentView.swift */,
 				177B1BF32DF76FC500AF465C /* BravoBallApp.swift */,
+				177B1BF52DF8CC7D00AF465C /* .cursor */,
 				17CA37BA2DF2440A001AD5FA /* HapticFeedback */,
 				1749361D2C3E1031001163B9 /* Assets.xcassets */,
 				177B1BEC2DF7680600AF465C /* AudioAssets */,
@@ -1237,6 +1240,7 @@
 				177B1BF12DF7682C00AF465C /* success.MP3 in Resources */,
 				4289C5B72E0339E5005CC91B /* Grass_Field.riv in Resources */,
 				177B1BF22DF7682C00AF465C /* 321-done.MP3 in Resources */,
+				177B1BF62DF8CC8200AF465C /* .cursor in Resources */,
 				4289C58A2DEE8C30005CC91B /* Prereq_Time.riv in Resources */,
 				43BFAA422D444A2C00B12A6F /* Message_Bubble.riv in Resources */,
 				17595AAD2D3B44FE0015F35D /* Drill_Card_Complete.riv in Resources */,
@@ -1564,7 +1568,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 8;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Tekk/Preview Content\"";
 				DEVELOPMENT_TEAM = J36CXA7LCG;
@@ -1606,7 +1610,7 @@
 				CODE_SIGN_ENTITLEMENTS = Tekk/Tekk.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 8;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Tekk/Preview Content\"";
 				DEVELOPMENT_TEAM = J36CXA7LCG;
