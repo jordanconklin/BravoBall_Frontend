@@ -40,7 +40,7 @@ class MainAppModel: ObservableObject {
     
     struct ViewState: Codable {
         var showingDrills = false
-        var showHomePage: Bool = true
+        var showHomePage: Bool = false
         var showPreSessionTextBubble: Bool = false
         var showPostSessionTextBubble: Bool = false
         var showFieldBehindHomePage: Bool = false

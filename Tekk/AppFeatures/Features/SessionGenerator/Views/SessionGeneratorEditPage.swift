@@ -1,5 +1,5 @@
 //
-//  SessionGeneratorHomePage.swift
+//  SessionGeneratorEditPage.swift
 //  BravoBall
 //
 //  Created by Jordan on 5/15/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SessionGeneratorHomePage: View {
+struct SessionGeneratorEditPage: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     var geometry: ViewGeometry
@@ -41,19 +41,16 @@ struct SessionGeneratorHomePage: View {
                         Text("Edit Session")
                             .font(.custom("Poppins-Bold", size: 20))
                             .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                            .padding(.trailing, 20)
+                            .padding(.leading, 5)
                         
                         Spacer()
                         
-                        Button(action: {
+                        Button("Done") {
                             Haptic.light()
+                            appModel.viewState.showSessionDeleteButtons = false
                             dismiss()
-                        }) {
-                            Image(systemName: "xmark")
-                                .foregroundColor(.gray)
                         }
-                        
-                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                        .foregroundColor(Color.blue)
                         .font(.custom("Poppins-Bold", size: 16))
                     }
                     .padding()
@@ -84,19 +81,19 @@ struct SessionGeneratorHomePage: View {
                     }
                 }
                 .background(Color.white)
-            
-            // Golden button
-            if sessionReady() {
-                StartButton(appModel: appModel, sessionModel: sessionModel) {
-                    withAnimation(.easeInOut(duration: 0.4)) {
-                        appModel.viewState.showHomePage = false
-                        appModel.viewState.showPreSessionTextBubble = false
-                        appModel.viewState.showFieldBehindHomePage = true
-                    }
-                }
-                .frame(maxWidth: min(geometry.size.width - 40, appModel.layout.buttonMaxWidth))
-                .offset(y: -10)
-            }
+//            
+//            // Golden button
+//            if sessionReady() {
+//                StartButton(appModel: appModel, sessionModel: sessionModel) {
+//                    withAnimation(.easeInOut(duration: 0.4)) {
+//                        appModel.viewState.showHomePage = false
+//                        appModel.viewState.showPreSessionTextBubble = false
+//                        appModel.viewState.showFieldBehindHomePage = true
+//                    }
+//                }
+//                .frame(maxWidth: min(geometry.size.width - 40, appModel.layout.buttonMaxWidth))
+//                .offset(y: -10)
+//            }
             
             // Prompt to save filter
             if appModel.viewState.showSaveFiltersPrompt {
@@ -144,7 +141,7 @@ struct SessionGeneratorHomePage: View {
                 dismiss: { appModel.viewState.showSavedFilters = false }
             )
             .presentationDragIndicator(.visible)
-            .presentationDetents([.height(appModel.layout.sheetHeight)])
+            .presentationDetents([.medium, .large])
             .frame(width: geometry.size.width)
         }
         // Sheet pop-up for filter option button
@@ -168,6 +165,7 @@ struct SessionGeneratorHomePage: View {
             .presentationDragIndicator(.visible)
         }
     }
+    
 
     func BravoTextBubbleDelay() {
         // Initially hide the bubble
@@ -188,13 +186,13 @@ struct SessionGeneratorHomePage: View {
 }
 
 #if DEBUG
-struct SessionGeneratorHomePage_Previews: PreviewProvider {
+struct SessionGeneratorEditPage_Previews: PreviewProvider {
     static var previews: some View {
         let appModel = MainAppModel()
         let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
         @State var searchSkillsText = ""
         let geometry = ViewGeometry(size: CGSize(width: 390, height: 844), safeAreaInsets: EdgeInsets())
-        return SessionGeneratorHomePage(appModel: appModel, sessionModel: sessionModel, geometry: geometry)
+        return SessionGeneratorEditPage(appModel: appModel, sessionModel: sessionModel, geometry: geometry)
     }
 }
 #endif 

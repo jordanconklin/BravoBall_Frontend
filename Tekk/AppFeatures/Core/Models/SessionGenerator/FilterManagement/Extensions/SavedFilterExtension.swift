@@ -8,6 +8,7 @@ import Foundation
 
 extension SessionGeneratorModel: SavedFiltersManagement {
     
+    
     // Filter value that is selected, or if its empty
     func filterValue(for type: FilterType) -> String {
         let value = switch type {

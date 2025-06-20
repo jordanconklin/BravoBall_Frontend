@@ -79,8 +79,8 @@ struct DrillResponse: Codable, Identifiable {
     
     // Convert API response to local DrillModel
     func toDrillModel() -> DrillModel {
-        // Get the primary skill category, defaulting to the type if not available
-        let skillCategory = primarySkill?.category ?? type
+        // Get the primary skill category, defaulting to "General" if not available
+        let skillCategory = primarySkill?.category ?? "General"
         
         // Collect all sub-skills from both primary and secondary skills
         var allSubSkills: [String] = []

@@ -57,6 +57,8 @@ struct DrillFollowAlongView: View {
                     HStack {
                         backButton
                         Spacer()
+                        
+                        
                         Text("\(editableDrill.drill.title)")
                             .foregroundColor(appModel.globalSettings.primaryDarkColor)
                             .font(.custom("Poppins-Bold", size: 18))
@@ -65,11 +67,20 @@ struct DrillFollowAlongView: View {
                         detailsButton
                     }
                     .padding(.top, 16)
+                    
+                    HStack {
+                        Spacer()
+                        
+                        Text("\(editableDrill.totalSets) sets - \(editableDrill.totalReps) reps - \(editableDrill.totalDuration) mins")
+                            .font(.custom("Poppins-Bold", size: 13))
+                            .foregroundColor(appModel.globalSettings.primaryGrayColor)
+                            .lineLimit(1)
+                        
+                        Spacer()
+                    }
+                    .padding(.top, 10)
 
-                    // Set info and progress bar at the top
-                    setsDoneText
-                    progressRectangle
-                    Spacer(minLength: 10)
+                    Spacer()
 
                     // Center the video player more visually
                     if !editableDrill.drill.videoUrl.isEmpty, let videoUrl = URL(string: editableDrill.drill.videoUrl) {
@@ -126,7 +137,7 @@ struct DrillFollowAlongView: View {
             .sheet(isPresented: $showInfoSheet) {
                 InfoPopupView(
                     title: "How Drill Timer Works",
-                    description: "Press play to start the countdown for this set.\n\nWhen the timer ends, you'll move to the next set and the timer will reset.\n\nComplete all sets to finish the drill and proceed to the next one.\n\nYou can skip a drill, but your session will be marked as incomplete if you do.",
+                    description: "Press play to start the countdown for this set.\n\nWhen the timer ends, you'll move to the next set and the timer will reset.\n\nComplete all sets to finish the drill and proceed to the next one. You can see the amount of sets you completed on the green \"Done\" button below.\n\nYou can skip a drill, but your session will be marked as incomplete if you do.",
                     onClose: { showInfoSheet = false }
                 )
                 .presentationDetents([.medium, .large])
@@ -216,7 +227,7 @@ struct DrillFollowAlongView: View {
     }
     
     private var endDrillButton: some View {
-        // End drill
+        // End drill with progress bar
         Button(action: {
             Haptic.light()
             handleDrillCompletion()
@@ -225,21 +236,30 @@ struct DrillFollowAlongView: View {
             if doneWithSession() {
                 handleSessionCompletion()
             }
-            
-        }
+        }) {
+            ZStack {
+                // Background progress bar
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.gray.opacity(0.3))
+                    .opacity(doneWithDrill() ? 1.0 : 0.6)
                 
-        ){
-            Text("Done with drill")
-                .font(.custom("Poppins-Bold", size: 16))
-                .foregroundColor(.white)
-                .frame(height: 44)
-                .frame(maxWidth: .infinity)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(doneWithDrill() ? Color.green : appModel.globalSettings.primaryLightGrayColor)
-                )
+                // Progress fill
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.green)
+                    .frame(maxWidth: .infinity)
+                    .scaleEffect(x: progress, anchor: .leading)
+                    .opacity(doneWithDrill() ? 1.0 : 0.6)
+                
+                // Button text
+                Text("Done")
+                    .font(.custom("Poppins-Bold", size: 16))
+                    .foregroundColor(.white)
+            }
+            .frame(height: 44)
+            .frame(maxWidth: .infinity)
         }
         .disabled(!doneWithDrill())
+        .padding(.trailing, 5)
     }
     
     private var backButton: some View {
@@ -252,38 +272,6 @@ struct DrillFollowAlongView: View {
                     .foregroundColor(appModel.globalSettings.primaryDarkColor)
             }
         }
-    }
-    
-    private var progressRectangle: some View {
-        // Progress stroke rectangle
-        Path { path in
-            path.move(to: CGPoint(x: 0, y: 0))
-            path.addLine(to: CGPoint(x: 360, y: 0))
-        }
-        .stroke(
-            Color.gray.opacity(0.3),
-            style: StrokeStyle(
-                lineWidth: 9,
-                lineCap: .round  // This rounds the ends
-            )
-        )
-        .overlay(
-            Path { path in
-                path.move(to: CGPoint(x: 0, y: 0))
-                path.addLine(to: CGPoint(x: 360, y: 0))
-            }
-            .trim(from: 0, to: Double(editableDrill.setsDone) / Double(editableDrill.totalSets))
-            .stroke(
-                appModel.globalSettings.primaryYellowColor,
-                style: StrokeStyle(
-                    lineWidth: 9,
-                    lineCap: .round  // This rounds the ends
-                )
-            )
-            .animation(.linear, value: Double(editableDrill.setsDone) / Double(editableDrill.totalSets))
-        )
-        .frame(width: 360, height: 20)
-        .padding(.top, 20)
     }
     
     private var setsDoneText: some View {
@@ -337,6 +325,9 @@ struct DrillFollowAlongView: View {
         sessionModel.orderedSessionDrills.filter( {$0.isCompleted == true}).count
     }
     
+    private var progress: Double {
+        Double(editableDrill.setsDone) / Double(editableDrill.totalSets)
+    }
 
     private func togglePlayPause() {
         isPlaying.toggle()
@@ -482,7 +473,7 @@ struct DrillFollowAlongView_Previews: PreviewProvider {
         )
         let editableDrill = EditableDrillModel(
             drill: drill,
-            setsDone: 0,
+            setsDone: 1,
             totalSets: 4,
             totalReps: 10,
             totalDuration: 15,

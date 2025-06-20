@@ -163,7 +163,13 @@ class PreferencesUpdateService {
                 let id = UUID()
                 let backendId = drill["id"] as? Int
                 let title = drill["title"] as? String ?? "Unnamed Drill"
-                let skill = drill["type"] as? String ?? "other"
+                let skill: String = {
+                    if let primarySkill = drill["primary_skill"] as? [String: Any],
+                       let category = primarySkill["category"] as? String, !category.isEmpty {
+                        return category
+                    }
+                    return "General" // Fallback to "General"
+                }()
                 let subSkills: [String] = {
                     var allSubSkills: [String] = []
                     if let primarySkill = drill["primary_skill"] as? [String: Any],

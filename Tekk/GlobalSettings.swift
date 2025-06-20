@@ -35,7 +35,7 @@ struct AppSettings {
         switch appDevCase {
         case 1:
             // Production (simulated during debug)
-            return "https://bravoball-backend.onrender.com"
+            return Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? "http://127.0.0.1:8000"
         case 2:
             // Localhost for simulator or Mac
             return "http://127.0.0.1:8000"
@@ -48,7 +48,7 @@ struct AppSettings {
         }
         #else
         // Real production build (release)
-        return "https://bravoball-backend.onrender.com"
+        return "https://api.yourproductiondomain.com"
         #endif
     }
 }
