@@ -17,6 +17,7 @@ struct FieldDrillCard: View {
     private let layout = ResponsiveLayout.shared
     
     var body: some View {
+        let _ = print("DEBUG: FieldDrillCard skill: '\(editableDrill.drill.skill)' -> Icon: '\(sessionModel.skillIconName(for: editableDrill.drill.skill))'")
         Button(action: {
             Haptic.light()
             showingFollowAlong = true

@@ -14,6 +14,7 @@ struct SkillRow: View {
     let isSelected: Bool
     
     var body: some View {
+        let _ = print("DEBUG: SkillRow category: '\(skill.category)' -> Icon: '\(sessionModel.skillIconName(for: skill.category))'")
         Button( action: {
             Haptic.light()
             if isSelected {

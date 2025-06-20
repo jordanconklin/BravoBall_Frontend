@@ -21,6 +21,7 @@ struct DrillCard: View {
     
     
     var body: some View {
+        let _ = print("DEBUG: DrillCard skill: '\(editableDrill.drill.skill)' -> Icon: '\(sessionModel.skillIconName(for: editableDrill.drill.skill))'")
         Button(action: {
             Haptic.light()
             sessionModel.selectedDrillForEditing = editableDrill

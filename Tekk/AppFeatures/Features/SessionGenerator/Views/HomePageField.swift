@@ -17,14 +17,16 @@ struct HomePageField: View {
         
     var body: some View {
         
-        ScrollView(.vertical, showsIndicators: false) {
+        ScrollView {
                 
                 // When the session begins, the field pops up
                 ZStack(alignment: .top) {
+                    
+                    
                     VStack(spacing: 0) {
                         RiveViewModel(fileName: "Grass_Field").view()
                             .frame(width: geometry.size.width, height: geometry.size.height)
-                            .padding(.zero)
+                            .padding(.top, 30)
                     
                     }
                     
@@ -89,12 +91,18 @@ struct HomePageField: View {
                             trophyButton
                         }
                         .padding()
+                        .padding(.bottom, 120)
                     }
-                    .padding(.top, 180)
+                    .padding(.top, 220)
+                    
+                    Spacer()
                     
                 }
 
         }
+        .edgesIgnoringSafeArea(.all)
+        .background(Color(hex:"70D412"))
+
         
         .fullScreenCover(isPresented: $showingFollowAlong) {
             if let index = sessionModel.orderedSessionDrills.firstIndex(where: { !$0.isCompleted }) {

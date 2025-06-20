@@ -34,7 +34,7 @@ struct HomePageToolBar: View {
                     .font(.system(size: 25))
                 Text("0")
                     .font(.custom("Poppins-Bold", size: 30))
-                    .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                    .foregroundColor(.blue)
             }
 
             HStack {
@@ -44,7 +44,7 @@ struct HomePageToolBar: View {
                     .font(.system(size: 25))
                 Text("0")
                     .font(.custom("Poppins-Bold", size: 30))
-                    .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                    .foregroundColor(.red)
             }
             
             HStack {
@@ -54,7 +54,7 @@ struct HomePageToolBar: View {
                     .frame(width: 30, height: 40)
                 Text("\(appModel.currentStreak)")
                     .font(.custom("Poppins-Bold", size: 30))
-                    .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                    .foregroundColor(.orange)
             }
             
         }

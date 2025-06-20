@@ -18,6 +18,7 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { geometry in
             Group {
+                
                 if onboardingModel.isLoggedIn {
                     MainTabView(onboardingModel: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
                         .onAppear {
@@ -49,3 +50,4 @@ struct ContentView: View {
     ContentView()
         .environmentObject(ToastManager())
 }
+

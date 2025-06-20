@@ -24,11 +24,6 @@ struct SessionGeneratorView: View {
         
         ZStack(alignment: .top) {
             
-            VStack {
-                Color(hex:"70D412")
-                .edgesIgnoringSafeArea(.all)
-            }
-            
             
             HomePageField(appModel: appModel, sessionModel: sessionModel)
         
@@ -37,6 +32,7 @@ struct SessionGeneratorView: View {
                 .frame(maxWidth: geometry.size.width)
             
         }
+        
         .fullScreenCover(isPresented: $appModel.viewState.showHomePage) {
             SessionGeneratorEditPage(appModel: appModel, sessionModel: sessionModel, geometry: geometry)
                 .frame(maxWidth: geometry.size.width)
@@ -47,6 +43,7 @@ struct SessionGeneratorView: View {
                 appModel: appModel, sessionModel: sessionModel
             )
         }
+        
     }
     
 
