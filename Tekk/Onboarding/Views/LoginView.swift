@@ -215,15 +215,15 @@ struct LoginView: View {
 
 }
 
-#if DEBUG
-struct LoginView_Previews: PreviewProvider {
-    static var previews: some View {
-        // Provide mock models for preview
-        let onboardingModel = OnboardingModel()
-        let userManager = UserManager()
-        LoginView(onboardingModel: onboardingModel, userManager: userManager)
-            .background(Color(.systemBackground))
-            .previewLayout(.sizeThatFits)
-    }
-}
-#endif
+//#if DEBUG
+//struct LoginView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        // Provide mock models for preview
+//        let onboardingModel = OnboardingModel()
+//        let userManager = UserManager()
+//        LoginView(onboardingModel: onboardingModel, userManager: userManager)
+//            .background(Color(.systemBackground))
+//            .previewLayout(.sizeThatFits)
+//    }
+//}
+//#endif

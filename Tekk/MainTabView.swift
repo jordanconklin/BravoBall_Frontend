@@ -72,8 +72,7 @@ struct MainTabView: View {
                         }
                     }
                     .padding(.horizontal, appModel.layout.contentMinPadding)
-                    .frame(height: 80)
-                    .background(Color.white)
+                    .frame(height: 70)
                 }
                 .background(Color.white)
             }
