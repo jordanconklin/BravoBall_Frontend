@@ -58,20 +58,30 @@ struct HomePageField: View {
                         Button(action: {
                             Haptic.light()
                             showingFollowAlong = true
+                        }) {
+                            ZStack {
+                                // Back rectangle for 3D effect
+                                Rectangle()
+                                    .foregroundColor(Color(hex:"c2983e"))
+                                    .cornerRadius(12)
+                                    .offset(y: 6)
+
+                                // Front rectangle
+                                Rectangle()
+                                    .foregroundColor(appModel.globalSettings.primaryYellowColor)
+                                    .cornerRadius(12)
+
+                                // Button Text
+                                Text(sessionModel.doesSessionHaveAnyProgress() ? "Continue" : "Begin")
+                                    .font(.custom("Poppins-Bold", size: 18))
+                                    .foregroundColor(.white)
+                            }
+                            .frame(width: 150, height: 50)
                         }
-                        
-                        ){
-                            Text(sessionModel.doesSessionHaveAnyProgress() ? "Continue" : "Begin")
-                                .font(.custom("Poppins-Bold", size: 18))
-                                .foregroundColor(.white)
-                                .padding(16)
-                                .background(appModel.globalSettings.primaryYellowColor)
-                                .cornerRadius(12)
-                                .opacity(sessionModel.sessionInProgress() ? 1.0 : 0.6)
-         
-                        }
-                        .padding(.top, 20)
+                        .padding()
                         .disabled(!sessionModel.sessionInProgress())
+                        .opacity(sessionModel.sessionInProgress() ? 1.0 : 0.0)
+
      
                         
                         VStack(spacing: 15) {
