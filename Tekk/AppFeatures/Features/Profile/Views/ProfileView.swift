@@ -119,7 +119,7 @@ struct ProfileView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 60, height: 60)
-                .foregroundColor(appModel.globalSettings.primaryLightGrayColor)
+                .foregroundColor(Color.blue.opacity(0.25))
             
 
             VStack(spacing: 0) {
