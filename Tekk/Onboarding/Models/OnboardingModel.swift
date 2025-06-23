@@ -67,6 +67,7 @@ class OnboardingModel: ObservableObject {
         var areasToImprove: [String] = []
         var email: String = ""
         var password: String = ""
+        var confirmPassword: String = ""
         
         // Keep these for future use but they won't be used in the current flow
         var biggestChallenge: [String] = []
@@ -87,7 +88,7 @@ class OnboardingModel: ObservableObject {
         case 4: return !onboardingData.ageRange.isEmpty
         case 5: return !onboardingData.strengths.isEmpty
         case 6: return !onboardingData.areasToImprove.isEmpty
-        case 7: return !onboardingData.email.isEmpty && !onboardingData.password.isEmpty
+        case 7: return !onboardingData.email.isEmpty && !onboardingData.password.isEmpty && !onboardingData.confirmPassword.isEmpty
         default: return false
         }
     }
@@ -163,6 +164,8 @@ class OnboardingModel: ObservableObject {
         if !AccountValidation.isValidEmail(onboardingData.email) { return "Please enter a valid email address." }
         if onboardingData.password.isEmpty { return "Password is required." }
         if let passError = AccountValidation.passwordError(onboardingData.password) { return passError }
+        if onboardingData.confirmPassword.isEmpty { return "Please confirm your password." }
+        if onboardingData.password != onboardingData.confirmPassword { return "Passwords do not match." }
         return nil
     }
 }

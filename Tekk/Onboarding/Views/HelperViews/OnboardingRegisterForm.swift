@@ -20,9 +20,15 @@ struct OnboardingRegisterForm: View {
             VStack(spacing: 20) {
                 // Email Field
                 BravoTextField(placeholder: "Email", text: $email, keyboardType: .emailAddress)
+                
                 // Password Field
                 BravoSecureField(placeholder: "Password", text: $password)
+                
+                // Confirm Password Field
+                BravoSecureField(placeholder: "Confirm Password", text: $onboardingModel.onboardingData.confirmPassword)
+                
                 Spacer()
+                
                 // Show validation error if present and user has attempted to submit
                 if hasAttemptedSubmit, let error = onboardingModel.registrationValidationError {
                     Text(error)

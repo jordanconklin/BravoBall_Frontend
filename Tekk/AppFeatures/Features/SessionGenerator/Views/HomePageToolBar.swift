@@ -20,11 +20,16 @@ struct HomePageToolBar: View {
             HStack(spacing: 22) {
                 
                 // this will use userManger object later for profile pic
-                Image(systemName: "person.circle.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 40, height: 40)
-                    .foregroundColor(appModel.globalSettings.primaryLightGrayColor)
+                Button(action: {
+                    Haptic.medium()
+                    appModel.mainTabSelected = 3
+                }) {
+                    Image(systemName: "person.circle.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 40, height: 40)
+                        .foregroundColor(Color.blue.opacity(0.25))
+                }
                 
                 Spacer()
                 
@@ -55,14 +60,19 @@ struct HomePageToolBar: View {
                 
                 Spacer()
                 
-                HStack {
-                    Image("Streak_Flame")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 40)
-                    Text("\(appModel.currentStreak)")
-                        .font(.custom("Poppins-Bold", size: 30))
-                        .foregroundColor(.orange)
+                Button(action: {
+                    Haptic.light()
+                    appModel.mainTabSelected = 1
+                }) {
+                    HStack {
+                        Image("Streak_Flame")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30, height: 40)
+                        Text("\(appModel.currentStreak)")
+                            .font(.custom("Poppins-Bold", size: 30))
+                            .foregroundColor(.orange)
+                    }
                 }
                 
             }

@@ -313,8 +313,9 @@ struct OnboardingView: View {
                         Task {
                             let email = onboardingModel.onboardingData.email
                             let password = onboardingModel.onboardingData.password
-                            guard !email.isEmpty, !password.isEmpty else {
-                                onboardingModel.errorMessage = "Please enter your email and password."
+                            let confirmPassword = onboardingModel.onboardingData.confirmPassword
+                            guard !email.isEmpty, !password.isEmpty, !confirmPassword.isEmpty else {
+                                onboardingModel.errorMessage = "Please enter your email and passwords."
                                 return
                             }
                             onboardingModel.isLoading = true
@@ -390,7 +391,7 @@ struct OnboardingView: View {
                 .padding(.bottom, 24)
                 .disabled(
                     onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1
-                        ? (!onboardingModel.canMoveNext() || onboardingModel.onboardingData.email.isEmpty || onboardingModel.onboardingData.password.isEmpty)
+                        ? (!onboardingModel.canMoveNext() || onboardingModel.onboardingData.email.isEmpty || onboardingModel.onboardingData.password.isEmpty || onboardingModel.onboardingData.confirmPassword.isEmpty)
                         : !onboardingModel.canMoveNext()
                 )
                 .alert(isPresented: $showEmailExistsAlert) {
