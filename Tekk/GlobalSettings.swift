@@ -48,7 +48,7 @@ struct AppSettings {
         }
         #else
         // Real production build (release)
-        return "https://api.yourproductiondomain.com"
+        return "https://bravoball-backend.onrender.com"
         #endif
     }
 }
