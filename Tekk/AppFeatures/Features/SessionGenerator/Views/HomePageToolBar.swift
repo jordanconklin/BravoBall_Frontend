@@ -28,7 +28,7 @@ struct HomePageToolBar: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 40, height: 40)
-                        .foregroundColor(Color.blue.opacity(0.25))
+                        .foregroundColor(Color(hex:"86C9F7"))
                         .padding(.bottom, 7)
                 }
                 
