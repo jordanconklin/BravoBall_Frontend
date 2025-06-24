@@ -8,13 +8,6 @@
 import SwiftUI
 import RiveRuntime
 
-// Custom button style to prevent opacity change when disabled
-struct NoOpacityChangeButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-    }
-}
-
 struct FieldDrillCard: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
@@ -24,13 +17,8 @@ struct FieldDrillCard: View {
     private let layout = ResponsiveLayout.shared
     
     var body: some View {
-        let _ = print("DEBUG: FieldDrillCard skill: '\(editableDrill.drill.skill)' -> Icon: '\(sessionModel.skillIconName(for: editableDrill.drill.skill))'")
-        Button(action: {
-            Haptic.light()
-            showingFollowAlong = true
-        }) {
-            
-            
+
+
             ZStack {
                 
                 cardCircle
@@ -54,23 +42,16 @@ struct FieldDrillCard: View {
                     .offset(x: 0, y: 3)
                     .opacity(!editableDrill.isCompleted && !isCurrentDrill() ? 0.0 : 1.0)
                 
-                // Soccer icon
-                Image(sessionModel.skillIconName(for: editableDrill.drill.skill))
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: layout.isPad ? 44 : 40, height: layout.isPad ? 44 : 40)
-                    .opacity(!editableDrill.isCompleted && !isCurrentDrill() ? 0.5 : 1.0)
             }
-        }
-        .buttonStyle(NoOpacityChangeButtonStyle())
-        .disabled(!editableDrill.isCompleted && !isCurrentDrill())
-        .fullScreenCover(isPresented: $showingFollowAlong) {
-            DrillFollowAlongView(
-                appModel: appModel,
-                sessionModel: sessionModel,
-                editableDrill: $editableDrill
-                )
-        }
+            .fullScreenCover(isPresented: $showingFollowAlong) {
+                DrillFollowAlongView(
+                    appModel: appModel,
+                    sessionModel: sessionModel,
+                    editableDrill: $editableDrill
+                    )
+            }
+        
+        
     }
     
     private func drillComplete() -> Bool {
@@ -88,16 +69,23 @@ struct FieldDrillCard: View {
         } else {
             state = .inProgress
         }
-        return ZStack {
-            // background
-            Circle()
-                .fill(backCircleColor(for: state))
-                .frame(width: 75, height: 75)
-                .offset(x: 0, y: 7)
-            // front
-            Circle()
-                .fill(frontCircleColor(for: state))
-                .frame(width: 75, height: 75)
+        return CircleButton(
+            action: {
+                Haptic.light()
+                showingFollowAlong = true
+            },
+            frontColor: frontCircleColor(for: state),
+            backColor: backCircleColor(for: state),
+            width: 75,
+            height: 75,
+            disabled: !editableDrill.isCompleted && !isCurrentDrill(),
+            pressedOffset: 6
+        ) {
+            Image(sessionModel.skillIconName(for: editableDrill.drill.skill))
+                .resizable()
+                .scaledToFit()
+                .frame(width: layout.isPad ? 44 : 40, height: layout.isPad ? 44 : 40)
+                .opacity(!editableDrill.isCompleted && !isCurrentDrill() ? 0.5 : 1.0)
         }
     }
     

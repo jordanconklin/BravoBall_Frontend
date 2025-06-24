@@ -9,6 +9,7 @@ import SwiftUI
 import RiveRuntime
 
 struct FloatingAddButton: View {
+    @ObservedObject var appModel: MainAppModel
     var action: () -> Void
     
     var body: some View {
@@ -16,12 +17,23 @@ struct FloatingAddButton: View {
             Spacer()
             HStack {
         Spacer()
-                Button(action: {
-                    Haptic.light()
-                    action()
-                }) {
-                    RiveViewModel(fileName: "Plus_Button").view()
-                        .frame(width: 60, height: 60)
+                // Search skills button
+                CircleButton(
+                    action: {
+                        Haptic.light()
+                        action()
+                    },
+                    frontColor: appModel.globalSettings.primaryYellowColor,
+                    backColor: appModel.globalSettings.primaryDarkYellowColor,
+                    width: 60,
+                    height: 60,
+                    disabled: false,
+                    pressedOffset: 6
+                    
+                ) {
+                    Image(systemName: "plus")
+                        .font(.system(size: 45, weight: .bold))
+                        .foregroundColor(Color.white)
                 }
                 .padding(.trailing, 20)
                 .padding(.bottom, 20)

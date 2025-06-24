@@ -1,13 +1,13 @@
 //
-//  PressableButtonstyle.swift
+//  ShrinkingButtonStyle.swift
 //  BravoBall
 //
-//  Created by Joshua Conklin on 6/23/25.
+//  Created by Joshua Conklin on 6/24/25.
 //
 
 import SwiftUI
 
-struct PressableButtonStyle: ButtonStyle {
+struct ShrinkingButtonStyle: ButtonStyle {
     var scaleAmount: CGFloat = 0.92
     var animation: Animation = .spring(response: 0.2, dampingFraction: 0.6)
 

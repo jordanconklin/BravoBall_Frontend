@@ -24,6 +24,7 @@ struct CustomTabItem: View {
             .frame(maxWidth: .infinity)
             .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
         }
-        .buttonStyle(PressableButtonStyle())
+        .buttonStyle(ShrinkingButtonStyle())
     }
 }
+

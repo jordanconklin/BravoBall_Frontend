@@ -15,6 +15,8 @@ struct SaveFiltersPromptView: View {
     @Binding var savedFiltersName: String
     var dismiss: () -> Void
     
+    private let layout = ResponsiveLayout.shared
+    
     var body: some View {
         ZStack {
             Color.black.opacity(0.3)
@@ -47,6 +49,8 @@ struct SaveFiltersPromptView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.horizontal, 16)
                     .padding(.top, 8)
+                
+                
                 // Save filters button
                 Button(action: {
                     Haptic.light()

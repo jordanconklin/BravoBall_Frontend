@@ -55,6 +55,7 @@ struct DrillSearchView: View {
                             .padding(.leading, 70)
                         Spacer()
                         Button("Done") {
+                            Haptic.light()
                             dismiss()
                         }
                         .padding()
@@ -330,23 +331,29 @@ struct DrillSearchView: View {
                     
                     // Add button
                     if !selectedDrills.isEmpty {
-                        Button(action: {
-                            // Call the callback with the selected drills
-                            Haptic.light()
-                            onDrillsSelected(selectedDrills)
-                            
-                            // Clear selection
-                            selectedDrills = []
-                        }) {
-                            Text(actionButtonText(selectedDrills.count))
-                                .font(.custom("Poppins-Bold", size: 18))
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(appModel.globalSettings.primaryYellowColor)
-                                .cornerRadius(12)
-                        }
+                        
+                        PrimaryButton(
+                            title: actionButtonText(selectedDrills.count),
+                            action: {
+                                // Call the callback with the selected drills
+                                Haptic.light()
+                                onDrillsSelected(selectedDrills)
+                                
+                                // Clear selection
+                                selectedDrills = []
+                            },
+                            frontColor: appModel.globalSettings.primaryYellowColor,
+                            backColor: appModel.globalSettings.primaryDarkYellowColor,
+                            textColor: Color.white,
+                            textSize: 18,
+                            width: .infinity,
+                            height: 50,
+                            disabled: false
+                                
+                        )
                         .padding()
+                        
+                        
                     }
                 }
                 .frame(width: geometry.size.width)
