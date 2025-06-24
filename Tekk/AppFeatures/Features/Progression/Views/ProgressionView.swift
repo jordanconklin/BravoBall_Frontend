@@ -59,7 +59,7 @@ struct ProgressionView: View {
                                 }
                             }
                             .padding(.horizontal)
-                            .padding(.bottom, 300) // TODO: fix bottom
+                            .padding(.bottom, 200) // TODO: fix bottom
                         }
                     }
                 }

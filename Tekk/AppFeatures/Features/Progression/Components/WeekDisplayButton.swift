@@ -18,14 +18,10 @@ struct WeekDisplayButton: View {
     let session: CompletedSession?
     
     var body: some View {
-        
         ZStack {
-        
             if let session = session {
-                
                 // Convert to float types, get score
                 let score = Double(session.totalCompletedDrills) / Double(session.totalDrills)
-                
                 Button(action: {
                     Haptic.light()
                     // Lets DrillResultsView access session
@@ -34,10 +30,9 @@ struct WeekDisplayButton: View {
                 }) {
                     ZStack {
                         RiveViewModel(fileName: "Day_Null").view()
-                            .frame(width: 60, height: 60)
-                            .aspectRatio(contentMode: .fit)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .aspectRatio(1, contentMode: .fit)
                             .clipped()
-                        
                         if score == 1.0 {
                             ZStack {
                                 RiveViewModel(fileName: "Paw_Yellow").view()
@@ -56,14 +51,13 @@ struct WeekDisplayButton: View {
                             }
                         }
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                
             } else {
                 RiveViewModel(fileName: "Day_Null").view()
-                    .frame(width: 60, height: 60)
-                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .aspectRatio(1, contentMode: .fit)
                     .clipped()
-                
                 if highlightedDay {
                     Text(text)
                         .font(.custom("Poppins-Bold", size: 22))
@@ -78,8 +72,11 @@ struct WeekDisplayButton: View {
                         .font(.custom("Poppins-Bold", size: 25))
                         .foregroundColor(appModel.globalSettings.primaryGrayColor)
                 }
+                // Fill the cell
+                Spacer(minLength: 0)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

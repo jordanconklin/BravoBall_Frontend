@@ -66,7 +66,7 @@ struct LimitedBounceScrollView<Content: View>: UIViewRepresentable {
             }
             
             // Limit bottom bounce
-            let maxContentOffset = scrollView.contentSize.height - scrollView.bounds.size.height
+            let maxContentOffset = max(0, scrollView.contentSize.height - scrollView.bounds.size.height)
             if scrollView.contentOffset.y > maxContentOffset + bounceLimit {
                 scrollView.contentOffset.y = maxContentOffset + bounceLimit
             }

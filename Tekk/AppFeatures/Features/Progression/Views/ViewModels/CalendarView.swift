@@ -128,66 +128,52 @@ struct CalendarView: View {
                 }
                 .padding()
 
-                // Day of week headers
-                HStack(spacing: 25) {
+                // Unified grid for weekday headers and days
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 0) {
+                    // Weekday headers
                     ForEach(["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"], id: \.self) { day in
                         Text(day)
                             .font(.custom("Poppins", size: 14))
                             .frame(maxWidth: .infinity)
                             .foregroundColor(appModel.globalSettings.primaryGrayColor)
                     }
-                }
-                .padding(.horizontal, 8)
-
-                // Calendar or week view
-                if appModel.showCalendar {
-                    // Calendar grid
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 5) {
-
-                        // Clear the unused days with no numbers
+                    if appModel.showCalendar {
+                        // Calendar grid days
                         ForEach(0..<firstWeekday-1, id: \.self) { _ in
                             Color.clear
                                 .frame(height: 50)
-
                         }
-
-                        
                         ForEach(1...days, id: \.self) { day in
 
                             // Set dates for each displayed day
                             let fullDate = createFullDate(from: day)
-
                             WeekDisplayButton(
                                 appModel: appModel,
                                 text: "\(day)",
                                 date: fullDate,
-                                highlightedDay: isCurrentDay(day), /*calendar.isDateInToday(fullDate)*/ // works in production
+                                highlightedDay: isCurrentDay(day),
                                 session: appModel.getSessionForDate(fullDate)
                             )
                             .frame(height: 50)
-
                         }
-                    }
-                    .frame(width: 330)
-                    .background(Color.white)
-                    
-                } else {
-                    // Current week only
-                    HStack(spacing: 5) {
-                        ForEach(daysInCurrentWeek(), id: \.date) { dayInfo in
+                    } else {
+                        // Week view days
+                        let weekDays = daysInCurrentWeek()
+                        ForEach(weekDays, id: \.date) { dayInfo in
                             WeekDisplayButton(
                                 appModel: appModel,
                                 text: "\(dayInfo.dayNumber)",
                                 date: dayInfo.date,
-                                highlightedDay: isCurrentDay(dayInfo.dayNumber), /*calendar.isDateInToday(dayInfo.date)*/ // works in production
+                                highlightedDay: isCurrentDay(dayInfo.dayNumber),
                                 session: appModel.getSessionForDate(dayInfo.date)
                             )
-                            .frame(width: 43)
+                            .frame(height: 50)
                         }
                     }
-                    .frame(width: 330)
-                    .background(Color.white)
                 }
+                .frame(maxWidth: .infinity)
+                .background(Color.white)
+                .padding(.horizontal, 16)
             }
             .padding()
             .cornerRadius(12)
