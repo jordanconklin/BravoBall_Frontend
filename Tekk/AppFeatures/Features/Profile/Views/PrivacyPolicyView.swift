@@ -37,16 +37,16 @@ struct PrivacyPolicyView: View {
                                       content: "We implement industry-standard security measures to protect your personal information and training data. This includes secure storage of your account credentials, encrypted data transmission, and regular security updates. Your training progress and preferences are stored securely on our servers.")
                         
                         policySection(title: "6. Your Rights",
-                                      content: "You may access, update, or delete your personal information at any time by contacting us at conklinofficialsoccer@gmail.com. You may also request that we stop using your information for certain purposes.")
+                                      content: "You may access, update, or delete your personal information at any time by contacting us at team@conklinofficial.com. You may also request that we stop using your information for certain purposes.")
                         
                         policySection(title: "7. Children's Privacy",
-                                      content: "BravoBall is designed to be accessible to soccer players of all ages. For users under 13, we recommend parental supervision and guidance. Parents or guardians can contact us at conklinofficialsoccer@gmail.com to manage their child's account and data.")
+                                      content: "BravoBall is designed to be accessible to soccer players of all ages. For users under 13, we recommend parental supervision and guidance. Parents or guardians can contact us at team@conklinofficial.com to manage their child's account and data.")
                         
                         policySection(title: "8. Changes to This Policy",
                                       content: "We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new policy in the App. Your continued use of the App after changes are posted constitutes your acceptance of those changes.")
                         
                         policySection(title: "9. Contact Us",
-                                      content: "If you have any questions or concerns about this Privacy Policy, please contact us at conklinofficialsoccer@gmail.com.")
+                                      content: "If you have any questions or concerns about this Privacy Policy, please contact us at team@conklinofficial.com.")
                         
                         policySection(title: "10. Data Retention",
                                       content: "We retain your personal information for as long as necessary to provide our services and comply with legal obligations. You can request deletion of your data at any time.")
