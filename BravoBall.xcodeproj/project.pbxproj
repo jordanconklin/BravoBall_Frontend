@@ -66,6 +66,8 @@
 		420DA39A2DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv in Resources */ = {isa = PBXBuildFile; fileRef = 420DA3992DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv */; };
 		420DA39E2DCE935B004CDD7A /* PreferencesUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420DA39D2DCE9357004CDD7A /* PreferencesUpdate.swift */; };
 		420DA3A72DCEEF55004CDD7A /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420DA3A62DCEEF52004CDD7A /* Checkbox.swift */; };
+		4275F3EF2E0A4198008A5E15 /* Backpack.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4275F3EE2E0A4198008A5E15 /* Backpack.riv */; };
+		4275F3F32E0A4359008A5E15 /* PressableButtonstyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4275F3F22E0A4353008A5E15 /* PressableButtonstyle.swift */; };
 		4289C57A2DEC3B8F005CC91B /* FloatingAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4289C5792DEC3B81005CC91B /* FloatingAddButton.swift */; };
 		4289C5862DEE8BBB005CC91B /* Prereq_Location.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4289C5852DEE8BBB005CC91B /* Prereq_Location.riv */; };
 		4289C58A2DEE8C30005CC91B /* Prereq_Time.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4289C5892DEE8C30005CC91B /* Prereq_Time.riv */; };
@@ -136,7 +138,6 @@
 		43BFAA322D44105200B12A6F /* Prereq_Equipment.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43BFAA312D44105200B12A6F /* Prereq_Equipment.riv */; };
 		43BFAA342D44164E00B12A6F /* Prereq_Training_Style.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43BFAA332D44164E00B12A6F /* Prereq_Training_Style.riv */; };
 		43BFAA422D444A2C00B12A6F /* Message_Bubble.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43BFAA412D444A2C00B12A6F /* Message_Bubble.riv */; };
-		43C5773C2D645BBB00D9B587 /* Break_Area.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43C5773B2D645BBB00D9B587 /* Break_Area.riv */; };
 		43C5FC412D6DB59D0064E7D5 /* DrillModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC402D6DB59A0064E7D5 /* DrillModel.swift */; };
 		43C5FC442D6DB7E20064E7D5 /* SkillTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC432D6DB7DF0064E7D5 /* SkillTypes.swift */; };
 		43C5FC492D6DB84F0064E7D5 /* EditableDrillModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC482D6DB84B0064E7D5 /* EditableDrillModel.swift */; };
@@ -245,6 +246,8 @@
 		420DA3992DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Bravo_Peaking_Home.riv; sourceTree = "<group>"; };
 		420DA39D2DCE9357004CDD7A /* PreferencesUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesUpdate.swift; sourceTree = "<group>"; };
 		420DA3A62DCEEF52004CDD7A /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
+		4275F3EE2E0A4198008A5E15 /* Backpack.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Backpack.riv; sourceTree = "<group>"; };
+		4275F3F22E0A4353008A5E15 /* PressableButtonstyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PressableButtonstyle.swift; sourceTree = "<group>"; };
 		4289C5792DEC3B81005CC91B /* FloatingAddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingAddButton.swift; sourceTree = "<group>"; };
 		4289C5852DEE8BBB005CC91B /* Prereq_Location.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Location.riv; sourceTree = "<group>"; };
 		4289C5892DEE8C30005CC91B /* Prereq_Time.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Time.riv; sourceTree = "<group>"; };
@@ -310,7 +313,6 @@
 		43BFAA312D44105200B12A6F /* Prereq_Equipment.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Equipment.riv; sourceTree = "<group>"; };
 		43BFAA332D44164E00B12A6F /* Prereq_Training_Style.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Training_Style.riv; sourceTree = "<group>"; };
 		43BFAA412D444A2C00B12A6F /* Message_Bubble.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Message_Bubble.riv; sourceTree = "<group>"; };
-		43C5773B2D645BBB00D9B587 /* Break_Area.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Break_Area.riv; sourceTree = "<group>"; };
 		43C5FC402D6DB59A0064E7D5 /* DrillModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrillModel.swift; sourceTree = "<group>"; };
 		43C5FC432D6DB7DF0064E7D5 /* SkillTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillTypes.swift; sourceTree = "<group>"; };
 		43C5FC482D6DB84B0064E7D5 /* EditableDrillModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableDrillModel.swift; sourceTree = "<group>"; };
@@ -394,6 +396,7 @@
 				17F5D6552CD347AD008E8C24 /* GlobalSettings.swift */,
 				17F5D6532CD3477E008E8C24 /* ColorExtension.swift */,
 				4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */,
+				4275F3F22E0A4353008A5E15 /* PressableButtonstyle.swift */,
 				4355EEAC2DB234D200D98314 /* GeometryKey.swift */,
 				178208F52D2E05FE00246494 /* AppFeatures */,
 				178208D12D2D14D200246494 /* MainTabView.swift */,
@@ -801,10 +804,10 @@
 			isa = PBXGroup;
 			children = (
 				4355EEB02DB23FBB00D98314 /* Bravo_Animation.riv */,
+				4275F3EE2E0A4198008A5E15 /* Backpack.riv */,
 				43BFA9F32D40AB8A00B12A6F /* Paw_Gray.riv */,
 				43BFA9E72D408B8100B12A6F /* Arrow.riv */,
 				43985E462CB4EFA200BE2AB6 /* BravoBall_Intro.riv */,
-				43C5773B2D645BBB00D9B587 /* Break_Area.riv */,
 				17595AAC2D3B44FE0015F35D /* Drill_Card_Complete.riv */,
 				420DA3992DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv */,
 				430FD71E2D334CAF0016D520 /* Day_Null.riv */,
@@ -1244,11 +1247,11 @@
 				4289C58A2DEE8C30005CC91B /* Prereq_Time.riv in Resources */,
 				43BFAA422D444A2C00B12A6F /* Message_Bubble.riv in Resources */,
 				17595AAD2D3B44FE0015F35D /* Drill_Card_Complete.riv in Resources */,
+				4275F3EF2E0A4198008A5E15 /* Backpack.riv in Resources */,
 				420DA39A2DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv in Resources */,
 				43BFA9E82D408B8100B12A6F /* Arrow.riv in Resources */,
 				43BFA9F62D40ABB600B12A6F /* Paw_Yellow.riv in Resources */,
 				174936222C3E1031001163B9 /* Preview Assets.xcassets in Resources */,
-				43C5773C2D645BBB00D9B587 /* Break_Area.riv in Resources */,
 				4355EEB12DB23FBB00D98314 /* Bravo_Animation.riv in Resources */,
 				1749361E2C3E1031001163B9 /* Assets.xcassets in Resources */,
 				43BFAA342D44164E00B12A6F /* Prereq_Training_Style.riv in Resources */,
@@ -1379,6 +1382,7 @@
 				177B1BCC2DF739E900AF465C /* PrivacyPolicyView.swift in Sources */,
 				17CA37A62DF0BA0F001AD5FA /* APIService.swift in Sources */,
 				177B1BBF2DF622A400AF465C /* AccountValidation.swift in Sources */,
+				4275F3F32E0A4359008A5E15 /* PressableButtonstyle.swift in Sources */,
 				43C5FC492D6DB84F0064E7D5 /* EditableDrillModel.swift in Sources */,
 				4289C57A2DEC3B8F005CC91B /* FloatingAddButton.swift in Sources */,
 				43A764992D825FEF004509E5 /* DataSyncService.swift in Sources */,

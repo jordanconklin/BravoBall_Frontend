@@ -46,11 +46,12 @@ struct HomePageField: View {
                                 appModel.viewState.showHomePage = true
                                 bravoTextBubbleDelay()
                             }) {
-                                RiveViewModel(fileName: "Break_Area").view()
+                                RiveViewModel(fileName: "Backpack").view()
                                     .frame(width: 80, height: 80)
                                     .padding(.top, 25)
                                 
                             }
+                            .buttonStyle(PressableButtonStyle())
                         }
                         
 
@@ -62,7 +63,7 @@ struct HomePageField: View {
                             ZStack {
                                 // Back rectangle for 3D effect
                                 Rectangle()
-                                    .foregroundColor(Color(hex:"c2983e"))
+                                    .foregroundColor(appModel.globalSettings.primaryDarkYellowColor)
                                     .cornerRadius(12)
                                     .offset(y: 6)
 
@@ -78,6 +79,7 @@ struct HomePageField: View {
                             }
                             .frame(width: 150, height: 50)
                         }
+                        
                         .padding()
                         .disabled(!sessionModel.sessionInProgress())
                         .opacity(sessionModel.sessionInProgress() ? 1.0 : 0.0)
