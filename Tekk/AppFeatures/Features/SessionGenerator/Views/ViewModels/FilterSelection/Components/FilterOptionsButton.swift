@@ -14,25 +14,26 @@ struct FilterOptionsButton: View {
     
     var body: some View {
         VStack {
-            Button(action: {
-                Haptic.light()
-                withAnimation {
-                    appModel.viewState.showFilterOptions.toggle()
-                }
-            }) {
-                ZStack {
-                    Circle()
-                        .fill(appModel.globalSettings.primaryLightGrayColor)
-                        .frame(width: 40, height: 40)
-                        .offset(x: 0, y: 3)
-                    Circle()
-                        .fill(Color.white)
-                        .frame(width: 40, height: 40)
-                    
-                    Image(systemName: "slider.horizontal.3")
-                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                        .font(.system(size: 16, weight: .medium))
-                }
+            
+            // Search skills button
+            CircleButton(
+                action: {
+                    Haptic.light()
+                    withAnimation {
+                        appModel.viewState.showFilterOptions.toggle()
+                    }
+                },
+                frontColor: Color.white,
+                backColor: appModel.globalSettings.primaryLightGrayColor,
+                width: 40,
+                height: 40,
+                disabled: false,
+                pressedOffset: 4
+                
+            ) {
+                Image(systemName: "slider.horizontal.3")
+                    .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                    .font(.system(size: 16, weight: .medium))
             }
             .padding(.horizontal)
             .padding(.vertical, 3)

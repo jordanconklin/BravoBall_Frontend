@@ -79,19 +79,23 @@ struct SessionCompleteView: View {
                     .padding(.horizontal)
                 }
                 
-                Button(action: {
-                    Haptic.light()
-                    resetSessionState()
-                }) {
-                    Text("Back to home page")
-                        .font(.custom("Poppins-Bold", size: 16))
-                        .foregroundColor(Color.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(appModel.globalSettings.primaryGreenColor)
-                        .cornerRadius(12)
-                }
+                PrimaryButton(
+                    title: "Back to home page",
+                    action: {
+                        Haptic.light()
+                        resetSessionState()
+                    },
+                    frontColor: appModel.globalSettings.primaryGreenColor,
+                    backColor: appModel.globalSettings.primaryDarkGreenColor,
+                    textColor: Color.white,
+                    textSize: 18,
+                    width: .infinity,
+                    height: 50,
+                    disabled: false
+                        
+                )
                 .padding(.horizontal)
+                
             }
             .padding(.bottom)
         }

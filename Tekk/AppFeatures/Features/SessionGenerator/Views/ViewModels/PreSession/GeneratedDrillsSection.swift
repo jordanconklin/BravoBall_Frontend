@@ -23,36 +23,50 @@ struct GeneratedDrillsSection: View {
                 Spacer()
                 
                 // Toggle delete mode for drills
-                Button(action: {
-                    Haptic.light()
-                    withAnimation(.spring(dampingFraction: 0.7)) {
-                        appModel.viewState.showSessionDeleteButtons.toggle()
-                    }
-                }) {
-                    ZStack {
-                        Circle()
-                            .fill(appModel.globalSettings.primaryLightGrayColor)
-                            .frame(width: 30, height: 30)
-                            .offset(x: 0, y: 3)
-                        Circle()
-                            .fill(Color.white)
-                            .frame(width: 30, height: 30)
-                        
-                        Image(systemName: "trash")
-                            .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                            .font(.system(size: 16, weight: .medium))
-                    }
+                CircleButton(
+                    action: {
+                        Haptic.light()
+                        withAnimation(.spring(dampingFraction: 0.7)) {
+                            appModel.viewState.showSessionDeleteButtons.toggle()
+                        }
+                    },
+                    frontColor: Color.white,
+                    backColor: appModel.globalSettings.primaryLightGrayColor,
+                    width: 30,
+                    height: 30,
+                    disabled: sessionModel.orderedSessionDrills.isEmpty,
+                    pressedOffset: 4
+                    
+                ) {
+                    Image(systemName: "trash")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
                 }
-                .disabled(sessionModel.orderedSessionDrills.isEmpty)
+                
                 
                 // Add drill button (opens drill search sheet)
-                Button(action: {
-                    Haptic.light()
-                    appModel.viewState.showSearchDrills = true
-                }) {
-                    RiveViewModel(fileName: "Plus_Button").view()
-                        .frame(width: 30, height: 30)
+                CircleButton(
+                    action: {
+                        Haptic.light()
+                        appModel.viewState.showSearchDrills = true
+                    },
+                    frontColor: appModel.globalSettings.primaryYellowColor,
+                    backColor: appModel.globalSettings.primaryDarkYellowColor,
+                    width: 30,
+                    height: 30,
+                    disabled: false,
+                    pressedOffset: 4
+                    
+                ) {
+                    Image(systemName: "plus")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(Color.white)
                 }
+                
+                
+                
+                
+                
             }
  
             // Show loading indicator if loading

@@ -32,33 +32,28 @@ struct SearchSkillsView: View {
                 }
             }
             Spacer()
+            
+            PrimaryButton(
+                title: "Create Session",
+                action: {
+                    Haptic.light()
+                    searchText = ""
+                    appModel.viewState.showSkillSearch = false
+                    
+                    sessionModel.schedulePreferenceUpdate()
+                },
+                frontColor: appModel.globalSettings.primaryYellowColor,
+                backColor: appModel.globalSettings.primaryDarkYellowColor,
+                textColor: Color.white,
+                textSize: 18,
+                width: .infinity,
+                height: 50,
+                disabled: sessionModel.selectedSkills.isEmpty
+            )
+            .padding()
+            .animation(.easeOut(duration: 0.16), value: isFocused)
         }
         .frame(width: geometry.size.width)
-        .safeAreaInset(edge: .bottom) {
-                        
-            Button(action: {
-                Haptic.light()
-                searchText = ""
-                appModel.viewState.showSkillSearch = false
-                
-                sessionModel.schedulePreferenceUpdate()
-                
-            }) {
-                
-                    Text("Create Session")
-                    .font(.custom("Poppins-Bold", size: 18))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(sessionModel.selectedSkills.isEmpty ? appModel.globalSettings.primaryLightGrayColor : appModel.globalSettings.primaryYellowColor)
-                    .cornerRadius(12)
-            }
-            .disabled(sessionModel.selectedSkills.isEmpty)
-            .padding(.horizontal)
-            .padding(.bottom, 30)
-        }
-        .ignoresSafeArea(.keyboard, edges: .bottom)
-        .animation(.easeOut(duration: 0.16), value: isFocused)
         
     }
     
