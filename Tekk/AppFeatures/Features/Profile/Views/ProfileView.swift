@@ -119,7 +119,7 @@ struct ProfileView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 60, height: 60)
-                .foregroundColor(appModel.globalSettings.primaryYellowColor)
+                .foregroundColor(Color(hex:"86C9F7"))
             
 
             VStack(spacing: 0) {
@@ -289,6 +289,7 @@ struct ProfileView: View {
     }
 
     private var logoutButton: some View {
+        
         PrimaryButton(
             title: "Logout",
             action: {
@@ -296,14 +297,20 @@ struct ProfileView: View {
                 appModel.alertType = .logout
                 appModel.showAlert = true
             },
-            backgroundColor: onboardingModel.globalSettings.primaryYellowColor,
-            font: .custom("Poppins-Bold", size: 16),
-            cornerRadius: 10
+            frontColor: appModel.globalSettings.primaryYellowColor,
+            backColor: appModel.globalSettings.primaryDarkYellowColor,
+            textColor: Color.white,
+            textSize: 16,
+            width: .infinity,
+            height: 40,
+            disabled: false
+                
         )
         .padding(.top, 5)
     }
     
     private var deleteAccountButton: some View {
+        
         PrimaryButton(
             title: "Delete Account",
             action: {
@@ -311,10 +318,16 @@ struct ProfileView: View {
                 appModel.alertType = .delete
                 appModel.showAlert = true
             },
-            backgroundColor: .red,
-            font: .custom("Poppins-Bold", size: 16),
-            cornerRadius: 10
+            frontColor: Color(hex: "#ed1818"),
+            backColor: Color(hex: "#ba1818"),
+            textColor: Color.white,
+            textSize: 16,
+            width: .infinity,
+            height: 40,
+            disabled: false
+                
         )
+        .padding(.top, 5)
     }
     
     private func logOutUser() {

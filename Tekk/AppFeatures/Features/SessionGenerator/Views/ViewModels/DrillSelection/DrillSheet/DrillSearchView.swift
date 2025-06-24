@@ -55,10 +55,11 @@ struct DrillSearchView: View {
                             .padding(.leading, 70)
                         Spacer()
                         Button("Done") {
+                            Haptic.light()
                             dismiss()
                         }
                         .padding()
-                        .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                        .foregroundColor(Color.blue)
                         .font(.custom("Poppins-Bold", size: 16))
                     }
                     
@@ -330,26 +331,29 @@ struct DrillSearchView: View {
                     
                     // Add button
                     if !selectedDrills.isEmpty {
-                        Button(action: {
-                            // Call the callback with the selected drills
-                            Haptic.light()
-                            onDrillsSelected(selectedDrills)
-                            
-                            // Clear selection
-                            selectedDrills = []
-                            
-                            // Dismiss view
-                            dismiss()
-                        }) {
-                            Text(actionButtonText(selectedDrills.count))
-                                .font(.custom("Poppins-Bold", size: 18))
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(appModel.globalSettings.primaryYellowColor)
-                                .cornerRadius(12)
-                        }
+                        
+                        PrimaryButton(
+                            title: actionButtonText(selectedDrills.count),
+                            action: {
+                                // Call the callback with the selected drills
+                                Haptic.light()
+                                onDrillsSelected(selectedDrills)
+                                
+                                // Clear selection
+                                selectedDrills = []
+                            },
+                            frontColor: appModel.globalSettings.primaryYellowColor,
+                            backColor: appModel.globalSettings.primaryDarkYellowColor,
+                            textColor: Color.white,
+                            textSize: 18,
+                            width: .infinity,
+                            height: 50,
+                            disabled: false
+                                
+                        )
                         .padding()
+                        
+                        
                     }
                 }
                 .frame(width: geometry.size.width)
@@ -493,15 +497,16 @@ struct DrillRowForSearch: View {
     let isAlreadyInSession: Bool
     let onSelect: () -> Void
     
+    private let layout = ResponsiveLayout.shared
+    
     
     var body: some View {
         HStack {
-            Image(systemName: "figure.soccer")
-                .font(.system(size: 24))
-                .foregroundColor(.black)
-                .frame(width: 40, height: 40)
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(8)
+            Image(sessionModel.skillIconName(for: drill.skill))
+                .resizable()
+                .scaledToFit()
+                .frame(width: layout.isPad ? 44 : 40, height: layout.isPad ? 44 : 40)
+                .padding(6)
             
             VStack(alignment: .leading) {
                 Text(drill.title)

@@ -23,7 +23,7 @@ struct MainTabView: View {
                 ZStack {
                     switch appModel.mainTabSelected {
                     case 0:
-                        SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel)
+                        SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
                     case 1:
                         ProgressionView(appModel: appModel, sessionModel: sessionModel)
                     case 2:
@@ -31,7 +31,7 @@ struct MainTabView: View {
                     case 3:
                         ProfileView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
                     default:
-                        SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel)
+                        SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -72,8 +72,7 @@ struct MainTabView: View {
                         }
                     }
                     .padding(.horizontal, appModel.layout.contentMinPadding)
-                    .frame(height: 80)
-                    .background(Color.white)
+                    .frame(height: 70)
                 }
                 .background(Color.white)
             }

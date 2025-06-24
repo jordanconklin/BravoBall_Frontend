@@ -61,6 +61,25 @@ class SessionGeneratorModel: ObservableObject {
         }
     }
     
+    
+    // Computed property to get the correct icon name
+    func skillIconName(for skill: String) -> String {
+        let normalizedSkill = skill
+            .lowercased()
+            .replacingOccurrences(of: " ", with: "")
+            .replacingOccurrences(of: "_", with: "")
+        
+        let skillCategory = SessionGeneratorView.skillCategories.first { category in
+            let normalizedCategoryName = category.name
+                .lowercased()
+                .replacingOccurrences(of: " ", with: "")
+                .replacingOccurrences(of: "_", with: "")
+            return normalizedCategoryName == normalizedSkill
+        }
+        return skillCategory?.icon ?? "figure.soccer"
+    }
+    
+    
     // MARK: Filter and Skill Selection
     
     
@@ -159,8 +178,11 @@ class SessionGeneratorModel: ObservableObject {
             }
         }
     }
+    
+    
     // didset in savedFilters func
     
+
     
     // MARK: Init
     

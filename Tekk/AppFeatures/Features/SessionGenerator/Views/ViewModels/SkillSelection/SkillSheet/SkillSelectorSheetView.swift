@@ -60,9 +60,10 @@ struct SkillSelectorSheet: View {
                                         HStack {
                                             Spacer()
                                             
-                                            Image(systemName: category.icon)
-                                                .font(.system(size: 20))
-                                                .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                                            Image(category.icon)
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 70, height: 70)
                                             
                                             Spacer()
 
@@ -118,28 +119,27 @@ struct SkillSelectorSheet: View {
                     }
                     .padding()
                 }
-            }
-            .frame(width: geometry.size.width)
-            .safeAreaInset(edge: .bottom) {
-                Button(action: {
+            Spacer()
+                
+            PrimaryButton(
+                title: "Create Session",
+                action: {
                     Haptic.light()
                     dismiss()
-                
                     sessionModel.schedulePreferenceUpdate()
-                    
-                }) {
-                        
-                    Text("Create Session")
-                        .font(.custom("Poppins-Bold", size: 18))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(sessionModel.selectedSkills.isEmpty ? appModel.globalSettings.primaryLightGrayColor : appModel.globalSettings.primaryYellowColor)
-                        .cornerRadius(12)
-                }
-                .disabled(sessionModel.selectedSkills.isEmpty)
-                .padding()
-            }
+                },
+                frontColor: appModel.globalSettings.primaryYellowColor,
+                backColor: appModel.globalSettings.primaryDarkYellowColor,
+                textColor: Color.white,
+                textSize: 18,
+                width: .infinity,
+                height: 50,
+                disabled: sessionModel.selectedSkills.isEmpty
+            )
+            .padding()
+        }
+        .frame(width: geometry.size.width)
+
     }
     // TODO: move this somewhere else?
     // Highlight category if sub skill selected

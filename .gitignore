@@ -3,3 +3,4 @@ project.xcworkspace/
 xcuserdata/
 tests/
 build/
+.DS_Store

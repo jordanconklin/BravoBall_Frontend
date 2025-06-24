@@ -78,20 +78,10 @@ struct DrillDetailView: View {
                             CustomVideoPlayer(videoURL: videoUrl)
                         }
                         
-                        // Drill information
-                        VStack(alignment: .leading, spacing: 16) {
-                            Text(drill.title)
-                                .font(.custom("Poppins-Bold", size: 24))
-                                .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                            
-                            HStack(spacing: 16) {
-                                Label("\(drill.sets)" + " sets", systemImage: "repeat")
-                                Label("\(drill.reps)" + " reps", systemImage: "figure.run")
-                                Label("\(drill.duration)" + " minutes", systemImage: "clock")
-                            }
-                            .font(.custom("Poppins-Medium", size: 14))
+                        // Drill title
+                        Text(drill.title)
+                            .font(.custom("Poppins-Bold", size: 24))
                             .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                        }
                         
                         // Description
                         VStack(alignment: .leading, spacing: 8) {
@@ -162,7 +152,9 @@ struct DrillDetailView: View {
                 // Add drill to session button
                 
                 if !isDrillInRunningSession() {
-                    FloatingAddButton{
+                    FloatingAddButton(
+                        appModel: appModel
+                    ){
                         Haptic.light()
                         addDrillWithToast()
                     }

@@ -26,7 +26,7 @@ protocol SessionDrillManagement: AnyObject {
     func clearOrderedDrills()
     func moveDrill(from source: IndexSet, to destination: Int)
     func deleteDrillFromSession(drill: EditableDrillModel)
-    func sessionNotComplete() -> Bool
+    func allSessionSetsNotComplete() -> Bool
     func sessionsLeftToComplete() -> Int
 }
 

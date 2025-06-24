@@ -102,6 +102,7 @@ struct OnboardingView: View {
             Spacer()
             
             VStack(spacing: 16) {
+                
                 // Create Account Button
                 PrimaryButton(
                     title: "Create an account",
@@ -111,12 +112,13 @@ struct OnboardingView: View {
                             onboardingModel.showWelcome.toggle()
                         }
                     },
-                    backgroundColor: onboardingModel.globalSettings.primaryYellowColor,
-                    textColor: .white,
-                    font: .custom("Poppins-Bold", size: 16),
-                    style: .filled,
-                    cornerRadius: 20,
-                    height: 50
+                    frontColor: appModel.globalSettings.primaryYellowColor,
+                    backColor: appModel.globalSettings.primaryDarkYellowColor,
+                    textColor: Color.white,
+                    textSize: 18,
+                    width: .infinity,
+                    height: 50,
+                    disabled: false
                 )
                 .padding(.horizontal)
                 
@@ -129,14 +131,16 @@ struct OnboardingView: View {
                             onboardingModel.showLoginPage = true
                         }
                     },
-                    backgroundColor: .gray.opacity(0.2),
-                    textColor: onboardingModel.globalSettings.primaryDarkColor,
-                    font: .custom("Poppins-Bold", size: 16),
-                    style: .filled,
-                    cornerRadius: 20,
-                    height: 50
+                    frontColor: appModel.globalSettings.primaryLightestGrayColor,
+                    backColor: appModel.globalSettings.primaryLightGrayColor,
+                    textColor: appModel.globalSettings.primaryDarkColor,
+                    textSize: 18,
+                    width: .infinity,
+                    height: 50,
+                    disabled: false
                 )
                 .padding(.horizontal)
+                
             }
             .padding(.bottom, 24)
         }
@@ -298,101 +302,20 @@ struct OnboardingView: View {
             
             // Next button
             if onboardingModel.currentStep < onboardingModel.numberOfOnboardingPages {
-                Button(action: {
-                    Haptic.light()
-                    if onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 {
-                        hasAttemptedSubmit = true  // Set to true when user attempts to submit
-                        
-                        // Validate registration form fields
-                        if let validationError = onboardingModel.registrationValidationError {
-                            onboardingModel.errorMessage = validationError
-                            return
-                        }
-                        
-                        // Call email pre-check
-                        Task {
-                            let email = onboardingModel.onboardingData.email
-                            let password = onboardingModel.onboardingData.password
-                            guard !email.isEmpty, !password.isEmpty else {
-                                onboardingModel.errorMessage = "Please enter your email and password."
-                                return
-                            }
-                            onboardingModel.isLoading = true
-                            onboardingModel.errorMessage = ""
-                            let body = ["email": email]
-                            let jsonBody = try? JSONSerialization.data(withJSONObject: body)
-                            do {
-                                let (data, response) = try await APIService.shared.request(
-                                    endpoint: "/check-email/",
-                                    method: "POST",
-                                    headers: ["Content-Type": "application/json"],
-                                    body: jsonBody
-                                )
-                                if response.statusCode == 200 {
-                                    if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                                       let exists = json["exists"] as? Bool {
-                                        if exists {
-                                            await MainActor.run {
-                                                onboardingModel.isLoading = false
-                                                showEmailExistsAlert = true
-                                            }
-                                            return
-                                        } else {
-                                            // Email is available, proceed with onboarding
-                                            await MainActor.run {
-                                                onboardingModel.errorMessage = ""
-                                                onboardingModel.isLoading = false
-                                                triggerBravoAnimation()
-                                                withAnimation {
-                                                    onboardingModel.backTransition = false
-                                                    onboardingModel.moveNext()
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        await MainActor.run {
-                                            onboardingModel.errorMessage = "Unexpected response from server."
-                                            onboardingModel.isLoading = false
-                                        }
-                                    }
-                                } else {
-                                    await MainActor.run {
-                                        onboardingModel.errorMessage = "Failed to check email. Please try again."
-                                        onboardingModel.isLoading = false
-                                    }
-                                }
-                            } catch {
-                                await MainActor.run {
-                                    onboardingModel.errorMessage = "Network error. Please try again."
-                                    onboardingModel.isLoading = false
-                                }
-                            }
-                        }
-                    } else {
-                        triggerBravoAnimation()
-                        withAnimation {
-                            onboardingModel.backTransition = false
-                            onboardingModel.moveNext()
-                        }
-                    }
-                }) {
-                    Text(onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 ? "Submit" : "Next")
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
-                        .background(
-                            RoundedRectangle(cornerRadius: 25)
-                                .fill(onboardingModel.canMoveNext() ? onboardingModel.globalSettings.primaryYellowColor : onboardingModel.globalSettings.primaryLightGrayColor)
-                        )
-                        .foregroundColor(.white)
-                        .font(.custom("Poppins-Bold", size: 16))
-                }
+                
+                PrimaryButton(
+                    title: onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 ? "Submit" : "Next",
+                    action: nextButtonLogic,
+                    frontColor: onboardingModel.globalSettings.primaryYellowColor,
+                    backColor: onboardingModel.globalSettings.primaryDarkYellowColor,
+                    textColor: Color.white,
+                    textSize: 16,
+                    width: .infinity,
+                    height: 50,
+                    disabled: nextButtonDisabledLogic()
+                )
                 .padding(.horizontal)
                 .padding(.bottom, 24)
-                .disabled(
-                    onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1
-                        ? (!onboardingModel.canMoveNext() || onboardingModel.onboardingData.email.isEmpty || onboardingModel.onboardingData.password.isEmpty)
-                        : !onboardingModel.canMoveNext()
-                )
                 .alert(isPresented: $showEmailExistsAlert) {
                     Alert(
                         title: Text("Email Already Registered"),
@@ -403,6 +326,94 @@ struct OnboardingView: View {
             }
         }
     }
+    
+    func nextButtonLogic() {
+        Haptic.light()
+        if onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 {
+            hasAttemptedSubmit = true  // Set to true when user attempts to submit
+            
+            // Validate registration form fields
+            if let validationError = onboardingModel.registrationValidationError {
+                onboardingModel.errorMessage = validationError
+                return
+            }
+            
+            // Call email pre-check
+            Task {
+                let email = onboardingModel.onboardingData.email
+                let password = onboardingModel.onboardingData.password
+                let confirmPassword = onboardingModel.onboardingData.confirmPassword
+                guard !email.isEmpty, !password.isEmpty, !confirmPassword.isEmpty else {
+                    onboardingModel.errorMessage = "Please enter your email and passwords."
+                    return
+                }
+                onboardingModel.isLoading = true
+                onboardingModel.errorMessage = ""
+                let body = ["email": email]
+                let jsonBody = try? JSONSerialization.data(withJSONObject: body)
+                do {
+                    let (data, response) = try await APIService.shared.request(
+                        endpoint: "/check-email/",
+                        method: "POST",
+                        headers: ["Content-Type": "application/json"],
+                        body: jsonBody
+                    )
+                    if response.statusCode == 200 {
+                        if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                           let exists = json["exists"] as? Bool {
+                            if exists {
+                                await MainActor.run {
+                                    onboardingModel.isLoading = false
+                                    showEmailExistsAlert = true
+                                }
+                                return
+                            } else {
+                                // Email is available, proceed with onboarding
+                                await MainActor.run {
+                                    onboardingModel.errorMessage = ""
+                                    onboardingModel.isLoading = false
+                                    triggerBravoAnimation()
+                                    withAnimation {
+                                        onboardingModel.backTransition = false
+                                        onboardingModel.moveNext()
+                                    }
+                                }
+                            }
+                        } else {
+                            await MainActor.run {
+                                onboardingModel.errorMessage = "Unexpected response from server."
+                                onboardingModel.isLoading = false
+                            }
+                        }
+                    } else {
+                        await MainActor.run {
+                            onboardingModel.errorMessage = "Failed to check email. Please try again."
+                            onboardingModel.isLoading = false
+                        }
+                    }
+                } catch {
+                    await MainActor.run {
+                        onboardingModel.errorMessage = "Network error. Please try again."
+                        onboardingModel.isLoading = false
+                    }
+                }
+            }
+        } else {
+            triggerBravoAnimation()
+            withAnimation {
+                onboardingModel.backTransition = false
+                onboardingModel.moveNext()
+            }
+        }
+    }
+    
+    func nextButtonDisabledLogic() -> Bool {
+        onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1
+            ? (!onboardingModel.canMoveNext() || onboardingModel.onboardingData.email.isEmpty || onboardingModel.onboardingData.password.isEmpty || onboardingModel.onboardingData.confirmPassword.isEmpty)
+            : !onboardingModel.canMoveNext()
+    }
+    
+    
     func triggerBravoAnimation() {
             guard canTrigger else { return }
             

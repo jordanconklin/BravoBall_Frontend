@@ -26,12 +26,16 @@ extension SessionGeneratorModel: SessionDrillManagement {
             
         
     
-    func sessionNotComplete() -> Bool {
+    func allSessionSetsNotComplete() -> Bool {
         orderedSessionDrills.contains(where: { $0.setsDone != $0.totalSets})
     }
     
     func sessionInProgress() -> Bool {
         orderedSessionDrills.contains(where: { $0.isCompleted == false})
+    }
+    
+    func doesSessionHaveAnyProgress() -> Bool {
+        return orderedSessionDrills.contains(where: { $0.setsDone > 0 })
     }
     
     func sessionsLeftToComplete() -> Int {

@@ -76,16 +76,25 @@ struct SkillSearchBar: View {
                     
                     Spacer()
                     
-
-                    if !appModel.viewState.showSkillSearch {
-                        Button(action: { 
+                    // Search skills button
+                    CircleButton(
+                        action: {
                             Haptic.light()
-                            showingSkillSelector = true 
-                        }) {
-                            RiveViewModel(fileName: "Plus_Button").view()
-                                .frame(width: 30, height: 30)
-                        }
+                            showingSkillSelector = true
+                        },
+                        frontColor: appModel.globalSettings.primaryYellowColor,
+                        backColor: appModel.globalSettings.primaryDarkYellowColor,
+                        width: 30,
+                        height: 30,
+                        disabled: false,
+                        pressedOffset: 4
+                        
+                    ) {
+                        Image(systemName: "plus")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(Color.white)
                     }
+                    .padding(3)
                     
                     
                     if !searchText.isEmpty {
@@ -111,7 +120,6 @@ struct SkillSearchBar: View {
             }
             
         }
-        .padding(.horizontal, 8)
         .sheet(isPresented: $showingSkillSelector) {
             SkillSelectorSheet(appModel: appModel, sessionModel: sessionModel)
                 .presentationDragIndicator(.hidden)
