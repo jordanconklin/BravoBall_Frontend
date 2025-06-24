@@ -69,7 +69,10 @@ struct TermsOfServiceView: View {
                 }
                 .padding()
             }
-            .navigationBarItems(trailing: Button("Done") { dismiss() })
+            .navigationBarItems(trailing: Button("Done") {
+                Haptic.light()
+                dismiss()
+            })
         }
     }
     

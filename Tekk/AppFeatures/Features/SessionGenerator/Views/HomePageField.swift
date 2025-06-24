@@ -51,38 +51,29 @@ struct HomePageField: View {
                                     .padding(.top, 25)
                                 
                             }
-                            .buttonStyle(PressableButtonStyle())
+                            .buttonStyle(ShrinkingButtonStyle())
                         }
                         
-
-                        // "Begin" button centered
-                        Button(action: {
-                            Haptic.light()
-                            showingFollowAlong = true
-                        }) {
-                            ZStack {
-                                // Back rectangle for 3D effect
-                                Rectangle()
-                                    .foregroundColor(appModel.globalSettings.primaryDarkYellowColor)
-                                    .cornerRadius(12)
-                                    .offset(y: 6)
-
-                                // Front rectangle
-                                Rectangle()
-                                    .foregroundColor(appModel.globalSettings.primaryYellowColor)
-                                    .cornerRadius(12)
-
-                                // Button Text
-                                Text(sessionModel.doesSessionHaveAnyProgress() ? "Continue" : "Begin")
-                                    .font(.custom("Poppins-Bold", size: 18))
-                                    .foregroundColor(.white)
-                            }
-                            .frame(width: 150, height: 50)
-                        }
                         
+                        PrimaryButton(
+                            title: sessionModel.doesSessionHaveAnyProgress() ? "Continue" : "Begin",
+                            action: {
+                                Haptic.light()
+                                showingFollowAlong = true
+                            },
+                            frontColor: appModel.globalSettings.primaryYellowColor,
+                            backColor: appModel.globalSettings.primaryDarkYellowColor,
+                            textColor: Color.white,
+                            textSize: 18,
+                            width: 180,
+                            height: 50,
+                            disabled: !sessionModel.sessionInProgress()
+                                
+                        )
                         .padding()
-                        .disabled(!sessionModel.sessionInProgress())
                         .opacity(sessionModel.sessionInProgress() ? 1.0 : 0.0)
+                        
+                        
 
      
                         
@@ -150,6 +141,7 @@ struct HomePageField: View {
                 .scaledToFit()
                 .frame(width: 80, height: 90)
         }
+        .buttonStyle(ShrinkingButtonStyle())
         .padding(.top, 20)
         .disabled(sessionModel.sessionInProgress() || sessionModel.orderedSessionDrills.isEmpty)
         .opacity(sessionModel.sessionInProgress() || sessionModel.orderedSessionDrills.isEmpty ? 0.6 : 1.0)

@@ -67,7 +67,6 @@
 		420DA39E2DCE935B004CDD7A /* PreferencesUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420DA39D2DCE9357004CDD7A /* PreferencesUpdate.swift */; };
 		420DA3A72DCEEF55004CDD7A /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420DA3A62DCEEF52004CDD7A /* Checkbox.swift */; };
 		4275F3EF2E0A4198008A5E15 /* Backpack.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4275F3EE2E0A4198008A5E15 /* Backpack.riv */; };
-		4275F3F32E0A4359008A5E15 /* PressableButtonstyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4275F3F22E0A4353008A5E15 /* PressableButtonstyle.swift */; };
 		4289C57A2DEC3B8F005CC91B /* FloatingAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4289C5792DEC3B81005CC91B /* FloatingAddButton.swift */; };
 		4289C5862DEE8BBB005CC91B /* Prereq_Location.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4289C5852DEE8BBB005CC91B /* Prereq_Location.riv */; };
 		4289C58A2DEE8C30005CC91B /* Prereq_Time.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4289C5892DEE8C30005CC91B /* Prereq_Time.riv */; };
@@ -81,6 +80,11 @@
 		4289C5C12E03D550005CC91B /* test2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4289C5C02E03D54D005CC91B /* test2.swift */; };
 		4289C5C32E049A7B005CC91B /* BounceConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4289C5C22E049A72005CC91B /* BounceConstraints.swift */; };
 		42929F3B2DD2EB5000DA73BB /* GroupFilterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42929F3A2DD2EB4900DA73BB /* GroupFilterOptions.swift */; };
+		42B35C652E0B00A500660E6E /* ShrinkingButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B35C642E0B00A000660E6E /* ShrinkingButtonStyle.swift */; };
+		42B35C6D2E0B0A5400660E6E /* NoOpacityChangeButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B35C6C2E0B0A4C00660E6E /* NoOpacityChangeButtonStyle.swift */; };
+		42B35C6F2E0B2B7600660E6E /* CircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B35C6E2E0B2B6700660E6E /* CircleButton.swift */; };
+		42B35C712E0B2BD600660E6E /* ThreeDPressCircleButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B35C702E0B2BCD00660E6E /* ThreeDPressCircleButtonStyle.swift */; };
+		42B35C732E0B2C0B00660E6E /* ThreeDPressRectButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B35C722E0B2C0100660E6E /* ThreeDPressRectButtonStyle.swift */; };
 		430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */; };
 		430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6CC2D3064850016D520 /* MainAppModel.swift */; };
 		430FD6D32D307AEC0016D520 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 430FD6D22D307AEC0016D520 /* SwiftKeychainWrapper */; };
@@ -247,7 +251,6 @@
 		420DA39D2DCE9357004CDD7A /* PreferencesUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesUpdate.swift; sourceTree = "<group>"; };
 		420DA3A62DCEEF52004CDD7A /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
 		4275F3EE2E0A4198008A5E15 /* Backpack.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Backpack.riv; sourceTree = "<group>"; };
-		4275F3F22E0A4353008A5E15 /* PressableButtonstyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PressableButtonstyle.swift; sourceTree = "<group>"; };
 		4289C5792DEC3B81005CC91B /* FloatingAddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingAddButton.swift; sourceTree = "<group>"; };
 		4289C5852DEE8BBB005CC91B /* Prereq_Location.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Location.riv; sourceTree = "<group>"; };
 		4289C5892DEE8C30005CC91B /* Prereq_Time.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Time.riv; sourceTree = "<group>"; };
@@ -260,6 +263,11 @@
 		4289C5C02E03D54D005CC91B /* test2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test2.swift; sourceTree = "<group>"; };
 		4289C5C22E049A72005CC91B /* BounceConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BounceConstraints.swift; sourceTree = "<group>"; };
 		42929F3A2DD2EB4900DA73BB /* GroupFilterOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupFilterOptions.swift; sourceTree = "<group>"; };
+		42B35C642E0B00A000660E6E /* ShrinkingButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShrinkingButtonStyle.swift; sourceTree = "<group>"; };
+		42B35C6C2E0B0A4C00660E6E /* NoOpacityChangeButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoOpacityChangeButtonStyle.swift; sourceTree = "<group>"; };
+		42B35C6E2E0B2B6700660E6E /* CircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleButton.swift; sourceTree = "<group>"; };
+		42B35C702E0B2BCD00660E6E /* ThreeDPressCircleButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDPressCircleButtonStyle.swift; sourceTree = "<group>"; };
+		42B35C722E0B2C0100660E6E /* ThreeDPressRectButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDPressRectButtonStyle.swift; sourceTree = "<group>"; };
 		430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegisterForm.swift; sourceTree = "<group>"; };
 		430FD6CC2D3064850016D520 /* MainAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppModel.swift; sourceTree = "<group>"; };
 		430FD71E2D334CAF0016D520 /* Day_Null.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Day_Null.riv; sourceTree = "<group>"; };
@@ -396,7 +404,6 @@
 				17F5D6552CD347AD008E8C24 /* GlobalSettings.swift */,
 				17F5D6532CD3477E008E8C24 /* ColorExtension.swift */,
 				4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */,
-				4275F3F22E0A4353008A5E15 /* PressableButtonstyle.swift */,
 				4355EEAC2DB234D200D98314 /* GeometryKey.swift */,
 				178208F52D2E05FE00246494 /* AppFeatures */,
 				178208D12D2D14D200246494 /* MainTabView.swift */,
@@ -404,6 +411,7 @@
 				1749361B2C3E102B001163B9 /* ContentView.swift */,
 				177B1BF32DF76FC500AF465C /* BravoBallApp.swift */,
 				177B1BF52DF8CC7D00AF465C /* .cursor */,
+				4275F3F42E0AFC50008A5E15 /* ButtonFeatures */,
 				17CA37BA2DF2440A001AD5FA /* HapticFeedback */,
 				1749361D2C3E1031001163B9 /* Assets.xcassets */,
 				177B1BEC2DF7680600AF465C /* AudioAssets */,
@@ -448,6 +456,7 @@
 		177B1BB82DF2BF4A00AF465C /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				42B35C6E2E0B2B6700660E6E /* CircleButton.swift */,
 				177B1BB92DF2BF4E00AF465C /* PrimaryButton.swift */,
 			);
 			path = Buttons;
@@ -578,6 +587,17 @@
 				420DA3A62DCEEF52004CDD7A /* Checkbox.swift */,
 			);
 			path = Checkbox;
+			sourceTree = "<group>";
+		};
+		4275F3F42E0AFC50008A5E15 /* ButtonFeatures */ = {
+			isa = PBXGroup;
+			children = (
+				42B35C6C2E0B0A4C00660E6E /* NoOpacityChangeButtonStyle.swift */,
+				42B35C722E0B2C0100660E6E /* ThreeDPressRectButtonStyle.swift */,
+				42B35C702E0B2BCD00660E6E /* ThreeDPressCircleButtonStyle.swift */,
+				42B35C642E0B00A000660E6E /* ShrinkingButtonStyle.swift */,
+			);
+			path = ButtonFeatures;
 			sourceTree = "<group>";
 		};
 		4289C5782DEC3B6F005CC91B /* DrillDetailPage */ = {
@@ -1310,6 +1330,7 @@
 				17C3B58D2D38E43900D2471F /* DrillFollowAlongView.swift in Sources */,
 				4399B6FD2D6C878600DA5E84 /* SkillSelectorSheetView.swift in Sources */,
 				177B1BD02DF741CE00AF465C /* DebounceService.swift in Sources */,
+				42B35C712E0B2BD600660E6E /* ThreeDPressCircleButtonStyle.swift in Sources */,
 				170167FB2D88B8790078446C /* DrillGroupService.swift in Sources */,
 				17DB45FA2DD69B2C000A76F6 /* BravoHeaderView.swift in Sources */,
 				17CA37A42DF0B1E5001AD5FA /* CustomVideoPlayer.swift in Sources */,
@@ -1330,6 +1351,7 @@
 				43C5FC662D6DC4800064E7D5 /* SavedFiltersSheet.swift in Sources */,
 				178208E62D2DEC2900246494 /* CompletionView.swift in Sources */,
 				4399B6D92D6930AB00DA5E84 /* OnboardingService.swift in Sources */,
+				42B35C652E0B00A500660E6E /* ShrinkingButtonStyle.swift in Sources */,
 				1784EB6F2D965FE0001D4F2F /* EditDetailsView.swift in Sources */,
 				43C5FC702D6DCC9A0064E7D5 /* SkillButton.swift in Sources */,
 				43AC25602DA394AD00EDD8C0 /* LikedGroupExtension.swift in Sources */,
@@ -1349,6 +1371,7 @@
 				178208E02D2DEB9C00246494 /* OnboardingModel.swift in Sources */,
 				43C5FC6A2D6DCC130064E7D5 /* RecommendedDrillCard.swift in Sources */,
 				4289C5C32E049A7B005CC91B /* BounceConstraints.swift in Sources */,
+				42B35C6F2E0B2B7600660E6E /* CircleButton.swift in Sources */,
 				43C5FC542D6DBD0E0064E7D5 /* GroupCard.swift in Sources */,
 				4399B7392D6D901B00DA5E84 /* ToastMessageModel.swift in Sources */,
 				17DB46022DD6D78F000A76F6 /* StartButton.swift in Sources */,
@@ -1364,6 +1387,7 @@
 				43C5FC562D6DBD310064E7D5 /* LikedGroupCard.swift in Sources */,
 				1784EB6D2D965F79001D4F2F /* SettingsModel.swift in Sources */,
 				4289C5BB2E036F8B005CC91B /* test.swift in Sources */,
+				42B35C6D2E0B0A5400660E6E /* NoOpacityChangeButtonStyle.swift in Sources */,
 				1782090C2D2E09EB00246494 /* SavedDrillsView.swift in Sources */,
 				43AC256F2DA3992B00EDD8C0 /* FilterProtocols.swift in Sources */,
 				178208E22D2DEBB400246494 /* OnboardingView.swift in Sources */,
@@ -1371,6 +1395,7 @@
 				4399B6F52D6C858200DA5E84 /* FilterOptions.swift in Sources */,
 				4289C59B2E0006F0005CC91B /* SessionGeneratorEditPage.swift in Sources */,
 				178208E42D2DEBC800246494 /* LoginView.swift in Sources */,
+				42B35C732E0B2C0B00660E6E /* ThreeDPressRectButtonStyle.swift in Sources */,
 				177B1BCA2DF7395C00AF465C /* ChangePasswordView.swift in Sources */,
 				178208E92D2DEC6D00246494 /* OnboardingStepView.swift in Sources */,
 				43FCC7232D7F684900005ABB /* UserManager.swift in Sources */,
@@ -1382,7 +1407,6 @@
 				177B1BCC2DF739E900AF465C /* PrivacyPolicyView.swift in Sources */,
 				17CA37A62DF0BA0F001AD5FA /* APIService.swift in Sources */,
 				177B1BBF2DF622A400AF465C /* AccountValidation.swift in Sources */,
-				4275F3F32E0A4359008A5E15 /* PressableButtonstyle.swift in Sources */,
 				43C5FC492D6DB84F0064E7D5 /* EditableDrillModel.swift in Sources */,
 				4289C57A2DEC3B8F005CC91B /* FloatingAddButton.swift in Sources */,
 				43A764992D825FEF004509E5 /* DataSyncService.swift in Sources */,

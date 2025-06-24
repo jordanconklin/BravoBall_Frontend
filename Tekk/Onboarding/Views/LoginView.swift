@@ -90,6 +90,7 @@ struct LoginView: View {
                 
             
                 // Login button
+            
                 PrimaryButton(
                     title: "Login",
                     action: {
@@ -98,15 +99,18 @@ struct LoginView: View {
                             loginUser()
                         }
                     },
-                    backgroundColor: onboardingModel.globalSettings.primaryYellowColor,
-                    textColor: .white,
-                    font: .system(size: 16, weight: .semibold),
-                    style: .filled,
-                    cornerRadius: 12,
-                    height: 44
+                    frontColor: onboardingModel.globalSettings.primaryYellowColor,
+                    backColor: onboardingModel.globalSettings.primaryDarkYellowColor,
+                    textColor: Color.white,
+                    textSize: 18,
+                    width: .infinity,
+                    height: 50,
+                    disabled: false
                 )
                 .padding(.horizontal)
                 .padding(.top)
+            
+            
                 
             
                 // Cancel button
@@ -118,14 +122,16 @@ struct LoginView: View {
                             resetLoginInfo()
                         }
                     },
-                    backgroundColor: .gray.opacity(0.2),
+                    frontColor: onboardingModel.globalSettings.primaryLightestGrayColor,
+                    backColor: onboardingModel.globalSettings.primaryLightGrayColor,
                     textColor: onboardingModel.globalSettings.primaryDarkColor,
-                    font: .system(size: 16, weight: .semibold),
-                    style: .filled,
-                    cornerRadius: 12,
-                    height: 44
+                    textSize: 18,
+                    width: .infinity,
+                    height: 50,
+                    disabled: false
                 )
                 .padding(.horizontal)
+            
                 
                 Spacer()
             }

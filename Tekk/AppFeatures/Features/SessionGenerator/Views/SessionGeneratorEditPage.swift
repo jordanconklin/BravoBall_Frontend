@@ -81,20 +81,7 @@ struct SessionGeneratorEditPage: View {
                     }
                 }
                 .background(Color.white)
-//            
-//            // Golden button
-//            if sessionReady() {
-//                StartButton(appModel: appModel, sessionModel: sessionModel) {
-//                    withAnimation(.easeInOut(duration: 0.4)) {
-//                        appModel.viewState.showHomePage = false
-//                        appModel.viewState.showPreSessionTextBubble = false
-//                        appModel.viewState.showFieldBehindHomePage = true
-//                    }
-//                }
-//                .frame(maxWidth: min(geometry.size.width - 40, appModel.layout.buttonMaxWidth))
-//                .offset(y: -10)
-//            }
-            
+
             // Prompt to save filter
             if appModel.viewState.showSaveFiltersPrompt {
                 SaveFiltersPromptView(

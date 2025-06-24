@@ -152,7 +152,9 @@ struct DrillDetailView: View {
                 // Add drill to session button
                 
                 if !isDrillInRunningSession() {
-                    FloatingAddButton{
+                    FloatingAddButton(
+                        appModel: appModel
+                    ){
                         Haptic.light()
                         addDrillWithToast()
                     }

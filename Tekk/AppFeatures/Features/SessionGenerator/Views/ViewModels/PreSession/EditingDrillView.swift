@@ -46,11 +46,11 @@ struct EditingDrillView: View {
                     
                     Spacer()
                     
-                    // Progress header
+                    // Edit drill header
                     Text("Edit Drill")
                         .font(.custom("Poppins-Bold", size: 18))
                         .foregroundColor(.black)
-                        .padding(.leading, 60)
+                        .padding(.leading, 70)
                     
                     Spacer()
                     
@@ -65,12 +65,12 @@ struct EditingDrillView: View {
                                 .foregroundColor(Color.white)
                                 .font(.system(size: 13, weight: .medium))
                             Text("Details")
-                                .font(.custom("Poppins-Bold", size: 16))
+                                .font(.custom("Poppins-Bold", size: 14))
                                 .foregroundColor(.white)
                             
                         }
                         .padding(.horizontal,10)
-                        .padding(.vertical, 10)
+                        .padding(.vertical, 8)
 
                         .background(appModel.globalSettings.primaryGrayColor)
                         .cornerRadius(12)
@@ -232,34 +232,32 @@ struct EditingDrillView: View {
         let repsValid = validations.reps
         let durationValid = validations.duration
         
-        
+        return PrimaryButton(
+            title: "Save Changes",
+            action: {
+                Haptic.light()
 
-        
-        return Button(action: {
-            Haptic.light()
-
-            if let sets = Int(editSets), setsValid {
-                editableDrill.totalSets = sets
-            }
-            if let reps = Int(editReps), repsValid {
-                editableDrill.totalReps = reps
-            }
-            if let duration = Int(editDuration), durationValid {
-                editableDrill.totalDuration = duration
-            }
-            
-            dismiss()
-            
-        }) {
-            Text("Save Changes")
-                .font(.custom("Poppins-Bold", size: 18))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(setsValid || repsValid || durationValid ? appModel.globalSettings.primaryYellowColor : Color.gray.opacity(0.5))
-                .cornerRadius(12)
-        }
-        .disabled(!setsValid && !repsValid && !durationValid)
+                if let sets = Int(editSets), setsValid {
+                    editableDrill.totalSets = sets
+                }
+                if let reps = Int(editReps), repsValid {
+                    editableDrill.totalReps = reps
+                }
+                if let duration = Int(editDuration), durationValid {
+                    editableDrill.totalDuration = duration
+                }
+                
+                dismiss()
+            },
+            frontColor: appModel.globalSettings.primaryYellowColor,
+            backColor: appModel.globalSettings.primaryDarkYellowColor,
+            textColor: Color.white,
+            textSize: 18,
+            width: .infinity,
+            height: 50,
+            disabled: !setsValid && !repsValid && !durationValid
+                
+        )
         .padding()
     }
 }

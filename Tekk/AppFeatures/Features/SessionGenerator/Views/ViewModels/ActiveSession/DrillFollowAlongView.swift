@@ -68,6 +68,23 @@ struct DrillFollowAlongView: View {
                     }
                     .padding(.top, 16)
                     
+                    
+                    ZStack {
+                        // Background progress bar
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.gray.opacity(0.3))
+                            .frame(maxWidth: .infinity, maxHeight: 8)
+                        
+                        // Progress fill
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(appModel.globalSettings.primaryYellowColor)
+                            .frame(maxWidth: .infinity)
+                            .scaleEffect(x: progress, anchor: .leading)
+                            .frame(maxWidth: .infinity, maxHeight: 8)
+                    }
+                    .padding(.top, 10)
+
+                    
                     HStack {
                         Spacer()
                         
@@ -79,7 +96,9 @@ struct DrillFollowAlongView: View {
                         Spacer()
                     }
                     .padding(.top, 10)
-
+                    
+                    
+                    
                     Spacer()
 
                     // Center the video player more visually
@@ -92,6 +111,7 @@ struct DrillFollowAlongView: View {
                     // Play button, timer, and info button row
                     HStack(spacing: 24) {
                         togglePlayButton
+                        
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Time")
                                 .font(.custom("Poppins-Bold", size: 18))
@@ -137,7 +157,7 @@ struct DrillFollowAlongView: View {
             .sheet(isPresented: $showInfoSheet) {
                 InfoPopupView(
                     title: "How Drill Timer Works",
-                    description: "Press play to start the countdown for this set.\n\nWhen the timer ends, you'll move to the next set and the timer will reset.\n\nComplete all sets to finish the drill and proceed to the next one. You can see the amount of sets you completed on the green \"Done\" button below.\n\nYou can skip a drill, but your session will be marked as incomplete if you do.",
+                    description: "Press play to start the countdown for this set.\n\nWhen the timer ends, you'll move to the next set and the timer will reset.\n\nComplete all sets to finish the drill and proceed to the next one. You can see the amount of sets you completed on the progress bar above.\n\nYou can skip a drill, but your session will be marked as incomplete if you do.",
                     onClose: { showInfoSheet = false }
                 )
                 .presentationDetents([.medium, .large])
@@ -147,59 +167,37 @@ struct DrillFollowAlongView: View {
     }
     
     private var togglePlayButton: some View {
-        Button(action: {
-            Haptic.light()
-            togglePlayPause()
-        }) {
-            Circle()
-                .fill(appModel.globalSettings.primaryYellowColor)
-                .frame(width: 100, height: 100)
-                .overlay(
-                    Group {
-                        if let countdown = countdownValue {
-                            Text("\(countdown)")
-                                .font(.custom("Poppins-Bold", size: 44))
-                                .foregroundColor(.white)
-                        } else {
-                            Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                                .font(.system(size: 40))
-                                .foregroundColor(.white)
-                        }
-                    }
-                )
-                .padding(.top, 10)
-                .padding(.bottom, 10)
+        
+        CircleButton(
+            action: {
+                Haptic.light()
+                togglePlayPause()
+            },
+            frontColor: appModel.globalSettings.primaryYellowColor,
+            backColor: appModel.globalSettings.primaryDarkYellowColor,
+            width: 100,
+            height: 100,
+            disabled: countdownValue != nil,
+            pressedOffset: 6
+            
+        ) {
+            Group {
+                if let countdown = countdownValue {
+                    Text("\(countdown)")
+                        .font(.custom("Poppins-Bold", size: 44))
+                        .foregroundColor(.white)
+                } else {
+                    Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                        .font(.system(size: 40))
+                        .foregroundColor(.white)
+                }
+            }
         }
         .opacity(editableDrill.setsDone != editableDrill.totalSets ? 1.0 : 0.0)
-        .disabled(countdownValue != nil)
+
+
     }
     
-    private var skipButton: some View {
-        // Skip button
-        Button(action: {
-            Haptic.light()
-            handleDrillCompletion()
-            endDrill()
-            
-        }) {
-            HStack {
-                Image(systemName: "forward.fill")
-                    .foregroundColor(Color.white)
-                    .font(.system(size: 16, weight: .medium))
-                Text("Skip Drill")
-                    .font(.custom("Poppins-Bold", size: 16))
-                    .foregroundColor(.white)
-                
-            }
-            .frame(height: 44)
-            .padding(.horizontal, 8)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(appModel.globalSettings.primaryYellowColor)
-            )
-                
-        }
-    }
     
     private var detailsButton: some View {
         // Details button
@@ -227,39 +225,55 @@ struct DrillFollowAlongView: View {
     }
     
     private var endDrillButton: some View {
-        // End drill with progress bar
-        Button(action: {
-            Haptic.light()
-            handleDrillCompletion()
-            endDrill()
+        
+        PrimaryButton(
+            title: "Done",
+            action: {
+                Haptic.light()
+                handleDrillCompletion()
+                endDrill()
+                
+                if doneWithSession() {
+                    handleSessionCompletion()
+                }
+            },
+            frontColor: appModel.globalSettings.primaryGreenColor,
+            backColor: appModel.globalSettings.primaryDarkGreenColor,
+            textColor: Color.white,
+            textSize: 18,
+            width: .infinity,
+            height: 50,
+            disabled: !doneWithDrill()
             
-            if doneWithSession() {
-                handleSessionCompletion()
-            }
-        }) {
-            ZStack {
-                // Background progress bar
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.gray.opacity(0.3))
-                    .opacity(doneWithDrill() ? 1.0 : 0.6)
-                
-                // Progress fill
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.green)
-                    .frame(maxWidth: .infinity)
-                    .scaleEffect(x: progress, anchor: .leading)
-                    .opacity(doneWithDrill() ? 1.0 : 0.6)
-                
-                // Button text
-                Text("Done")
-                    .font(.custom("Poppins-Bold", size: 16))
-                    .foregroundColor(.white)
-            }
-            .frame(height: 44)
-            .frame(maxWidth: .infinity)
-        }
-        .disabled(!doneWithDrill())
+        )
         .padding(.trailing, 5)
+
+    }
+    
+    private var skipButton: some View {
+        
+        PrimaryButton(
+            title: "Skip Drill",
+            action: {
+                Haptic.light()
+                handleDrillCompletion()
+                endDrill()
+            },
+            frontColor: appModel.globalSettings.primaryYellowColor,
+            backColor: appModel.globalSettings.primaryDarkYellowColor,
+            textColor: Color.white,
+            textSize: 18,
+            width: 150,
+            height: 50,
+            disabled: false
+            
+        ) {
+            Image(systemName: "forward.fill")
+                .foregroundColor(Color.white)
+                .font(.system(size: 16, weight: .medium))
+        }
+        .padding(.trailing, 5)
+
     }
     
     private var backButton: some View {

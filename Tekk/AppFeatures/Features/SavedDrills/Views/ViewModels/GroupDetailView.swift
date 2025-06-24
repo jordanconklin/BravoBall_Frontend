@@ -117,7 +117,9 @@ struct GroupDetailView: View {
                 
                 // Floating add button
                 
-                FloatingAddButton{
+                FloatingAddButton(
+                    appModel: appModel
+                ){
                     showAddDrillSheet = true
                 }
                 

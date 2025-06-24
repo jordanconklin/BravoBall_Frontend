@@ -28,7 +28,10 @@ struct ChangePasswordView: View {
             VStack(spacing: 0) {
                 // Header
                 HStack {
-                    Button(action: { dismiss() }) {
+                    Button(action: {
+                        Haptic.light()
+                        dismiss()
+                    }) {
                         Image(systemName: "xmark")
                             .foregroundColor(globalSettings.primaryDarkColor)
                     }
@@ -55,8 +58,7 @@ struct ChangePasswordView: View {
                     BravoSecureField(placeholder: "New Password", text: $newPassword)
                     BravoSecureField(placeholder: "Confirm New Password", text: $confirmPassword)
                 }
-                .padding(.horizontal, 24)
-                .padding(.vertical, 18)
+
                 .background(RoundedRectangle(cornerRadius: 18).fill(Color.white))
                 .padding(.horizontal, 16)
                 .padding(.bottom, 20)
@@ -69,13 +71,17 @@ struct ChangePasswordView: View {
                         .multilineTextAlignment(.center)
                         .padding(.bottom, 8)
                 }
-                
+       
                 PrimaryButton(
                     title: "Update Password",
                     action: { savePassword() },
-                    backgroundColor: globalSettings.primaryYellowColor,
-                    font: .custom("Poppins-Bold", size: 16),
-                    cornerRadius: 12
+                    frontColor: globalSettings.primaryYellowColor,
+                    backColor: globalSettings.primaryDarkYellowColor,
+                    textColor: Color.white,
+                    textSize: 16,
+                    width: .infinity,
+                    height: 40,
+                    disabled: false
                 )
                 .padding(.horizontal, 16)
                 .padding(.bottom, 30)
