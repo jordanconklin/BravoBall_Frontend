@@ -29,6 +29,7 @@ struct HomePageToolBar: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 40, height: 40)
                         .foregroundColor(Color.blue.opacity(0.25))
+                        .padding(.bottom, 7)
                 }
                 
                 Spacer()

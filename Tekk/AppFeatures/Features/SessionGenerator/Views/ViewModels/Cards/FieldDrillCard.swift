@@ -8,6 +8,13 @@
 import SwiftUI
 import RiveRuntime
 
+// Custom button style to prevent opacity change when disabled
+struct NoOpacityChangeButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+    }
+}
+
 struct FieldDrillCard: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
@@ -22,21 +29,19 @@ struct FieldDrillCard: View {
             Haptic.light()
             showingFollowAlong = true
         }) {
+            
+            
             ZStack {
-                // Background circle
-                Circle()
-                    .fill(editableDrill.isCompleted && editableDrill.totalSets == editableDrill.setsDone ?
-                          appModel.globalSettings.primaryYellowColor : Color.white)
-                    .frame(width: 60, height: 60)
-                    .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 5)
                 
+                cardCircle
+
                 // Progress stroke circle
                 Circle()
                     .stroke(
                         Color.gray.opacity(0.3),
                         lineWidth: 8
                     )
-                    .frame(width: 85, height: 85)
+                    .frame(width: 100, height: 100)
                     .overlay(
                         Circle()
                             .trim(from: 0, to: progress)
@@ -46,16 +51,18 @@ struct FieldDrillCard: View {
                             .rotationEffect(.degrees(-90))
                             .animation(.linear, value: progress)
                     )
+                    .offset(x: 0, y: 3)
+                    .opacity(!editableDrill.isCompleted && !isCurrentDrill() ? 0.0 : 1.0)
                 
                 // Soccer icon
                 Image(sessionModel.skillIconName(for: editableDrill.drill.skill))
                     .resizable()
                     .scaledToFit()
                     .frame(width: layout.isPad ? 44 : 40, height: layout.isPad ? 44 : 40)
+                    .opacity(!editableDrill.isCompleted && !isCurrentDrill() ? 0.5 : 1.0)
             }
         }
-        .buttonStyle(PlainButtonStyle())
-        .opacity(editableDrill.isCompleted || isCurrentDrill() ? 1.0 : 0.5)
+        .buttonStyle(NoOpacityChangeButtonStyle())
         .disabled(!editableDrill.isCompleted && !isCurrentDrill())
         .fullScreenCover(isPresented: $showingFollowAlong) {
             DrillFollowAlongView(
@@ -63,6 +70,34 @@ struct FieldDrillCard: View {
                 sessionModel: sessionModel,
                 editableDrill: $editableDrill
                 )
+        }
+    }
+    
+    private func drillComplete() -> Bool {
+        return editableDrill.isCompleted && editableDrill.totalSets == editableDrill.setsDone
+    }
+    
+    var cardCircle: some View {
+        let state: CardColorState
+        if drillComplete() {
+            state = .complete
+        } else if !editableDrill.isCompleted && isCurrentDrill() {
+            state = .inProgress
+        } else if !editableDrill.isCompleted && !isCurrentDrill() {
+            state = .noProgress
+        } else {
+            state = .inProgress
+        }
+        return ZStack {
+            // background
+            Circle()
+                .fill(backCircleColor(for: state))
+                .frame(width: 75, height: 75)
+                .offset(x: 0, y: 7)
+            // front
+            Circle()
+                .fill(frontCircleColor(for: state))
+                .frame(width: 75, height: 75)
         }
     }
     
@@ -76,6 +111,37 @@ struct FieldDrillCard: View {
         }
         return false
     }
+    
+    
+    private enum CardColorState {
+        case complete
+        case inProgress
+        case noProgress
+    }
+    
+    private func frontCircleColor(for state: CardColorState) -> Color {
+        switch state {
+        case .complete:
+            return appModel.globalSettings.primaryYellowColor
+        case .inProgress:
+            return Color.white
+        case .noProgress:
+            return appModel.globalSettings.primaryLightGrayColor
+        }
+    }
+    
+    private func backCircleColor(for state: CardColorState) -> Color {
+        switch state {
+        case .complete:
+            return appModel.globalSettings.primaryDarkYellowColor
+        case .inProgress:
+            return appModel.globalSettings.primaryLightGrayColor
+        case .noProgress:
+            return Color(hex:"b5b5b5")
+        }
+    }
+    
+    
 }
 
 #if DEBUG
@@ -101,7 +167,7 @@ struct FieldDrillCard_Previews: PreviewProvider {
         )
         let editableDrill = EditableDrillModel(
             drill: drill,
-            setsDone: 1,
+            setsDone: 0,
             totalSets: 3,
             totalReps: 10,
             totalDuration: 15,
