@@ -1774,7 +1774,7 @@
 				1749363A2C3E1032001163B9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		1749363B2C3E1032001163B9 /* Build configuration list for PBXNativeTarget "BravoBall" */ = {
 			isa = XCConfigurationList;
@@ -1783,7 +1783,7 @@
 				1749363D2C3E1032001163B9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		1749363E2C3E1032001163B9 /* Build configuration list for PBXNativeTarget "BravoBallTests" */ = {
 			isa = XCConfigurationList;
@@ -1792,7 +1792,7 @@
 				174936402C3E1032001163B9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		174936412C3E1032001163B9 /* Build configuration list for PBXNativeTarget "BravoBallUITests" */ = {
 			isa = XCConfigurationList;
@@ -1801,7 +1801,7 @@
 				174936432C3E1032001163B9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 
