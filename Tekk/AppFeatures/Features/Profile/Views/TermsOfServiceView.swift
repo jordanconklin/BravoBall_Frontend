@@ -52,13 +52,13 @@ struct TermsOfServiceView: View {
                                      content: "These Terms are governed by the laws of the United States and the State of California, without regard to conflict of law principles.")
                         
                         termsSection(title: "11. Contact Us",
-                                     content: "If you have any questions about these Terms, please contact us at conklinofficialsoccer@gmail.com.")
+                                     content: "If you have any questions about these Terms, please contact us at team@conklinofficial.com.")
                         
                         termsSection(title: "12. Subscription and Payments",
                                      content: "If the App offers subscription services, you agree to pay all fees associated with your subscription. Subscriptions automatically renew unless cancelled.")
                         
                         termsSection(title: "13. Refund Policy",
-                                     content: "Refund requests will be considered on a case-by-case basis. Contact us at conklinofficialsoccer@gmail.com for refund inquiries.")
+                                     content: "Refund requests will be considered on a case-by-case basis. Contact us at team@conklinofficial.com for refund inquiries.")
                         
                         termsSection(title: "14. Dispute Resolution",
                                      content: "Any disputes shall be resolved through binding arbitration in accordance with the rules of the American Arbitration Association.")
