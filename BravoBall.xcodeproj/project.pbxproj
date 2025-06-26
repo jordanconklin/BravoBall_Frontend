@@ -1239,8 +1239,8 @@
 			);
 			mainGroup = 1749360D2C3E102B001163B9;
 			packageReferences = (
-				430FD6B82D2E12640016D520 /* XCRemoteSwiftPackageReference "rive-ios" */,
 				430FD6D12D307AEC0016D520 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
+				17FE33D72E0DCC7B00FDC1B4 /* XCRemoteSwiftPackageReference "rive-ios" */,
 			);
 			productRefGroup = 174936172C3E102B001163B9 /* Products */;
 			projectDirPath = "";
@@ -1808,6 +1808,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		17FE33D72E0DCC7B00FDC1B4 /* XCRemoteSwiftPackageReference "rive-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rive-app/rive-ios";
+			requirement = {
+				kind = exactVersion;
+				version = 6.5.6;
+			};
+		};
 		430FD6B82D2E12640016D520 /* XCRemoteSwiftPackageReference "rive-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/rive-app/rive-ios";
