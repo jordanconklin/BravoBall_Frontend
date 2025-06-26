@@ -32,9 +32,9 @@ struct LoginView: View {
                     .font(.custom("PottaOne-Regular", size: 32))
                     .foregroundColor(model.globalSettings.primaryDarkColor)
                 
-                RiveViewModel(fileName: "Bravo_Panting").view()
-                    .frame(width: 200, height: 200)
-                    .padding()
+//                RiveViewModel(fileName: "Bravo_Panting").view()
+//                    .frame(width: 200, height: 200)
+//                    .padding()
                 
                 VStack(spacing: 15) {
                     // Email Field

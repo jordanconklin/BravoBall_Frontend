@@ -71,10 +71,10 @@ struct WeekDisplayButton: View {
                 }
                 
             } else {
-                RiveViewModel(fileName: "Day_Null").view()
-                    .frame(width: 60, height: 60)
-                    .aspectRatio(contentMode: .fit)
-                    .clipped()
+//                RiveViewModel(fileName: "Day_Null").view()
+//                    .frame(width: 60, height: 60)
+//                    .aspectRatio(contentMode: .fit)
+//                    .clipped()
                 
                 if highlightedDay {
                     Text(text)

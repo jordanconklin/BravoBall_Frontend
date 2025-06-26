@@ -50,17 +50,17 @@ struct OnboardingView: View {
             
             // Intro animation overlay
             if model.showIntroAnimation {
-                RiveViewModel(fileName: "BravoBall_Intro").view()
-                    .scaleEffect(model.animationScale)
-                    .edgesIgnoringSafeArea(.all)
-                    .allowsHitTesting(false)
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.7) {
-                            withAnimation(.spring()) {
-                                model.showIntroAnimation = false
-                            }
-                        }
-                    }
+//                RiveViewModel(fileName: "BravoBall_Intro").view()
+//                    .scaleEffect(model.animationScale)
+//                    .edgesIgnoringSafeArea(.all)
+//                    .allowsHitTesting(false)
+//                    .onAppear {
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.7) {
+//                            withAnimation(.spring()) {
+//                                model.showIntroAnimation = false
+//                            }
+//                        }
+//                    }
             }
         }
         .animation(.spring(), value: model.showWelcome)
@@ -70,10 +70,10 @@ struct OnboardingView: View {
     // Welcome view for new users
     var welcomeContent: some View {
         VStack {
-            RiveViewModel(fileName: "Bravo_Panting").view()
-                .frame(width: 300, height: 300)
-                .padding(.top, 30)
-                .padding(.bottom, 10)
+//            RiveViewModel(fileName: "Bravo_Panting").view()
+//                .frame(width: 300, height: 300)
+//                .padding(.top, 30)
+//                .padding(.bottom, 10)
             
             Text("BravoBall")
                 .foregroundColor(model.globalSettings.primaryYellowColor)
@@ -173,9 +173,9 @@ struct OnboardingView: View {
             .padding(.top, 8)
             
             // Mascot
-            RiveViewModel(fileName: "Bravo_Panting").view()
-                .frame(width: 100, height: 100)
-            
+//            RiveViewModel(fileName: "Bravo_Panting").view()
+//                .frame(width: 100, height: 100)
+//            
             // Step Content
             ScrollView(showsIndicators: false) {
                 switch model.currentStep {
