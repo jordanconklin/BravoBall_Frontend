@@ -86,42 +86,42 @@ struct DrillCard: View {
     
 }
 
-#if DEBUG
-struct DrillCard_Previews: PreviewProvider {
-    static var previews: some View {
-        let appModel = MainAppModel()
-        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
-        // Create a mock drill and editable drill
-        let drill = DrillModel(
-            title: "One-Touch Pass",
-            skill: "Passing",
-            subSkills: ["short_passing"],
-            sets: 3,
-            reps: 10,
-            duration: 15,
-            description: "Practice quick one-touch passes with a partner or wall.",
-            instructions: [""],
-            tips: ["Keep your ankle locked", "Follow through"],
-            equipment: ["Soccer ball", "Cones"],
-            trainingStyle: "Medium Intensity",
-            difficulty: "Beginner",
-            videoUrl: "www.example.com"
-        )
-        let editableDrill = EditableDrillModel(
-            drill: drill,
-            setsDone: 0,
-            totalSets: 3,
-            totalReps: 10,
-            totalDuration: 15,
-            isCompleted: false
-        )
-        DrillCard(
-            appModel: appModel,
-            sessionModel: sessionModel,
-            editableDrill: .constant(editableDrill)
-        )
-        .previewLayout(.sizeThatFits)
-        .padding()
-    }
-}
-#endif
+//#if DEBUG
+//struct DrillCard_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let appModel = MainAppModel()
+//        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+//        // Create a mock drill and editable drill
+//        let drill = DrillModel(
+//            title: "One-Touch Pass",
+//            skill: "Passing",
+//            subSkills: ["short_passing"],
+//            sets: 3,
+//            reps: 10,
+//            duration: 15,
+//            description: "Practice quick one-touch passes with a partner or wall.",
+//            instructions: [""],
+//            tips: ["Keep your ankle locked", "Follow through"],
+//            equipment: ["Soccer ball", "Cones"],
+//            trainingStyle: "Medium Intensity",
+//            difficulty: "Beginner",
+//            videoUrl: "www.example.com"
+//        )
+//        let editableDrill = EditableDrillModel(
+//            drill: drill,
+//            setsDone: 0,
+//            totalSets: 3,
+//            totalReps: 10,
+//            totalDuration: 15,
+//            isCompleted: false
+//        )
+//        DrillCard(
+//            appModel: appModel,
+//            sessionModel: sessionModel,
+//            editableDrill: .constant(editableDrill)
+//        )
+//        .previewLayout(.sizeThatFits)
+//        .padding()
+//    }
+//}
+//#endif

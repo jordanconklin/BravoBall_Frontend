@@ -30,16 +30,20 @@ class DataSyncService {
     struct OrderedDrillData: Decodable {
         let backendId: Int
         let title: String
-        let skill: String?
+        let skill: String
+        let subSkills: [String]
         let sets: Int
         let reps: Int
         let duration: Int
         let description: String
+        let instructions: [String]
         let tips: [String]
         let equipment: [String]
-        let trainingStyle: String?
+        let trainingStyle: String
         let difficulty: String
+        let videoUrl: String
     }
+
     
     // MARK: - Ordered Session Drills Sync
     
@@ -74,21 +78,22 @@ class DataSyncService {
             
             // Create a DrillModel from the ordered drill data
             let drillModel = DrillModel(
-                id: UUID(),
+                // TODO: FIX id later, this is making second instance but doesnt matter rn its not being used
+                id: UUID(), // Generate a new UUID for the frontend
                 backendId: drillData.backendId,
                 title: drillData.title,
-                skill: drillData.skill ?? "General",
-                subSkills: [], // No sub-skills in this response
+                skill: drillData.skill,
+                subSkills: drillData.subSkills,
                 sets: drillData.sets,
                 reps: drillData.reps,
                 duration: drillData.duration,
                 description: drillData.description,
-                instructions: [], // No instructions in this response
+                instructions: drillData.instructions,
                 tips: drillData.tips,
                 equipment: drillData.equipment,
-                trainingStyle: drillData.trainingStyle ?? "Medium",
+                trainingStyle: drillData.trainingStyle,
                 difficulty: drillData.difficulty,
-                videoUrl: "" // No video URL in this response
+                videoUrl: drillData.videoUrl
             )
             
             // Create EditableDrillModel with the session-specific data
