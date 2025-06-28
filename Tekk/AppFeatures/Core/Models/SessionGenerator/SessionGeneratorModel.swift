@@ -220,12 +220,12 @@ class SessionGeneratorModel: ObservableObject {
                 
     }
     
-    deinit {
-        autoSaveTimer?.invalidate()
-        saveChanges() // Final save on deinit
-        // Remove notification observer
-        NotificationCenter.default.removeObserver(self)
-    }
+//    deinit {
+//        autoSaveTimer?.invalidate()
+//        saveChanges() // Final save on deinit
+//        // Remove notification observer
+//        NotificationCenter.default.removeObserver(self)
+//    }
     
     
     

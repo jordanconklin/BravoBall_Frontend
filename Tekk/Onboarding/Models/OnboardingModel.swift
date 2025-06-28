@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftKeychainWrapper
 
 class OnboardingModel: ObservableObject {
     let globalSettings = GlobalSettings()
@@ -76,6 +77,11 @@ class OnboardingModel: ObservableObject {
         var availableEquipment: [String] = []
         var dailyTrainingTime: String = ""
         var weeklyTrainingDays: String = ""
+    }
+
+    init() {
+        // Check for existing authentication on init
+        restoreLoginStateFromStorage()
     }
 
     // Checks if youre allowed to move to next question (validates data)
@@ -167,5 +173,38 @@ class OnboardingModel: ObservableObject {
         if onboardingData.confirmPassword.isEmpty { return "Please confirm your password." }
         if onboardingData.password != onboardingData.confirmPassword { return "Passwords do not match." }
         return nil
+    }
+
+    // MARK: - Persistent Login State Management
+    
+    /// Restores login state from stored tokens in Keychain
+    func restoreLoginStateFromStorage() {
+        let storedAccessToken = KeychainWrapper.standard.string(forKey: "accessToken") ?? ""
+        let storedUserEmail = KeychainWrapper.standard.string(forKey: "userEmail") ?? ""
+        
+        // User is logged in if they have both access token and email
+        if !storedAccessToken.isEmpty && !storedUserEmail.isEmpty {
+            accessToken = storedAccessToken
+            isLoggedIn = true
+            print("🔑 Restored login state from storage - User: \(storedUserEmail)")
+        } else {
+            print("📱 No stored authentication found")
+        }
+    }
+    
+    /// Clears login state and stored tokens
+    func clearLoginState() {
+        isLoggedIn = false
+        accessToken = ""
+        showLoginPage = false
+        showWelcome = false
+        showIntroAnimation = false
+        
+        // Clear stored tokens
+        KeychainWrapper.standard.removeObject(forKey: "accessToken")
+        KeychainWrapper.standard.removeObject(forKey: "refreshToken")
+        KeychainWrapper.standard.removeObject(forKey: "userEmail")
+        
+        print("🧹 Cleared login state and stored tokens")
     }
 }

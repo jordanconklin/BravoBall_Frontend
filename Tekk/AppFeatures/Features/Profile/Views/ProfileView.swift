@@ -329,18 +329,8 @@ struct ProfileView: View {
     }
     
     private func logOutUser() {
-        // Reset login property and clear onboarding data
-        onboardingModel.accessToken = "" // TODO: make it so accessToken isnt stored here
-        onboardingModel.errorMessage = ""
-        onboardingModel.isLoggedIn = false
-        onboardingModel.onboardingComplete = false
-        
-        // Reset skiponboarding for when testing with skiponboarding set to true
-        onboardingModel.skipOnboarding = false
-
-        // Clear Keychain tokens
-        let keychain = KeychainWrapper.standard
-        keychain.removeObject(forKey: "accessToken")
+        // Use the new clearLoginState method for consistency
+        onboardingModel.clearLoginState()
         
         // Clear user's cache and data
         sessionModel.clearUserData()
@@ -348,6 +338,8 @@ struct ProfileView: View {
         
         // Reset to home tab
         appModel.mainTabSelected = 0
+        
+        print("✅ User logged out successfully")
     }
     
     

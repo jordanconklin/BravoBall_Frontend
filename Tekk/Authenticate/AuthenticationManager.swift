@@ -18,6 +18,8 @@ class AuthenticationService: ObservableObject {
     
     /// Checks if user has valid stored credentials and validates them with the backend
     func checkAuthenticationStatus() async -> Bool {
+        print("🔍 AuthenticationService: Starting authentication check...")
+        
         await MainActor.run {
             isCheckingAuthentication = true
         }
@@ -27,6 +29,7 @@ class AuthenticationService: ObservableObject {
               let userEmail = KeychainWrapper.standard.string(forKey: "userEmail"),
               !accessToken.isEmpty,
               !userEmail.isEmpty else {
+            print("❌ AuthenticationService: No stored tokens found")
             await MainActor.run {
                 isCheckingAuthentication = false
                 isAuthenticated = false
@@ -34,8 +37,12 @@ class AuthenticationService: ObservableObject {
             return false
         }
         
+        print("✅ AuthenticationService: Found stored tokens for user: \(userEmail)")
+        print("🔑 AuthenticationService: Access token: \(accessToken.prefix(20))...")
+        
         // Validate token with backend
         do {
+            print("🌐 AuthenticationService: Validating token with backend...")
             let (_, response) = try await APIService.shared.request(
                 endpoint: "/api/session/preferences",
                 method: "GET",
@@ -46,15 +53,23 @@ class AuthenticationService: ObservableObject {
             )
             
             let isValid = response.statusCode == 200
+            print("🌐 AuthenticationService: Backend response status: \(response.statusCode)")
             
             await MainActor.run {
                 isCheckingAuthentication = false
                 isAuthenticated = isValid
             }
             
+            if isValid {
+                print("✅ AuthenticationService: Token validation successful")
+            } else {
+                print("❌ AuthenticationService: Token validation failed")
+            }
+            
             return isValid
             
         } catch {
+            print("❌ AuthenticationService: Error validating token: \(error.localizedDescription)")
             // If validation fails, clear invalid tokens
             await clearInvalidTokens()
             

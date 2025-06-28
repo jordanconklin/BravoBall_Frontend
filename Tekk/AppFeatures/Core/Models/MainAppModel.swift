@@ -158,30 +158,33 @@ class MainAppModel: ObservableObject {
     private let progressSyncDebounceInterval: TimeInterval = 1.0 // 1 second debounce
     private var pendingProgressSync = false
     
-    @Published var currentStreak: Int = 0 {
-        didSet {
-            if !isInitialLoad && !isLoggingOut && currentStreak != oldValue {
-                cacheCurrentStreak()
-                queueProgressSync()
-            }
-        }
-    }
-    @Published var highestStreak: Int = 0 {
-        didSet {
-            if !isInitialLoad && !isLoggingOut && highestStreak != oldValue {
-                cacheHighestStreak()
-                queueProgressSync()
-            }
-        }
-    }
-    @Published var countOfFullyCompletedSessions: Int = 0 {
-        didSet {
-            if !isInitialLoad && !isLoggingOut && countOfFullyCompletedSessions != oldValue {
-                cacheCompletedSessionsCount()
-                queueProgressSync()
-            }
-        }
-    }
+    @Published var currentStreak: Int = 0
+//    {
+//        didSet {
+//            if !isInitialLoad && !isLoggingOut && currentStreak != oldValue {
+//                cacheCurrentStreak()
+//                queueProgressSync()
+//            }
+//        }
+//    }
+    @Published var highestStreak: Int = 0
+//    {
+//        didSet {
+//            if !isInitialLoad && !isLoggingOut && highestStreak != oldValue {
+//                cacheHighestStreak()
+//                queueProgressSync()
+//            }
+//        }
+//    }
+    @Published var countOfFullyCompletedSessions: Int = 0
+//    {
+//        didSet {
+//            if !isInitialLoad && !isLoggingOut && countOfFullyCompletedSessions != oldValue {
+//                cacheCompletedSessionsCount()
+//                queueProgressSync()
+//            }
+//        }
+//    }
     
     // TODO: better way to manage progress network calls?
     // madds debounce so all progress history isnt pushing individual network calls

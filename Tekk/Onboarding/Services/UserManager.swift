@@ -67,8 +67,20 @@ class UserManager: ObservableObject {
         // Load access token from Keychain
         accessToken = KeychainWrapper.standard.string(forKey: "accessToken") ?? ""
         
-        // Update login state
-        isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
+        // Also load email from keychain (this is the primary source)
+        let keychainEmail = KeychainWrapper.standard.string(forKey: "userEmail") ?? ""
+        if !keychainEmail.isEmpty {
+            email = keychainEmail
+        }
+        
+        // Update login state - user is logged in if they have both email and access token
+        isLoggedIn = !accessToken.isEmpty && !email.isEmpty
+        userHasAccountHistory = isLoggedIn
+        
+        // Update UserDefaults to reflect current state
+        UserDefaults.standard.set(isLoggedIn, forKey: "isLoggedIn")
+        
+        print("📱 UserManager loaded data - Email: \(email), isLoggedIn: \(isLoggedIn)")
     }
     
     func logout() {
@@ -84,12 +96,13 @@ class UserManager: ObservableObject {
         isLoggedIn = false
         userHasAccountHistory = false
         
-    
         // Remove from UserDefaults and Keychain
         UserDefaults.standard.removeObject(forKey: "userId")
         UserDefaults.standard.removeObject(forKey: "email")
         UserDefaults.standard.removeObject(forKey: "isLoggedIn")
         KeychainWrapper.standard.removeObject(forKey: "accessToken")
+        KeychainWrapper.standard.removeObject(forKey: "refreshToken")
+        KeychainWrapper.standard.removeObject(forKey: "userEmail")
         
         // Clear user-specific liked drills UUID
         UserDefaults.standard.removeObject(forKey: "\(previousEmail)_likedDrillsUUID")
