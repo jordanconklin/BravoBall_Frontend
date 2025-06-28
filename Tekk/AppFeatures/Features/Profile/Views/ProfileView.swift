@@ -300,13 +300,12 @@ struct ProfileView: View {
             frontColor: appModel.globalSettings.primaryYellowColor,
             backColor: appModel.globalSettings.primaryDarkYellowColor,
             textColor: Color.white,
-            textSize: 16,
+            textSize: 18,
             width: .infinity,
-            height: 40,
+            height: 50,
             disabled: false
                 
         )
-        .padding(.top, 5)
     }
     
     private var deleteAccountButton: some View {
@@ -321,13 +320,12 @@ struct ProfileView: View {
             frontColor: Color(hex: "#ed1818"),
             backColor: Color(hex: "#ba1818"),
             textColor: Color.white,
-            textSize: 16,
+            textSize: 18,
             width: .infinity,
-            height: 40,
+            height: 50,
             disabled: false
                 
         )
-        .padding(.top, 5)
     }
     
     private func logOutUser() {

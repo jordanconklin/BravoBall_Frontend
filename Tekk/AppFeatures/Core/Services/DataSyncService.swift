@@ -12,6 +12,34 @@ class DataSyncService {
     static let shared = DataSyncService()
     private let baseURL = AppSettings.baseURL
     
+    // MARK: - Response Models for Ordered Drills
+    
+    struct OrderedDrillsResponse: Decodable {
+        let orderedDrills: [OrderedDrillItem]
+    }
+    
+    struct OrderedDrillItem: Decodable {
+        let drill: OrderedDrillData
+        let sets: Int
+        let reps: Int
+        let duration: Int
+        let isCompleted: Bool
+        let position: Int
+    }
+    
+    struct OrderedDrillData: Decodable {
+        let backendId: Int
+        let title: String
+        let skill: String?
+        let sets: Int
+        let reps: Int
+        let duration: Int
+        let description: String
+        let tips: [String]
+        let equipment: [String]
+        let trainingStyle: String?
+        let difficulty: String
+    }
     
     // MARK: - Ordered Session Drills Sync
     
@@ -27,24 +55,55 @@ class DataSyncService {
             throw URLError(.badServerResponse)
         }
         print("📥 Response status code: \(response.statusCode)")
+        
+        // Print the raw JSON data to see what the API is actually returning
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("🔍 Raw JSON response from /api/sessions/ordered_drills/:")
+            print(jsonString)
+        }
+        
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        let drills = try decoder.decode([DrillResponse].self, from: data)
-        // Convert API response to EditableDrillModel
-        return drills.map { apiDrill in
-            let drillModel = apiDrill.toDrillModel()
+        
+        // Decode the wrapper response first
+        let sessionResponse = try decoder.decode(OrderedDrillsResponse.self, from: data)
+        
+        // Convert each ordered drill item to EditableDrillModel
+        return sessionResponse.orderedDrills.map { orderedDrillItem in
+            let drillData = orderedDrillItem.drill
+            
+            // Create a DrillModel from the ordered drill data
+            let drillModel = DrillModel(
+                id: UUID(),
+                backendId: drillData.backendId,
+                title: drillData.title,
+                skill: drillData.skill ?? "General",
+                subSkills: [], // No sub-skills in this response
+                sets: drillData.sets,
+                reps: drillData.reps,
+                duration: drillData.duration,
+                description: drillData.description,
+                instructions: [], // No instructions in this response
+                tips: drillData.tips,
+                equipment: drillData.equipment,
+                trainingStyle: drillData.trainingStyle ?? "Medium",
+                difficulty: drillData.difficulty,
+                videoUrl: "" // No video URL in this response
+            )
+            
+            // Create EditableDrillModel with the session-specific data
             return EditableDrillModel(
                 drill: drillModel,
-                setsDone: 0,
-                totalSets: drillModel.sets,
-                totalReps: drillModel.reps,
-                totalDuration: drillModel.duration,
-                isCompleted: false
+                setsDone: 0, // Start with 0 sets done
+                totalSets: orderedDrillItem.sets,
+                totalReps: orderedDrillItem.reps,
+                totalDuration: orderedDrillItem.duration,
+                isCompleted: orderedDrillItem.isCompleted
             )
         }
     }
     
-    func syncOrderedSessionDrills(sessionDrills: [EditableDrillModel], sessionId: Int) async throws {
+    func syncOrderedSessionDrills(sessionDrills: [EditableDrillModel]) async throws {
         let endpoint = "/api/sessions/ordered_drills/"
         let drillsData = sessionDrills.map { drill in
             return [
@@ -66,8 +125,7 @@ class DataSyncService {
                 "sets": drill.totalSets,
                 "reps": drill.totalReps,
                 "duration": drill.totalDuration,
-                "is_completed": drill.isCompleted,
-                "session_id": sessionId
+                "is_completed": drill.isCompleted
             ]
         }
         let requestData = ["ordered_drills": drillsData]
@@ -148,10 +206,34 @@ class DataSyncService {
             throw URLError(.badServerResponse)
         }
         print("📥 Response status code: \(response.statusCode)")
+        
+        // Print raw JSON for debugging
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("🔍 Raw JSON response from /api/sessions/completed/:")
+            print(jsonString)
+        }
+        
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        // Add custom date decoding strategy to handle string dates
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
         let completedSessions = try decoder.decode([CompletedSession].self, from: data)
         print("✅ Successfully fetched \(completedSessions.count) completed sessions")
+        
+        // Print the decoded sessions for debugging
+        print("📊 Decoded completed sessions:")
+        for (index, session) in completedSessions.enumerated() {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+            let sessionDateString = formatter.string(from: session.date)
+            print("   Session \(index): \(sessionDateString) - \(session.totalCompletedDrills)/\(session.totalDrills) completed")
+        }
+        
         return completedSessions
     }
 
@@ -163,14 +245,17 @@ class DataSyncService {
                     "id": drill.drill.id.uuidString,
                     "title": drill.drill.title,
                     "skill": drill.drill.skill,
-                    "sets": drill.totalSets,
-                    "reps": drill.totalReps,
-                    "duration": drill.totalDuration,
+                    "subSkills": drill.drill.subSkills,
+                    "sets": drill.drill.sets,
+                    "reps": drill.drill.reps,
+                    "duration": drill.drill.duration,
                     "description": drill.drill.description,
                     "tips": drill.drill.tips,
+                    "instructions": drill.drill.instructions,
                     "equipment": drill.drill.equipment,
                     "trainingStyle": drill.drill.trainingStyle,
-                    "difficulty": drill.drill.difficulty
+                    "difficulty": drill.drill.difficulty,
+                    "videoUrl": drill.drill.videoUrl
                 ],
                 "setsDone": drill.setsDone,
                 "totalSets": drill.totalSets,
@@ -186,14 +271,37 @@ class DataSyncService {
             "total_drills": total
         ] as [String : Any]
         let body = try JSONSerialization.data(withJSONObject: sessionData)
-        let (_, response) = try await APIService.shared.request(
+        
+        // Print the request data for debugging
+        if let requestString = String(data: body, encoding: .utf8) {
+            print("📤 Request data being sent to /api/sessions/completed/:")
+            print(requestString)
+        }
+        
+        let (data, response) = try await APIService.shared.request(
             endpoint: endpoint,
             method: "POST",
             headers: ["Content-Type": "application/json"],
             body: body
         )
+        
+        print("📥 Response status code: \(response.statusCode)")
+        
         guard response.statusCode == 200 else {
-            throw URLError(.badServerResponse)
+            // Print the error response from the server
+            if let errorString = String(data: data, encoding: .utf8) {
+                print("❌ Server error response:")
+                print(errorString)
+            }
+            
+            // Create a more descriptive error
+            let errorMessage = "Server returned status code \(response.statusCode)"
+            print("❌ \(errorMessage)")
+            throw NSError(domain: "DataSyncService", code: response.statusCode, userInfo: [
+                NSLocalizedDescriptionKey: errorMessage,
+                "statusCode": response.statusCode,
+                "responseData": String(data: data, encoding: .utf8) ?? "No response data"
+            ])
         }
         print("✅ Successfully synced completed session")
     }

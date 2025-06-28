@@ -11,9 +11,14 @@ struct ContentView: View {
     @StateObject private var onboardingModel = OnboardingModel()
     @StateObject private var appModel = MainAppModel()
     @StateObject private var userInfoManager = UserManager()
-    @StateObject private var sessionGenModel = SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData())
-
-
+    @StateObject private var sessionGenModel: SessionGeneratorModel
+    
+    init() {
+        let appModel = MainAppModel()
+        let onboardingData = OnboardingModel.OnboardingData()
+        self._appModel = StateObject(wrappedValue: appModel)
+        self._sessionGenModel = StateObject(wrappedValue: SessionGeneratorModel(appModel: appModel, onboardingData: onboardingData))
+    }
 
     var body: some View {
         GeometryReader { geometry in
@@ -22,10 +27,23 @@ struct ContentView: View {
                 if onboardingModel.isLoggedIn {
                     MainTabView(onboardingModel: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
                         .onAppear {
-                            // Load cached data if user has history
+                            // Load data if user has history
                             if userInfoManager.userHasAccountHistory {
-                                appModel.loadCachedData()
-                                sessionGenModel.loadCachedData()
+                                Task {
+                                    await sessionGenModel.loadBackendData()
+                                    
+                                    // Set isInitialLoad to false after data loading is complete
+                                    await MainActor.run {
+                                        sessionGenModel.isInitialLoad = false
+                                        appModel.isInitialLoad = false
+                                        print("✅ Initialization complete - isInitialLoad set to false")
+                                    }
+                                }
+                            } else {
+                                // If no user history, set isInitialLoad to false immediately
+                                sessionGenModel.isInitialLoad = false
+                                appModel.isInitialLoad = false
+                                print("✅ Initialization complete - isInitialLoad set to false (no user history)")
                             }
                         }
                     

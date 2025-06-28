@@ -192,16 +192,16 @@ class SessionGeneratorModel: ObservableObject {
         // Check if we just signed out and/or signed in with a new user
         let currentUser = KeychainWrapper.standard.string(forKey: "userEmail") ?? "no user"
         let lastUser = UserDefaults.standard.string(forKey: "lastActiveUser") ?? ""
-        
-        if currentUser != lastUser {
-            print("👤 User change detected: '\(lastUser)' → '\(currentUser)'")
-            // Clear any leftover data from previous user
-            clearUserData()
-            
-            // Save current user as last active
-            UserDefaults.standard.set(currentUser, forKey: "lastActiveUser")
-        }
-        print("OnboardingData at model init: \(onboardingData)")
+//        
+//        if currentUser != lastUser {
+//            print("👤 User change detected: '\(lastUser)' → '\(currentUser)'")
+//            // Clear any leftover data from previous user
+//            clearUserData()
+//            
+//            // Save current user as last active
+//            UserDefaults.standard.set(currentUser, forKey: "lastActiveUser")
+//        }
+//        print("OnboardingData at model init: \(onboardingData)")
         
         
         
@@ -341,15 +341,10 @@ class SessionGeneratorModel: ObservableObject {
             do {
                 // Only sync what has changed
                 if changeTracker.orderedDrillsChanged {
-                    if let sessionId = currentSessionId {
                     try await DataSyncService.shared.syncOrderedSessionDrills(
-                            sessionDrills: orderedSessionDrills,
-                            sessionId: sessionId
+                            sessionDrills: orderedSessionDrills
                     )
-                    } else {
-                        print("⚠️ Warning: currentSessionId is nil, cannot sync ordered drills.")
-                    }
-                    cacheOrderedDrills()
+//                    cacheOrderedDrills()
                 }
                 if changeTracker.savedFiltersChanged {
                     try await SavedFiltersService.shared.syncSavedFilters(
