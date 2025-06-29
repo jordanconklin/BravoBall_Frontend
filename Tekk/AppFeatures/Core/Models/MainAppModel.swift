@@ -436,6 +436,12 @@ class MainAppModel: ObservableObject {
         }
     }
     
+    func alreadyCompletedToday() -> Bool {
+        return allCompletedSessions.contains {
+            Calendar.current.isDate($0.date, equalTo: Date(), toGranularity: .day)
+        }
+    }
+    
 
     
     // When logging out

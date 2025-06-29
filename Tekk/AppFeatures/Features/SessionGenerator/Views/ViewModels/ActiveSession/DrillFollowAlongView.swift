@@ -331,6 +331,7 @@ struct DrillFollowAlongView: View {
         }) == 1 {
             appModel.currentStreak += 1
         }
+
         
         appModel.highestStreakSetter(streak: appModel.currentStreak)
     }
