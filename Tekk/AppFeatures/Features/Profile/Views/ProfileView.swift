@@ -300,13 +300,12 @@ struct ProfileView: View {
             frontColor: appModel.globalSettings.primaryYellowColor,
             backColor: appModel.globalSettings.primaryDarkYellowColor,
             textColor: Color.white,
-            textSize: 16,
+            textSize: 18,
             width: .infinity,
-            height: 40,
+            height: 50,
             disabled: false
                 
         )
-        .padding(.top, 5)
     }
     
     private var deleteAccountButton: some View {
@@ -321,28 +320,17 @@ struct ProfileView: View {
             frontColor: Color(hex: "#ed1818"),
             backColor: Color(hex: "#ba1818"),
             textColor: Color.white,
-            textSize: 16,
+            textSize: 18,
             width: .infinity,
-            height: 40,
+            height: 50,
             disabled: false
                 
         )
-        .padding(.top, 5)
     }
     
     private func logOutUser() {
-        // Reset login property and clear onboarding data
-        onboardingModel.accessToken = "" // TODO: make it so accessToken isnt stored here
-        onboardingModel.errorMessage = ""
-        onboardingModel.isLoggedIn = false
-        onboardingModel.onboardingComplete = false
-        
-        // Reset skiponboarding for when testing with skiponboarding set to true
-        onboardingModel.skipOnboarding = false
-
-        // Clear Keychain tokens
-        let keychain = KeychainWrapper.standard
-        keychain.removeObject(forKey: "accessToken")
+        // Use the new clearLoginState method for consistency
+        onboardingModel.clearLoginState()
         
         // Clear user's cache and data
         sessionModel.clearUserData()
@@ -350,6 +338,8 @@ struct ProfileView: View {
         
         // Reset to home tab
         appModel.mainTabSelected = 0
+        
+        print("✅ User logged out successfully")
     }
     
     

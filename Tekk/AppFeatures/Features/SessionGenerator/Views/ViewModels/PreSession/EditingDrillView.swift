@@ -262,40 +262,40 @@ struct EditingDrillView: View {
     }
 }
 
-#if DEBUG
-struct EditingDrillView_Previews: PreviewProvider {
-    static var previews: some View {
-        let appModel = MainAppModel()
-        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
-        let mockDrill = EditableDrillModel(
-            drill: DrillModel(
-                title: "Test Drill",
-                skill: "Passing",
-                subSkills: ["short_passing"],
-                sets: 3,
-                reps: 10,
-                duration: 15,
-                description: "Practice short passing technique.",
-                instructions: ["Pass the ball back and forth."],
-                tips: ["Keep your ankle locked."],
-                equipment: ["Soccer ball"],
-                trainingStyle: "Medium Intensity",
-                difficulty: "Beginner",
-                videoUrl: "https://bravoball-drills.s3.us-east-2.amazonaws.com/first-touch-drills/freestyle-juggling-with-wall.mp4"
-            ),
-            setsDone: 0,
-            totalSets: 3,
-            totalReps: 10,
-            totalDuration: 15,
-            isCompleted: false
-        )
-        return EditingDrillView(
-            appModel: appModel,
-            sessionModel: sessionModel,
-            editableDrill: .constant(mockDrill)
-        )
-        .previewLayout(.sizeThatFits)
-        .padding()
-    }
-}
-#endif
+//#if DEBUG
+//struct EditingDrillView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let appModel = MainAppModel()
+//        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+//        let mockDrill = EditableDrillModel(
+//            drill: DrillModel(
+//                title: "Test Drill",
+//                skill: "Passing",
+//                subSkills: ["short_passing"],
+//                sets: 3,
+//                reps: 10,
+//                duration: 15,
+//                description: "Practice short passing technique.",
+//                instructions: ["Pass the ball back and forth."],
+//                tips: ["Keep your ankle locked."],
+//                equipment: ["Soccer ball"],
+//                trainingStyle: "Medium Intensity",
+//                difficulty: "Beginner",
+//                videoUrl: "https://bravoball-drills.s3.us-east-2.amazonaws.com/first-touch-drills/freestyle-juggling-with-wall.mp4"
+//            ),
+//            setsDone: 0,
+//            totalSets: 3,
+//            totalReps: 10,
+//            totalDuration: 15,
+//            isCompleted: false
+//        )
+//        return EditingDrillView(
+//            appModel: appModel,
+//            sessionModel: sessionModel,
+//            editableDrill: .constant(mockDrill)
+//        )
+//        .previewLayout(.sizeThatFits)
+//        .padding()
+//    }
+//}
+//#endif

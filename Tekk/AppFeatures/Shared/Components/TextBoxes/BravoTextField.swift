@@ -27,11 +27,13 @@ struct BravoTextField: View {
             if isSecure {
                 SecureField(placeholder, text: $text)
                     .font(font)
+                    .autocapitalization(.none)
                     .disableAutocorrection(true)
                     .keyboardType(keyboardType)
             } else {
                 TextField(placeholder, text: $text)
                     .font(font)
+                    .autocapitalization(.none)
                     .disableAutocorrection(true)
                     .keyboardType(keyboardType)
             }

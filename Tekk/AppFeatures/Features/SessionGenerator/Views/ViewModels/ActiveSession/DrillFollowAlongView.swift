@@ -331,6 +331,7 @@ struct DrillFollowAlongView: View {
         }) == 1 {
             appModel.currentStreak += 1
         }
+
         
         appModel.highestStreakSetter(streak: appModel.currentStreak)
     }
@@ -465,41 +466,41 @@ struct DrillFollowAlongView: View {
     }
 }
 
-#if DEBUG
-struct DrillFollowAlongView_Previews: PreviewProvider {
-    static var previews: some View {
-        let appModel = MainAppModel()
-        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
-        let drill = DrillModel(
-            title: "Pass to Inside Touch",
-            skill: "Passing",
-            subSkills: ["short_passing"],
-            sets: 4,
-            reps: 10,
-            duration: 15,
-            description: "Practice accurate short passes with a partner or wall.",
-            instructions: ["Pass the ball against the wall and control with inside touch."],
-            tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
-            equipment: ["Soccer ball", "Cones"],
-            trainingStyle: "High Intensity",
-            difficulty: "Beginner",
-            videoUrl: "https://bravoball-drills.s3.us-east-2.amazonaws.com/passing-drills/pass-to-inside-touch.mp4"
-        )
-        let editableDrill = EditableDrillModel(
-            drill: drill,
-            setsDone: 1,
-            totalSets: 4,
-            totalReps: 10,
-            totalDuration: 15,
-            isCompleted: false
-        )
-        DrillFollowAlongView(
-            appModel: appModel,
-            sessionModel: sessionModel,
-            editableDrill: .constant(editableDrill)
-        )
-        .previewLayout(.sizeThatFits)
-        .padding()
-    }
-}
-#endif
+//#if DEBUG
+//struct DrillFollowAlongView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let appModel = MainAppModel()
+//        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+//        let drill = DrillModel(
+//            title: "Pass to Inside Touch",
+//            skill: "Passing",
+//            subSkills: ["short_passing"],
+//            sets: 4,
+//            reps: 10,
+//            duration: 15,
+//            description: "Practice accurate short passes with a partner or wall.",
+//            instructions: ["Pass the ball against the wall and control with inside touch."],
+//            tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
+//            equipment: ["Soccer ball", "Cones"],
+//            trainingStyle: "High Intensity",
+//            difficulty: "Beginner",
+//            videoUrl: "https://bravoball-drills.s3.us-east-2.amazonaws.com/passing-drills/pass-to-inside-touch.mp4"
+//        )
+//        let editableDrill = EditableDrillModel(
+//            drill: drill,
+//            setsDone: 1,
+//            totalSets: 4,
+//            totalReps: 10,
+//            totalDuration: 15,
+//            isCompleted: false
+//        )
+//        DrillFollowAlongView(
+//            appModel: appModel,
+//            sessionModel: sessionModel,
+//            editableDrill: .constant(editableDrill)
+//        )
+//        .previewLayout(.sizeThatFits)
+//        .padding()
+//    }
+//}
+//#endif

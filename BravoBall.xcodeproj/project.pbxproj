@@ -85,6 +85,9 @@
 		42B35C6F2E0B2B7600660E6E /* CircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B35C6E2E0B2B6700660E6E /* CircleButton.swift */; };
 		42B35C712E0B2BD600660E6E /* ThreeDPressCircleButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B35C702E0B2BCD00660E6E /* ThreeDPressCircleButtonStyle.swift */; };
 		42B35C732E0B2C0B00660E6E /* ThreeDPressRectButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B35C722E0B2C0100660E6E /* ThreeDPressRectButtonStyle.swift */; };
+		42BDAAB32E0DC72C002B06F3 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 42BDAAB22E0DC72C002B06F3 /* RiveRuntime */; };
+		42C81AD12E0DE4D500186E41 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C81AD02E0DE4D000186E41 /* AuthenticationManager.swift */; };
+		42C81AD32E0DE50B00186E41 /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C81AD22E0DE50900186E41 /* Loading.swift */; };
 		430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */; };
 		430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6CC2D3064850016D520 /* MainAppModel.swift */; };
 		430FD6D32D307AEC0016D520 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 430FD6D22D307AEC0016D520 /* SwiftKeychainWrapper */; };
@@ -155,7 +158,6 @@
 		43C5FC622D6DC1470064E7D5 /* SkillRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC612D6DC1450064E7D5 /* SkillRow.swift */; };
 		43C5FC642D6DC1670064E7D5 /* FilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC632D6DC1640064E7D5 /* FilterButton.swift */; };
 		43C5FC662D6DC4800064E7D5 /* SavedFiltersSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC652D6DC47B0064E7D5 /* SavedFiltersSheet.swift */; };
-		43C5FC6A2D6DCC130064E7D5 /* RecommendedDrillCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC692D6DCC0D0064E7D5 /* RecommendedDrillCard.swift */; };
 		43C5FC6C2D6DCC520064E7D5 /* DrillCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC6B2D6DCC4F0064E7D5 /* DrillCard.swift */; };
 		43C5FC6E2D6DCC7E0064E7D5 /* FieldDrillCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC6D2D6DCC7B0064E7D5 /* FieldDrillCard.swift */; };
 		43C5FC702D6DCC9A0064E7D5 /* SkillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC6F2D6DCC970064E7D5 /* SkillButton.swift */; };
@@ -268,6 +270,8 @@
 		42B35C6E2E0B2B6700660E6E /* CircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleButton.swift; sourceTree = "<group>"; };
 		42B35C702E0B2BCD00660E6E /* ThreeDPressCircleButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDPressCircleButtonStyle.swift; sourceTree = "<group>"; };
 		42B35C722E0B2C0100660E6E /* ThreeDPressRectButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDPressRectButtonStyle.swift; sourceTree = "<group>"; };
+		42C81AD02E0DE4D000186E41 /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
+		42C81AD22E0DE50900186E41 /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
 		430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegisterForm.swift; sourceTree = "<group>"; };
 		430FD6CC2D3064850016D520 /* MainAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppModel.swift; sourceTree = "<group>"; };
 		430FD71E2D334CAF0016D520 /* Day_Null.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Day_Null.riv; sourceTree = "<group>"; };
@@ -334,7 +338,6 @@
 		43C5FC612D6DC1450064E7D5 /* SkillRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillRow.swift; sourceTree = "<group>"; };
 		43C5FC632D6DC1640064E7D5 /* FilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterButton.swift; sourceTree = "<group>"; };
 		43C5FC652D6DC47B0064E7D5 /* SavedFiltersSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedFiltersSheet.swift; sourceTree = "<group>"; };
-		43C5FC692D6DCC0D0064E7D5 /* RecommendedDrillCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedDrillCard.swift; sourceTree = "<group>"; };
 		43C5FC6B2D6DCC4F0064E7D5 /* DrillCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrillCard.swift; sourceTree = "<group>"; };
 		43C5FC6D2D6DCC7B0064E7D5 /* FieldDrillCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldDrillCard.swift; sourceTree = "<group>"; };
 		43C5FC6F2D6DCC970064E7D5 /* SkillButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillButton.swift; sourceTree = "<group>"; };
@@ -357,6 +360,7 @@
 				43AC25812DA798FF00EDD8C0 /* RiveRuntime in Frameworks */,
 				435A70152CA7AB2600BFCC40 /* RiveRuntime in Frameworks */,
 				43AC257F2DA7979000EDD8C0 /* RiveRuntime in Frameworks */,
+				42BDAAB32E0DC72C002B06F3 /* RiveRuntime in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,6 +413,7 @@
 				178208D12D2D14D200246494 /* MainTabView.swift */,
 				178208DC2D2DEB7200246494 /* Onboarding */,
 				1749361B2C3E102B001163B9 /* ContentView.swift */,
+				42C81ACF2E0DE4CB00186E41 /* Authenticate */,
 				177B1BF32DF76FC500AF465C /* BravoBallApp.swift */,
 				177B1BF52DF8CC7D00AF465C /* .cursor */,
 				4275F3F42E0AFC50008A5E15 /* ButtonFeatures */,
@@ -607,6 +612,15 @@
 				174C676F2D34EB11003D02EF /* DrillDetailView.swift */,
 			);
 			path = DrillDetailPage;
+			sourceTree = "<group>";
+		};
+		42C81ACF2E0DE4CB00186E41 /* Authenticate */ = {
+			isa = PBXGroup;
+			children = (
+				42C81AD22E0DE50900186E41 /* Loading.swift */,
+				42C81AD02E0DE4D000186E41 /* AuthenticationManager.swift */,
+			);
+			path = Authenticate;
 			sourceTree = "<group>";
 		};
 		431BDFE82D853E0700F4E6EE /* Views */ = {
@@ -1024,7 +1038,6 @@
 			isa = PBXGroup;
 			children = (
 				43C5FC6B2D6DCC4F0064E7D5 /* DrillCard.swift */,
-				43C5FC692D6DCC0D0064E7D5 /* RecommendedDrillCard.swift */,
 				43C5FC6D2D6DCC7B0064E7D5 /* FieldDrillCard.swift */,
 			);
 			path = Cards;
@@ -1240,7 +1253,7 @@
 			mainGroup = 1749360D2C3E102B001163B9;
 			packageReferences = (
 				430FD6D12D307AEC0016D520 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
-				17FE33D72E0DCC7B00FDC1B4 /* XCRemoteSwiftPackageReference "rive-ios" */,
+				42C81ACE2E0DCCEF00186E41 /* XCRemoteSwiftPackageReference "rive-ios" */,
 			);
 			productRefGroup = 174936172C3E102B001163B9 /* Products */;
 			projectDirPath = "";
@@ -1331,6 +1344,7 @@
 				4399B6FD2D6C878600DA5E84 /* SkillSelectorSheetView.swift in Sources */,
 				177B1BD02DF741CE00AF465C /* DebounceService.swift in Sources */,
 				42B35C712E0B2BD600660E6E /* ThreeDPressCircleButtonStyle.swift in Sources */,
+				42C81AD32E0DE50B00186E41 /* Loading.swift in Sources */,
 				170167FB2D88B8790078446C /* DrillGroupService.swift in Sources */,
 				17DB45FA2DD69B2C000A76F6 /* BravoHeaderView.swift in Sources */,
 				17CA37A42DF0B1E5001AD5FA /* CustomVideoPlayer.swift in Sources */,
@@ -1369,7 +1383,6 @@
 				437D1A1F2D94FE5600B875CF /* SavedFiltersService.swift in Sources */,
 				17CA37BC2DF24428001AD5FA /* Haptic.swift in Sources */,
 				178208E02D2DEB9C00246494 /* OnboardingModel.swift in Sources */,
-				43C5FC6A2D6DCC130064E7D5 /* RecommendedDrillCard.swift in Sources */,
 				4289C5C32E049A7B005CC91B /* BounceConstraints.swift in Sources */,
 				42B35C6F2E0B2B7600660E6E /* CircleButton.swift in Sources */,
 				43C5FC542D6DBD0E0064E7D5 /* GroupCard.swift in Sources */,
@@ -1381,6 +1394,7 @@
 				17F5D6562CD347AE008E8C24 /* GlobalSettings.swift in Sources */,
 				17F5D6542CD3477E008E8C24 /* ColorExtension.swift in Sources */,
 				1782090E2D2E0A1100246494 /* ProfileView.swift in Sources */,
+				42C81AD12E0DE4D500186E41 /* AuthenticationManager.swift in Sources */,
 				43C5FC5E2D6DC0E40064E7D5 /* FilterOptionsButton.swift in Sources */,
 				43AC25622DA394B500EDD8C0 /* SavedGroupsExtension.swift in Sources */,
 				177B1BBA2DF2BF5200AF465C /* PrimaryButton.swift in Sources */,
@@ -1599,7 +1613,7 @@
 				CURRENT_PROJECT_VERSION = 13;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Tekk/Preview Content\"";
-				DEVELOPMENT_TEAM = J36CXA7LCG;
+				DEVELOPMENT_TEAM = 9NT64FVZCY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Tekk/Info.plist;
@@ -1646,7 +1660,7 @@
 				CURRENT_PROJECT_VERSION = 13;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Tekk/Preview Content\"";
-				DEVELOPMENT_TEAM = J36CXA7LCG;
+				DEVELOPMENT_TEAM = 9NT64FVZCY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Tekk/Info.plist;
@@ -1808,7 +1822,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		17FE33D72E0DCC7B00FDC1B4 /* XCRemoteSwiftPackageReference "rive-ios" */ = {
+		42BDAAB12E0DC72C002B06F3 /* XCRemoteSwiftPackageReference "rive-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rive-app/rive-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.5.6;
+			};
+		};
+		42C81ACE2E0DCCEF00186E41 /* XCRemoteSwiftPackageReference "rive-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/rive-app/rive-ios";
 			requirement = {
@@ -1846,6 +1868,11 @@
 		4289C5BE2E037E4A005CC91B /* RiveRuntime */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 430FD6B82D2E12640016D520 /* XCRemoteSwiftPackageReference "rive-ios" */;
+			productName = RiveRuntime;
+		};
+		42BDAAB22E0DC72C002B06F3 /* RiveRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42BDAAB12E0DC72C002B06F3 /* XCRemoteSwiftPackageReference "rive-ios" */;
 			productName = RiveRuntime;
 		};
 		430FD6D22D307AEC0016D520 /* SwiftKeychainWrapper */ = {

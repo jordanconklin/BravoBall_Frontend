@@ -20,6 +20,7 @@ class MainAppModel: ObservableObject {
     
     
     var isInitialLoad = true
+    var isLoggingOut = false
     private let cacheManager = CacheManager.shared
     private var loadingTask: Task<Void, Never>?  // Track loading task
     
@@ -111,9 +112,16 @@ class MainAppModel: ObservableObject {
     let calendar = Calendar.current
     
     @Published var allCompletedSessions: [CompletedSession] = [] {
+        
         didSet {
-            if !isInitialLoad && allCompletedSessions.count > oldValue.count,
+            
+            print("initial load state: \(isInitialLoad)")
+            
+            if !isInitialLoad && !isLoggingOut && allCompletedSessions.count > oldValue.count,
                let latestSession = allCompletedSessions.last {
+                
+
+                
                 Task {
                     do {
                         // Sync the completed session
@@ -133,9 +141,11 @@ class MainAppModel: ObservableObject {
                         )
                         print("✅ Successfully synced progress history")
                     } catch {
-                        print("❌ Error syncing session data: \(error)")
+
                     }
                 }
+            } else {
+                print("❌ No latest session found in allCompletedSessions")
             }
         }
     }
@@ -148,30 +158,33 @@ class MainAppModel: ObservableObject {
     private let progressSyncDebounceInterval: TimeInterval = 1.0 // 1 second debounce
     private var pendingProgressSync = false
     
-    @Published var currentStreak: Int = 0 {
-        didSet {
-            if !isInitialLoad && currentStreak != oldValue {
-                cacheCurrentStreak()
-                queueProgressSync()
-            }
-        }
-    }
-    @Published var highestStreak: Int = 0 {
-        didSet {
-            if !isInitialLoad && highestStreak != oldValue {
-                cacheHighestStreak()
-                queueProgressSync()
-            }
-        }
-    }
-    @Published var countOfFullyCompletedSessions: Int = 0 {
-        didSet {
-            if !isInitialLoad && countOfFullyCompletedSessions != oldValue {
-                cacheCompletedSessionsCount()
-                queueProgressSync()
-            }
-        }
-    }
+    @Published var currentStreak: Int = 0
+//    {
+//        didSet {
+//            if !isInitialLoad && !isLoggingOut && currentStreak != oldValue {
+//                cacheCurrentStreak()
+//                queueProgressSync()
+//            }
+//        }
+//    }
+    @Published var highestStreak: Int = 0
+//    {
+//        didSet {
+//            if !isInitialLoad && !isLoggingOut && highestStreak != oldValue {
+//                cacheHighestStreak()
+//                queueProgressSync()
+//            }
+//        }
+//    }
+    @Published var countOfFullyCompletedSessions: Int = 0
+//    {
+//        didSet {
+//            if !isInitialLoad && !isLoggingOut && countOfFullyCompletedSessions != oldValue {
+//                cacheCompletedSessionsCount()
+//                queueProgressSync()
+//            }
+//        }
+//    }
     
     // TODO: better way to manage progress network calls?
     // madds debounce so all progress history isnt pushing individual network calls
@@ -252,81 +265,81 @@ class MainAppModel: ObservableObject {
         print("💾 Saved completed sessions count: \(countOfFullyCompletedSessions)")
     }
     
-    // MARK: - Cache Load Operations
-    func loadCachedData() {
-        // Cancel any existing loading task
-        loadingTask?.cancel()
-        
-        isInitialLoad = true
-        loadingError = nil
-        
-        print("\n📱 Loading cached data for current user...")
-        let userEmail = KeychainWrapper.standard.string(forKey: "userEmail") ?? "no user"
-        print("\n👤 USER SESSION INFO:")
-        print("----------------------------------------")
-        print("Current user email: \(userEmail)")
-        
-        // Load completed sessions
-        if let retrievedSessions: [CompletedSession] = cacheManager.retrieve(forKey: .allCompletedSessionsCase) {
-            allCompletedSessions = retrievedSessions
-            print("✅ Loaded \(allCompletedSessions.count) completed sessions")
-        }
-        
-        // Load progress history from cache first
-        let cachedCurrentStreak: Int = cacheManager.retrieve(forKey: .currentStreakCase) ?? 0
-        let cachedHighestStreak: Int = cacheManager.retrieve(forKey: .highestSreakCase) ?? 0
-        let cachedCompletedCount: Int = cacheManager.retrieve(forKey: .countOfCompletedSessionsCase) ?? 0
-        
-        // Set the values without triggering observers
-        self.currentStreak = cachedCurrentStreak
-        self.highestStreak = cachedHighestStreak
-        self.countOfFullyCompletedSessions = cachedCompletedCount
-        
-        print("✅ Loaded from cache - Current Streak: \(cachedCurrentStreak), Highest: \(cachedHighestStreak), Completed: \(cachedCompletedCount)")
-        print("----------------------------------------")
-        
-        // Create a new loading task
-        loadingTask = Task { [weak self] in
-            guard let self = self else { return }
-            
-            do {
-                let response = try await DataSyncService.shared.fetchProgressHistory()
-                
-                // Check if task was cancelled
-                if Task.isCancelled { return }
-                
-                // Only update if the backend values are different from cache
-                if response.currentStreak != cachedCurrentStreak ||
-                   response.highestStreak != cachedHighestStreak ||
-                   response.completedSessionsCount != cachedCompletedCount {
-                    
-                    await MainActor.run {
-                        guard !Task.isCancelled else { return }
-                        
-                        self.currentStreak = response.currentStreak
-                        self.highestStreak = response.highestStreak
-                        self.countOfFullyCompletedSessions = response.completedSessionsCount
-                        print("✅ Updated with backend data - Current: \(response.currentStreak), Highest: \(response.highestStreak), Completed: \(response.completedSessionsCount)")
-                    }
-                }
-            } catch {
-                if !Task.isCancelled {
-                    await MainActor.run {
-                        self.loadingError = error
-                        print("⚠️ Could not fetch from backend, using cached values: \(error)")
-                    }
-                }
-            }
-            
-            // Only set isInitialLoad to false if this task wasn't cancelled
-            if !Task.isCancelled {
-                await MainActor.run {
-                    self.isInitialLoad = false
-                }
-            }
-        }
-    }
-    
+//    // MARK: - Cache Load Operations
+//    func loadCachedData() {
+//        // Cancel any existing loading task
+//        loadingTask?.cancel()
+//        
+//        isInitialLoad = true
+//        loadingError = nil
+//        
+//        print("\n📱 Loading cached data for current user...")
+//        let userEmail = KeychainWrapper.standard.string(forKey: "userEmail") ?? "no user"
+//        print("\n👤 USER SESSION INFO:")
+//        print("----------------------------------------")
+//        print("Current user email: \(userEmail)")
+//        
+//        // Load completed sessions
+//        if let retrievedSessions: [CompletedSession] = cacheManager.retrieve(forKey: .allCompletedSessionsCase) {
+//            allCompletedSessions = retrievedSessions
+//            print("✅ Loaded \(allCompletedSessions.count) completed sessions")
+//        }
+//        
+//        // Load progress history from cache first
+//        let cachedCurrentStreak: Int = cacheManager.retrieve(forKey: .currentStreakCase) ?? 0
+//        let cachedHighestStreak: Int = cacheManager.retrieve(forKey: .highestSreakCase) ?? 0
+//        let cachedCompletedCount: Int = cacheManager.retrieve(forKey: .countOfCompletedSessionsCase) ?? 0
+//        
+//        // Set the values without triggering observers
+//        self.currentStreak = cachedCurrentStreak
+//        self.highestStreak = cachedHighestStreak
+//        self.countOfFullyCompletedSessions = cachedCompletedCount
+//        
+//        print("✅ Loaded from cache - Current Streak: \(cachedCurrentStreak), Highest: \(cachedHighestStreak), Completed: \(cachedCompletedCount)")
+//        print("----------------------------------------")
+//        
+//        // Create a new loading task
+//        loadingTask = Task { [weak self] in
+//            guard let self = self else { return }
+//            
+//            do {
+//                let response = try await DataSyncService.shared.fetchProgressHistory()
+//                
+//                // Check if task was cancelled
+//                if Task.isCancelled { return }
+//                
+//                // Only update if the backend values are different from cache
+//                if response.currentStreak != cachedCurrentStreak ||
+//                   response.highestStreak != cachedHighestStreak ||
+//                   response.completedSessionsCount != cachedCompletedCount {
+//                    
+//                    await MainActor.run {
+//                        guard !Task.isCancelled else { return }
+//                        
+//                        self.currentStreak = response.currentStreak
+//                        self.highestStreak = response.highestStreak
+//                        self.countOfFullyCompletedSessions = response.completedSessionsCount
+//                        print("✅ Updated with backend data - Current: \(response.currentStreak), Highest: \(response.highestStreak), Completed: \(response.completedSessionsCount)")
+//                    }
+//                }
+//            } catch {
+//                if !Task.isCancelled {
+//                    await MainActor.run {
+//                        self.loadingError = error
+//                        print("⚠️ Could not fetch from backend, using cached values: \(error)")
+//                    }
+//                }
+//            }
+//            
+//            // Only set isInitialLoad to false if this task wasn't cancelled
+//            if !Task.isCancelled {
+//                await MainActor.run {
+//                    self.isInitialLoad = false
+//                }
+//            }
+//        }
+//    }
+//    
     // Adding completed session into allCompletedSessions array
     func addCompletedSession(date: Date, drills: [EditableDrillModel], totalCompletedDrills: Int, totalDrills: Int) {
         let newSession = CompletedSession(
@@ -361,9 +374,44 @@ class MainAppModel: ObservableObject {
     // return the data in the drill results view in CompletedSession structure
     func getSessionForDate(_ date: Date) -> CompletedSession? {
         let calendar = Calendar.current
-        return allCompletedSessions.first { session in
-            calendar.isDate(session.date, inSameDayAs: date)
+        
+        // Debug: Print all available session dates
+        print("🔍 Looking for session on date: \(date)")
+        print("📅 Available session dates:")
+        for (index, session) in allCompletedSessions.enumerated() {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+            let sessionDateString = formatter.string(from: session.date)
+            print("   Session \(index): \(sessionDateString)")
+            
+            // Test the date comparison using year, month, day only
+            let sessionComponents = calendar.dateComponents([.year, .month, .day], from: session.date)
+            let targetComponents = calendar.dateComponents([.year, .month, .day], from: date)
+            let isSameDay = sessionComponents.year == targetComponents.year &&
+                           sessionComponents.month == targetComponents.month &&
+                           sessionComponents.day == targetComponents.day
+            print("   Comparing with \(date): \(isSameDay)")
         }
+        
+        // Use a more robust date comparison that only looks at year, month, day
+        let session = allCompletedSessions.first { session in
+            let sessionComponents = calendar.dateComponents([.year, .month, .day], from: session.date)
+            let targetComponents = calendar.dateComponents([.year, .month, .day], from: date)
+            return sessionComponents.year == targetComponents.year &&
+                   sessionComponents.month == targetComponents.month &&
+                   sessionComponents.day == targetComponents.day
+        }
+        
+        print("count in array: \(allCompletedSessions.count)")
+        
+        // Debug: Print when sessions are found for calendar dates
+        if let foundSession = session {
+            print("📅 Calendar found session for \(date): \(foundSession.totalCompletedDrills)/\(foundSession.totalDrills) completed")
+        } else {
+            print("❌ No session found for date \(date)")
+        }
+        
+        return session
     }
     
     // MARK: App Settings
@@ -388,11 +436,24 @@ class MainAppModel: ObservableObject {
         }
     }
     
+    func alreadyCompletedToday() -> Bool {
+        return allCompletedSessions.contains {
+            Calendar.current.isDate($0.date, equalTo: Date(), toGranularity: .day)
+        }
+    }
+    
 
     
     // When logging out
     
     func cleanupOnLogout() {
+        print("🚨 cleanupOnLogout() called!")
+        print("   - Stack trace: \(Thread.callStackSymbols.prefix(5).map { $0.components(separatedBy: " ").last ?? "unknown" })")
+        print("   - Current allCompletedSessions count: \(allCompletedSessions.count)")
+        
+        // Set logout flag to prevent didSet observers from triggering
+        isLoggingOut = true
+        
         // Reset view state
         viewState = ViewState()
         
@@ -412,6 +473,11 @@ class MainAppModel: ObservableObject {
         currentStreak = 0
         highestStreak = 0
         countOfFullyCompletedSessions = 0
+        
+        // Reset the logout flag
+        isLoggingOut = false
+        
+        print("✅ cleanupOnLogout() completed - allCompletedSessions cleared")
     }
     
     deinit {

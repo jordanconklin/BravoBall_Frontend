@@ -156,13 +156,15 @@ struct CalendarView: View {
 
                             // Set dates for each displayed day
                             let fullDate = createFullDate(from: day)
+                            
+                            let session = appModel.getSessionForDate(fullDate)
 
                             WeekDisplayButton(
                                 appModel: appModel,
                                 text: "\(day)",
                                 date: fullDate,
                                 highlightedDay: isCurrentDay(day), /*calendar.isDateInToday(fullDate)*/ // works in production
-                                session: appModel.getSessionForDate(fullDate)
+                                session: session
                             )
                             .frame(height: 50)
 

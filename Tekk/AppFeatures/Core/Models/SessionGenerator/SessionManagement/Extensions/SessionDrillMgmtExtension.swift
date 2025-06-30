@@ -84,31 +84,31 @@ extension SessionGeneratorModel: SessionDrillManagement {
         }
     }
     
-    // Get drills from cache or fallback to test drills
-    func getDrillsFromCache() -> [DrillModel] {
-        if let cachedDrills: [DrillModel] = CacheManager.shared.retrieve(forKey: .databaseDrillsCase) {
-            print("\n📋 Using \(cachedDrills.count) drills from cache")
-            print("📋 Sample of cached drills:")
-            for (index, drill) in cachedDrills.prefix(3).enumerated() {
-                print("\nCached Drill \(index + 1):")
-                print("- Title:", drill.title)
-                print("- Skill:", drill.skill)
-                print("- SubSkills:", drill.subSkills)
-            }
-            return cachedDrills
-        }
-        
-        print("\n⚠️ No cached drills found, using test drills")
-        let testDrills = Self.testDrills
-        print("📋 Sample of test drills:")
-        for (index, drill) in testDrills.prefix(3).enumerated() {
-            print("\nTest Drill \(index + 1):")
-            print("- Title:", drill.title)
-            print("- Skill:", drill.skill)
-            print("- SubSkills:", drill.subSkills)
-        }
-        return testDrills
-    }
+//    // Get drills from cache or fallback to test drills
+//    func getDrillsFromCache() -> [DrillModel] {
+//        if let cachedDrills: [DrillModel] = CacheManager.shared.retrieve(forKey: .databaseDrillsCase) {
+//            print("\n📋 Using \(cachedDrills.count) drills from cache")
+//            print("📋 Sample of cached drills:")
+//            for (index, drill) in cachedDrills.prefix(3).enumerated() {
+//                print("\nCached Drill \(index + 1):")
+//                print("- Title:", drill.title)
+//                print("- Skill:", drill.skill)
+//                print("- SubSkills:", drill.subSkills)
+//            }
+//            return cachedDrills
+//        }
+//        
+//        print("\n⚠️ No cached drills found, using test drills")
+//        let testDrills = Self.testDrills
+//        print("📋 Sample of test drills:")
+//        for (index, drill) in testDrills.prefix(3).enumerated() {
+//            print("\nTest Drill \(index + 1):")
+//            print("- Title:", drill.title)
+//            print("- Skill:", drill.skill)
+//            print("- SubSkills:", drill.subSkills)
+//        }
+//        return testDrills
+//    }
     
     
 }

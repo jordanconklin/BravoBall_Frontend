@@ -160,7 +160,7 @@ class PreferencesUpdateService {
            let focusAreas = dataDict["focus_areas"] as? [String],
            let drillsArray = dataDict["drills"] as? [[String: Any]] {
             let drillModels: [DrillModel] = drillsArray.map { drill in
-                let id = UUID()
+                let id = drill["uuid"] as? UUID ?? UUID()
                 let backendId = drill["id"] as? Int
                 let title = drill["title"] as? String ?? "Unnamed Drill"
                 let skill: String = {

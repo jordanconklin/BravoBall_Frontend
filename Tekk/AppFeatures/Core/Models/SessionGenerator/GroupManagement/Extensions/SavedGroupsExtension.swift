@@ -94,6 +94,7 @@ extension SessionGeneratorModel: SavedDrillsGroupManagement {
     
     // Updated method to remove drill from group
     func removeDrillFromGroup(drill: DrillModel, groupId: UUID) {
+        
         if let index = savedDrills.firstIndex(where: { $0.id == groupId }) {
             // Remove drill from local sessionGeneratorModel
             savedDrills[index].drills.removeAll(where: { $0.id == drill.id })

@@ -21,7 +21,7 @@ struct SessionCompleteView: View {
                 .ignoresSafeArea()
             
             VStack {
-                Text(sessionModel.allSessionSetsNotComplete() ? "Your session has ended, but it was incomplete." : "You've completed your session!")
+                Text(sessionModel.allSessionSetsNotComplete() ? "Your session has ended." : "You've completed your session!")
                     .foregroundColor(Color.white)
                     .font(.custom("Poppins-Bold", size: 20))
                     .padding()
@@ -63,12 +63,14 @@ struct SessionCompleteView: View {
         }
         .safeAreaInset(edge: .bottom) {
             VStack(spacing: 25) {
-                if sessionModel.allSessionSetsNotComplete() {
+                if sessionModel.allSessionSetsNotComplete() || appModel.allCompletedSessions.count(where: {
+                    Calendar.current.isDate($0.date, equalTo: Date(), toGranularity: .day)
+                }) != 1 {
                     // Note about streak progress
                     HStack {
                         Image(systemName: "info.circle.fill")
                             .foregroundColor(appModel.globalSettings.primaryDarkColor)
-                        Text("Note: your streak progress only increases when you complete all the drills in your session")
+                        Text("Note: Streak progress only increases on a new day and when you complete all the drills in your session.")
                             .font(.custom("Poppins-Bold", size: 14))
                             .foregroundColor(appModel.globalSettings.primaryDarkColor)
                             .multilineTextAlignment(.leading)
