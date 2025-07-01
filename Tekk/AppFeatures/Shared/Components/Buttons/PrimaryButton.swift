@@ -15,12 +15,13 @@ struct PrimaryButton<Content: View>: View {
     
     var title: String
     var action: () -> Void
-    var frontColor: Color = Color.accentColor
-    var backColor: Color = Color.accentColor
-    var textColor: Color = .white
-    var textSize: CGFloat = 18
+    var frontColor: Color
+    var backColor: Color
+    var textColor: Color
+    var textSize: CGFloat
     var width: CGFloat
-    var height: CGFloat = 60
+    var height: CGFloat
+    var borderColor: Color
     var disabled: Bool = false
     var content: Content
     
@@ -34,6 +35,7 @@ struct PrimaryButton<Content: View>: View {
             textSize: CGFloat = 18,
             width: CGFloat,
             height: CGFloat = 60,
+            borderColor: Color = Color.clear,
             disabled: Bool = false,
             @ViewBuilder content: @escaping () -> Content = { EmptyView() }
         ) {
@@ -45,6 +47,7 @@ struct PrimaryButton<Content: View>: View {
             self.textSize = textSize
             self.width = width
             self.height = height
+            self.borderColor = borderColor
             self.disabled = disabled
             self.content = content()
         }
@@ -67,7 +70,8 @@ struct PrimaryButton<Content: View>: View {
                 backColor: disabled ? Color(hex:"b8b8b8") : backColor,
                 cornerRadius: 12,
                 size: CGSize(width: width, height: height),
-                pressedOffset: 6
+                pressedOffset: 6,
+                borderColor: borderColor
             )
         )
         .disabled(disabled)

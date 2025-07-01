@@ -18,24 +18,21 @@ struct MainTabView: View {
     
     var body: some View {
         NavigationView {
+            // Main Content
             ZStack(alignment: .bottom) {
-                // Main Content
-                ZStack {
-                    switch appModel.mainTabSelected {
-                    case 0:
-                        SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
-                    case 1:
-                        ProgressionView(appModel: appModel, sessionModel: sessionModel)
-                    case 2:
-                        SavedDrillsView(appModel: appModel, sessionModel: sessionModel)
-                    case 3:
-                        ProfileView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
-                    default:
-                        SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
-                    }
+                switch appModel.mainTabSelected {
+                case 0:
+                    SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
+                case 1:
+                    ProgressionView(appModel: appModel, sessionModel: sessionModel)
+                case 2:
+                    SavedDrillsView(appModel: appModel, sessionModel: sessionModel)
+                case 3:
+                    ProfileView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
+                default:
+                    SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
                 }
-                .frame(maxWidth: .infinity)
-
+                
                 // Custom Tab Bar
                 VStack(spacing: 0) {
                     Divider()
@@ -74,7 +71,10 @@ struct MainTabView: View {
                     .padding(.horizontal, appModel.layout.contentMinPadding)
                     .frame(height: 70)
                 }
+                .frame(maxWidth: .infinity)
                 .background(Color.white)
+
+                
             }
             .edgesIgnoringSafeArea(.bottom)
         }

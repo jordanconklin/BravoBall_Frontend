@@ -87,7 +87,9 @@
 		42B35C732E0B2C0B00660E6E /* ThreeDPressRectButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B35C722E0B2C0100660E6E /* ThreeDPressRectButtonStyle.swift */; };
 		42BDAAB32E0DC72C002B06F3 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 42BDAAB22E0DC72C002B06F3 /* RiveRuntime */; };
 		42C81AD12E0DE4D500186E41 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C81AD02E0DE4D000186E41 /* AuthenticationManager.swift */; };
-		42C81AD32E0DE50B00186E41 /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C81AD22E0DE50900186E41 /* Loading.swift */; };
+		42E0A9352E1467DE008ED40E /* BravoBall_Intro.riv in Resources */ = {isa = PBXBuildFile; fileRef = 42E0A9342E1467DE008ED40E /* BravoBall_Intro.riv */; };
+		42E0A9372E147402008ED40E /* Bravo_Animation.riv in Resources */ = {isa = PBXBuildFile; fileRef = 42E0A9362E147402008ED40E /* Bravo_Animation.riv */; };
+		42E0A93A2E14765A008ED40E /* RiveAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9392E147652008ED40E /* RiveAnimationView.swift */; };
 		430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */; };
 		430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6CC2D3064850016D520 /* MainAppModel.swift */; };
 		430FD6D32D307AEC0016D520 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 430FD6D22D307AEC0016D520 /* SwiftKeychainWrapper */; };
@@ -96,10 +98,8 @@
 		4351674B2DAE3ECA00E7D964 /* ResponsiveLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */; };
 		43524E772D4D994B00AD897A /* SessionGeneratorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43524E762D4D994400AD897A /* SessionGeneratorModel.swift */; };
 		4355EEAD2DB234D700D98314 /* GeometryKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4355EEAC2DB234D200D98314 /* GeometryKey.swift */; };
-		4355EEB12DB23FBB00D98314 /* Bravo_Animation.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4355EEB02DB23FBB00D98314 /* Bravo_Animation.riv */; };
 		435A70152CA7AB2600BFCC40 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 435A70142CA7AB2600BFCC40 /* RiveRuntime */; };
 		437D1A1F2D94FE5600B875CF /* SavedFiltersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437D1A1E2D94FE4700B875CF /* SavedFiltersService.swift */; };
-		43985E472CB4EFA200BE2AB6 /* BravoBall_Intro.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43985E462CB4EFA200BE2AB6 /* BravoBall_Intro.riv */; };
 		43985E522CB51E1100BE2AB6 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 43985E512CB51E1100BE2AB6 /* Poppins-Bold.ttf */; };
 		43985E542CB5A9A600BE2AB6 /* PottaOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 43985E532CB5A9A600BE2AB6 /* PottaOne-Regular.ttf */; };
 		4399B6CE2D67CE3B00DA5E84 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4399B6CD2D67CE3500DA5E84 /* ToastMessageView.swift */; };
@@ -271,7 +271,9 @@
 		42B35C702E0B2BCD00660E6E /* ThreeDPressCircleButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDPressCircleButtonStyle.swift; sourceTree = "<group>"; };
 		42B35C722E0B2C0100660E6E /* ThreeDPressRectButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDPressRectButtonStyle.swift; sourceTree = "<group>"; };
 		42C81AD02E0DE4D000186E41 /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
-		42C81AD22E0DE50900186E41 /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
+		42E0A9342E1467DE008ED40E /* BravoBall_Intro.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = BravoBall_Intro.riv; sourceTree = "<group>"; };
+		42E0A9362E147402008ED40E /* Bravo_Animation.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Bravo_Animation.riv; sourceTree = "<group>"; };
+		42E0A9392E147652008ED40E /* RiveAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveAnimationView.swift; sourceTree = "<group>"; };
 		430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegisterForm.swift; sourceTree = "<group>"; };
 		430FD6CC2D3064850016D520 /* MainAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppModel.swift; sourceTree = "<group>"; };
 		430FD71E2D334CAF0016D520 /* Day_Null.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Day_Null.riv; sourceTree = "<group>"; };
@@ -279,9 +281,7 @@
 		4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsiveLayout.swift; sourceTree = "<group>"; };
 		43524E762D4D994400AD897A /* SessionGeneratorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionGeneratorModel.swift; sourceTree = "<group>"; };
 		4355EEAC2DB234D200D98314 /* GeometryKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryKey.swift; sourceTree = "<group>"; };
-		4355EEB02DB23FBB00D98314 /* Bravo_Animation.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Bravo_Animation.riv; sourceTree = "<group>"; };
 		437D1A1E2D94FE4700B875CF /* SavedFiltersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedFiltersService.swift; sourceTree = "<group>"; };
-		43985E462CB4EFA200BE2AB6 /* BravoBall_Intro.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = BravoBall_Intro.riv; sourceTree = "<group>"; };
 		43985E512CB51E1100BE2AB6 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
 		43985E532CB5A9A600BE2AB6 /* PottaOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PottaOne-Regular.ttf"; sourceTree = "<group>"; };
 		4399B6CD2D67CE3500DA5E84 /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
@@ -617,10 +617,17 @@
 		42C81ACF2E0DE4CB00186E41 /* Authenticate */ = {
 			isa = PBXGroup;
 			children = (
-				42C81AD22E0DE50900186E41 /* Loading.swift */,
 				42C81AD02E0DE4D000186E41 /* AuthenticationManager.swift */,
 			);
 			path = Authenticate;
+			sourceTree = "<group>";
+		};
+		42E0A9382E14764D008ED40E /* Rive */ = {
+			isa = PBXGroup;
+			children = (
+				42E0A9392E147652008ED40E /* RiveAnimationView.swift */,
+			);
+			path = Rive;
 			sourceTree = "<group>";
 		};
 		431BDFE82D853E0700F4E6EE /* Views */ = {
@@ -780,6 +787,7 @@
 		4399B7252D6D7AB400DA5E84 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				42E0A9382E14764D008ED40E /* Rive */,
 				177B1BC02DF6233700AF465C /* TextBoxes */,
 				177B1BBD2DF6226C00AF465C /* Logic */,
 				177B1BB82DF2BF4A00AF465C /* Buttons */,
@@ -837,18 +845,18 @@
 		439A72632C9FA55700B4C5AD /* RiveAssets */ = {
 			isa = PBXGroup;
 			children = (
-				4355EEB02DB23FBB00D98314 /* Bravo_Animation.riv */,
 				4275F3EE2E0A4198008A5E15 /* Backpack.riv */,
 				43BFA9F32D40AB8A00B12A6F /* Paw_Gray.riv */,
 				43BFA9E72D408B8100B12A6F /* Arrow.riv */,
-				43985E462CB4EFA200BE2AB6 /* BravoBall_Intro.riv */,
 				17595AAC2D3B44FE0015F35D /* Drill_Card_Complete.riv */,
 				420DA3992DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv */,
 				430FD71E2D334CAF0016D520 /* Day_Null.riv */,
 				43BFA9D52D3F38B300B12A6F /* Golden_Button.riv */,
 				43BFA9E52D40885000B12A6F /* Plus_Button.riv */,
+				42E0A9362E147402008ED40E /* Bravo_Animation.riv */,
 				43BFA9E92D40964700B12A6F /* Drill_Card_Incomplete.riv */,
 				43BFAA412D444A2C00B12A6F /* Message_Bubble.riv */,
+				42E0A9342E1467DE008ED40E /* BravoBall_Intro.riv */,
 				43BFA9F52D40ABB600B12A6F /* Paw_Yellow.riv */,
 				43BFAA0F2D43291E00B12A6F /* Tab_House.riv */,
 				4289C5B62E0339E5005CC91B /* Grass_Field.riv */,
@@ -1278,14 +1286,15 @@
 				177B1BF22DF7682C00AF465C /* 321-done.MP3 in Resources */,
 				177B1BF62DF8CC8200AF465C /* .cursor in Resources */,
 				4289C58A2DEE8C30005CC91B /* Prereq_Time.riv in Resources */,
+				42E0A9372E147402008ED40E /* Bravo_Animation.riv in Resources */,
 				43BFAA422D444A2C00B12A6F /* Message_Bubble.riv in Resources */,
 				17595AAD2D3B44FE0015F35D /* Drill_Card_Complete.riv in Resources */,
 				4275F3EF2E0A4198008A5E15 /* Backpack.riv in Resources */,
 				420DA39A2DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv in Resources */,
 				43BFA9E82D408B8100B12A6F /* Arrow.riv in Resources */,
 				43BFA9F62D40ABB600B12A6F /* Paw_Yellow.riv in Resources */,
+				42E0A9352E1467DE008ED40E /* BravoBall_Intro.riv in Resources */,
 				174936222C3E1031001163B9 /* Preview Assets.xcassets in Resources */,
-				4355EEB12DB23FBB00D98314 /* Bravo_Animation.riv in Resources */,
 				1749361E2C3E1031001163B9 /* Assets.xcassets in Resources */,
 				43BFAA342D44164E00B12A6F /* Prereq_Training_Style.riv in Resources */,
 				43BFAA102D43291E00B12A6F /* Tab_House.riv in Resources */,
@@ -1296,7 +1305,6 @@
 				43BFA9E62D40885000B12A6F /* Plus_Button.riv in Resources */,
 				43985E522CB51E1100BE2AB6 /* Poppins-Bold.ttf in Resources */,
 				43985E542CB5A9A600BE2AB6 /* PottaOne-Regular.ttf in Resources */,
-				43985E472CB4EFA200BE2AB6 /* BravoBall_Intro.riv in Resources */,
 				43BFAA262D43946000B12A6F /* Tab_Dude.riv in Resources */,
 				43BFAA202D438C7B00B12A6F /* Tab_Calendar.riv in Resources */,
 				430FD71F2D334CAF0016D520 /* Day_Null.riv in Resources */,
@@ -1344,7 +1352,6 @@
 				4399B6FD2D6C878600DA5E84 /* SkillSelectorSheetView.swift in Sources */,
 				177B1BD02DF741CE00AF465C /* DebounceService.swift in Sources */,
 				42B35C712E0B2BD600660E6E /* ThreeDPressCircleButtonStyle.swift in Sources */,
-				42C81AD32E0DE50B00186E41 /* Loading.swift in Sources */,
 				170167FB2D88B8790078446C /* DrillGroupService.swift in Sources */,
 				17DB45FA2DD69B2C000A76F6 /* BravoHeaderView.swift in Sources */,
 				17CA37A42DF0B1E5001AD5FA /* CustomVideoPlayer.swift in Sources */,
@@ -1380,6 +1387,7 @@
 				17DB45FE2DD6A2D3000A76F6 /* SaveFiltersPromptView.swift in Sources */,
 				4399B6E92D69407F00DA5E84 /* GroupDetailView.swift in Sources */,
 				1749361C2C3E102B001163B9 /* ContentView.swift in Sources */,
+				42E0A93A2E14765A008ED40E /* RiveAnimationView.swift in Sources */,
 				437D1A1F2D94FE5600B875CF /* SavedFiltersService.swift in Sources */,
 				17CA37BC2DF24428001AD5FA /* Haptic.swift in Sources */,
 				178208E02D2DEB9C00246494 /* OnboardingModel.swift in Sources */,

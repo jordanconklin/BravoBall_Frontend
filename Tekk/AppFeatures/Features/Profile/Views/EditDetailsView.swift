@@ -64,6 +64,8 @@ struct EditDetailsView: View {
                         .padding(.bottom, 8)
                 }
                 
+                Spacer()
+                
                 
                 PrimaryButton(
                     title: "Update Email",
@@ -73,14 +75,13 @@ struct EditDetailsView: View {
                     textColor: Color.white,
                     textSize: 16,
                     width: .infinity,
-                    height: 40,
+                    height: 50,
                     disabled: false
                         
                 )
                 .padding(.horizontal, 16)
                 .padding(.bottom, 30)
                 
-                Spacer()
             }
         }
         .onAppear {
