@@ -99,14 +99,7 @@ struct SessionGeneratorEditPage: View {
         .onAppear {
             BravoTextBubbleDelay()
         }
-        .onDisappear {
-            sessionModel.saveChanges()
-        }
-        .onChange(of: UIApplication.shared.applicationState) {
-            if UIApplication.shared.applicationState == .background {
-                sessionModel.saveChanges()
-            }
-        }
+
         // Sheet pop-up for each filter
         .sheet(item: $appModel.selectedFilter) { type in
             FilterSheet(
@@ -176,7 +169,7 @@ struct SessionGeneratorEditPage: View {
 struct SessionGeneratorEditPage_Previews: PreviewProvider {
     static var previews: some View {
         let appModel = MainAppModel()
-        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        let sessionModel = SessionGeneratorModel()
         @State var searchSkillsText = ""
         let geometry = ViewGeometry(size: CGSize(width: 390, height: 844), safeAreaInsets: EdgeInsets())
         return SessionGeneratorEditPage(appModel: appModel, sessionModel: sessionModel, geometry: geometry)

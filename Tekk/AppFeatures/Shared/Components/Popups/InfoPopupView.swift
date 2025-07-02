@@ -9,6 +9,8 @@ import SwiftUI
 import RiveRuntime
 
 struct InfoPopupView: View {
+    let globalSettings = GlobalSettings.shared
+    
     let title: String
     let description: String
     let onClose: (() -> Void)?
@@ -58,7 +60,7 @@ struct InfoPopupView: View {
                     .foregroundColor(.white)
                     .padding(.horizontal, 32)
                     .padding(.vertical, 12)
-                    .background(GlobalSettings().primaryYellowColor)
+                    .background(globalSettings.primaryYellowColor)
                     .cornerRadius(20)
             }
             .padding(.bottom, 16)

@@ -12,9 +12,7 @@ import SwiftKeychainWrapper
 
 // MARK: Session model
 class SessionGeneratorModel: ObservableObject {
-    
-    @ObservedObject var appModel: MainAppModel  // Add this
-    
+        
     // Add loading state
     @Published var isLoadingDrills: Bool = false
     
@@ -178,57 +176,7 @@ class SessionGeneratorModel: ObservableObject {
             }
         }
     }
-    
-    
-    // didset in savedFilters func
-    
 
-    
-    // MARK: Init
-    
-    init(appModel: MainAppModel, onboardingData: OnboardingModel.OnboardingData) {
-        self.appModel = appModel
-        
-        // Check if we just signed out and/or signed in with a new user
-        let currentUser = KeychainWrapper.standard.string(forKey: "userEmail") ?? "no user"
-        let lastUser = UserDefaults.standard.string(forKey: "lastActiveUser") ?? ""
-//        
-//        if currentUser != lastUser {
-//            print("👤 User change detected: '\(lastUser)' → '\(currentUser)'")
-//            // Clear any leftover data from previous user
-//            clearUserData()
-//            
-//            // Save current user as last active
-//            UserDefaults.standard.set(currentUser, forKey: "lastActiveUser")
-//        }
-//        print("OnboardingData at model init: \(onboardingData)")
-        
-        
-        
-        // Setup auto-save timer
-        autoSaveTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
-            self?.saveChanges()
-        }
-        
-        // Add observer for user logout
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleUserLogout),
-            name: Notification.Name("UserLoggedOut"),
-            object: nil
-        )
-                
-    }
-    
-//    deinit {
-//        autoSaveTimer?.invalidate()
-//        saveChanges() // Final save on deinit
-//        // Remove notification observer
-//        NotificationCenter.default.removeObserver(self)
-//    }
-    
-    
-    
     
     // User logout and clearing of data
     @objc private func handleUserLogout(notification: Notification) {
@@ -299,7 +247,6 @@ class SessionGeneratorModel: ObservableObject {
             }
         case .orderedDrills:
             changeTracker.orderedDrillsChanged = true
-            cacheOrderedDrills()
 //        case .userPreferences:
 //            // Add preference syncing when filters change
 ////            Task {
@@ -307,16 +254,13 @@ class SessionGeneratorModel: ObservableObject {
 ////            }
         case .savedFilters:
             changeTracker.savedFiltersChanged = true
-            cacheFilterGroups(name: "")
         case .progressHistory:
             changeTracker.progressHistoryChanged = true
             // Progress history is handled by MainAppModel
         case .likedDrills:
             changeTracker.likedDrillsChanged = true
-            cacheLikedDrills()
         case .savedDrills:
             changeTracker.savedDrillsChanged = true
-            cacheSavedDrills()
         case .completedSessions:
             changeTracker.completedSessionsChanged = true
         }
@@ -332,200 +276,7 @@ class SessionGeneratorModel: ObservableObject {
         case completedSessions
     }
     
-    // MARK: - Saving and Syncing
-    // saves changes while user is using the app
-    func saveChanges() {
-        guard changeTracker.hasAnyChanges else { return }
-        
-        Task {
-            do {
-                // Only sync what has changed
-                if changeTracker.orderedDrillsChanged {
-                    try await DataSyncService.shared.syncOrderedSessionDrills(
-                            sessionDrills: orderedSessionDrills
-                    )
-//                    cacheOrderedDrills()
-                }
-                if changeTracker.savedFiltersChanged {
-                    try await SavedFiltersService.shared.syncSavedFilters(
-                        savedFilters: allSavedFilters
-                    )
-                    // caching performed in saveFiltersInGroup function when user saves filter
-                    
-                }
-                
-                // TODO: right now the changeTracker is set on progress history variables directly in mainappmodel w/ didSet, see if can implement changeTracker to here, may have to reorganize main and ses models
-//                if changeTracker.progressHistoryChanged {
-//                    try await DataSyncService.shared.syncProgressHistory(
-//                        currentStreak: appModel.currentStreak,
-//                        highestStreak: appModel.highestStreak,
-//                        completedSessionsCount: appModel.countOfFullyCompletedSessions
-//                    )
-//                    appModel.cacheCurrentStreak()
-//                    appModel.cacheHighestStreak()
-//                    appModel.cacheCompletedSessionsCount()
-//                }
-                
-                // Sync both liked drills and saved drills together if either has changed
-                if changeTracker.likedDrillsChanged || changeTracker.savedDrillsChanged {
-                    try await DataSyncService.shared.syncAllDrillGroups(
-                        savedGroups: savedDrills,
-                        likedGroup: likedDrillsGroup
-                    )
-                    // Cache after successful sync
-                    cacheSavedDrills()
-                    cacheLikedDrills()
-                }
-                
-                if changeTracker.completedSessionsChanged {
-                    let completedDrills = orderedSessionDrills.filter { $0.isCompleted }.count
-                    try await DataSyncService.shared.syncCompletedSession(
-                        date: Date(),
-                        drills: orderedSessionDrills,
-                        totalCompleted: completedDrills,
-                        total: orderedSessionDrills.count
-                    )
-                    appModel.cacheCompletedSessions()
-                }
-                
-                await MainActor.run {
-                    changeTracker.reset()
-                    hasUnsavedChanges = false
-                }
-            } catch {
-                print("❌ Error syncing data: \(error)")
-                // Keep change flags set so we can retry on next save
-            }
-        }
-    }
     
-    
-    
-    
-//    // Test data for drills with specific sub-skills
-//    static let testDrills: [DrillModel] = [
-//        DrillModel(
-//            title: "Short Passing Drill",
-//            skill: "Passing",
-//            subSkills: ["short_passing"],
-//            sets: 4,
-//            reps: 10,
-//            duration: 15,
-//            description: "Practice accurate short passes with a partner or wall.",
-//            instructions: [""],
-//            tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
-//            equipment: ["Soccer ball", "Cones"],
-//            trainingStyle: "High Intensity",
-//            difficulty: "Beginner",
-//            videoUrl: "www.example.com"
-//        ),
-//        DrillModel(
-//            title: "Short Passing Drill Two",
-//            skill: "Passing",
-//            subSkills: ["short_passing"],
-//            sets: 4,
-//            reps: 10,
-//            duration: 15,
-//            description: "Practice accurate short passes with a partner or wall.",
-//            instructions: [""],
-//            tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
-//            equipment: ["Soccer ball", "Cones"],
-//            trainingStyle: "High Intensity",
-//            difficulty: "Beginner",
-//            videoUrl: "www.example.com"
-//        ),
-//        DrillModel(
-//            title: "Short Passing Drill Three",
-//            skill: "Passing",
-//            subSkills: ["short_passing"],
-//            sets: 4,
-//            reps: 10,
-//            duration: 15,
-//            description: "Practice accurate short passes with a partner or wall.",
-//            instructions: [""],
-//            tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
-//            equipment: ["Soccer ball", "Cones"],
-//            trainingStyle: "High Intensity",
-//            difficulty: "Beginner",
-//            videoUrl: "www.example.com"
-//        ),
-//        DrillModel(
-//            title: "Short Passing Four",
-//            skill: "Passing",
-//            subSkills: ["short_passing"],
-//            sets: 4,
-//            reps: 10,
-//            duration: 15,
-//            description: "Practice accurate short passes with a partner or wall.",
-//            instructions: [""],
-//            tips: ["Keep the ball on the ground", "Use inside of foot", "Follow through towards target"],
-//            equipment: ["Soccer ball", "Cones"],
-//            trainingStyle: "High Intensity",
-//            difficulty: "Beginner",
-//            videoUrl: "www.example.com"
-//        ),
-//        DrillModel(
-//            title: "Long Passing Practice",
-//            skill: "Passing",
-//            subSkills: ["long_passing"],
-//            sets: 3,
-//            reps: 8,
-//            duration: 20,
-//            description: "Improve your long-range passing accuracy.",
-//            instructions: [""],
-//            tips: ["Lock ankle", "Follow through", "Watch ball contact"],
-//            equipment: ["Soccer ball", "Cones"],
-//            trainingStyle: "Medium Intensity",
-//            difficulty: "Intermediate",
-//            videoUrl: "www.example.com"
-//        ),
-//        DrillModel(
-//            title: "Through Ball Training",
-//            skill: "Passing",
-//            subSkills: ["long_passing"],
-//            sets: 4,
-//            reps: 6,
-//            duration: 15,
-//            description: "Practice timing and weight of through passes.",
-//            instructions: [""],
-//            tips: ["Look for space", "Time the pass", "Weight it properly"],
-//            equipment: ["Soccer ball", "Cones"],
-//            trainingStyle: "Medium Intensity",
-//            difficulty: "Intermediate",
-//            videoUrl: "www.example.com"
-//        ),
-//        DrillModel(
-//            title: "Power Shot Practice",
-//            skill: "Shooting",
-//            subSkills: ["power_shots"],
-//            sets: 3,
-//            reps: 5,
-//            duration: 20,
-//            description: "Work on powerful shots on goal.",
-//            instructions: [""],
-//            tips: ["Plant foot beside ball", "Strike with laces", "Follow through"],
-//            equipment: ["Soccer ball", "Goal"],
-//            trainingStyle: "High Intensity",
-//            difficulty: "Intermediate",
-//            videoUrl: "www.example.com"
-//        ),
-//        DrillModel(
-//            title: "1v1 Dribbling Skills",
-//            skill: "Dribbling",
-//            subSkills: ["1v1_moves"],
-//            sets: 4,
-//            reps: 8,
-//            duration: 15,
-//            description: "Master close ball control and quick direction changes.",
-//            instructions: [""],
-//            tips: ["Keep ball close", "Use both feet", "Change pace"],
-//            equipment: ["Soccer ball", "Cones"],
-//            trainingStyle: "High Intensity",
-//            difficulty: "Intermediate",
-//            videoUrl: "www.example.com"
-//        )
-//    ]
-
     
     // Define Preferences struct for caching
     struct Preferences: Codable {
@@ -591,10 +342,7 @@ class SessionGeneratorModel: ObservableObject {
             }
             
             print("✅ Processed \(processedCount) drills for session")
-            
-            // Explicitly save to cache since we're in initial load
-            cacheOrderedDrills()
-            saveChanges()
+
             
             await MainActor.run {
                 isLoadingDrills = false

@@ -14,7 +14,7 @@ import SwiftKeychainWrapper
 
 class MainAppModel: ObservableObject {
     
-    let globalSettings = GlobalSettings()
+    let globalSettings = GlobalSettings.shared
     let layout = ResponsiveLayout()
 
     
@@ -38,6 +38,23 @@ class MainAppModel: ObservableObject {
     
     // View state
     @Published var viewState = ViewState()
+    
+    let currentDate: Date = Date()
+    
+    init() {
+        // --- Streak logic ---
+                let calendar = Calendar.current
+                if let yesterday = calendar.date(byAdding: .day, value: -1, to: currentDate),
+                   let _ = getSessionForDate(yesterday) {
+                    // If there was a session yesterday, increment streak
+                    highestStreakSetter(streak: currentStreak)
+                    currentStreak += 1
+                } else {
+                    // If not, reset streak to 1 (today)
+                    highestStreakSetter(streak: currentStreak)
+                    currentStreak = 0
+                }
+    }
     
     struct ViewState: Codable {
         var showingDrills = false

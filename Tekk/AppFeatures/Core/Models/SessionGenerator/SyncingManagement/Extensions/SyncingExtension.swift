@@ -214,7 +214,6 @@ extension SessionGeneratorModel: SyncManagement {
             print("🔄 Deduplicated \(likedDrillsGroup.drills.count - uniqueDrills.count) drills from liked drills group")
             likedDrillsGroup.drills = uniqueDrills
             // Make sure to cache the updated group
-            cacheLikedDrills()
         }
     }
     

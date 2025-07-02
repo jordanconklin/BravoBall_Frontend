@@ -86,7 +86,7 @@ struct MainTabView: View {
     let mockOnboardingModel = OnboardingModel()
     let mockMainAppModel = MainAppModel()
     let mockUserManager = UserManager()
-    let mockSesGenModel = SessionGeneratorModel(appModel: MainAppModel(), onboardingData: OnboardingModel.OnboardingData())
+    let mockSesGenModel = SessionGeneratorModel()
     
     return MainTabView(
         onboardingModel: mockOnboardingModel,

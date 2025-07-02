@@ -43,7 +43,6 @@ extension SessionGeneratorModel: SavedFiltersManagement {
         
         allSavedFilters.append(savedFilters)
         
-        cacheFilterGroups(name: name)
     }
     
     // Load filter after clicking the name of saved filter

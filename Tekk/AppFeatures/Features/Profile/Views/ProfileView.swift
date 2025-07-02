@@ -408,7 +408,7 @@ struct ProfileView_Previews: PreviewProvider {
         let onboardingModel = OnboardingModel()
         let appModel = MainAppModel()
         let userManager = UserManager()
-        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        let sessionModel = SessionGeneratorModel()
         
         // Optionally set some mock data for a more realistic preview
         onboardingModel.isLoggedIn = true

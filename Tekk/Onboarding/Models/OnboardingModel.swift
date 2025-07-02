@@ -9,7 +9,7 @@ import Foundation
 import SwiftKeychainWrapper
 
 class OnboardingModel: ObservableObject {
-    let globalSettings = GlobalSettings()
+    let globalSettings = GlobalSettings.shared
 
     @Published var currentStep = 0
     // For question transition when back button pressed

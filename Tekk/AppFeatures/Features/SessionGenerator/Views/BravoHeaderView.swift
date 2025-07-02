@@ -65,7 +65,7 @@ struct BravoHeaderView: View {
 struct BravoHeaderView_Previews: PreviewProvider {
     static var previews: some View {
         let appModel = MainAppModel()
-        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        let sessionModel = SessionGeneratorModel()
         // Provide a mock geometry
         let geometry = ViewGeometry(size: CGSize(width: 390, height: 844), safeAreaInsets: EdgeInsets())
         BravoHeaderView(appModel: appModel, sessionModel: sessionModel, geometry: geometry)

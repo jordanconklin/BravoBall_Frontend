@@ -162,7 +162,7 @@ struct SavedDrillsView: View {
 struct SavedDrillsView_Previews: PreviewProvider {
     static var previews: some View {
         let appModel = MainAppModel()
-        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        let sessionModel = SessionGeneratorModel()
         SavedDrillsView(appModel: appModel, sessionModel: sessionModel)
     }
 }

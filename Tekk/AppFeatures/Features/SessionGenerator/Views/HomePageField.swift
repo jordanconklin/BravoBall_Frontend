@@ -205,7 +205,7 @@ struct HomePageField: View {
 struct HomePageField_Previews: PreviewProvider {
     static var previews: some View {
         let appModel = MainAppModel()
-        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        let sessionModel = SessionGeneratorModel()
         let geometry = ViewGeometry(size: CGSize(width: 390, height: 844), safeAreaInsets: EdgeInsets())
         // Set the flag to show the field
         appModel.viewState.showFieldBehindHomePage = true

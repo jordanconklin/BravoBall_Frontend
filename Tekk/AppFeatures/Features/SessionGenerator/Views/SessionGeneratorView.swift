@@ -54,7 +54,7 @@ struct SessionGeneratorView_Previews: PreviewProvider {
     static var previews: some View {
         let onboardingModel = OnboardingModel()
         let appModel = MainAppModel()
-        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        let sessionModel = SessionGeneratorModel()
         let userManager = UserManager()
         SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
         

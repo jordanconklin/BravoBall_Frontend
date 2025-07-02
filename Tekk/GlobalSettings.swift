@@ -10,6 +10,8 @@ import Foundation
 
 // global view settings
 class GlobalSettings: ObservableObject {
+    static let shared = GlobalSettings()
+    
     @Published var primaryYellowColor: Color = Color(hex: "F6C356")
     @Published var primaryDarkYellowColor: Color = Color(hex: "c2983e")
     @Published var secondaryYellowColor: Color = Color(hex: "C8A369")

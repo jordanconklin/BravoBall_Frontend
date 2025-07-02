@@ -54,7 +54,7 @@ struct FilterScrollView: View {
 struct FilterScrollView_Previews: PreviewProvider {
     static var previews: some View {
         let appModel = MainAppModel()
-        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        let sessionModel = SessionGeneratorModel()
         let geometry = ViewGeometry(size: CGSize(width: 390, height: 844), safeAreaInsets: EdgeInsets())
         FilterScrollView(appModel: appModel, sessionModel: sessionModel, geometry: geometry)
     }

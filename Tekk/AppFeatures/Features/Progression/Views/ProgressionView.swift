@@ -100,7 +100,7 @@ struct ProgressionView: View {
 struct ProgressionView_Previews: PreviewProvider {
     static var previews: some View {
         let appModel = MainAppModel()
-        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        let sessionModel = SessionGeneratorModel()
         ProgressionView(appModel: appModel, sessionModel: sessionModel)
     }
 }

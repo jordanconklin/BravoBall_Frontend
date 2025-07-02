@@ -148,7 +148,6 @@ extension SessionGeneratorModel: SavedDrillsGroupManagement {
             print("🔄 Deduplicated \(savedDrills[groupIndex].drills.count - uniqueDrills.count) drills from group '\(savedDrills[groupIndex].name)'")
             savedDrills[groupIndex].drills = uniqueDrills
             // Make sure to cache the updated group
-            cacheSavedDrills()
         }
     }
 }

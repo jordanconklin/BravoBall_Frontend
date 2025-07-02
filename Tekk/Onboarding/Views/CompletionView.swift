@@ -256,7 +256,7 @@ struct CompletionView_Previews: PreviewProvider {
         let onboardingModel = OnboardingModel()
         let userManager = UserManager()
         let appModel = MainAppModel()
-        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        let sessionModel = SessionGeneratorModel()
         
         // Optionally set some mock data for a more realistic preview
         onboardingModel.onboardingData.email = "jordan@example.com"

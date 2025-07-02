@@ -86,7 +86,7 @@ struct SaveFiltersPromptView: View {
 struct SaveFiltersPromptView_Previews: PreviewProvider {
     static var previews: some View {
         let appModel = MainAppModel()
-        let sessionModel = SessionGeneratorModel(appModel: appModel, onboardingData: .init())
+        let sessionModel = SessionGeneratorModel()
         @State var name = ""
         return SaveFiltersPromptView(appModel: appModel, sessionModel: sessionModel, savedFiltersName: .constant("")) {
             // Dismiss closure for preview
