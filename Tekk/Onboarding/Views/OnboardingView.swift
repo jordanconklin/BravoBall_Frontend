@@ -16,13 +16,10 @@ struct OnboardingView: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     @Environment(\.dismiss) private var dismiss
     
-    
+    @State private var mascotShouldAnimate = false
     @State private var canTrigger = true
     @State private var showEmailExistsAlert = false
     @State private var hasAttemptedSubmit = false  // New state variable to track submission attempts
-    
-    let riveViewModelOne = RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1")
-    let riveViewModelTwo = RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 2", autoPlay: true)
     
     
 
@@ -62,20 +59,7 @@ struct OnboardingView: View {
                     .transition(.move(edge: .trailing))
             }
             
-            // Intro animation overlay
-            if onboardingModel.showIntroAnimation {
-                RiveViewModel(fileName: "BravoBall_Intro").view()
-                    .scaleEffect(onboardingModel.animationScale)
-                    .edgesIgnoringSafeArea(.all)
-                    .allowsHitTesting(false)
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.7) {
-                            withAnimation(.spring()) {
-                                onboardingModel.showIntroAnimation = false
-                            }
-                        }
-                    }
-            }
+            
         }
         .animation(.spring(), value: onboardingModel.showWelcome)
         .animation(.spring(), value: onboardingModel.showLoginPage)
@@ -84,10 +68,17 @@ struct OnboardingView: View {
     // Welcome view for new users
     var welcomeContent: some View {
         VStack {
-            riveViewModelOne.view()
-                .frame(width: 300, height: 300)
-                .padding(.top, 30)
-                .padding(.bottom, 10)
+            RiveAnimationView(
+                onboardingModel: onboardingModel,
+                fileName: "Bravo_Animation",
+                stateMachine: "State Machine 1",
+                actionForTrigger: false,
+                triggerName: ""
+
+            )
+            .frame(width: 300, height: 300)
+            .padding(.top, 30)
+            .padding(.bottom, 10)
             
             Text("BravoBall")
                 .foregroundColor(onboardingModel.globalSettings.primaryYellowColor)
@@ -131,12 +122,13 @@ struct OnboardingView: View {
                             onboardingModel.showLoginPage = true
                         }
                     },
-                    frontColor: appModel.globalSettings.primaryLightestGrayColor,
+                    frontColor: Color.white,
                     backColor: appModel.globalSettings.primaryLightGrayColor,
-                    textColor: appModel.globalSettings.primaryDarkColor,
+                    textColor: appModel.globalSettings.primaryYellowColor,
                     textSize: 18,
                     width: .infinity,
                     height: 50,
+                    borderColor: appModel.globalSettings.primaryLightGrayColor,
                     disabled: false
                 )
                 .padding(.horizontal)
@@ -209,8 +201,16 @@ struct OnboardingView: View {
             
             HStack {
                 // Mascot
-                riveViewModelTwo.view()
-                    .frame(width: 100, height: 100)
+                RiveAnimationView(
+                    onboardingModel: onboardingModel,
+                    fileName: "Bravo_Animation",
+                    stateMachine: "State Machine 2",
+                    actionForTrigger: mascotShouldAnimate,
+                    triggerName: "user_inputs"
+
+                )
+                .frame(width: 100, height: 100)
+                
                 if onboardingModel.currentStep > 0 && onboardingModel.currentStep != onboardingModel.numberOfOnboardingPages {
                     ZStack(alignment: .leading) {
                         HStack(spacing: 0) {
@@ -353,7 +353,7 @@ struct OnboardingView: View {
                 let jsonBody = try? JSONSerialization.data(withJSONObject: body)
                 do {
                     let (data, response) = try await APIService.shared.request(
-                        endpoint: "/check-email/",
+                        endpoint: "/check-unique-email/",
                         method: "POST",
                         headers: ["Content-Type": "application/json"],
                         body: jsonBody
@@ -372,7 +372,6 @@ struct OnboardingView: View {
                                 await MainActor.run {
                                     onboardingModel.errorMessage = ""
                                     onboardingModel.isLoading = false
-                                    triggerBravoAnimation()
                                     withAnimation {
                                         onboardingModel.backTransition = false
                                         onboardingModel.moveNext()
@@ -399,12 +398,18 @@ struct OnboardingView: View {
                 }
             }
         } else {
-            triggerBravoAnimation()
+            mascotShouldAnimate = true
             withAnimation {
                 onboardingModel.backTransition = false
                 onboardingModel.moveNext()
             }
+            
+            // Optionally, reset the trigger after a delay (match your animation duration)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    mascotShouldAnimate = false
+                }
         }
+
     }
     
     func nextButtonDisabledLogic() -> Bool {
@@ -413,24 +418,6 @@ struct OnboardingView: View {
             : !onboardingModel.canMoveNext()
     }
     
-    
-    func triggerBravoAnimation() {
-            guard canTrigger else { return }
-            
-            // Disable triggering
-            canTrigger = false
-            
-            // Trigger the animation
-            riveViewModelTwo.setInput("user_input", value: true)
-            
-            // Wait for the full animation cycle (3 seconds + a small buffer)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
-                // Reset the trigger
-                riveViewModelTwo.setInput("user_input", value: false)
-                // Re-enable triggering
-                canTrigger = true
-            }
-        }
 }
 
 

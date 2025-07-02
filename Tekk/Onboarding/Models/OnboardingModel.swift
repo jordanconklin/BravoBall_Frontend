@@ -18,7 +18,7 @@ class OnboardingModel: ObservableObject {
     
     @Published var showLoginPage = false
     @Published var showWelcome = false
-    @Published var showIntroAnimation = true // TESTING, toggle when need to
+    @Published var showIntroAnimation = true
     @Published var isLoggedIn = false
     @Published var accessToken = ""
     @Published var isPasswordVisible: Bool = false
@@ -78,6 +78,15 @@ class OnboardingModel: ObservableObject {
         var dailyTrainingTime: String = ""
         var weeklyTrainingDays: String = ""
     }
+
+    @Published var showForgotPasswordPage: Bool = false
+    @Published var forgotPasswordMessage: String = ""
+    @Published var forgotPasswordStep: Int = 1 // 1: email, 2: code, 3: new password
+    @Published var forgotPasswordEmail: String = ""
+    @Published var forgotPasswordCode: String = ""
+    @Published var forgotPasswordNewPassword: String = ""
+    @Published var forgotPasswordConfirmPassword: String = ""
+    @Published var isNewPasswordVisible: Bool = false
 
     init() {
         // Check for existing authentication on init
@@ -206,5 +215,136 @@ class OnboardingModel: ObservableObject {
         KeychainWrapper.standard.removeObject(forKey: "userEmail")
         
         print("🧹 Cleared login state and stored tokens")
+    }
+
+    // MARK: - Forgot Password Logic
+    func checkEmailExists(email: String) async -> Bool {
+        do {
+            let jsonBody = try JSONSerialization.data(withJSONObject: ["email": email])
+            let (data, response) = try await APIService.shared.request(
+                endpoint: "/check-existing-email/",
+                method: "POST",
+                headers: ["Content-Type": "application/json"],
+                body: jsonBody
+            )
+            return response.statusCode == 200
+        } catch {
+            return false
+        }
+    }
+    
+    func sendForgotPassword(email: String) async {
+        DispatchQueue.main.async {
+            self.forgotPasswordMessage = ""
+        }
+        
+        // First check if email exists
+        let emailExists = await checkEmailExists(email: email)
+        if !emailExists {
+            DispatchQueue.main.async {
+                self.forgotPasswordMessage = "Email not found. Please check your email address."
+            }
+            return
+        }
+        
+        do {
+            let (data, response) = try await APIService.shared.forgotPassword(email: email)
+            if response.statusCode == 200 {
+                DispatchQueue.main.async {
+                    self.forgotPasswordEmail = email
+                    self.forgotPasswordStep = 2
+                    self.forgotPasswordMessage = "Verification code sent to your email."
+                }
+            } else {
+                let responseString = String(data: data, encoding: .utf8) ?? "Unknown error"
+                DispatchQueue.main.async {
+                    self.forgotPasswordMessage = "Failed to send code: \(responseString)"
+                }
+            }
+        } catch {
+            DispatchQueue.main.async {
+                self.forgotPasswordMessage = "Network error. Please try again."
+            }
+        }
+    }
+    
+    func verifyResetCode(code: String) async {
+        DispatchQueue.main.async {
+            self.forgotPasswordMessage = ""
+        }
+        do {
+            let (data, response) = try await APIService.shared.verifyResetCode(email: forgotPasswordEmail, code: code)
+            if response.statusCode == 200 {
+                DispatchQueue.main.async {
+                    self.forgotPasswordCode = code
+                    self.forgotPasswordStep = 3
+                    self.forgotPasswordMessage = "Code verified successfully."
+                }
+            } else {
+                let responseString = String(data: data, encoding: .utf8) ?? "Invalid code"
+                DispatchQueue.main.async {
+                    self.forgotPasswordMessage = "Invalid or expired code. Please try again."
+                }
+            }
+        } catch {
+            DispatchQueue.main.async {
+                self.forgotPasswordMessage = "Network error. Please try again."
+            }
+        }
+    }
+    
+    func resetPassword(newPassword: String, confirmPassword: String) async {
+        DispatchQueue.main.async {
+            self.forgotPasswordMessage = ""
+        }
+        
+        // Validate passwords
+        if newPassword != confirmPassword {
+            DispatchQueue.main.async {
+                self.forgotPasswordMessage = "Passwords do not match."
+            }
+            return
+        }
+        
+        if let passwordError = AccountValidation.passwordError(newPassword) {
+            DispatchQueue.main.async {
+                self.forgotPasswordMessage = passwordError
+            }
+            return
+        }
+        
+        do {
+            let (data, response) = try await APIService.shared.resetPassword(
+                email: forgotPasswordEmail,
+                code: forgotPasswordCode,
+                newPassword: newPassword
+            )
+            if response.statusCode == 200 {
+                DispatchQueue.main.async {
+                    self.forgotPasswordMessage = "Password reset successfully!"
+                    // Reset all forgot password state
+                    self.resetForgotPasswordState()
+                }
+            } else {
+                let responseString = String(data: data, encoding: .utf8) ?? "Unknown error"
+                DispatchQueue.main.async {
+                    self.forgotPasswordMessage = "Failed to reset password: \(responseString)"
+                }
+            }
+        } catch {
+            DispatchQueue.main.async {
+                self.forgotPasswordMessage = "Network error. Please try again."
+            }
+        }
+    }
+    
+    func resetForgotPasswordState() {
+        forgotPasswordStep = 1
+        forgotPasswordEmail = ""
+        forgotPasswordCode = ""
+        forgotPasswordNewPassword = ""
+        forgotPasswordConfirmPassword = ""
+        forgotPasswordMessage = ""
+        showForgotPasswordPage = false
     }
 }

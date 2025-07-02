@@ -106,4 +106,55 @@ class APIService {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return try decoder.decode(T.self, from: data)
     }
+
+    // Forgot password request - sends verification code
+    func forgotPassword(email: String) async throws -> (Data, HTTPURLResponse) {
+        guard let url = URL(string: baseURL + "/forgot-password/") else {
+            throw URLError(.badURL)
+        }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let body = ["email": email]
+        urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body)
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+        return (data, httpResponse)
+    }
+    
+    // Verify reset code
+    func verifyResetCode(email: String, code: String) async throws -> (Data, HTTPURLResponse) {
+        guard let url = URL(string: baseURL + "/verify-reset-code/") else {
+            throw URLError(.badURL)
+        }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let body = ["email": email, "code": code]
+        urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body)
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+        return (data, httpResponse)
+    }
+    
+    // Reset password with new password
+    func resetPassword(email: String, code: String, newPassword: String) async throws -> (Data, HTTPURLResponse) {
+        guard let url = URL(string: baseURL + "/reset-password/") else {
+            throw URLError(.badURL)
+        }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let body = ["email": email, "code": code, "new_password": newPassword]
+        urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body)
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+        return (data, httpResponse)
+    }
 } 
