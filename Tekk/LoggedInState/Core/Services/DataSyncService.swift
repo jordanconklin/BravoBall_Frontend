@@ -43,6 +43,7 @@ class DataSyncService {
         let difficulty: String
         let videoUrl: String
     }
+    
 
     
     // MARK: - Ordered Session Drills Sync
@@ -149,6 +150,8 @@ class DataSyncService {
     }
     
     
+    
+    
     // MARK: - Progress History Sync
     
     struct ProgressHistoryResponse: Codable {
@@ -156,6 +159,7 @@ class DataSyncService {
         let highestStreak: Int
         let completedSessionsCount: Int
     }
+    
     
     func fetchProgressHistory() async throws -> ProgressHistoryResponse {
         let endpoint = "/api/progress_history/"

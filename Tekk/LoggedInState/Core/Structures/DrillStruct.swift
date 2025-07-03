@@ -1,8 +1,8 @@
 //
-//  DrillModel.swift
+//  DrillStruct.swift
 //  BravoBall
 //
-//  Created by Joshua Conklin on 2/25/25.
+//  Created by Joshua Conklin on 7/3/25.
 //
 
 import Foundation

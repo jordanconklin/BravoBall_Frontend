@@ -8,6 +8,11 @@
 import SwiftUI
 import SwiftKeychainWrapper
 
+
+// TODO: separate service components
+
+
+
 class SettingsModel: ObservableObject {
     @Published var email: String {
         didSet { UserDefaults.standard.set(email, forKey: "email") }

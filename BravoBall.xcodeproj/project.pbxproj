@@ -86,6 +86,8 @@
 		42B35C712E0B2BD600660E6E /* ThreeDPressCircleButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B35C702E0B2BCD00660E6E /* ThreeDPressCircleButtonStyle.swift */; };
 		42B35C732E0B2C0B00660E6E /* ThreeDPressRectButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B35C722E0B2C0100660E6E /* ThreeDPressRectButtonStyle.swift */; };
 		42BDAAB32E0DC72C002B06F3 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 42BDAAB22E0DC72C002B06F3 /* RiveRuntime */; };
+		42C2F0A72E173611008F93C4 /* OnboardingResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C2F0A62E17360C008F93C4 /* OnboardingResponse.swift */; };
+		42C2F0AD2E173B7E008F93C4 /* DrillStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C2F0AC2E173B7A008F93C4 /* DrillStruct.swift */; };
 		42C81AD12E0DE4D500186E41 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C81AD02E0DE4D000186E41 /* AuthenticationManager.swift */; };
 		42E0A9352E1467DE008ED40E /* BravoBall_Intro.riv in Resources */ = {isa = PBXBuildFile; fileRef = 42E0A9342E1467DE008ED40E /* BravoBall_Intro.riv */; };
 		42E0A9372E147402008ED40E /* Bravo_Animation.riv in Resources */ = {isa = PBXBuildFile; fileRef = 42E0A9362E147402008ED40E /* Bravo_Animation.riv */; };
@@ -95,7 +97,6 @@
 		42E0A94A2E15E4F6008ED40E /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9492E15E4F3008ED40E /* LoginModel.swift */; };
 		42E0A9522E15EA27008ED40E /* ForgotPasswordService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9512E15EA20008ED40E /* ForgotPasswordService.swift */; };
 		42E0A9592E15EAE0008ED40E /* ForgotPasswordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9582E15EADA008ED40E /* ForgotPasswordModel.swift */; };
-		42E0A95C2E15FA9C008ED40E /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A95B2E15FA98008ED40E /* ResponseModel.swift */; };
 		42E0A95F2E1600FA008ED40E /* ForgotPasswordSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A95E2E1600F5008ED40E /* ForgotPasswordSheet.swift */; };
 		42E0A9642E1602E3008ED40E /* OnboardingMappingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9632E1602DD008ED40E /* OnboardingMappingExtension.swift */; };
 		42E0A9662E1603F5008ED40E /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9652E1603F1008ED40E /* LoginResponse.swift */; };
@@ -158,7 +159,6 @@
 		43BFAA322D44105200B12A6F /* Prereq_Equipment.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43BFAA312D44105200B12A6F /* Prereq_Equipment.riv */; };
 		43BFAA342D44164E00B12A6F /* Prereq_Training_Style.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43BFAA332D44164E00B12A6F /* Prereq_Training_Style.riv */; };
 		43BFAA422D444A2C00B12A6F /* Message_Bubble.riv in Resources */ = {isa = PBXBuildFile; fileRef = 43BFAA412D444A2C00B12A6F /* Message_Bubble.riv */; };
-		43C5FC412D6DB59D0064E7D5 /* DrillModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC402D6DB59A0064E7D5 /* DrillModel.swift */; };
 		43C5FC442D6DB7E20064E7D5 /* SkillTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC432D6DB7DF0064E7D5 /* SkillTypes.swift */; };
 		43C5FC492D6DB84F0064E7D5 /* EditableDrillModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC482D6DB84B0064E7D5 /* EditableDrillModel.swift */; };
 		43C5FC522D6DBCF00064E7D5 /* AllGroupsDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC512D6DBCEA0064E7D5 /* AllGroupsDisplay.swift */; };
@@ -282,6 +282,8 @@
 		42B35C6E2E0B2B6700660E6E /* CircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleButton.swift; sourceTree = "<group>"; };
 		42B35C702E0B2BCD00660E6E /* ThreeDPressCircleButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDPressCircleButtonStyle.swift; sourceTree = "<group>"; };
 		42B35C722E0B2C0100660E6E /* ThreeDPressRectButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDPressRectButtonStyle.swift; sourceTree = "<group>"; };
+		42C2F0A62E17360C008F93C4 /* OnboardingResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingResponse.swift; sourceTree = "<group>"; };
+		42C2F0AC2E173B7A008F93C4 /* DrillStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrillStruct.swift; sourceTree = "<group>"; };
 		42C81AD02E0DE4D000186E41 /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		42E0A9342E1467DE008ED40E /* BravoBall_Intro.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = BravoBall_Intro.riv; sourceTree = "<group>"; };
 		42E0A9362E147402008ED40E /* Bravo_Animation.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Bravo_Animation.riv; sourceTree = "<group>"; };
@@ -291,7 +293,6 @@
 		42E0A9492E15E4F3008ED40E /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
 		42E0A9512E15EA20008ED40E /* ForgotPasswordService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordService.swift; sourceTree = "<group>"; };
 		42E0A9582E15EADA008ED40E /* ForgotPasswordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordModel.swift; sourceTree = "<group>"; };
-		42E0A95B2E15FA98008ED40E /* ResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseModel.swift; sourceTree = "<group>"; };
 		42E0A95E2E1600F5008ED40E /* ForgotPasswordSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordSheet.swift; sourceTree = "<group>"; };
 		42E0A9632E1602DD008ED40E /* OnboardingMappingExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingMappingExtension.swift; sourceTree = "<group>"; };
 		42E0A9652E1603F1008ED40E /* LoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
@@ -350,7 +351,6 @@
 		43BFAA312D44105200B12A6F /* Prereq_Equipment.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Equipment.riv; sourceTree = "<group>"; };
 		43BFAA332D44164E00B12A6F /* Prereq_Training_Style.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Prereq_Training_Style.riv; sourceTree = "<group>"; };
 		43BFAA412D444A2C00B12A6F /* Message_Bubble.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Message_Bubble.riv; sourceTree = "<group>"; };
-		43C5FC402D6DB59A0064E7D5 /* DrillModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrillModel.swift; sourceTree = "<group>"; };
 		43C5FC432D6DB7DF0064E7D5 /* SkillTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillTypes.swift; sourceTree = "<group>"; };
 		43C5FC482D6DB84B0064E7D5 /* EditableDrillModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableDrillModel.swift; sourceTree = "<group>"; };
 		43C5FC512D6DBCEA0064E7D5 /* AllGroupsDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllGroupsDisplay.swift; sourceTree = "<group>"; };
@@ -525,25 +525,6 @@
 			path = AudioAssets;
 			sourceTree = "<group>";
 		};
-		178208DD2D2DEB7C00246494 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				42E0A95B2E15FA98008ED40E /* ResponseModel.swift */,
-				178208DF2D2DEB9C00246494 /* OnboardingModel.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		178208DE2D2DEB8400246494 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				178208E12D2DEBB400246494 /* OnboardingView.swift */,
-				178208E52D2DEC2900246494 /* CompletionView.swift */,
-				178208E72D2DEC5400246494 /* HelperViews */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		178208E72D2DEC5400246494 /* HelperViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -559,7 +540,6 @@
 		1784EB6B2D965F6C001D4F2F /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				1784EB6C2D965F70001D4F2F /* SettingsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -616,6 +596,69 @@
 			path = DrillDetailPage;
 			sourceTree = "<group>";
 		};
+		42C2F0A12E1733DE008F93C4 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				42C2F0A92E173808008F93C4 /* Services */,
+				42C2F0A32E173562008F93C4 /* Structs */,
+				42E0A9572E15EA9F008ED40E /* Models */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		42C2F0A22E1733E5008F93C4 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				42E0A96C2E162560008ED40E /* LaunchScreen */,
+				42E0A9532E15EA83008ED40E /* ForgotPassword */,
+				42E0A9422E15DE81008ED40E /* Onboarding */,
+				42E0A9432E15DE88008ED40E /* Login */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		42C2F0A32E173562008F93C4 /* Structs */ = {
+			isa = PBXGroup;
+			children = (
+				42C2F0A62E17360C008F93C4 /* OnboardingResponse.swift */,
+				42E0A9652E1603F1008ED40E /* LoginResponse.swift */,
+			);
+			path = Structs;
+			sourceTree = "<group>";
+		};
+		42C2F0A82E1737A9008F93C4 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				4399B6D72D6930AB00DA5E84 /* OnboardingService.swift */,
+				42E0A9622E1602D8008ED40E /* Extensions */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		42C2F0A92E173808008F93C4 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				42C2F0A82E1737A9008F93C4 /* Onboarding */,
+				42E0A96A2E1621B1008ED40E /* LoginService.swift */,
+				42E0A9512E15EA20008ED40E /* ForgotPasswordService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		42C2F0AA2E17388F008F93C4 /* Structures */ = {
+			isa = PBXGroup;
+			children = (
+				43C5FC482D6DB84B0064E7D5 /* EditableDrillModel.swift */,
+				17DB46032DD6D837000A76F6 /* ResponseModels.swift */,
+				43B687802D7C23D7009CCA8C /* GroupModel.swift */,
+				4399B7412D6D92BE00DA5E84 /* FilterTypes.swift */,
+				43C5FC432D6DB7DF0064E7D5 /* SkillTypes.swift */,
+				42C2F0AC2E173B7A008F93C4 /* DrillStruct.swift */,
+				42E0A9772E168520008ED40E /* RewardsModel.swift */,
+			);
+			path = Structures;
+			sourceTree = "<group>";
+		};
 		42C81ACF2E0DE4CB00186E41 /* Authenticate */ = {
 			isa = PBXGroup;
 			children = (
@@ -644,10 +687,8 @@
 		42E0A9412E15DE56008ED40E /* InitialFlow */ = {
 			isa = PBXGroup;
 			children = (
-				42E0A96C2E162560008ED40E /* LaunchScreen */,
-				42E0A9532E15EA83008ED40E /* ForgotPassword */,
-				42E0A9422E15DE81008ED40E /* Onboarding */,
-				42E0A9432E15DE88008ED40E /* Login */,
+				42C2F0A22E1733E5008F93C4 /* Features */,
+				42C2F0A12E1733DE008F93C4 /* Core */,
 			);
 			path = InitialFlow;
 			sourceTree = "<group>";
@@ -655,9 +696,9 @@
 		42E0A9422E15DE81008ED40E /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				178208DE2D2DEB8400246494 /* Views */,
-				4399B6DC2D69393F00DA5E84 /* Services */,
-				178208DD2D2DEB7C00246494 /* Models */,
+				178208E12D2DEBB400246494 /* OnboardingView.swift */,
+				178208E52D2DEC2900246494 /* CompletionView.swift */,
+				178208E72D2DEC5400246494 /* HelperViews */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -665,54 +706,27 @@
 		42E0A9432E15DE88008ED40E /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				42E0A9692E1621A8008ED40E /* Services */,
-				42E0A95A2E15F5DF008ED40E /* Views */,
-				42E0A9482E15E4CC008ED40E /* Models */,
+				178208E32D2DEBC800246494 /* LoginView.swift */,
 			);
 			path = Login;
-			sourceTree = "<group>";
-		};
-		42E0A9482E15E4CC008ED40E /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				42E0A9652E1603F1008ED40E /* LoginResponse.swift */,
-				42E0A9492E15E4F3008ED40E /* LoginModel.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		42E0A9532E15EA83008ED40E /* ForgotPassword */ = {
 			isa = PBXGroup;
 			children = (
-				42E0A9682E16145B008ED40E /* Views */,
-				42E0A9572E15EA9F008ED40E /* Models */,
-				42E0A9562E15EA97008ED40E /* Service */,
+				42E0A95E2E1600F5008ED40E /* ForgotPasswordSheet.swift */,
 			);
 			path = ForgotPassword;
-			sourceTree = "<group>";
-		};
-		42E0A9562E15EA97008ED40E /* Service */ = {
-			isa = PBXGroup;
-			children = (
-				42E0A9512E15EA20008ED40E /* ForgotPasswordService.swift */,
-			);
-			path = Service;
 			sourceTree = "<group>";
 		};
 		42E0A9572E15EA9F008ED40E /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				42E0A9582E15EADA008ED40E /* ForgotPasswordModel.swift */,
+				178208DF2D2DEB9C00246494 /* OnboardingModel.swift */,
+				42E0A9492E15E4F3008ED40E /* LoginModel.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		42E0A95A2E15F5DF008ED40E /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				178208E32D2DEBC800246494 /* LoginView.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		42E0A95D2E15FC08008ED40E /* UserManagement */ = {
@@ -731,22 +745,6 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		42E0A9682E16145B008ED40E /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				42E0A95E2E1600F5008ED40E /* ForgotPasswordSheet.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		42E0A9692E1621A8008ED40E /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				42E0A96A2E1621B1008ED40E /* LoginService.swift */,
-			);
-			path = Services;
-			sourceTree = "<group>";
-		};
 		42E0A96C2E162560008ED40E /* LaunchScreen */ = {
 			isa = PBXGroup;
 			children = (
@@ -761,7 +759,6 @@
 				178208D12D2D14D200246494 /* MainTabView.swift */,
 				4399B7142D6D794000DA5E84 /* Core */,
 				4399B7192D6D79D100DA5E84 /* Features */,
-				4399B7222D6D7A3C00DA5E84 /* Shared */,
 			);
 			path = LoggedInState;
 			sourceTree = "<group>";
@@ -788,25 +785,8 @@
 		42E0A9742E168508008ED40E /* Shop */ = {
 			isa = PBXGroup;
 			children = (
-				42E0A9762E16851B008ED40E /* Views */,
-				42E0A9752E168516008ED40E /* Models */,
 			);
 			path = Shop;
-			sourceTree = "<group>";
-		};
-		42E0A9752E168516008ED40E /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				42E0A9772E168520008ED40E /* RewardsModel.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		42E0A9762E16851B008ED40E /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		431BDFE82D853E0700F4E6EE /* Views */ = {
@@ -830,21 +810,12 @@
 			path = Font;
 			sourceTree = "<group>";
 		};
-		4399B6DC2D69393F00DA5E84 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				4399B6D72D6930AB00DA5E84 /* OnboardingService.swift */,
-				42E0A9622E1602D8008ED40E /* Extensions */,
-			);
-			path = Services;
-			sourceTree = "<group>";
-		};
 		4399B70F2D6D741100DA5E84 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				43AC25222DA24C7300EDD8C0 /* SessionGenerator */,
-				43C5FC402D6DB59A0064E7D5 /* DrillModel.swift */,
+				43524E762D4D994400AD897A /* SessionGeneratorModel.swift */,
 				430FD6CC2D3064850016D520 /* MainAppModel.swift */,
+				1784EB6C2D965F70001D4F2F /* SettingsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -852,6 +823,7 @@
 		4399B7142D6D794000DA5E84 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				42C2F0AA2E17388F008F93C4 /* Structures */,
 				4399B7182D6D799700DA5E84 /* Services */,
 				4399B70F2D6D741100DA5E84 /* Models */,
 			);
@@ -861,14 +833,19 @@
 		4399B7182D6D799700DA5E84 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				420DA39D2DCE9357004CDD7A /* PreferencesUpdate.swift */,
 				17CA37A52DF0BA0C001AD5FA /* APIService.swift */,
 				177B1BCF2DF741CB00AF465C /* DebounceService.swift */,
-				437D1A1E2D94FE4700B875CF /* SavedFiltersService.swift */,
 				43A764982D825FE8004509E5 /* DataSyncService.swift */,
+				420DA39D2DCE9357004CDD7A /* PreferencesUpdate.swift */,
+				437D1A1E2D94FE4700B875CF /* SavedFiltersService.swift */,
 				43B6877C2D7C2391009CCA8C /* CacheManager.swift */,
 				170167FA2D88B8730078446C /* DrillGroupService.swift */,
 				170167FC2D88F5C00078446C /* DrillSearchService.swift */,
+				43AC25652DA3984200EDD8C0 /* SyncingManagement */,
+				43AC25642DA3983900EDD8C0 /* CacheManagement */,
+				43AC25632DA3983200EDD8C0 /* FilterManagement */,
+				43AC25522DA38EE900EDD8C0 /* GroupManagement */,
+				43AC254D2DA38DE500EDD8C0 /* SessionManagement */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -876,6 +853,7 @@
 		4399B7192D6D79D100DA5E84 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				4399B7222D6D7A3C00DA5E84 /* Shared */,
 				4399B71A2D6D79D800DA5E84 /* SessionGenerator */,
 				4399B71B2D6D79DF00DA5E84 /* Progression */,
 				4399B71C2D6D79E800DA5E84 /* SavedDrills */,
@@ -888,7 +866,6 @@
 		4399B71A2D6D79D800DA5E84 /* SessionGenerator */ = {
 			isa = PBXGroup;
 			children = (
-				43C5FC452D6DB8280064E7D5 /* Models */,
 				4399B7212D6D7A0D00DA5E84 /* Views */,
 			);
 			path = SessionGenerator;
@@ -906,7 +883,6 @@
 		4399B71C2D6D79E800DA5E84 /* SavedDrills */ = {
 			isa = PBXGroup;
 			children = (
-				43B687822D7C2DE6009CCA8C /* Models */,
 				4399B71F2D6D7A0400DA5E84 /* Views */,
 				43C5FC972D6DD5750064E7D5 /* Components */,
 			);
@@ -1053,19 +1029,6 @@
 			path = RiveAssets;
 			sourceTree = "<group>";
 		};
-		43AC25222DA24C7300EDD8C0 /* SessionGenerator */ = {
-			isa = PBXGroup;
-			children = (
-				43AC25652DA3984200EDD8C0 /* SyncingManagement */,
-				43AC25642DA3983900EDD8C0 /* CacheManagement */,
-				43AC25632DA3983200EDD8C0 /* FilterManagement */,
-				43AC25522DA38EE900EDD8C0 /* GroupManagement */,
-				43AC254D2DA38DE500EDD8C0 /* SessionManagement */,
-				43524E762D4D994400AD897A /* SessionGeneratorModel.swift */,
-			);
-			path = SessionGenerator;
-			sourceTree = "<group>";
-		};
 		43AC25232DA24C8100EDD8C0 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -1195,14 +1158,6 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		43B687822D7C2DE6009CCA8C /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				43B687802D7C23D7009CCA8C /* GroupModel.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		43C5FC422D6DB6D20064E7D5 /* ToastMessage */ = {
 			isa = PBXGroup;
 			children = (
@@ -1210,17 +1165,6 @@
 				4399B7382D6D901300DA5E84 /* ToastMessageModel.swift */,
 			);
 			path = ToastMessage;
-			sourceTree = "<group>";
-		};
-		43C5FC452D6DB8280064E7D5 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				43C5FC482D6DB84B0064E7D5 /* EditableDrillModel.swift */,
-				17DB46032DD6D837000A76F6 /* ResponseModels.swift */,
-				43C5FC432D6DB7DF0064E7D5 /* SkillTypes.swift */,
-				4399B7412D6D92BE00DA5E84 /* FilterTypes.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		43C5FC772D6DCD6D0064E7D5 /* Cards */ = {
@@ -1540,7 +1484,6 @@
 				42E0A96E2E1625CC008ED40E /* LaunchScreenView.swift in Sources */,
 				43AC25752DA39A7500EDD8C0 /* CacheExtension.swift in Sources */,
 				17595AA32D3B3B610015F35D /* WeekDisplayButton.swift in Sources */,
-				43C5FC412D6DB59D0064E7D5 /* DrillModel.swift in Sources */,
 				43C5FC622D6DC1470064E7D5 /* SkillRow.swift in Sources */,
 				43112E562DBACAA500DEAE59 /* FilterMgmtExtension.swift in Sources */,
 				43C5FC442D6DB7E20064E7D5 /* SkillTypes.swift in Sources */,
@@ -1554,13 +1497,13 @@
 				178208E62D2DEC2900246494 /* CompletionView.swift in Sources */,
 				4399B6D92D6930AB00DA5E84 /* OnboardingService.swift in Sources */,
 				42E0A9592E15EAE0008ED40E /* ForgotPasswordModel.swift in Sources */,
+				42C2F0AD2E173B7E008F93C4 /* DrillStruct.swift in Sources */,
 				42B35C652E0B00A500660E6E /* ShrinkingButtonStyle.swift in Sources */,
 				1784EB6F2D965FE0001D4F2F /* EditDetailsView.swift in Sources */,
 				43C5FC702D6DCC9A0064E7D5 /* SkillButton.swift in Sources */,
 				43AC25602DA394AD00EDD8C0 /* LikedGroupExtension.swift in Sources */,
 				420DA39E2DCE935B004CDD7A /* PreferencesUpdate.swift in Sources */,
 				178208EB2D2DECE300246494 /* OnboardingMultiSelectView.swift in Sources */,
-				42E0A95C2E15FA9C008ED40E /* ResponseModel.swift in Sources */,
 				17DB45FC2DD69D3C000A76F6 /* FilterScrollView.swift in Sources */,
 				177B1BF42DF76FCA00AF465C /* BravoBallApp.swift in Sources */,
 				177B1BCE2DF73A2000AF465C /* TermsOfServiceView.swift in Sources */,
@@ -1594,6 +1537,7 @@
 				43C5FC5E2D6DC0E40064E7D5 /* FilterOptionsButton.swift in Sources */,
 				43AC25622DA394B500EDD8C0 /* SavedGroupsExtension.swift in Sources */,
 				177B1BBA2DF2BF5200AF465C /* PrimaryButton.swift in Sources */,
+				42C2F0A72E173611008F93C4 /* OnboardingResponse.swift in Sources */,
 				43C5FC562D6DBD310064E7D5 /* LikedGroupCard.swift in Sources */,
 				1784EB6D2D965F79001D4F2F /* SettingsModel.swift in Sources */,
 				4289C5BB2E036F8B005CC91B /* test.swift in Sources */,

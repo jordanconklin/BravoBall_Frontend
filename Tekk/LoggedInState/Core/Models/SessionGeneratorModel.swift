@@ -17,6 +17,8 @@ class SessionGeneratorModel: ObservableObject {
     @Published var isLoadingDrills: Bool = false
     
     let cacheManager = CacheManager.shared
+    let dataSyncService = DataSyncService.shared
+    
     private var lastSyncTime: Date = Date()
     private let syncDebounceInterval: TimeInterval = 2.0 // 2 seconds
     var hasUnsavedChanges = false
@@ -33,31 +35,7 @@ class SessionGeneratorModel: ObservableObject {
     
     private var preferenceUpdateTask: Task<Void, Never>?
     private var isOnboarding = false
-    
-    func schedulePreferenceUpdate() {
-        // If we're in onboarding, update immediately
-        if isOnboarding {
-            Task {
-                await syncPreferencesWithBackend()
-            }
-            return
-        }
-        
-        // Cancel any existing update task
-        preferenceUpdateTask?.cancel()
-        
-        // Create a new task
-        preferenceUpdateTask = Task {
-            // Wait for 0.5 seconds to allow for multiple rapid changes
-            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
-            
-            // Only proceed if the task hasn't been cancelled
-            guard !Task.isCancelled else { return }
-            
-            // Perform the update
-            await syncPreferencesWithBackend()
-        }
-    }
+
     
     
     // Computed property to get the correct icon name
@@ -80,15 +58,53 @@ class SessionGeneratorModel: ObservableObject {
     
     // MARK: Filter and Skill Selection
     
+    func syncUpdatePreferencesTask() async {
+        Task {
+            // Wait for 0.5 seconds to allow for multiple rapid changes
+            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+            
+            // Only proceed if the task hasn't been cancelled
+            guard !Task.isCancelled else { return }
+            
+            await MainActor.run {
+                isLoadingDrills = true
+            }
+            defer {
+                Task { @MainActor in
+                    isLoadingDrills = false
+                }
+            }
+            do {
+                try await PreferencesUpdateService.shared.performUpdatePreferences(
+                    time: selectedTime,
+                    equipment: selectedEquipment,
+                    trainingStyle: selectedTrainingStyle,
+                    location: selectedLocation,
+                    difficulty: selectedDifficulty,
+                    skills: selectedSkills,
+                    sessionModel: self
+                )
+                print("✅ Successfully synced preferences with backend")
+            } catch URLError.timedOut {
+                print("⏱️ Request debounced – too soon since last request")
+            } catch {
+                print("❌ Failed to sync preferences with backend: \(error)")
+            
+            }
+            return
+            
+            
+        }
+    }
     
     
     @Published var selectedTime: String? {
         didSet {
-            print("[DEBUG] selectedTime changed to: \(String(describing: selectedTime))")
             if !isInitialLoad && !isLoggingOut {
-                schedulePreferenceUpdate()
+                Task {
+                    await syncUpdatePreferencesTask()
+                }
             }
-            print("\(isInitialLoad) and \(isLoggingOut)")
         }
     }
 
@@ -96,7 +112,9 @@ class SessionGeneratorModel: ObservableObject {
         didSet {
             print("[DEBUG] selectedEquipment changed to: \(selectedEquipment)")
             if !isInitialLoad && !isLoggingOut {
-                schedulePreferenceUpdate()
+                Task {
+                    await syncUpdatePreferencesTask()
+                }
             }
         }
     }
@@ -105,7 +123,9 @@ class SessionGeneratorModel: ObservableObject {
         didSet {
             print("[DEBUG] selectedTrainingStyle changed to: \(String(describing: selectedTrainingStyle))")
             if !isInitialLoad && !isLoggingOut {
-                schedulePreferenceUpdate()
+                Task {
+                    await syncUpdatePreferencesTask()
+                }
             }
         }
     }
@@ -114,7 +134,9 @@ class SessionGeneratorModel: ObservableObject {
         didSet {
             print("[DEBUG] selectedLocation changed to: \(String(describing: selectedLocation))")
             if !isInitialLoad && !isLoggingOut {
-                schedulePreferenceUpdate()
+                Task {
+                    await syncUpdatePreferencesTask()
+                }
             }
         }
     }
@@ -123,7 +145,9 @@ class SessionGeneratorModel: ObservableObject {
         didSet {
             print("[DEBUG] selectedDifficulty changed to: \(String(describing: selectedDifficulty))")
             if !isInitialLoad && !isLoggingOut {
-                schedulePreferenceUpdate()
+                Task {
+                    await syncUpdatePreferencesTask()
+                }
             }
         }
     }
@@ -228,11 +252,7 @@ class SessionGeneratorModel: ObservableObject {
             }
         case .orderedDrills:
             changeTracker.orderedDrillsChanged = true
-//        case .userPreferences:
-//            // Add preference syncing when filters change
-////            Task {
-////                await syncPreferencesWithBackend()
-////            }
+            startAutoSaveTimer()
         case .savedFilters:
             changeTracker.savedFiltersChanged = true
         case .progressHistory:
@@ -345,15 +365,14 @@ class SessionGeneratorModel: ObservableObject {
             }
         }
         do {
-            try await PreferencesUpdateService.shared.updatePreferences(
+            try await PreferencesUpdateService.shared.performUpdatePreferences(
                 time: selectedTime,
                 equipment: selectedEquipment,
                 trainingStyle: selectedTrainingStyle,
                 location: selectedLocation,
                 difficulty: selectedDifficulty,
                 skills: selectedSkills,
-                sessionModel: self,
-                isOnboarding: isOnboarding
+                sessionModel: self
             )
             print("✅ Successfully synced preferences with backend")
         } catch URLError.timedOut {
@@ -520,6 +539,59 @@ class SessionGeneratorModel: ObservableObject {
         selectedSkills = []
         
         print("✅ User data and cache cleared successfully")
+    }
+    
+    // MARK: - Auto Save Timer Management
+    
+    private func startAutoSaveTimer() {
+        // Cancel existing timer
+        autoSaveTimer?.invalidate()
+        
+        // Start new timer with 2 second delay
+        autoSaveTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { [weak self] _ in
+            Task {
+                await self?.syncPendingChanges()
+            }
+        }
+    }
+    
+    @MainActor
+    private func syncPendingChanges() async {
+        guard hasUnsavedChanges else { return }
+        
+        print("🔄 Syncing pending changes to backend...")
+        
+        // Sync ordered drills if changed
+        if changeTracker.orderedDrillsChanged {
+            do {
+                try await DataSyncService.shared.syncOrderedSessionDrills(sessionDrills: orderedSessionDrills)
+                changeTracker.orderedDrillsChanged = false
+                print("✅ Successfully synced ordered drills")
+            } catch {
+                print("❌ Failed to sync ordered drills: \(error)")
+            }
+        }
+        
+        // Reset change tracker and unsaved changes flag
+        if !changeTracker.hasAnyChanges {
+            hasUnsavedChanges = false
+            print("✅ All changes synced successfully")
+        }
+    }
+    
+    // MARK: - Manual Sync Methods
+    
+    /// Manually sync ordered drills to backend
+    func syncOrderedDrillsToBackend() async {
+        print("🔄 Manually syncing ordered drills to backend...")
+        do {
+            try await DataSyncService.shared.syncOrderedSessionDrills(sessionDrills: orderedSessionDrills)
+            changeTracker.orderedDrillsChanged = false
+            hasUnsavedChanges = changeTracker.hasAnyChanges
+            print("✅ Successfully synced ordered drills manually")
+        } catch {
+            print("❌ Failed to sync ordered drills manually: \(error)")
+        }
     }
 }
 

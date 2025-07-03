@@ -81,30 +81,10 @@ class PreferencesUpdateService {
     
     private init() {}
 
-    // Update preferences using preference data and subskills, which will help load a session into the SessionGeneratorView
-    func updatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel, isOnboarding: Bool = false) async throws {
-        // SAFETY: Prevent updates if logging out or no valid user
-        let userEmail = KeychainWrapper.standard.string(forKey: "userEmail") ?? ""
-        if sessionModel.isLoggingOut || userEmail.isEmpty {
-            print("[SAFETY] Skipping updatePreferences: isLoggingOut=\(sessionModel.isLoggingOut), userEmail=\(userEmail)")
-            return
-        }
-
-        // If this is onboarding, skip debounce and update immediately
-        if isOnboarding {
-            print("[Onboarding] Performing immediate preferences update")
-            try await performUpdatePreferences(time: time, equipment: equipment, trainingStyle: trainingStyle, location: location, difficulty: difficulty, skills: skills, sessionModel: sessionModel)
-            return
-        }
-
-        print("Current access token: \(KeychainWrapper.standard.string(forKey: "accessToken") ?? "nil")")
-        print("Current refresh token: \(KeychainWrapper.standard.string(forKey: "refreshToken") ?? "nil")")
-        
-        try await performUpdatePreferences(time: time, equipment: equipment, trainingStyle: trainingStyle, location: location, difficulty: difficulty, skills: skills, sessionModel: sessionModel)
-    }
+   
 
     // The actual call-to-backend logic
-    private func performUpdatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel) async throws {
+    func performUpdatePreferences(time: String?, equipment: Set<String>, trainingStyle: String?, location: String?, difficulty: String?, skills: Set<String>, sessionModel: SessionGeneratorModel) async throws {
         // SAFETY: Prevent updates if logging out or no valid user
         let userEmail = KeychainWrapper.standard.string(forKey: "userEmail") ?? ""
         if sessionModel.isLoggingOut || userEmail.isEmpty {

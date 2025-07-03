@@ -1,8 +1,8 @@
 //
-//  ResponseModel.swift
+//  OnboardingResponse.swift
 //  BravoBall
 //
-//  Created by Joshua Conklin on 7/2/25.
+//  Created by Joshua Conklin on 7/3/25.
 //
 
 // Define the structure for the onboarding response

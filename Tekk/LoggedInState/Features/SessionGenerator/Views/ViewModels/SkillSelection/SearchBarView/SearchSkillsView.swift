@@ -41,7 +41,11 @@ struct SearchSkillsView: View {
                     searchText = ""
                     appModel.viewState.showSkillSearch = false
                     
-                    sessionModel.schedulePreferenceUpdate()
+                    Task {
+                        if !appModel.viewState.showSkillSearch {
+                            await sessionModel.syncUpdatePreferencesTask()
+                        }
+                    }
                 },
                 frontColor: globalSettings.primaryYellowColor,
                 backColor: globalSettings.primaryDarkYellowColor,

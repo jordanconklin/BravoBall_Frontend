@@ -29,10 +29,12 @@ struct SkillButton: View {
                     Haptic.light()
                     action()
                     
-                    if !appModel.viewState.showSkillSearch {
-                        sessionModel.schedulePreferenceUpdate()
+                    Task {
+                        if !appModel.viewState.showSkillSearch {
+                            await sessionModel.syncUpdatePreferencesTask()
+                        }
                     }
-                    
+
                 }) {
                     Image(systemName: "xmark")
                         .foregroundColor(globalSettings.primaryDarkColor.opacity(0.5))

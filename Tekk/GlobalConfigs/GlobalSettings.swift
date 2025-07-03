@@ -32,8 +32,8 @@ struct AppSettings {
     /// 1: Production
     /// 2: Computer (localhost)
     /// 3: Phone (Wi-Fi IP via Info.plist)
-    static let appDevCase = 1
-    static let debug = false // for testing; set false in production
+    static let appDevCase = 2
+    static let debug = true // for testing; set false in production
 
 
     static var baseURL: String {
