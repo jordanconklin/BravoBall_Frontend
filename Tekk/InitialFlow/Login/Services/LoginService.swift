@@ -11,7 +11,7 @@ class LoginService {
     static let shared = LoginService()
     
     @MainActor
-    func loginUser(userManager: UserManager, loginModel: LoginModel) {
+    func loginUser(userManager: UserManager, loginModel: LoginModel) async {
         guard !loginModel.email.isEmpty, !loginModel.password.isEmpty else {
             loginModel.errorMessage = "Please fill in all fields."
             return
@@ -47,6 +47,7 @@ class LoginService {
                         userManager.userHasAccountHistory = true
                         userManager.isLoggedIn = true
                         userManager.showLoginPage = false
+                        loginModel.resetLoginInfo()
                         print("🔑 Token saved to keychain: \(KeychainWrapper.standard.string(forKey: "accessToken") ?? "nil")")
                         print("🔑 Refresh token saved to keychain: \(KeychainWrapper.standard.string(forKey: "refreshToken") ?? "nil")")
                         print("Auth token: \(userManager.accessToken)")

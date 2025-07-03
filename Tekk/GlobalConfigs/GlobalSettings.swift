@@ -33,6 +33,8 @@ struct AppSettings {
     /// 2: Computer (localhost)
     /// 3: Phone (Wi-Fi IP via Info.plist)
     static let appDevCase = 2
+    static let debug = false // for testing; set false in production
+
 
     static var baseURL: String {
         #if DEBUG

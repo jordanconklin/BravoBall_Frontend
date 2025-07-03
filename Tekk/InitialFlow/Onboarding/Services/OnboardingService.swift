@@ -11,8 +11,6 @@ import Foundation
 // Submits onboarding data to the backend and stores access token in OnboardingResponse
 class OnboardingService {
     static let shared = OnboardingService()
-    static let appSettings = AppSettings()
-    
 
     // Add an async version of the submitOnboardingData method
     func submitOnboardingData(data: OnboardingModel.OnboardingData) async throws -> OnboardingResponse {

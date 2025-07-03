@@ -13,8 +13,7 @@ class LoginModel: ObservableObject {
     @Published var isPasswordVisible: Bool = false
     
     // Resets login info and error message when user cancels login page
-    func resetLoginInfo(userManager: UserManager) {
-        userManager.showLoginPage = false
+    func resetLoginInfo() {
         email = ""
         password = ""
         errorMessage = ""

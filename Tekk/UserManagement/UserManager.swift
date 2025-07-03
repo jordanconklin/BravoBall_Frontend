@@ -11,7 +11,6 @@ import SwiftKeychainWrapper
 
 
 class UserManager: ObservableObject {
-    @Published var debug = false // for testing; set false in production
     @Published var userId: Int = 0
     @Published var email: String = ""
     @Published var accessToken: String = ""
@@ -20,6 +19,9 @@ class UserManager: ObservableObject {
     @Published var showLoginPage = false
     @Published var showWelcome = false
     @Published var showIntroAnimation = true
+    
+    let globalSettings = GlobalSettings.shared
+    let debug = AppSettings.debug
     
     private let keychain = KeychainWrapper.standard
     

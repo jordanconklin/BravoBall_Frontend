@@ -102,8 +102,9 @@ struct LoginView: View {
                     action: {
                         Haptic.light()
                         withAnimation(.spring()) {
-                            loginService.loginUser(userManager: userManager, loginModel: loginModel)
-                            loginModel.resetLoginInfo(userManager: userManager)
+                            Task {
+                                await loginService.loginUser(userManager: userManager, loginModel: loginModel)
+                            }
                         }
                     },
                     frontColor: globalSettings.primaryYellowColor,
@@ -126,7 +127,7 @@ struct LoginView: View {
                     action: {
                         Haptic.light()
                         withAnimation(.spring()) {
-                            loginModel.resetLoginInfo(userManager: userManager)
+                            loginModel.resetLoginInfo()
                         }
                     },
                     frontColor: Color.white,
