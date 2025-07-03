@@ -7,5 +7,16 @@
 import SwiftUI
 
 class LoginModel: ObservableObject {
+    @Published var email = ""
+    @Published var password = ""
+    @Published var errorMessage = ""
+    @Published var isPasswordVisible: Bool = false
     
+    // Resets login info and error message when user cancels login page
+    func resetLoginInfo(userManager: UserManager) {
+        userManager.showLoginPage = false
+        email = ""
+        password = ""
+        errorMessage = ""
+    }
 }

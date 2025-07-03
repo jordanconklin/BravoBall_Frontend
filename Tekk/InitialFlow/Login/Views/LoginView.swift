@@ -12,17 +12,19 @@ import SwiftKeychainWrapper
 
 // Login page
 struct LoginView: View {
-    @ObservedObject var onboardingModel: OnboardingModel
     @ObservedObject var userManager: UserManager
     @ObservedObject var forgotPasswordModel: ForgotPasswordModel
-    @State private var email = ""
-    @State private var password = ""
+    @ObservedObject var loginModel: LoginModel
+    let loginService = LoginService.shared
+    let globalSettings = GlobalSettings.shared
+    
+
     
     var body: some View {
         VStack(spacing: 20) {
                 Text("Welcome Back!")
                     .font(.custom("PottaOne-Regular", size: 32))
-                    .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
+                    .foregroundColor(globalSettings.primaryDarkColor)
                 
             RiveViewModel(fileName: "Bravo_Animation", stateMachineName: "State Machine 1").view()
                     .frame(width: 200, height: 200)
@@ -30,30 +32,30 @@ struct LoginView: View {
                 
                 VStack(spacing: 15) {
                     // Email Field
-                    TextField("Email", text: $email)
+                    TextField("Email", text: $loginModel.email)
                         .padding()
                         .textContentType(.emailAddress)
                         .keyboardType(.emailAddress)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.1)))
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(onboardingModel.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
                     
                     // Password Field
                     ZStack(alignment: .trailing) {
-                        if onboardingModel.isPasswordVisible {
-                            TextField("Password", text: $password)
+                        if loginModel.isPasswordVisible {
+                            TextField("Password", text: $loginModel.password)
                                 .padding()
                                 .autocapitalization(.none)
                                 .disableAutocorrection(true)
                                 .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.1)))
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(onboardingModel.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
+                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
                                 .keyboardType(.default)
                         } else {
-                            SecureField("Password", text: $password)
+                            SecureField("Password", text: $loginModel.password)
                                 .padding()
                                 .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.1)))
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(onboardingModel.globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
+                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(globalSettings.primaryYellowColor.opacity(0.3), lineWidth: 1))
                                 .keyboardType(.default)
                             
                         }
@@ -61,10 +63,10 @@ struct LoginView: View {
                         // Eye icon for password visibility toggle
                         Button(action: {
                             Haptic.light()
-                            onboardingModel.isPasswordVisible.toggle()
+                            loginModel.isPasswordVisible.toggle()
                         }) {
-                            Image(systemName: onboardingModel.isPasswordVisible ? "eye.fill" : "eye.slash.fill")
-                                .foregroundColor(onboardingModel.globalSettings.primaryYellowColor)
+                            Image(systemName: loginModel.isPasswordVisible ? "eye.fill" : "eye.slash.fill")
+                                .foregroundColor(globalSettings.primaryYellowColor)
                         }
                         .padding(.trailing, 10)
                     }
@@ -77,16 +79,16 @@ struct LoginView: View {
                 }) {
                     Text("Forgot Password?")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(onboardingModel.globalSettings.primaryYellowColor)
+                        .foregroundColor(globalSettings.primaryYellowColor)
                         .padding(.top, 4)
                 }
                 .sheet(isPresented: $forgotPasswordModel.showForgotPasswordPage) {
-                    ForgotPasswordSheet(onboardingModel: onboardingModel, forgotPasswordModel: forgotPasswordModel)
+                    ForgotPasswordSheet(forgotPasswordModel: forgotPasswordModel)
                 }
                 
                 // Error message
-                if !onboardingModel.errorMessage.isEmpty {
-                    Text(onboardingModel.errorMessage)
+            if !loginModel.errorMessage.isEmpty {
+                Text(loginModel.errorMessage)
                         .foregroundColor(.red)
                         .font(.system(size: 14))
                         .padding(.horizontal)
@@ -100,11 +102,11 @@ struct LoginView: View {
                     action: {
                         Haptic.light()
                         withAnimation(.spring()) {
-                            loginUser()
+                            loginService.loginUser(userManager: userManager, loginModel: loginModel)
                         }
                     },
-                    frontColor: onboardingModel.globalSettings.primaryYellowColor,
-                    backColor: onboardingModel.globalSettings.primaryDarkYellowColor,
+                    frontColor: globalSettings.primaryYellowColor,
+                    backColor: globalSettings.primaryDarkYellowColor,
                     textColor: Color.white,
                     textSize: 18,
                     width: .infinity,
@@ -123,16 +125,16 @@ struct LoginView: View {
                     action: {
                         Haptic.light()
                         withAnimation(.spring()) {
-                            resetLoginInfo()
+                            loginModel.resetLoginInfo(userManager: userManager)
                         }
                     },
                     frontColor: Color.white,
-                    backColor: onboardingModel.globalSettings.primaryLightGrayColor,
-                    textColor: onboardingModel.globalSettings.primaryYellowColor,
+                    backColor: globalSettings.primaryLightGrayColor,
+                    textColor: globalSettings.primaryYellowColor,
                     textSize: 18,
                     width: .infinity,
                     height: 50,
-                    borderColor: onboardingModel.globalSettings.primaryLightGrayColor,
+                    borderColor: globalSettings.primaryLightGrayColor,
                     disabled: false
                 )
                 .padding(.horizontal)
@@ -147,83 +149,8 @@ struct LoginView: View {
         }
     
 
-    // Resets login info and error message when user cancels login page
-    func resetLoginInfo() {
-        userManager.showLoginPage = false
-        email = ""
-        password = ""
-        onboardingModel.errorMessage = ""
-    }
-
     
-    // MARK: - Login user function
-    // function for login user
-    func loginUser() {
-        guard !email.isEmpty, !password.isEmpty else {
-            self.onboardingModel.errorMessage = "Please fill in all fields."
-            return
-        }
-
-        Task {
-            let loginDetails = [
-                "email": email,
-                "password": password
-            ]
-            let body = try? JSONSerialization.data(withJSONObject: loginDetails)
-            do {
-                let (data, response) = try await APIService.shared.request(
-                    endpoint: "/login/",
-                    method: "POST",
-                    headers: ["Content-Type": "application/json"],
-                    body: body,
-                    retryOn401: false,
-                    debounceKey: "login_request",
-                    debounceInterval: 1.0
-                )
-                if response.statusCode == 200 {
-                    let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
-                    DispatchQueue.main.async {
-                        userManager.accessToken = loginResponse.access_token
-                        KeychainWrapper.standard.set(loginResponse.access_token, forKey: "accessToken")
-                        if let refreshToken = loginResponse.refresh_token {
-                            KeychainWrapper.standard.set(refreshToken, forKey: "refreshToken")
-                        }
-                        // Save user info to Keychain (only email now)
-                        userManager.updateUserKeychain(
-                            email: loginResponse.email
-                        )
-                        userManager.userHasAccountHistory = true
-                        userManager.isLoggedIn = true
-                        userManager.showLoginPage = false
-                        print("🔑 Token saved to keychain: \(KeychainWrapper.standard.string(forKey: "accessToken") ?? "nil")")
-                        print("🔑 Refresh token saved to keychain: \(KeychainWrapper.standard.string(forKey: "refreshToken") ?? "nil")")
-                        print("Auth token: \(userManager.accessToken)")
-                        print("Login success: \(userManager.isLoggedIn)")
-                    }
-                } else if response.statusCode == 401 {
-                    DispatchQueue.main.async {
-                        self.onboardingModel.errorMessage = "Invalid credentials, please try again."
-                        print("❌ Login failed: Invalid credentials")
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        self.onboardingModel.errorMessage = "Failed to login. Please try again."
-                        if let responseString = String(data: data, encoding: .utf8) {
-                            print("Response data not fully completed: \(responseString)")
-                        }
-                    }
-                }
-            } catch URLError.timedOut {
-                print("⏱️ Login request debounced - too soon since last request")
-            } catch {
-                DispatchQueue.main.async {
-                    self.onboardingModel.errorMessage = "Network error. Please try again."
-                    print("Login error: \(error.localizedDescription)")
-                }
-            }
-        }
-    }
-
+    
 }
 
 

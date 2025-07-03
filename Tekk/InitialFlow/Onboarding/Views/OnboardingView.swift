@@ -1,148 +1,25 @@
 //
-//  OnboardingViewTest.swift
+//  LaunchScreenView.swift
 //  BravoBall
 //
 //  Created by Jordan on 1/6/25.
 //
-
 import SwiftUI
-import RiveRuntime
 
-// Main onboarding view
 struct OnboardingView: View {
     @ObservedObject var onboardingModel: OnboardingModel
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var userManager: UserManager
     @ObservedObject var sessionModel: SessionGeneratorModel
-    @ObservedObject var forgotPasswordModel: ForgotPasswordModel
-    @Environment(\.dismiss) private var dismiss
+    let globalSettings = GlobalSettings.shared
+    
     
     @State private var mascotShouldAnimate = false
-    @State private var canTrigger = true
     @State private var showEmailExistsAlert = false
-    @State private var hasAttemptedSubmit = false  // New state variable to track submission attempts
     
-    
-
-    
-    var body: some View {
-        Group {
-            // testing instead of onboarding complete
-            if userManager.isLoggedIn {
-                MainTabView(onboardingModel: onboardingModel, appModel: appModel, userManager: userManager, sessionModel: sessionModel)
-            } else if onboardingModel.skipOnboarding {
-                // Skip directly to completion view when toggle is on
-                CompletionView(onboardingModel: onboardingModel, userManager: userManager, sessionModel: sessionModel)
-            } else {
-                content
-            }
-        }
-    }
-    
-    var content: some View {
-        ZStack {
-            Color.white.ignoresSafeArea()
-            
-            // Main content (Bravo and create account / login buttons)
-            if !userManager.showWelcome && !userManager.showLoginPage {
-                welcomeContent
-            }
-            
-            // Login view with transition
-            if userManager.showLoginPage {
-                LoginView(onboardingModel: onboardingModel, userManager: userManager, forgotPasswordModel: forgotPasswordModel)
-                    .transition(.move(edge: .bottom))
-            }
-            
-            // Welcome/Questionnaire view with transition
-            if userManager.showWelcome {
-                questionnaireContent
-                    .transition(.move(edge: .trailing))
-            }
-            
-            
-        }
-        .animation(.spring(), value: userManager.showWelcome)
-        .animation(.spring(), value: userManager.showLoginPage)
-    }
-    
-    // Welcome view for new users
-    var welcomeContent: some View {
-        VStack {
-            RiveAnimationView(
-                userManager: userManager,
-                fileName: "Bravo_Animation",
-                stateMachine: "State Machine 1",
-                actionForTrigger: false,
-                triggerName: ""
-
-            )
-            .frame(width: 300, height: 300)
-            .padding(.top, 30)
-            .padding(.bottom, 10)
-            
-            Text("BravoBall")
-                .foregroundColor(onboardingModel.globalSettings.primaryYellowColor)
-                .padding(.bottom, 5)
-                .font(.custom("PottaOne-Regular", size: 45))
-            
-            Text("Start Small. Dream Big")
-                .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
-                .padding(.bottom, 100)
-                .font(.custom("Poppins-Bold", size: 16))
-            
-            Spacer()
-            
-            VStack(spacing: 16) {
-                
-                // Create Account Button
-                PrimaryButton(
-                    title: "Create an account",
-                    action: {
-                        Haptic.light()
-                        withAnimation(.spring()) {
-                            userManager.showWelcome.toggle()
-                        }
-                    },
-                    frontColor: appModel.globalSettings.primaryYellowColor,
-                    backColor: appModel.globalSettings.primaryDarkYellowColor,
-                    textColor: Color.white,
-                    textSize: 18,
-                    width: .infinity,
-                    height: 50,
-                    disabled: false
-                )
-                .padding(.horizontal)
-                
-                // Login Button
-                PrimaryButton(
-                    title: "Login",
-                    action: {
-                        Haptic.light()
-                        withAnimation(.spring()) {
-                            userManager.showLoginPage = true
-                        }
-                    },
-                    frontColor: Color.white,
-                    backColor: appModel.globalSettings.primaryLightGrayColor,
-                    textColor: appModel.globalSettings.primaryYellowColor,
-                    textSize: 18,
-                    width: .infinity,
-                    height: 50,
-                    borderColor: appModel.globalSettings.primaryLightGrayColor,
-                    disabled: false
-                )
-                .padding(.horizontal)
-                
-            }
-            .padding(.bottom, 24)
-        }
-        .frame(maxHeight: .infinity, alignment: .top)
-        .background(Color.white)
-    }
     
     // Questionnaire view for onboarding new users
-    var questionnaireContent: some View {
+    var body: some View {
         VStack(spacing: 30) {
             // Top Navigation Bar
             HStack(spacing: 12) {
@@ -155,7 +32,7 @@ struct OnboardingView: View {
                     }
                 }) {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
+                        .foregroundColor(globalSettings.primaryDarkColor)
                         .imageScale(.large)
                 }
                 
@@ -170,7 +47,7 @@ struct OnboardingView: View {
                                 .cornerRadius(2)
                             
                             Rectangle()
-                                .foregroundColor(onboardingModel.globalSettings.primaryYellowColor)
+                                .foregroundColor(globalSettings.primaryYellowColor)
                                 .frame(width: geometry.size.width * min(CGFloat(onboardingModel.currentStep) / CGFloat(onboardingModel.numberOfOnboardingPages - 1), 1.0), height: 10)
                                 .cornerRadius(2)
                         }
@@ -189,7 +66,7 @@ struct OnboardingView: View {
                     }) {
                         Text("Skip")
                             .font(.custom("Poppins-Bold", size: 16))
-                            .foregroundColor(onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 ? Color.gray.opacity(0.4) : onboardingModel.globalSettings.primaryDarkColor)
+                            .foregroundColor(onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 ? Color.gray.opacity(0.4) : globalSettings.primaryDarkColor)
                     }
                     .disabled(onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1)
                 } else {
@@ -208,7 +85,7 @@ struct OnboardingView: View {
                     stateMachine: "State Machine 2",
                     actionForTrigger: mascotShouldAnimate,
                     triggerName: "user_inputs"
-
+                    
                 )
                 .frame(width: 100, height: 100)
                 
@@ -221,19 +98,19 @@ struct OnboardingView: View {
                                 path.addLine(to: CGPoint(x: 0, y: 10))
                                 path.addLine(to: CGPoint(x: 15, y: 20))
                             }
-                            .fill(appModel.globalSettings.primaryLightestGrayColor)
+                            .fill(globalSettings.primaryLightestGrayColor)
                             .frame(width: 9, height: 20)
                             .offset(x: -5, y: 1)
                             
                             // Text Bubble
                             Text(onboardingModel.currentStep < onboardingModel.questionTitles.count + 1 ? onboardingModel.questionTitles[onboardingModel.currentStep - 1] : "Enter your Registration Info below!")
                                 .font(.custom("Poppins-Bold", size: 16))
-                                .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                                .foregroundColor(globalSettings.primaryDarkColor)
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 8)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .fill(appModel.globalSettings.primaryLightestGrayColor)
+                                        .fill(globalSettings.primaryLightestGrayColor)
                                         .frame(width: 180)
                                 )
                                 .frame(width: 180)
@@ -247,59 +124,59 @@ struct OnboardingView: View {
             
             
             // Step Content
-                if onboardingModel.currentStep < onboardingModel.numberOfOnboardingPages - 1 {
-                    switch onboardingModel.currentStep {
-                    case 0: OnboardingPreview(
-                        appModel: appModel
-                    )
-                    case 1:
-                        OnboardingStepView(
-                            onboardingModel: onboardingModel,
-                            options: onboardingModel.questionOptions[0],
-                            selection: $onboardingModel.onboardingData.primaryGoal
-                        )
-                    case 2:
-                        OnboardingStepView(
-                            onboardingModel: onboardingModel,
-                            options: onboardingModel.questionOptions[1],
-                            selection: $onboardingModel.onboardingData.trainingExperience
-                        )
-                    case 3:
-                        OnboardingStepView(
-                            onboardingModel: onboardingModel,
-                            options: onboardingModel.questionOptions[2],
-                            selection: $onboardingModel.onboardingData.position
-                        )
-                    case 4:
-                        OnboardingStepView(
-                            onboardingModel: onboardingModel,
-                            options: onboardingModel.questionOptions[3],
-                            selection: $onboardingModel.onboardingData.ageRange
-                        )
-                    case 5:
-                        OnboardingMultiSelectView(
-                            onboardingModel: onboardingModel,
-                            options: onboardingModel.questionOptions[4],
-                            selections: $onboardingModel.onboardingData.strengths
-                        )
-                    case 6:
-                        OnboardingMultiSelectView(
-                            onboardingModel: onboardingModel,
-                            options: onboardingModel.questionOptions[5],
-                            selections: $onboardingModel.onboardingData.areasToImprove
-                        )
-                    default:
-                        EmptyView()
-                    }
-                } else if onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 {
-                    OnboardingRegisterForm(
+            if onboardingModel.currentStep < onboardingModel.numberOfOnboardingPages - 1 {
+                switch onboardingModel.currentStep {
+                case 0: OnboardingPreview(
+                    appModel: appModel
+                )
+                case 1:
+                    OnboardingStepView(
                         onboardingModel: onboardingModel,
-                        email: $onboardingModel.onboardingData.email,
-                        password: $onboardingModel.onboardingData.password
+                        options: onboardingModel.questionOptions[0],
+                        selection: $onboardingModel.onboardingData.primaryGoal
                     )
-                } else {
-                    CompletionView(onboardingModel: onboardingModel, userManager: userManager, sessionModel: sessionModel)
+                case 2:
+                    OnboardingStepView(
+                        onboardingModel: onboardingModel,
+                        options: onboardingModel.questionOptions[1],
+                        selection: $onboardingModel.onboardingData.trainingExperience
+                    )
+                case 3:
+                    OnboardingStepView(
+                        onboardingModel: onboardingModel,
+                        options: onboardingModel.questionOptions[2],
+                        selection: $onboardingModel.onboardingData.position
+                    )
+                case 4:
+                    OnboardingStepView(
+                        onboardingModel: onboardingModel,
+                        options: onboardingModel.questionOptions[3],
+                        selection: $onboardingModel.onboardingData.ageRange
+                    )
+                case 5:
+                    OnboardingMultiSelectView(
+                        onboardingModel: onboardingModel,
+                        options: onboardingModel.questionOptions[4],
+                        selections: $onboardingModel.onboardingData.strengths
+                    )
+                case 6:
+                    OnboardingMultiSelectView(
+                        onboardingModel: onboardingModel,
+                        options: onboardingModel.questionOptions[5],
+                        selections: $onboardingModel.onboardingData.areasToImprove
+                    )
+                default:
+                    EmptyView()
                 }
+            } else if onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 {
+                OnboardingRegisterForm(
+                    onboardingModel: onboardingModel,
+                    email: $onboardingModel.onboardingData.email,
+                    password: $onboardingModel.onboardingData.password
+                )
+            } else {
+                CompletionView(onboardingModel: onboardingModel, userManager: userManager, sessionModel: sessionModel)
+            }
             
             // Next button
             if onboardingModel.currentStep < onboardingModel.numberOfOnboardingPages {
@@ -307,8 +184,8 @@ struct OnboardingView: View {
                 PrimaryButton(
                     title: onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 ? "Submit" : "Next",
                     action: nextButtonLogic,
-                    frontColor: onboardingModel.globalSettings.primaryYellowColor,
-                    backColor: onboardingModel.globalSettings.primaryDarkYellowColor,
+                    frontColor: globalSettings.primaryYellowColor,
+                    backColor: globalSettings.primaryDarkYellowColor,
                     textColor: Color.white,
                     textSize: 16,
                     width: .infinity,
@@ -331,7 +208,6 @@ struct OnboardingView: View {
     func nextButtonLogic() {
         Haptic.light()
         if onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 {
-            hasAttemptedSubmit = true  // Set to true when user attempts to submit
             
             // Validate registration form fields
             if let validationError = onboardingModel.registrationValidationError {
@@ -418,7 +294,4 @@ struct OnboardingView: View {
             ? (!onboardingModel.canMoveNext() || onboardingModel.onboardingData.email.isEmpty || onboardingModel.onboardingData.password.isEmpty || onboardingModel.onboardingData.confirmPassword.isEmpty)
             : !onboardingModel.canMoveNext()
     }
-    
 }
-
-

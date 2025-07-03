@@ -13,6 +13,8 @@ struct CompletionView: View {
     @ObservedObject var onboardingModel: OnboardingModel
     @ObservedObject var userManager: UserManager
     @ObservedObject var sessionModel: SessionGeneratorModel
+    let globalSettings = GlobalSettings.shared
+    
     @State private var isLoading = false
     @State private var errorMessage = ""
     
@@ -24,7 +26,7 @@ struct CompletionView: View {
                     // Loading text and spinner directly below Bravo
                     Text("Creating your session...")
                         .font(.custom("Poppins-Bold", size: 20))
-                        .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
+                        .foregroundColor(globalSettings.primaryDarkColor)
                         .offset(y: -5)
 
                     ProgressView()
@@ -35,7 +37,7 @@ struct CompletionView: View {
 
                     Text("We're personalizing drills based on your preferences")
                         .font(.custom("Poppins-Regular", size: 16))
-                        .foregroundColor(onboardingModel.globalSettings.primaryGrayColor)
+                        .foregroundColor(globalSettings.primaryGrayColor)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 40)
                         .offset(y: -5)
@@ -53,11 +55,11 @@ struct CompletionView: View {
                     
                     Text("You're all set!")
                         .font(.custom("Poppins-Bold", size: 24))
-                        .foregroundColor(onboardingModel.globalSettings.primaryDarkColor)
+                        .foregroundColor(globalSettings.primaryDarkColor)
                     
                     Text("Thanks for completing the onboarding process. We've created a personalized training plan for you.")
                         .font(.custom("Poppins-Regular", size: 16))
-                        .foregroundColor(onboardingModel.globalSettings.primaryGrayColor)
+                        .foregroundColor(globalSettings.primaryGrayColor)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 40)
                     
@@ -81,7 +83,7 @@ struct CompletionView: View {
                             .font(.custom("Poppins-Bold", size: 18))
                             .foregroundColor(.white)
                             .frame(width: 280, height: 50)
-                            .background(onboardingModel.globalSettings.primaryYellowColor)
+                            .background(globalSettings.primaryYellowColor)
                             .cornerRadius(25)
                     }
                     .padding(.bottom, 50)

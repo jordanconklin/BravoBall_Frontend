@@ -12,6 +12,7 @@ import RiveRuntime
 struct ContentView: View {
     @StateObject private var onboardingModel = OnboardingModel()
     @StateObject private var forgotPasswordModel = ForgotPasswordModel()
+    @StateObject private var loginModel = LoginModel()
     @StateObject private var appModel = MainAppModel()
     @StateObject private var userInfoManager = UserManager()
     @StateObject private var sessionGenModel = SessionGeneratorModel()
@@ -31,7 +32,7 @@ struct ContentView: View {
                                     // Load data if user has history
                                     if userInfoManager.userHasAccountHistory {
                                         Task {
-                                            await sessionGenModel.loadBackendData(appModel: appModel)
+                                            await userInfoManager.loadBackendData(appModel: appModel, sessionModel: sessionGenModel)
                                             
                                             // Set isInitialLoad to false after data loading is complete
                                             await MainActor.run {
@@ -48,7 +49,7 @@ struct ContentView: View {
                                     }
                                 }
                         } else {
-                            OnboardingView(onboardingModel: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel, forgotPasswordModel: forgotPasswordModel)
+                            LaunchScreenView(onboardingModel: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel, forgotPasswordModel: forgotPasswordModel, loginModel: loginModel)
                         }
                     
                     // Rive animation with state machine transitions

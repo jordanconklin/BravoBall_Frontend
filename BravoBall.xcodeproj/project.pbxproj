@@ -93,13 +93,14 @@
 		42E0A93D2E15AFA5008ED40E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A93C2E15AFA1008ED40E /* AppDelegate.swift */; };
 		42E0A93F2E15D235008ED40E /* AuthProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A93E2E15D230008ED40E /* AuthProtocol.swift */; };
 		42E0A94A2E15E4F6008ED40E /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9492E15E4F3008ED40E /* LoginModel.swift */; };
-		42E0A9502E15EA14008ED40E /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A94F2E15EA10008ED40E /* LoginService.swift */; };
 		42E0A9522E15EA27008ED40E /* ForgotPasswordService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9512E15EA20008ED40E /* ForgotPasswordService.swift */; };
 		42E0A9592E15EAE0008ED40E /* ForgotPasswordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9582E15EADA008ED40E /* ForgotPasswordModel.swift */; };
 		42E0A95C2E15FA9C008ED40E /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A95B2E15FA98008ED40E /* ResponseModel.swift */; };
 		42E0A95F2E1600FA008ED40E /* ForgotPasswordSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A95E2E1600F5008ED40E /* ForgotPasswordSheet.swift */; };
 		42E0A9642E1602E3008ED40E /* OnboardingMappingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9632E1602DD008ED40E /* OnboardingMappingExtension.swift */; };
 		42E0A9662E1603F5008ED40E /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9652E1603F1008ED40E /* LoginResponse.swift */; };
+		42E0A96B2E1621B7008ED40E /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A96A2E1621B1008ED40E /* LoginService.swift */; };
+		42E0A96E2E1625CC008ED40E /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A96D2E1625C7008ED40E /* LaunchScreenView.swift */; };
 		430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */; };
 		430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6CC2D3064850016D520 /* MainAppModel.swift */; };
 		430FD6D32D307AEC0016D520 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 430FD6D22D307AEC0016D520 /* SwiftKeychainWrapper */; };
@@ -172,7 +173,6 @@
 		43C5FC6E2D6DCC7E0064E7D5 /* FieldDrillCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC6D2D6DCC7B0064E7D5 /* FieldDrillCard.swift */; };
 		43C5FC702D6DCC9A0064E7D5 /* SkillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC6F2D6DCC970064E7D5 /* SkillButton.swift */; };
 		43C5FC742D6DCCF30064E7D5 /* GeneratedDrillsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC732D6DCCEC0064E7D5 /* GeneratedDrillsSection.swift */; };
-		43C5FC762D6DCD1D0064E7D5 /* RecommendedDrillsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC752D6DCD160064E7D5 /* RecommendedDrillsSection.swift */; };
 		43C5FC7D2D6DCE740064E7D5 /* SelectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC7C2D6DCE710064E7D5 /* SelectionButton.swift */; };
 		43C5FC852D6DCF530064E7D5 /* TabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC842D6DCF4F0064E7D5 /* TabButton.swift */; };
 		43C5FC9C2D6E54B90064E7D5 /* CircularScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5FC9B2D6E54B60064E7D5 /* CircularScore.swift */; };
@@ -287,13 +287,14 @@
 		42E0A93C2E15AFA1008ED40E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42E0A93E2E15D230008ED40E /* AuthProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthProtocol.swift; sourceTree = "<group>"; };
 		42E0A9492E15E4F3008ED40E /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
-		42E0A94F2E15EA10008ED40E /* LoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		42E0A9512E15EA20008ED40E /* ForgotPasswordService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordService.swift; sourceTree = "<group>"; };
 		42E0A9582E15EADA008ED40E /* ForgotPasswordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordModel.swift; sourceTree = "<group>"; };
 		42E0A95B2E15FA98008ED40E /* ResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseModel.swift; sourceTree = "<group>"; };
 		42E0A95E2E1600F5008ED40E /* ForgotPasswordSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordSheet.swift; sourceTree = "<group>"; };
 		42E0A9632E1602DD008ED40E /* OnboardingMappingExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingMappingExtension.swift; sourceTree = "<group>"; };
 		42E0A9652E1603F1008ED40E /* LoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
+		42E0A96A2E1621B1008ED40E /* LoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
+		42E0A96D2E1625C7008ED40E /* LaunchScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
 		430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegisterForm.swift; sourceTree = "<group>"; };
 		430FD6CC2D3064850016D520 /* MainAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppModel.swift; sourceTree = "<group>"; };
 		430FD71E2D334CAF0016D520 /* Day_Null.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Day_Null.riv; sourceTree = "<group>"; };
@@ -362,7 +363,6 @@
 		43C5FC6D2D6DCC7B0064E7D5 /* FieldDrillCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldDrillCard.swift; sourceTree = "<group>"; };
 		43C5FC6F2D6DCC970064E7D5 /* SkillButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillButton.swift; sourceTree = "<group>"; };
 		43C5FC732D6DCCEC0064E7D5 /* GeneratedDrillsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedDrillsSection.swift; sourceTree = "<group>"; };
-		43C5FC752D6DCD160064E7D5 /* RecommendedDrillsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedDrillsSection.swift; sourceTree = "<group>"; };
 		43C5FC7C2D6DCE710064E7D5 /* SelectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionButton.swift; sourceTree = "<group>"; };
 		43C5FC842D6DCF4F0064E7D5 /* TabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 		43C5FC9B2D6E54B60064E7D5 /* CircularScore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularScore.swift; sourceTree = "<group>"; };
@@ -425,12 +425,8 @@
 			isa = PBXGroup;
 			children = (
 				17E693182C7435B3006B58A3 /* Info.plist */,
-				17F5D6552CD347AD008E8C24 /* GlobalSettings.swift */,
-				17F5D6532CD3477E008E8C24 /* ColorExtension.swift */,
-				4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */,
-				4355EEAC2DB234D200D98314 /* GeometryKey.swift */,
-				178208F52D2E05FE00246494 /* AppFeatures */,
-				178208D12D2D14D200246494 /* MainTabView.swift */,
+				42E0A9702E162D63008ED40E /* GlobalConfigs */,
+				42E0A96F2E162CE1008ED40E /* LoggedInState */,
 				42E0A9412E15DE56008ED40E /* InitialFlow */,
 				1749361B2C3E102B001163B9 /* ContentView.swift */,
 				177B1BF32DF76FC500AF465C /* BravoBallApp.swift */,
@@ -556,16 +552,6 @@
 			path = HelperViews;
 			sourceTree = "<group>";
 		};
-		178208F52D2E05FE00246494 /* AppFeatures */ = {
-			isa = PBXGroup;
-			children = (
-				4399B7142D6D794000DA5E84 /* Core */,
-				4399B7192D6D79D100DA5E84 /* Features */,
-				4399B7222D6D7A3C00DA5E84 /* Shared */,
-			);
-			path = AppFeatures;
-			sourceTree = "<group>";
-		};
 		1784EB6B2D965F6C001D4F2F /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -654,6 +640,7 @@
 		42E0A9412E15DE56008ED40E /* InitialFlow */ = {
 			isa = PBXGroup;
 			children = (
+				42E0A96C2E162560008ED40E /* LaunchScreen */,
 				42E0A9532E15EA83008ED40E /* ForgotPassword */,
 				42E0A9422E15DE81008ED40E /* Onboarding */,
 				42E0A9432E15DE88008ED40E /* Login */,
@@ -674,8 +661,8 @@
 		42E0A9432E15DE88008ED40E /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				42E0A9692E1621A8008ED40E /* Services */,
 				42E0A95A2E15F5DF008ED40E /* Views */,
-				42E0A94E2E15EA05008ED40E /* Service */,
 				42E0A9482E15E4CC008ED40E /* Models */,
 			);
 			path = Login;
@@ -690,17 +677,10 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		42E0A94E2E15EA05008ED40E /* Service */ = {
-			isa = PBXGroup;
-			children = (
-				42E0A94F2E15EA10008ED40E /* LoginService.swift */,
-			);
-			path = Service;
-			sourceTree = "<group>";
-		};
 		42E0A9532E15EA83008ED40E /* ForgotPassword */ = {
 			isa = PBXGroup;
 			children = (
+				42E0A9682E16145B008ED40E /* Views */,
 				42E0A9572E15EA9F008ED40E /* Models */,
 				42E0A9562E15EA97008ED40E /* Service */,
 			);
@@ -726,7 +706,6 @@
 		42E0A95A2E15F5DF008ED40E /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				42E0A95E2E1600F5008ED40E /* ForgotPasswordSheet.swift */,
 				178208E32D2DEBC800246494 /* LoginView.swift */,
 			);
 			path = Views;
@@ -746,6 +725,52 @@
 				42E0A9632E1602DD008ED40E /* OnboardingMappingExtension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		42E0A9682E16145B008ED40E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				42E0A95E2E1600F5008ED40E /* ForgotPasswordSheet.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		42E0A9692E1621A8008ED40E /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				42E0A96A2E1621B1008ED40E /* LoginService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		42E0A96C2E162560008ED40E /* LaunchScreen */ = {
+			isa = PBXGroup;
+			children = (
+				42E0A96D2E1625C7008ED40E /* LaunchScreenView.swift */,
+			);
+			path = LaunchScreen;
+			sourceTree = "<group>";
+		};
+		42E0A96F2E162CE1008ED40E /* LoggedInState */ = {
+			isa = PBXGroup;
+			children = (
+				178208D12D2D14D200246494 /* MainTabView.swift */,
+				4399B7142D6D794000DA5E84 /* Core */,
+				4399B7192D6D79D100DA5E84 /* Features */,
+				4399B7222D6D7A3C00DA5E84 /* Shared */,
+			);
+			path = LoggedInState;
+			sourceTree = "<group>";
+		};
+		42E0A9702E162D63008ED40E /* GlobalConfigs */ = {
+			isa = PBXGroup;
+			children = (
+				17F5D6552CD347AD008E8C24 /* GlobalSettings.swift */,
+				17F5D6532CD3477E008E8C24 /* ColorExtension.swift */,
+				4351674A2DAE3EC300E7D964 /* ResponsiveLayout.swift */,
+				4355EEAC2DB234D200D98314 /* GeometryKey.swift */,
+			);
+			path = GlobalConfigs;
 			sourceTree = "<group>";
 		};
 		431BDFE82D853E0700F4E6EE /* Views */ = {
@@ -1245,7 +1270,6 @@
 			isa = PBXGroup;
 			children = (
 				4399B6E52D693C2B00DA5E84 /* EditingDrillView.swift */,
-				43C5FC752D6DCD160064E7D5 /* RecommendedDrillsSection.swift */,
 				43C5FC732D6DCCEC0064E7D5 /* GeneratedDrillsSection.swift */,
 			);
 			path = PreSession;
@@ -1475,6 +1499,7 @@
 				17CA37A42DF0B1E5001AD5FA /* CustomVideoPlayer.swift in Sources */,
 				43AC25732DA39A5800EDD8C0 /* CacheProtocols.swift in Sources */,
 				4399B6EB2D6942AC00DA5E84 /* DrillRow.swift in Sources */,
+				42E0A96E2E1625CC008ED40E /* LaunchScreenView.swift in Sources */,
 				43AC25752DA39A7500EDD8C0 /* CacheExtension.swift in Sources */,
 				17595AA32D3B3B610015F35D /* WeekDisplayButton.swift in Sources */,
 				43C5FC412D6DB59D0064E7D5 /* DrillModel.swift in Sources */,
@@ -1507,6 +1532,7 @@
 				430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */,
 				43AC255E2DA393B600EDD8C0 /* BothGroupsExtension.swift in Sources */,
 				17DB45FE2DD6A2D3000A76F6 /* SaveFiltersPromptView.swift in Sources */,
+				42E0A96B2E1621B7008ED40E /* LoginService.swift in Sources */,
 				4399B6E92D69407F00DA5E84 /* GroupDetailView.swift in Sources */,
 				1749361C2C3E102B001163B9 /* ContentView.swift in Sources */,
 				42E0A93A2E14765A008ED40E /* RiveAnimationView.swift in Sources */,
@@ -1577,8 +1603,6 @@
 				43AC25792DA39C7200EDD8C0 /* SyncingExtension.swift in Sources */,
 				43524E772D4D994B00AD897A /* SessionGeneratorModel.swift in Sources */,
 				177B1BC22DF6234D00AF465C /* BravoTextField.swift in Sources */,
-				43C5FC762D6DCD1D0064E7D5 /* RecommendedDrillsSection.swift in Sources */,
-				42E0A9502E15EA14008ED40E /* LoginService.swift in Sources */,
 				43FCC7252D7F8D6E00005ABB /* CustomTabItem.swift in Sources */,
 				43AC25562DA38F1400EDD8C0 /* GroupProtocols.swift in Sources */,
 			);

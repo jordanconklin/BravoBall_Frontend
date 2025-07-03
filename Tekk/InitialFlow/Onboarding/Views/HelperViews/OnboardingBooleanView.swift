@@ -10,6 +10,7 @@ import SwiftUI
 // For onboarding pages with 'Yes or No' options
 struct OnboardingBooleanView: View {
     @ObservedObject var onboardingModel: OnboardingModel
+    let globalSettings = GlobalSettings.shared
     @Binding var selection: Bool
     
     var body: some View {
@@ -34,14 +35,14 @@ struct OnboardingBooleanView: View {
                         .frame(maxWidth: .infinity)
                         .background(
                             RoundedRectangle(cornerRadius: 25)
-                                .fill(selection ? onboardingModel.globalSettings.primaryYellowColor : .white)
+                                .fill(selection ? globalSettings.primaryYellowColor : .white)
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 25)
                                 .stroke(selection ? Color.clear : Color.gray.opacity(0.3), lineWidth: 1)
                         )
                     }
-                    .foregroundColor(selection ? .white : onboardingModel.globalSettings.primaryDarkColor)
+                    .foregroundColor(selection ? .white : globalSettings.primaryDarkColor)
                     
                     Button(action: {
                         Haptic.light()
@@ -60,14 +61,14 @@ struct OnboardingBooleanView: View {
                         .frame(maxWidth: .infinity)
                         .background(
                             RoundedRectangle(cornerRadius: 25)
-                                .fill(!selection ? onboardingModel.globalSettings.primaryYellowColor : .white)
+                                .fill(!selection ? globalSettings.primaryYellowColor : .white)
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 25)
                                 .stroke(!selection ? Color.clear : Color.gray.opacity(0.3), lineWidth: 1)
                         )
                     }
-                    .foregroundColor(!selection ? .white : onboardingModel.globalSettings.primaryDarkColor)
+                    .foregroundColor(!selection ? .white : globalSettings.primaryDarkColor)
                 }
             }
             .padding(.horizontal)

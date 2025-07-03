@@ -9,15 +9,12 @@ import Foundation
 import SwiftKeychainWrapper
 
 class OnboardingModel: ObservableObject {
-    let globalSettings = GlobalSettings.shared
 
     @Published var currentStep = 0
     // For question transition when back button pressed
     @Published var backTransition: Bool = false
     @Published var onboardingData = OnboardingData()
     
-
-    @Published var isPasswordVisible: Bool = false
     @Published var numberOfOnboardingPages = 8 // Updated to include registration page and preview page
     
     // TESTING: Set this to true to skip onboarding and go straight to completion
@@ -129,6 +126,7 @@ class OnboardingModel: ObservableObject {
         print("Current step: \(currentStep)")
 
     }
+    
 
     
     // TESTING: Method to prefill onboarding data for testing
@@ -151,6 +149,7 @@ class OnboardingModel: ObservableObject {
         
         print("✅ Test data prefilled with email: \(randomEmail)")
     }
+    
     
     // MARK: - Validation
     var registrationValidationError: String? {

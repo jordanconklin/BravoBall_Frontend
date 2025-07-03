@@ -9,6 +9,8 @@ import SwiftUI
 
 struct OnboardingPreview: View {
     @ObservedObject var appModel: MainAppModel
+    let globalSettings = GlobalSettings.shared
+    
     @State private var displayedText1 = ""
     @State private var displayedText2a = ""
     @State private var displayedText2b = ""
@@ -23,18 +25,18 @@ struct OnboardingPreview: View {
         VStack(spacing: 35) {
             Text(displayedText1)
                 .font(.custom("Poppins-Bold", size: 20))
-                .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                .foregroundColor(globalSettings.primaryDarkColor)
                 .multilineTextAlignment(.center)
             
             VStack(spacing: 25) {
                 Text(displayedText2a)
                     .font(.custom("Poppins-Regular", size: 16))
-                    .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                    .foregroundColor(globalSettings.primaryDarkColor)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
                 Text(displayedText2b)
                     .font(.custom("Poppins-Regular", size: 16))
-                    .foregroundColor(appModel.globalSettings.primaryDarkColor)
+                    .foregroundColor(globalSettings.primaryDarkColor)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
             }

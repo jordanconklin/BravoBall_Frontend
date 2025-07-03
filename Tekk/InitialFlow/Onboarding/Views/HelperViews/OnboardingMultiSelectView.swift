@@ -10,6 +10,8 @@ import SwiftUI
 // For onboarding pages with multi-select options
 struct OnboardingMultiSelectView: View {
     @ObservedObject var onboardingModel: OnboardingModel
+    let globalSettings = GlobalSettings.shared
+    
     let options: [String]
     @Binding var selections: [String]
     
@@ -40,14 +42,14 @@ struct OnboardingMultiSelectView: View {
                         .frame(maxWidth: .infinity)
                         .background(
                             RoundedRectangle(cornerRadius: 25)
-                                .fill(selections.contains(option) ? onboardingModel.globalSettings.primaryYellowColor : .white)
+                                .fill(selections.contains(option) ? globalSettings.primaryYellowColor : .white)
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 25)
                                 .stroke(selections.contains(option) ? Color.clear : Color.gray.opacity(0.3), lineWidth: 1)
                         )
                     }
-                    .foregroundColor(selections.contains(option) ? .white : onboardingModel.globalSettings.primaryDarkColor)
+                    .foregroundColor(selections.contains(option) ? .white : globalSettings.primaryDarkColor)
                 }
             }
             .padding(.horizontal)
