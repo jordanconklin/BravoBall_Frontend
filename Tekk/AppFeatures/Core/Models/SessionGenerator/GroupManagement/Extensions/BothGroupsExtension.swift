@@ -12,6 +12,7 @@ import Foundation
 extension SessionGeneratorModel: BothGroupsManagement {
     
 
+    @MainActor
     func loadDrillGroupsFromBackend() async {
         print("🔄 Loading drill groups from backend...")
         
@@ -20,9 +21,10 @@ extension SessionGeneratorModel: BothGroupsManagement {
             let groups = try await DrillGroupService.shared.getAllDrillGroups()
             print("📋 Received \(groups.count) drill groups from backend")
             
-            // Clear existing groups
-            savedDrills = []
-            groupBackendIds = [:]
+            
+                // Clear existing groups
+                savedDrills = []
+                groupBackendIds = [:]
             
             // Process each group
             for remoteGroup in groups {
@@ -73,9 +75,9 @@ extension SessionGeneratorModel: BothGroupsManagement {
                 if remoteGroup.name != "Liked Drills" {
                     savedDrills.append(localGroup)
                 } else {
-                    // Update liked drills group
-                    likedDrillsGroup = localGroup
-                    likedGroupBackendId = remoteGroup.id
+                        // Update liked drills group
+                        likedDrillsGroup = localGroup
+                        likedGroupBackendId = remoteGroup.id
                 }
             }
             

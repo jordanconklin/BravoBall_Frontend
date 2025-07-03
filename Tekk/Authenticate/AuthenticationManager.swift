@@ -116,8 +116,8 @@ final class AuthenticationService: ObservableObject, AuthenticationManaging {
                 userManager.userHasAccountHistory = true
                 
                 // Update onboarding model
-                onboardingModel.accessToken = accessToken
-                onboardingModel.isLoggedIn = true
+                userManager.accessToken = accessToken
+                userManager.isLoggedIn = true
                 
                 print("🔑 Restored login state for user: \(userEmail)")
             } else {

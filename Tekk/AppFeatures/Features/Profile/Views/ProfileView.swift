@@ -330,7 +330,7 @@ struct ProfileView: View {
     
     private func logOutUser() {
         // Use the new clearLoginState method for consistency
-        onboardingModel.clearLoginState()
+        userManager.clearLoginState()
         
         // Clear user's cache and data
         sessionModel.clearUserData()
@@ -411,7 +411,7 @@ struct ProfileView_Previews: PreviewProvider {
         let sessionModel = SessionGeneratorModel()
         
         // Optionally set some mock data for a more realistic preview
-        onboardingModel.isLoggedIn = true
+        userManager.isLoggedIn = true
         userManager.updateUserKeychain(
             email: "jordan@example.com"
         )

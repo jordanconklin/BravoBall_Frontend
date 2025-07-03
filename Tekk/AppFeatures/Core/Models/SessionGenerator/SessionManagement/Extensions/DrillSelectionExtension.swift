@@ -25,7 +25,7 @@ extension SessionGeneratorModel: DrillSelection {
     
     func addDrillToSession(drills: [DrillModel]) {
         for oneDrill in drills {
-            print("[AddToSession] Drill added: \(oneDrill.title), videoUrl: \(oneDrill.videoUrl ?? "nil")")
+            print("[AddToSession] Drill added: \(oneDrill.title), videoUrl: \(oneDrill.videoUrl)")
             let editableDrills = EditableDrillModel(
                 drill: oneDrill,
                 setsDone: 0,

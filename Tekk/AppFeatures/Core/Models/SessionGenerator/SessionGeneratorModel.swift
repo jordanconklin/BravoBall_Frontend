@@ -325,7 +325,7 @@ class SessionGeneratorModel: ObservableObject {
             for apiDrill in sessionResponse.drills {
                 do {
                     let drillModel = apiDrill.toDrillModel()
-                    print("[Session] Drill loaded: \(drillModel.title), videoUrl: \(drillModel.videoUrl ?? "nil")")
+                    print("[Session] Drill loaded: \(drillModel.title), videoUrl: \(drillModel.videoUrl)")
                     // Create an editable drill model
                     let editableDrill = EditableDrillModel(
                         drill: drillModel,

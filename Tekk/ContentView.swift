@@ -11,6 +11,7 @@ import RiveRuntime
 
 struct ContentView: View {
     @StateObject private var onboardingModel = OnboardingModel()
+    @StateObject private var forgotPasswordModel = ForgotPasswordModel()
     @StateObject private var appModel = MainAppModel()
     @StateObject private var userInfoManager = UserManager()
     @StateObject private var sessionGenModel = SessionGeneratorModel()
@@ -24,7 +25,7 @@ struct ContentView: View {
                 ZStack {
                     
                     // Main content (only show when intro animation is not showing)
-                        if onboardingModel.isLoggedIn {
+                        if userInfoManager.isLoggedIn {
                             MainTabView(onboardingModel: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
                                 .onAppear {
                                     // Load data if user has history
@@ -47,21 +48,21 @@ struct ContentView: View {
                                     }
                                 }
                         } else {
-                            OnboardingView(onboardingModel: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
+                            OnboardingView(onboardingModel: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel, forgotPasswordModel: forgotPasswordModel)
                         }
                     
                     // Rive animation with state machine transitions
-                    if onboardingModel.showIntroAnimation || authService.isCheckingAuth {
+                    if userInfoManager.showIntroAnimation || authService.isCheckingAuth {
                         
                         RiveAnimationView(
-                            onboardingModel: onboardingModel,
+                            userManager: userInfoManager,
                             fileName: "BravoBall_Intro",
                             stateMachine: "State Machine 1",
                             actionForTrigger: authService.isCheckingAuth,
                             animationScale: onboardingModel.animationScale,
                             triggerName: "Start Intro",
                             completionHandler: {
-                                onboardingModel.showIntroAnimation = false
+                                userInfoManager.showIntroAnimation = false
                             }
 
                         )

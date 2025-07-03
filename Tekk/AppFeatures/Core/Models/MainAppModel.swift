@@ -392,24 +392,6 @@ class MainAppModel: ObservableObject {
     func getSessionForDate(_ date: Date) -> CompletedSession? {
         let calendar = Calendar.current
         
-        // Debug: Print all available session dates
-        print("🔍 Looking for session on date: \(date)")
-        print("📅 Available session dates:")
-        for (index, session) in allCompletedSessions.enumerated() {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
-            let sessionDateString = formatter.string(from: session.date)
-            print("   Session \(index): \(sessionDateString)")
-            
-            // Test the date comparison using year, month, day only
-            let sessionComponents = calendar.dateComponents([.year, .month, .day], from: session.date)
-            let targetComponents = calendar.dateComponents([.year, .month, .day], from: date)
-            let isSameDay = sessionComponents.year == targetComponents.year &&
-                           sessionComponents.month == targetComponents.month &&
-                           sessionComponents.day == targetComponents.day
-            print("   Comparing with \(date): \(isSameDay)")
-        }
-        
         // Use a more robust date comparison that only looks at year, month, day
         let session = allCompletedSessions.first { session in
             let sessionComponents = calendar.dateComponents([.year, .month, .day], from: session.date)
@@ -419,14 +401,7 @@ class MainAppModel: ObservableObject {
                    sessionComponents.day == targetComponents.day
         }
         
-        print("count in array: \(allCompletedSessions.count)")
-        
-        // Debug: Print when sessions are found for calendar dates
-        if let foundSession = session {
-            print("📅 Calendar found session for \(date): \(foundSession.totalCompletedDrills)/\(foundSession.totalDrills) completed")
-        } else {
-            print("❌ No session found for date \(date)")
-        }
+
         
         return session
     }

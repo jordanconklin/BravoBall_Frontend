@@ -14,6 +14,7 @@ struct OnboardingView: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var userManager: UserManager
     @ObservedObject var sessionModel: SessionGeneratorModel
+    @ObservedObject var forgotPasswordModel: ForgotPasswordModel
     @Environment(\.dismiss) private var dismiss
     
     @State private var mascotShouldAnimate = false
@@ -27,7 +28,7 @@ struct OnboardingView: View {
     var body: some View {
         Group {
             // testing instead of onboarding complete
-            if onboardingModel.isLoggedIn {
+            if userManager.isLoggedIn {
                 MainTabView(onboardingModel: onboardingModel, appModel: appModel, userManager: userManager, sessionModel: sessionModel)
             } else if onboardingModel.skipOnboarding {
                 // Skip directly to completion view when toggle is on
@@ -43,33 +44,33 @@ struct OnboardingView: View {
             Color.white.ignoresSafeArea()
             
             // Main content (Bravo and create account / login buttons)
-            if !onboardingModel.showWelcome && !onboardingModel.showLoginPage {
+            if !userManager.showWelcome && !userManager.showLoginPage {
                 welcomeContent
             }
             
             // Login view with transition
-            if onboardingModel.showLoginPage {
-                LoginView(onboardingModel: onboardingModel, userManager: userManager)
+            if userManager.showLoginPage {
+                LoginView(onboardingModel: onboardingModel, userManager: userManager, forgotPasswordModel: forgotPasswordModel)
                     .transition(.move(edge: .bottom))
             }
             
             // Welcome/Questionnaire view with transition
-            if onboardingModel.showWelcome {
+            if userManager.showWelcome {
                 questionnaireContent
                     .transition(.move(edge: .trailing))
             }
             
             
         }
-        .animation(.spring(), value: onboardingModel.showWelcome)
-        .animation(.spring(), value: onboardingModel.showLoginPage)
+        .animation(.spring(), value: userManager.showWelcome)
+        .animation(.spring(), value: userManager.showLoginPage)
     }
     
     // Welcome view for new users
     var welcomeContent: some View {
         VStack {
             RiveAnimationView(
-                onboardingModel: onboardingModel,
+                userManager: userManager,
                 fileName: "Bravo_Animation",
                 stateMachine: "State Machine 1",
                 actionForTrigger: false,
@@ -100,7 +101,7 @@ struct OnboardingView: View {
                     action: {
                         Haptic.light()
                         withAnimation(.spring()) {
-                            onboardingModel.showWelcome.toggle()
+                            userManager.showWelcome.toggle()
                         }
                     },
                     frontColor: appModel.globalSettings.primaryYellowColor,
@@ -119,7 +120,7 @@ struct OnboardingView: View {
                     action: {
                         Haptic.light()
                         withAnimation(.spring()) {
-                            onboardingModel.showLoginPage = true
+                            userManager.showLoginPage = true
                         }
                     },
                     frontColor: Color.white,
@@ -150,7 +151,7 @@ struct OnboardingView: View {
                     Haptic.light()
                     withAnimation {
                         onboardingModel.backTransition = true
-                        onboardingModel.movePrevious()
+                        onboardingModel.movePrevious(userManager: userManager)
                     }
                 }) {
                     Image(systemName: "chevron.left")
@@ -202,7 +203,7 @@ struct OnboardingView: View {
             HStack {
                 // Mascot
                 RiveAnimationView(
-                    onboardingModel: onboardingModel,
+                    userManager: userManager,
                     fileName: "Bravo_Animation",
                     stateMachine: "State Machine 2",
                     actionForTrigger: mascotShouldAnimate,

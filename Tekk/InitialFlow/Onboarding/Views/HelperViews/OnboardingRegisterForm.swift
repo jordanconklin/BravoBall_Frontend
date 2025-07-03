@@ -39,7 +39,7 @@ struct OnboardingRegisterForm: View {
                 }
             }
             .padding(.horizontal)
-            .onChange(of: onboardingModel.errorMessage) { newValue in
+            .onChange(of: onboardingModel.errorMessage) { index, newValue in
                 if !newValue.isEmpty {
                     hasAttemptedSubmit = true
                 }

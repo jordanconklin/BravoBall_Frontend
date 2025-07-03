@@ -156,9 +156,10 @@ struct CompletionView: View {
                     )
                     
                     // Set user as logged in
-                    onboardingModel.isLoggedIn = true
+                    userManager.isLoggedIn = true
                     // Clear onboarding data
                     onboardingModel.resetOnboardingData()
+                    userManager.resetUserStateAfterOnboarding()
                     
                     print("✅ Onboarding complete, user logged in")
                     print("[UI] selectedSkills: \(sessionModel.selectedSkills)")
@@ -184,7 +185,7 @@ struct CompletionView: View {
                     if error.domain != "CompletionView" {
                         // For server errors, we can still proceed with a default session
                         createDefaultSession()
-                        onboardingModel.isLoggedIn = true
+                        userManager.isLoggedIn = true
                     }
                 }
             } catch {
@@ -207,7 +208,7 @@ struct CompletionView: View {
             if context.codingPath.contains(where: { $0.stringValue == "initial_session" }) {
                 print("⚠️ Error in initial session data, creating default session")
                 createDefaultSession()
-                onboardingModel.isLoggedIn = true
+                userManager.isLoggedIn = true
             }
         case .valueNotFound(let type, let context):
             onboardingModel.errorMessage = "Value not found: Expected \(type) but found null."
@@ -220,7 +221,7 @@ struct CompletionView: View {
                context.codingPath.contains(where: { $0.stringValue == "reps" }) {
                 print("⚠️ Error in initial session data, creating default session")
                 createDefaultSession()
-                onboardingModel.isLoggedIn = true
+                userManager.isLoggedIn = true
             }
         case .keyNotFound(let key, let context):
             onboardingModel.errorMessage = "Key not found: \(key.stringValue)"
@@ -255,7 +256,6 @@ struct CompletionView_Previews: PreviewProvider {
         // Mock models for preview
         let onboardingModel = OnboardingModel()
         let userManager = UserManager()
-        let appModel = MainAppModel()
         let sessionModel = SessionGeneratorModel()
         
         // Optionally set some mock data for a more realistic preview

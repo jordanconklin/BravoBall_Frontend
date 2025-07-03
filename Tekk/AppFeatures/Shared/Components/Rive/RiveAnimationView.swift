@@ -11,7 +11,7 @@ import RiveRuntime
 
 
 struct RiveAnimationView: View {
-    @ObservedObject var onboardingModel: OnboardingModel
+    @ObservedObject var userManager: UserManager
     
     let fileName: String
     let stateMachine: String
@@ -22,8 +22,8 @@ struct RiveAnimationView: View {
     
     @State private var riveViewModel: RiveViewModel
     
-    init(onboardingModel: OnboardingModel, fileName: String, stateMachine: String, actionForTrigger: Bool, animationScale: CGFloat? = nil, triggerName: String, completionHandler: (() -> Void)? = nil) {
-        self.onboardingModel = onboardingModel
+    init(userManager: UserManager, fileName: String, stateMachine: String, actionForTrigger: Bool, animationScale: CGFloat? = nil, triggerName: String, completionHandler: (() -> Void)? = nil) {
+        self.userManager = userManager
         self.fileName = fileName
         self.stateMachine = stateMachine
         self.actionForTrigger = actionForTrigger
@@ -49,7 +49,7 @@ struct RiveAnimationView: View {
 
         .onChange(of: actionForTrigger) { newValue in
             print("[RiveAnimationView] isCheckingAuth changed to \(newValue)")
-            if !newValue && onboardingModel.showIntroAnimation {
+            if !newValue && userManager.showIntroAnimation {
                 // Transition from loading to intro animation
                 print("[RiveAnimationView] Triggering transition to Intro Animation")
                 transitionToIntroAnimation()

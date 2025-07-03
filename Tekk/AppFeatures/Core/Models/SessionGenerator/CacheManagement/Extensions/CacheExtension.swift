@@ -111,7 +111,6 @@ extension SessionGeneratorModel: CacheManagement {
                         
                         appModel.allCompletedSessions = backendSessions
                         
-                        print("count in array: \(appModel.allCompletedSessions.count)")
                     }
                 }
                 

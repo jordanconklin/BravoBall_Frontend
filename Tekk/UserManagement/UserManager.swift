@@ -16,11 +16,14 @@ class UserManager: ObservableObject {
     @Published var accessToken: String = ""
     @Published var isLoggedIn: Bool = false
     @Published var userHasAccountHistory: Bool = false
+    @Published var showLoginPage = false
+    @Published var showWelcome = false
+    @Published var showIntroAnimation = true
     
     private let keychain = KeychainWrapper.standard
     
     init() {
-        loadUserData()
+        restoreLoginStateFromStorage()
     }
     
     // Updates the currentUser instance of User structure
@@ -59,7 +62,7 @@ class UserManager: ObservableObject {
         UserDefaults.standard.set(isLoggedIn, forKey: "isLoggedIn")
     }
     
-    func loadUserData() {
+    func restoreLoginStateFromStorage() {
         // Load user data from UserDefaults
         userId = UserDefaults.standard.integer(forKey: "userId")
         email = UserDefaults.standard.string(forKey: "email") ?? ""
@@ -82,6 +85,7 @@ class UserManager: ObservableObject {
         
         print("📱 UserManager loaded data - Email: \(email), isLoggedIn: \(isLoggedIn)")
     }
+    
     
     func logout() {
         print("\n👋 User logging out...")
@@ -121,5 +125,31 @@ class UserManager: ObservableObject {
         )
         
         print("✅ User data cleared from all storage")
+    }
+    
+    func resetUserStateAfterOnboarding() {
+        // Reset published properties after onboarding
+        showLoginPage = false
+        showWelcome = false
+        accessToken = ""
+
+        print("auth token nil value: \(accessToken)")
+    }
+
+    
+    /// Clears login state and stored tokens
+    func clearLoginState() {
+        isLoggedIn = false
+        accessToken = ""
+        showLoginPage = false
+        showWelcome = false
+        showIntroAnimation = false
+        
+        // Clear stored tokens
+        KeychainWrapper.standard.removeObject(forKey: "accessToken")
+        KeychainWrapper.standard.removeObject(forKey: "refreshToken")
+        KeychainWrapper.standard.removeObject(forKey: "userEmail")
+        
+        print("🧹 Cleared login state and stored tokens")
     }
 }
