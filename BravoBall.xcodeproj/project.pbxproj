@@ -102,6 +102,7 @@
 		42E0A96B2E1621B7008ED40E /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A96A2E1621B1008ED40E /* LoginService.swift */; };
 		42E0A96E2E1625CC008ED40E /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A96D2E1625C7008ED40E /* LaunchScreenView.swift */; };
 		42E0A9732E1653C5008ED40E /* StreakResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9722E1653BF008ED40E /* StreakResetView.swift */; };
+		42E0A9782E168525008ED40E /* RewardsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9772E168520008ED40E /* RewardsModel.swift */; };
 		430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */; };
 		430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6CC2D3064850016D520 /* MainAppModel.swift */; };
 		430FD6D32D307AEC0016D520 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 430FD6D22D307AEC0016D520 /* SwiftKeychainWrapper */; };
@@ -297,6 +298,7 @@
 		42E0A96A2E1621B1008ED40E /* LoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		42E0A96D2E1625C7008ED40E /* LaunchScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
 		42E0A9722E1653BF008ED40E /* StreakResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakResetView.swift; sourceTree = "<group>"; };
+		42E0A9772E168520008ED40E /* RewardsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsModel.swift; sourceTree = "<group>"; };
 		430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegisterForm.swift; sourceTree = "<group>"; };
 		430FD6CC2D3064850016D520 /* MainAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppModel.swift; sourceTree = "<group>"; };
 		430FD71E2D334CAF0016D520 /* Day_Null.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Day_Null.riv; sourceTree = "<group>"; };
@@ -783,6 +785,30 @@
 			path = PopUpPages;
 			sourceTree = "<group>";
 		};
+		42E0A9742E168508008ED40E /* Shop */ = {
+			isa = PBXGroup;
+			children = (
+				42E0A9762E16851B008ED40E /* Views */,
+				42E0A9752E168516008ED40E /* Models */,
+			);
+			path = Shop;
+			sourceTree = "<group>";
+		};
+		42E0A9752E168516008ED40E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				42E0A9772E168520008ED40E /* RewardsModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		42E0A9762E16851B008ED40E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		431BDFE82D853E0700F4E6EE /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -853,6 +879,7 @@
 				4399B71A2D6D79D800DA5E84 /* SessionGenerator */,
 				4399B71B2D6D79DF00DA5E84 /* Progression */,
 				4399B71C2D6D79E800DA5E84 /* SavedDrills */,
+				42E0A9742E168508008ED40E /* Shop */,
 				4399B71D2D6D79EE00DA5E84 /* Profile */,
 			);
 			path = Features;
@@ -1613,6 +1640,7 @@
 				4355EEAD2DB234D700D98314 /* GeometryKey.swift in Sources */,
 				4399B6F32D6C854B00DA5E84 /* FilterSheet.swift in Sources */,
 				43AC25792DA39C7200EDD8C0 /* SyncingExtension.swift in Sources */,
+				42E0A9782E168525008ED40E /* RewardsModel.swift in Sources */,
 				43524E772D4D994B00AD897A /* SessionGeneratorModel.swift in Sources */,
 				177B1BC22DF6234D00AF465C /* BravoTextField.swift in Sources */,
 				43FCC7252D7F8D6E00005ABB /* CustomTabItem.swift in Sources */,

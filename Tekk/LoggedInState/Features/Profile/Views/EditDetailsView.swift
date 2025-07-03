@@ -69,7 +69,9 @@ struct EditDetailsView: View {
                 
                 PrimaryButton(
                     title: "Update Email",
-                    action: { saveEmail() },
+                    action: {
+                        Haptic.light()
+                        saveEmail() },
                     frontColor: globalSettings.primaryYellowColor,
                     backColor: globalSettings.primaryDarkYellowColor,
                     textColor: Color.white,

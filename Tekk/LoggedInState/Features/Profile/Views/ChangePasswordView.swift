@@ -76,7 +76,9 @@ struct ChangePasswordView: View {
        
                 PrimaryButton(
                     title: "Update Password",
-                    action: { savePassword() },
+                    action: {
+                        Haptic.light()
+                        savePassword() },
                     frontColor: globalSettings.primaryYellowColor,
                     backColor: globalSettings.primaryDarkYellowColor,
                     textColor: Color.white,

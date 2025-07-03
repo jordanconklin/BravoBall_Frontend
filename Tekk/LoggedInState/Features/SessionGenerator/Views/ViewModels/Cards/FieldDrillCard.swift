@@ -1,5 +1,5 @@
 //
-//  FieldDrillCard.swift
+//  FieldDrillCircleButton.swift
 //  BravoBall
 //
 //  Created by Joshua Conklin on 2/25/25.
@@ -8,7 +8,7 @@
 import SwiftUI
 import RiveRuntime
 
-struct FieldDrillCard: View {
+struct FieldDrillCircleButton: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     @Binding var editableDrill: EditableDrillModel
@@ -23,7 +23,7 @@ struct FieldDrillCard: View {
 
             ZStack {
                 
-                cardCircle
+                mainCircle
 
                 // Progress stroke circle
                 Circle()
@@ -60,7 +60,7 @@ struct FieldDrillCard: View {
         return editableDrill.isCompleted && editableDrill.totalSets == editableDrill.setsDone
     }
     
-    var cardCircle: some View {
+    var mainCircle: some View {
         let state: CardColorState
         if drillComplete() {
             state = .complete

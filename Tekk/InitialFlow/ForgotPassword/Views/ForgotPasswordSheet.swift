@@ -93,6 +93,7 @@ struct ForgotPasswordSheet: View {
             PrimaryButton(
                 title: "Send Verification Code",
                 action: {
+                    Haptic.light()
                     guard !forgotPasswordModel.forgotPasswordEmail.isEmpty else { return }
                     isSending = true
                     Task {
@@ -153,6 +154,7 @@ struct ForgotPasswordSheet: View {
             PrimaryButton(
                 title: "Verify Code",
                 action: {
+                    Haptic.light()
                     guard forgotPasswordModel.forgotPasswordCode.count == 6 else { return }
                     isSending = true
                     Task {
@@ -175,6 +177,7 @@ struct ForgotPasswordSheet: View {
             PrimaryButton(
                 title: "Resend Code",
                 action: {
+                    Haptic.light()
                     isSending = true
                     Task {
                         await forgotPasswordService.sendForgotPassword(email: forgotPasswordModel.forgotPasswordEmail, forgotPasswordModel: forgotPasswordModel)
@@ -254,6 +257,7 @@ struct ForgotPasswordSheet: View {
             PrimaryButton(
                 title: "Reset Password",
                 action: {
+                    Haptic.light()
                     guard !forgotPasswordModel.forgotPasswordNewPassword.isEmpty && !forgotPasswordModel.forgotPasswordConfirmPassword.isEmpty else { return }
                     isSending = true
                     Task {

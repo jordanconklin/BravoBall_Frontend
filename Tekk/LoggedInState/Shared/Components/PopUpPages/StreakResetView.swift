@@ -27,7 +27,10 @@ struct StreakResetView: View {
                 .padding(.horizontal)
             PrimaryButton(
                 title: "Got it",
-                action: onDismiss,
+                action: {
+                    Haptic.light()
+                    onDismiss()
+                },
                 frontColor: Color.orange,
                 backColor: Color(hex:"ad791a"),
                 textColor: Color.white,

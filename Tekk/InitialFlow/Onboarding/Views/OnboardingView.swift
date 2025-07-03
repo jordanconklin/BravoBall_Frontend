@@ -183,7 +183,10 @@ struct OnboardingView: View {
                 
                 PrimaryButton(
                     title: onboardingModel.currentStep == onboardingModel.numberOfOnboardingPages - 1 ? "Submit" : "Next",
-                    action: nextButtonLogic,
+                    action: {
+                        Haptic.light()
+                        nextButtonLogic()
+                    },
                     frontColor: globalSettings.primaryYellowColor,
                     backColor: globalSettings.primaryDarkYellowColor,
                     textColor: Color.white,

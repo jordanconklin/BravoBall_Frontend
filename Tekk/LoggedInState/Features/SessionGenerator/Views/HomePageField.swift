@@ -84,7 +84,7 @@ struct HomePageField: View {
                             // Ordered drill cards on the field
                             ForEach(sessionModel.orderedSessionDrills, id: \.drill.id) { editableDrill in
                                 if let index = sessionModel.orderedSessionDrills.firstIndex(where: {$0.drill.id == editableDrill.drill.id}) {
-                                    FieldDrillCard(
+                                    FieldDrillCircleButton(
                                         appModel: appModel,
                                         sessionModel: sessionModel,
                                         editableDrill: $sessionModel.orderedSessionDrills[index]

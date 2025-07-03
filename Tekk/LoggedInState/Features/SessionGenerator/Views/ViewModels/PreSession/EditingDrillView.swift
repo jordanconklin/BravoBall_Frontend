@@ -145,14 +145,14 @@ struct EditingDrillView: View {
                             .frame(maxWidth: 60)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 8)
-                            .onChange(of: editSets) { _, newValue in
+                            .onChange(of: editReps) { _, newValue in
                                             let filtered = newValue.filter { $0.isNumber }
                                             if filtered.count > 2 {
                                                 // Limit to 2 digits
-                                                editSets = String(filtered.prefix(2))
+                                                editReps = String(filtered.prefix(2))
                                             } else if filtered != newValue {
                                                 // Only numbers allowed
-                                                editSets = filtered
+                                                editReps = filtered
                                             }
 
                                         }
@@ -175,14 +175,14 @@ struct EditingDrillView: View {
                             .frame(maxWidth: 60)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 8)
-                            .onChange(of: editSets) { _, newValue in
+                            .onChange(of: editDuration) { _, newValue in
                                             let filtered = newValue.filter { $0.isNumber }
                                             if filtered.count > 2 {
                                                 // Limit to 2 digits
-                                                editSets = String(filtered.prefix(2))
+                                                editDuration = String(filtered.prefix(2))
                                             } else if filtered != newValue {
                                                 // Only numbers allowed
-                                                editSets = filtered
+                                                editDuration = filtered
                                             }
 
                                         }

@@ -101,10 +101,8 @@ struct LoginView: View {
                     title: "Login",
                     action: {
                         Haptic.light()
-                        withAnimation(.spring()) {
-                            Task {
-                                await loginService.loginUser(userManager: userManager, loginModel: loginModel)
-                            }
+                        Task {
+                            await loginService.loginUser(userManager: userManager, loginModel: loginModel)
                         }
                     },
                     frontColor: globalSettings.primaryYellowColor,
