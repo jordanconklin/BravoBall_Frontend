@@ -245,7 +245,7 @@ struct ProfileView: View {
 
     // Share the app with a friend
     private func shareApp() {
-        let text = "Check out BravoBall - Your personal soccer training companion!"
+        let text = "Check out BravoBall - Your personal soccer training companion!\n\nDownload it here: https://apps.apple.com/us/app/bravoball/id6746950846"
         let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
         
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
