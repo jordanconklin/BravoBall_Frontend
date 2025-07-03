@@ -176,25 +176,6 @@ class SessionGeneratorModel: ObservableObject {
             }
         }
     }
-
-    
-    // User logout and clearing of data
-    @objc private func handleUserLogout(notification: Notification) {
-        if let previousEmail = notification.userInfo?["previousEmail"] as? String {
-            print("📣 SessionGeneratorModel received logout notification for user: \(previousEmail)")
-        } else {
-            print("📣 SessionGeneratorModel received logout notification")
-        }
-        
-        // Set logging out flag before clearing data
-        isLoggingOut = true
-        
-        // Clear all user data
-        clearUserData()
-        
-        // Reset logging out flag after clearing
-        isLoggingOut = false
-    }
     
     
     
@@ -503,7 +484,43 @@ class SessionGeneratorModel: ObservableObject {
         // After all preferences are set, update isOnboarding to false
         isOnboarding = false
     }
-
+    
+    // Clear all user data when logging out
+    func clearUserData() {
+        print("\n🧹 Clearing user data...")
+        
+        // Cancel any pending auto-save timer
+        autoSaveTimer?.invalidate()
+        autoSaveTimer = nil
+        
+        // Reset change tracker
+        changeTracker = DataChangeTracker()
+        hasUnsavedChanges = false
+        
+        // First clear all published properties
+        orderedSessionDrills = []
+        savedDrills = []
+        likedDrillsGroup = GroupModel(
+            id: getLikedDrillsUUID(), // Use user-specific UUID
+            name: "Liked Drills",
+            description: "Your favorite drills",
+            drills: []
+        )
+        groupBackendIds = [:]
+        likedGroupBackendId = nil
+        selectedDrills = []
+        allSavedFilters = []
+        
+        // Clear filter preferences
+        selectedTime = nil
+        selectedEquipment = []
+        selectedTrainingStyle = nil
+        selectedLocation = nil
+        selectedDifficulty = nil
+        selectedSkills = []
+        
+        print("✅ User data and cache cleared successfully")
+    }
 }
 
 

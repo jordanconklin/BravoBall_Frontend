@@ -16,6 +16,9 @@ struct MainTabView: View {
     @ObservedObject var sessionModel: SessionGeneratorModel
     @EnvironmentObject var toastManager: ToastManager
     
+    @State private var showStreakReset: Bool = true
+    @State private var streakResetOffset: CGFloat = 0
+    
     var body: some View {
         NavigationView {
             // Main Content
@@ -74,7 +77,32 @@ struct MainTabView: View {
                 .frame(maxWidth: .infinity)
                 .background(Color.white)
 
-                
+                // StreakResetView overlay
+                if appModel.viewState.showStreakLostMessage && showStreakReset {
+                    // Fade background overlay
+                    Color.black.opacity(0.45)
+                        .ignoresSafeArea()
+                        .transition(.opacity)
+                        .zIndex(99)
+                        .onTapGesture { /* Prevent tap-through */ }
+                    StreakResetView(onDismiss: {
+                        withAnimation(.spring()) {
+                            streakResetOffset = UIScreen.main.bounds.height
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                            appModel.viewState.showStreakLostMessage = false
+                            showStreakReset = false
+                            streakResetOffset = 0
+                        }
+                    })
+                    .offset(y: streakResetOffset)
+                    .transition(.move(edge: .top))
+                    .zIndex(100)
+                    .onAppear {
+                        streakResetOffset = 0
+                        showStreakReset = true
+                    }
+                }
             }
             .edgesIgnoringSafeArea(.bottom)
         }

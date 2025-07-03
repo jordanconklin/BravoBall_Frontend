@@ -103,6 +103,7 @@ struct LoginView: View {
                         Haptic.light()
                         withAnimation(.spring()) {
                             loginService.loginUser(userManager: userManager, loginModel: loginModel)
+                            loginModel.resetLoginInfo(userManager: userManager)
                         }
                     },
                     frontColor: globalSettings.primaryYellowColor,

@@ -160,7 +160,7 @@ struct CompletionView: View {
                     // Set user as logged in
                     userManager.isLoggedIn = true
                     // Clear onboarding data
-                    onboardingModel.resetOnboardingData()
+                    onboardingModel.resetOnboardingInfo()
                     userManager.resetUserStateAfterOnboarding()
                     
                     print("✅ Onboarding complete, user logged in")

@@ -101,6 +101,7 @@
 		42E0A9662E1603F5008ED40E /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9652E1603F1008ED40E /* LoginResponse.swift */; };
 		42E0A96B2E1621B7008ED40E /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A96A2E1621B1008ED40E /* LoginService.swift */; };
 		42E0A96E2E1625CC008ED40E /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A96D2E1625C7008ED40E /* LaunchScreenView.swift */; };
+		42E0A9732E1653C5008ED40E /* StreakResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9722E1653BF008ED40E /* StreakResetView.swift */; };
 		430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */; };
 		430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6CC2D3064850016D520 /* MainAppModel.swift */; };
 		430FD6D32D307AEC0016D520 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 430FD6D22D307AEC0016D520 /* SwiftKeychainWrapper */; };
@@ -295,6 +296,7 @@
 		42E0A9652E1603F1008ED40E /* LoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
 		42E0A96A2E1621B1008ED40E /* LoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		42E0A96D2E1625C7008ED40E /* LaunchScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
+		42E0A9722E1653BF008ED40E /* StreakResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakResetView.swift; sourceTree = "<group>"; };
 		430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegisterForm.swift; sourceTree = "<group>"; };
 		430FD6CC2D3064850016D520 /* MainAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppModel.swift; sourceTree = "<group>"; };
 		430FD71E2D334CAF0016D520 /* Day_Null.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Day_Null.riv; sourceTree = "<group>"; };
@@ -773,6 +775,14 @@
 			path = GlobalConfigs;
 			sourceTree = "<group>";
 		};
+		42E0A9712E1653B4008ED40E /* PopUpPages */ = {
+			isa = PBXGroup;
+			children = (
+				42E0A9722E1653BF008ED40E /* StreakResetView.swift */,
+			);
+			path = PopUpPages;
+			sourceTree = "<group>";
+		};
 		431BDFE82D853E0700F4E6EE /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -930,6 +940,7 @@
 		4399B7252D6D7AB400DA5E84 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				42E0A9712E1653B4008ED40E /* PopUpPages */,
 				42E0A9382E14764D008ED40E /* Rive */,
 				177B1BC02DF6233700AF465C /* TextBoxes */,
 				177B1BBD2DF6226C00AF465C /* Logic */,
@@ -1552,6 +1563,7 @@
 				42E0A9522E15EA27008ED40E /* ForgotPasswordService.swift in Sources */,
 				1782090E2D2E0A1100246494 /* ProfileView.swift in Sources */,
 				42C81AD12E0DE4D500186E41 /* AuthenticationManager.swift in Sources */,
+				42E0A9732E1653C5008ED40E /* StreakResetView.swift in Sources */,
 				43C5FC5E2D6DC0E40064E7D5 /* FilterOptionsButton.swift in Sources */,
 				43AC25622DA394B500EDD8C0 /* SavedGroupsExtension.swift in Sources */,
 				177B1BBA2DF2BF5200AF465C /* PrimaryButton.swift in Sources */,

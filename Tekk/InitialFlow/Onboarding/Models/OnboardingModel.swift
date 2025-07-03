@@ -113,9 +113,10 @@ class OnboardingModel: ObservableObject {
         }
     }
     
-    func resetOnboardingData() {
+    func resetOnboardingInfo() {
         currentStep = 0
 //        showIntroAnimation = false
+        
         
         // Reset onboardingData to default values
         onboardingData = OnboardingData()  // This creates a new instance with default values
@@ -161,6 +162,6 @@ class OnboardingModel: ObservableObject {
         if onboardingData.password != onboardingData.confirmPassword { return "Passwords do not match." }
         return nil
     }
-
+    
 
 }

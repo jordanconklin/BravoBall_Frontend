@@ -66,13 +66,12 @@ struct HomePageToolBar: View {
                     Haptic.light()
                     appModel.mainTabSelected = 1
                 }) {
-                    HStack {
-                        Image("Streak_Flame")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30, height: 40)
+                    HStack(spacing: 3) {
+                        Image(systemName: "flame.fill")
+                            .font(.system(size: 23))
+                            .foregroundColor(.orange)
                         Text("\(appModel.currentStreak)")
-                            .font(.custom("Poppins-Bold", size: 30))
+                            .font(.custom("Poppins-Bold", size: 25))
                             .foregroundColor(.orange)
                     }
                 }
@@ -91,3 +90,17 @@ struct HomePageToolBar: View {
         .background(Color.white)
     }
 }
+
+#if DEBUG
+struct HomePageToolBar_Previews: PreviewProvider {
+    static var previews: some View {
+        let appModel = MainAppModel()
+        let sessionModel = SessionGeneratorModel()
+        let userManager = UserManager()
+        HomePageToolBar(appModel: appModel, sessionModel: sessionModel, userManager: userManager)
+            .previewLayout(.sizeThatFits)
+            .padding()
+            .background(Color(.systemBackground))
+    }
+}
+#endif

@@ -33,10 +33,9 @@ struct SessionCompleteView: View {
                 
                 VStack {
                     HStack {
-                        Image("Streak_Flame")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 80, height: 90)
+                        Image(systemName: "flame.fill")
+                            .font(.system(size: 60))
+                            .foregroundColor(.orange)
                         Text("\(appModel.currentStreak)")
                             .font(.custom("Poppins-Bold", size: 90))
                             .foregroundColor(Color.white)
