@@ -17,171 +17,128 @@ struct GeneratedDrillsSection: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        // Main vertical stack for the drills section
-        LazyVStack(alignment: .center, spacing: layout.standardSpacing) {
-            HStack {
-                
-                Spacer()
-                
-                // Toggle delete mode for drills
-                CircleButton(
-                    action: {
-                        Haptic.light()
-                        withAnimation(.spring(dampingFraction: 0.7)) {
-                            appModel.viewState.showSessionDeleteButtons.toggle()
-                        }
-                    },
-                    frontColor: Color.white,
-                    backColor: globalSettings.primaryLightGrayColor,
-                    width: 30,
-                    height: 30,
-                    disabled: sessionModel.orderedSessionDrills.isEmpty,
-                    pressedOffset: 4
-                    
-                ) {
-                    Image(systemName: "trash")
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(globalSettings.primaryDarkColor)
-                }
-                
-                
-                // Add drill button (opens drill search sheet)
-                CircleButton(
-                    action: {
-                        Haptic.light()
-                        appModel.viewState.showSearchDrills = true
-                    },
-                    frontColor: globalSettings.primaryYellowColor,
-                    backColor: globalSettings.primaryDarkYellowColor,
-                    width: 30,
-                    height: 30,
-                    disabled: false,
-                    pressedOffset: 4
-                    
-                ) {
-                    Image(systemName: "plus")
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(Color.white)
-                }
-                
-                
-                
-                
-                
-            }
- 
-            // Show loading indicator if loading
-            if sessionModel.isLoadingDrills {
-                VStack(spacing: 20) {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle())
-                        .scaleEffect(1.5)
-                        .tint(globalSettings.primaryYellowColor)
-                    
-                    Text("Loading drills...")
-                        .font(.custom("Poppins-Regular", size: 14))
-                        .foregroundColor(globalSettings.primaryDarkColor)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(.vertical, 50)
-                .transition(.opacity)
-            }
-            // Show placeholder if no drills are selected and not loading
-            else if sessionModel.orderedSessionDrills.isEmpty {
-                Spacer()
+            // Main vertical stack for the drills section
+            LazyVStack(alignment: .center, spacing: layout.standardSpacing) {
                 HStack {
-                    Image(systemName: "lock.fill")
-                        .frame(width: 50, height: 50)
-                        .foregroundColor(globalSettings.primaryLightGrayColor)
-                    Text("Session will show up here once skills or filters are chosen.")
-                        .font(.custom("Poppins-Bold", size: 12))
-                        .foregroundColor(globalSettings.primaryLightGrayColor)
-                }
-                .padding(30)
-            } else {
-                // List each drill card in the session
-                ForEach($sessionModel.orderedSessionDrills, id: \.drill.id) { $editableDrill in
-                    HStack {
-                        // Show delete button if in delete mode
-                        if appModel.viewState.showSessionDeleteButtons {
-                            Button(action: {
-                                Haptic.light()
-                                sessionModel.deleteDrillFromSession(drill: editableDrill)
-                                if sessionModel.orderedSessionDrills.isEmpty {
-                                    appModel.viewState.showSessionDeleteButtons = false
-                                }
-                            }) {
-                                ZStack {
-                                    Circle()
-                                        .fill(Color.red)
-                                        .frame(width: 20, height: 20)
-                                    Rectangle()
-                                        .fill(Color.white)
-                                        .frame(width: 10, height: 2)
-                                }
+                    
+                    Spacer()
+                    
+                    // Toggle delete mode for drills
+                    CircleButton(
+                        action: {
+                            Haptic.light()
+                            withAnimation(.spring(dampingFraction: 0.7)) {
+                                appModel.viewState.showSessionDeleteButtons.toggle()
                             }
-                            .buttonStyle(PlainButtonStyle())
-                            .padding(.leading)
-                        }
+                        },
+                        frontColor: Color.white,
+                        backColor: globalSettings.primaryLightGrayColor,
+                        width: 30,
+                        height: 30,
+                        disabled: sessionModel.orderedSessionDrills.isEmpty,
+                        pressedOffset: 4
                         
-                        // Drill card with drag-and-drop support
-                        DrillCard(
-                            appModel: appModel,
-                            sessionModel: sessionModel,
-                            editableDrill: $editableDrill
-                        )
-                        .draggable(editableDrill.drill.title) {
+                    ) {
+                        Image(systemName: "trash")
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundColor(globalSettings.primaryDarkColor)
+                    }
+
+                    
+                    
+                }
+     
+                // Show loading indicator if loading
+                if sessionModel.isLoadingDrills {
+                    VStack(spacing: 20) {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle())
+                            .scaleEffect(1.5)
+                            .tint(globalSettings.primaryYellowColor)
+                        
+                        Text("Loading drills...")
+                            .font(.custom("Poppins-Regular", size: 14))
+                            .foregroundColor(globalSettings.primaryDarkColor)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.vertical, 50)
+                    .transition(.opacity)
+                }
+                // Show placeholder if no drills are selected and not loading
+                else if sessionModel.orderedSessionDrills.isEmpty {
+                    Spacer()
+                    HStack {
+                        Image(systemName: "lock.fill")
+                            .frame(width: 50, height: 50)
+                            .foregroundColor(globalSettings.primaryLightGrayColor)
+                        Text("Session will show up here once skills or filters are chosen.")
+                            .font(.custom("Poppins-Bold", size: 12))
+                            .foregroundColor(globalSettings.primaryLightGrayColor)
+                    }
+                    .padding(30)
+                } else {
+                    // List each drill card in the session
+                    ForEach($sessionModel.orderedSessionDrills, id: \.drill.id) { $editableDrill in
+                        HStack {
+                            // Show delete button if in delete mode
+                            if appModel.viewState.showSessionDeleteButtons {
+                                Button(action: {
+                                    Haptic.light()
+                                    sessionModel.deleteDrillFromSession(drill: editableDrill)
+                                    if sessionModel.orderedSessionDrills.isEmpty {
+                                        appModel.viewState.showSessionDeleteButtons = false
+                                    }
+                                }) {
+                                    ZStack {
+                                        Circle()
+                                            .fill(Color.red)
+                                            .frame(width: 20, height: 20)
+                                        Rectangle()
+                                            .fill(Color.white)
+                                            .frame(width: 10, height: 2)
+                                    }
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                .padding(.leading)
+                            }
+                            
+                            // Drill card with drag-and-drop support
                             DrillCard(
                                 appModel: appModel,
                                 sessionModel: sessionModel,
                                 editableDrill: $editableDrill
                             )
-                        }
-                        .dropDestination(for: String.self) { items, location in
-                            // Handle drag-and-drop reordering
-                            guard let sourceTitle = items.first,
-                                  let sourceIndex = sessionModel.orderedSessionDrills.firstIndex(where: { $0.drill.title == sourceTitle }),
-                                  let destinationIndex = sessionModel.orderedSessionDrills.firstIndex(where: { $0.drill.title == editableDrill.drill.title }) else {
-                                return false
+                            .draggable(editableDrill.drill.title) {
+                                DrillCard(
+                                    appModel: appModel,
+                                    sessionModel: sessionModel,
+                                    editableDrill: $editableDrill
+                                )
                             }
-                            
-                            withAnimation(.spring()) {
-                                let movedDrill = sessionModel.orderedSessionDrills.remove(at: sourceIndex)
-                                sessionModel.orderedSessionDrills.insert(movedDrill, at: destinationIndex)
+                            .dropDestination(for: String.self) { items, location in
+                                // Handle drag-and-drop reordering
+                                guard let sourceTitle = items.first,
+                                      let sourceIndex = sessionModel.orderedSessionDrills.firstIndex(where: { $0.drill.title == sourceTitle }),
+                                      let destinationIndex = sessionModel.orderedSessionDrills.firstIndex(where: { $0.drill.title == editableDrill.drill.title }) else {
+                                    return false
+                                }
+                                
+                                withAnimation(.spring()) {
+                                    let movedDrill = sessionModel.orderedSessionDrills.remove(at: sourceIndex)
+                                    sessionModel.orderedSessionDrills.insert(movedDrill, at: destinationIndex)
+                                }
+                                return true
                             }
-                            return true
+                            .frame(height: layout.isPad ? 330 : 160)
                         }
-                        .frame(height: layout.isPad ? 330 : 160)
                     }
                 }
             }
-        }
-        .padding(.horizontal)
-        .padding(.top, 10)
-        .cornerRadius(15)
-        // Sheet for searching and adding drills
-        .sheet(isPresented: $appModel.viewState.showSearchDrills) {
-            DrillSearchView(
-                appModel: appModel,
-                sessionModel: sessionModel,
-                onDrillsSelected: { selectedDrills in
-                    // Add the selected drills to the session
-                    sessionModel.addDrillToSession(drills: selectedDrills)
-                    
-                    // Close the sheet
-                    appModel.viewState.showSearchDrills = false
-                },
-                title: "Search Drills",
-                actionButtonText: { count in
-                    "Add \(count) \(count == 1 ? "Drill" : "Drills") to Session"
-                },
-                filterDrills: { drill in
-                    sessionModel.orderedSessionDrills.contains(where: { $0.drill.id == drill.id })
-                },
-                isDrillSelected: { drill in
-                    sessionModel.isDrillSelected(drill)
-                }
-            )
-        }
+            .padding(.horizontal)
+            .padding(.top, 10)
+            .cornerRadius(15)
+            
+            
+        
     }
 }

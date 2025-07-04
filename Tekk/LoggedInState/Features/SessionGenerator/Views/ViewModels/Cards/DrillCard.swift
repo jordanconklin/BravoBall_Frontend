@@ -64,11 +64,16 @@ struct DrillCard: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    // Right arrow
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(globalSettings.primaryGrayColor)
-                        .font(.system(size: layout.isPad ? 16 : 14, weight: .semibold))
-                        .padding(.trailing, layout.isPad ? 24 : 16)
+                    Button(action: {
+                        appModel.viewState.showDrillOptions = true
+                    }) {
+                        // Right arrow
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(globalSettings.primaryGrayColor)
+                            .font(.system(size: layout.isPad ? 16 : 14, weight: .semibold))
+                            .padding(.trailing, layout.isPad ? 24 : 16)
+                    }
+                   
                 }
                 .frame(maxWidth: layout.isPad ? 600 : 300)
             }
@@ -83,6 +88,101 @@ struct DrillCard: View {
                     editableDrill: $sessionModel.orderedSessionDrills[index])
             }
         }
+        .sheet(isPresented: $appModel.viewState.showDrillOptions) {
+            if let selectedDrill = sessionModel.selectedDrillForEditing,
+               let index = sessionModel.orderedSessionDrills.firstIndex(where: {$0.drill.id == selectedDrill.drill.id}) {
+                DrillOptions(
+                    appModel: appModel,
+                    sessionModel: sessionModel,
+                    editableDrill: sessionModel.orderedSessionDrills[index]
+                )
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
+            }
+        }
     }
     
+}
+
+
+
+// TODO: enum this
+
+
+struct DrillOptions: View {
+    @ObservedObject var appModel: MainAppModel
+    @ObservedObject var sessionModel: SessionGeneratorModel
+    
+    @State private var selectedDrill: DrillModel? = nil
+    let editableDrill: EditableDrillModel
+    let globalSettings = GlobalSettings.shared
+    
+    
+    // TODO: case enums for neatness and make this shared
+    
+    var body: some View {
+        NavigationView {
+            VStack(alignment: .leading) {
+                Button(action: {
+                    Haptic.light()
+                    
+//                    withAnimation {
+//                        appModel.viewState.showDrillOptions = false
+//                    }
+                    
+                    selectedDrill = editableDrill.drill
+                    
+                }) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "questionmark.circle.fill")
+                            .foregroundColor(globalSettings.primaryDarkColor)
+                        Text("Instructions")
+                            .foregroundColor(globalSettings.primaryDarkColor)
+                            .font(.custom("Poppins-Bold", size: 12))
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                }
+                .padding()
+                
+                Divider()
+                
+                Button(action: {
+                    Haptic.light()
+                    
+                    withAnimation {
+                        appModel.viewState.showDrillOptions = false
+                    }
+                    
+                    
+                    sessionModel.deleteDrillFromSession(drill: editableDrill)
+                    
+                    
+                }) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "trash")
+                            .foregroundColor(globalSettings.primaryDarkColor)
+                        Text("Delete Drill")
+                            .foregroundColor(globalSettings.primaryDarkColor)
+                            .font(.custom("Poppins-Bold", size: 12))
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                }
+                .padding()
+                
+                
+                Spacer()
+            }
+        }
+            
+            .padding(8)
+            .background(Color.white)
+            .frame(maxWidth: .infinity)
+            .navigationDestination(item: $selectedDrill) { drill in
+                DrillDetailView(appModel: appModel, sessionModel: sessionModel, drill: drill)
+            }
+            
+        
+    }
 }

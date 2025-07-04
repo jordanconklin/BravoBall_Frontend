@@ -94,6 +94,14 @@ struct SessionGeneratorEditPage: View {
                     appModel.viewState.showSaveFiltersPrompt = false
                 }
             }
+            
+            FloatingAddButton(
+                appModel: appModel
+            ){
+                Haptic.light()
+                appModel.viewState.showSearchDrills = true
+            }
+            
         }
         .animation(.easeInOut(duration: 0.4), value: appModel.viewState.showFieldBehindHomePage)
         .animation(.easeInOut(duration: 0.4), value: appModel.viewState.showHomePage)
@@ -145,6 +153,31 @@ struct SessionGeneratorEditPage: View {
             .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
         }
+        // Sheet for searching and adding drills
+        .sheet(isPresented: $appModel.viewState.showSearchDrills) {
+            DrillSearchView(
+                appModel: appModel,
+                sessionModel: sessionModel,
+                onDrillsSelected: { selectedDrills in
+                    // Add the selected drills to the session
+                    sessionModel.addDrillToSession(drills: selectedDrills)
+                    
+                    // Close the sheet
+                    appModel.viewState.showSearchDrills = false
+                },
+                title: "Search Drills",
+                actionButtonText: { count in
+                    "Add \(count) \(count == 1 ? "Drill" : "Drills") to Session"
+                },
+                filterDrills: { drill in
+                    sessionModel.orderedSessionDrills.contains(where: { $0.drill.id == drill.id })
+                },
+                isDrillSelected: { drill in
+                    sessionModel.isDrillSelected(drill)
+                }
+            )
+        }
+
     }
     
 

@@ -43,6 +43,7 @@ class MainAppModel: ObservableObject {
     struct ViewState: Codable {
         var showStreakLostMessage: Bool = false
         var showingDrills: Bool = false
+        var showDrillOptions: Bool = false
         var showHomePage: Bool = false
         var showPreSessionTextBubble: Bool = false
         var showPostSessionTextBubble: Bool = false
