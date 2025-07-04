@@ -131,7 +131,7 @@ struct CompletionView: View {
                 print("[After prefillSelectedSkills] selectedSkills: \(sessionModel.selectedSkills)")
                 
                 // Update preferences using onboarding data and subskills, which will help preload our session after onboarding
-                try await PreferencesUpdateService.shared.updatePreferences(
+                try await PreferencesUpdateService.shared.syncPreferencesWithBackend(
                     time: onboardingModel.onboardingData.dailyTrainingTime,
                     equipment: Set(onboardingModel.onboardingData.availableEquipment),
                     trainingStyle: onboardingModel.onboardingData.trainingExperience,

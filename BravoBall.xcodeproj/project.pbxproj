@@ -80,6 +80,7 @@
 		4289C5C12E03D550005CC91B /* test2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4289C5C02E03D54D005CC91B /* test2.swift */; };
 		4289C5C32E049A7B005CC91B /* BounceConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4289C5C22E049A72005CC91B /* BounceConstraints.swift */; };
 		42929F3B2DD2EB5000DA73BB /* GroupFilterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42929F3A2DD2EB4900DA73BB /* GroupFilterOptions.swift */; };
+		42A3F1682E1753A400665893 /* RewardsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A3F1672E1753A000665893 /* RewardsModel.swift */; };
 		42B35C652E0B00A500660E6E /* ShrinkingButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B35C642E0B00A000660E6E /* ShrinkingButtonStyle.swift */; };
 		42B35C6D2E0B0A5400660E6E /* NoOpacityChangeButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B35C6C2E0B0A4C00660E6E /* NoOpacityChangeButtonStyle.swift */; };
 		42B35C6F2E0B2B7600660E6E /* CircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B35C6E2E0B2B6700660E6E /* CircleButton.swift */; };
@@ -102,7 +103,6 @@
 		42E0A96B2E1621B7008ED40E /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A96A2E1621B1008ED40E /* LoginService.swift */; };
 		42E0A96E2E1625CC008ED40E /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A96D2E1625C7008ED40E /* LaunchScreenView.swift */; };
 		42E0A9732E1653C5008ED40E /* StreakResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9722E1653BF008ED40E /* StreakResetView.swift */; };
-		42E0A9782E168525008ED40E /* RewardsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0A9772E168520008ED40E /* RewardsModel.swift */; };
 		430FD6BA2D2E8C9C0016D520 /* OnboardingRegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */; };
 		430FD6CD2D30648A0016D520 /* MainAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430FD6CC2D3064850016D520 /* MainAppModel.swift */; };
 		430FD6D32D307AEC0016D520 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 430FD6D22D307AEC0016D520 /* SwiftKeychainWrapper */; };
@@ -277,6 +277,7 @@
 		4289C5C02E03D54D005CC91B /* test2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test2.swift; sourceTree = "<group>"; };
 		4289C5C22E049A72005CC91B /* BounceConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BounceConstraints.swift; sourceTree = "<group>"; };
 		42929F3A2DD2EB4900DA73BB /* GroupFilterOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupFilterOptions.swift; sourceTree = "<group>"; };
+		42A3F1672E1753A000665893 /* RewardsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsModel.swift; sourceTree = "<group>"; };
 		42B35C642E0B00A000660E6E /* ShrinkingButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShrinkingButtonStyle.swift; sourceTree = "<group>"; };
 		42B35C6C2E0B0A4C00660E6E /* NoOpacityChangeButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoOpacityChangeButtonStyle.swift; sourceTree = "<group>"; };
 		42B35C6E2E0B2B6700660E6E /* CircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleButton.swift; sourceTree = "<group>"; };
@@ -298,7 +299,6 @@
 		42E0A96A2E1621B1008ED40E /* LoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		42E0A96D2E1625C7008ED40E /* LaunchScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
 		42E0A9722E1653BF008ED40E /* StreakResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakResetView.swift; sourceTree = "<group>"; };
-		42E0A9772E168520008ED40E /* RewardsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsModel.swift; sourceTree = "<group>"; };
 		430FD6B92D2E8C860016D520 /* OnboardingRegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegisterForm.swift; sourceTree = "<group>"; };
 		430FD6CC2D3064850016D520 /* MainAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppModel.swift; sourceTree = "<group>"; };
 		430FD71E2D334CAF0016D520 /* Day_Null.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Day_Null.riv; sourceTree = "<group>"; };
@@ -616,6 +616,14 @@
 			path = DrillDetailPage;
 			sourceTree = "<group>";
 		};
+		42A3F1692E1761AA00665893 /* Structures */ = {
+			isa = PBXGroup;
+			children = (
+				43C5FC402D6DB59A0064E7D5 /* DrillModel.swift */,
+			);
+			path = Structures;
+			sourceTree = "<group>";
+		};
 		42C81ACF2E0DE4CB00186E41 /* Authenticate */ = {
 			isa = PBXGroup;
 			children = (
@@ -788,25 +796,8 @@
 		42E0A9742E168508008ED40E /* Shop */ = {
 			isa = PBXGroup;
 			children = (
-				42E0A9762E16851B008ED40E /* Views */,
-				42E0A9752E168516008ED40E /* Models */,
 			);
 			path = Shop;
-			sourceTree = "<group>";
-		};
-		42E0A9752E168516008ED40E /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				42E0A9772E168520008ED40E /* RewardsModel.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		42E0A9762E16851B008ED40E /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		431BDFE82D853E0700F4E6EE /* Views */ = {
@@ -843,8 +834,8 @@
 			isa = PBXGroup;
 			children = (
 				43AC25222DA24C7300EDD8C0 /* SessionGenerator */,
-				43C5FC402D6DB59A0064E7D5 /* DrillModel.swift */,
 				430FD6CC2D3064850016D520 /* MainAppModel.swift */,
+				42A3F1672E1753A000665893 /* RewardsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -852,6 +843,7 @@
 		4399B7142D6D794000DA5E84 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				42A3F1692E1761AA00665893 /* Structures */,
 				4399B7182D6D799700DA5E84 /* Services */,
 				4399B70F2D6D741100DA5E84 /* Models */,
 			);
@@ -861,6 +853,11 @@
 		4399B7182D6D799700DA5E84 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				43AC254D2DA38DE500EDD8C0 /* SessionManagement */,
+				43AC25522DA38EE900EDD8C0 /* GroupManagement */,
+				43AC25632DA3983200EDD8C0 /* FilterManagement */,
+				43AC25642DA3983900EDD8C0 /* CacheManagement */,
+				43AC25652DA3984200EDD8C0 /* SyncingManagement */,
 				420DA39D2DCE9357004CDD7A /* PreferencesUpdate.swift */,
 				17CA37A52DF0BA0C001AD5FA /* APIService.swift */,
 				177B1BCF2DF741CB00AF465C /* DebounceService.swift */,
@@ -1056,11 +1053,6 @@
 		43AC25222DA24C7300EDD8C0 /* SessionGenerator */ = {
 			isa = PBXGroup;
 			children = (
-				43AC25652DA3984200EDD8C0 /* SyncingManagement */,
-				43AC25642DA3983900EDD8C0 /* CacheManagement */,
-				43AC25632DA3983200EDD8C0 /* FilterManagement */,
-				43AC25522DA38EE900EDD8C0 /* GroupManagement */,
-				43AC254D2DA38DE500EDD8C0 /* SessionManagement */,
 				43524E762D4D994400AD897A /* SessionGeneratorModel.swift */,
 			);
 			path = SessionGenerator;
@@ -1640,7 +1632,7 @@
 				4355EEAD2DB234D700D98314 /* GeometryKey.swift in Sources */,
 				4399B6F32D6C854B00DA5E84 /* FilterSheet.swift in Sources */,
 				43AC25792DA39C7200EDD8C0 /* SyncingExtension.swift in Sources */,
-				42E0A9782E168525008ED40E /* RewardsModel.swift in Sources */,
+				42A3F1682E1753A400665893 /* RewardsModel.swift in Sources */,
 				43524E772D4D994B00AD897A /* SessionGeneratorModel.swift in Sources */,
 				177B1BC22DF6234D00AF465C /* BravoTextField.swift in Sources */,
 				43FCC7252D7F8D6E00005ABB /* CustomTabItem.swift in Sources */,

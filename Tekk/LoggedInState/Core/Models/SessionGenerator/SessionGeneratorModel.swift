@@ -19,7 +19,6 @@ class SessionGeneratorModel: ObservableObject {
     let cacheManager = CacheManager.shared
     private var lastSyncTime: Date = Date()
     private let syncDebounceInterval: TimeInterval = 2.0 // 2 seconds
-    var hasUnsavedChanges = false
     var autoSaveTimer: Timer?
     var isLoggingOut = false  // Add flag to prevent caching during logout
     var isInitialLoad = false  // Add this flag
@@ -34,13 +33,35 @@ class SessionGeneratorModel: ObservableObject {
     private var preferenceUpdateTask: Task<Void, Never>?
     private var isOnboarding = false
     
-    func schedulePreferenceUpdate() {
+    func schedulePreferenceUpdate() async {
         // If we're in onboarding, update immediately
         if isOnboarding {
             Task {
-                await syncPreferencesWithBackend()
+                do {
+                    try await PreferencesUpdateService.shared.syncPreferencesWithBackend(
+                        time: selectedTime,
+                        equipment: selectedEquipment,
+                        trainingStyle: selectedTrainingStyle,
+                        location: selectedLocation,
+                        difficulty: selectedDifficulty,
+                        skills: selectedSkills,
+                        sessionModel: self
+                    )
+                    print("✅ Successfully synced preferences with backend")
+                } catch {
+                    print("❌ Failed to sync preferences with backend: \(error)")
+                }
             }
             return
+        }
+        
+        await MainActor.run {
+            isLoadingDrills = true
+        }
+        defer {
+            Task { @MainActor in
+                isLoadingDrills = false
+            }
         }
         
         // Cancel any existing update task
@@ -55,7 +76,20 @@ class SessionGeneratorModel: ObservableObject {
             guard !Task.isCancelled else { return }
             
             // Perform the update
-            await syncPreferencesWithBackend()
+            do {
+                try await PreferencesUpdateService.shared.syncPreferencesWithBackend(
+                    time: selectedTime,
+                    equipment: selectedEquipment,
+                    trainingStyle: selectedTrainingStyle,
+                    location: selectedLocation,
+                    difficulty: selectedDifficulty,
+                    skills: selectedSkills,
+                    sessionModel: self
+                )
+                print("✅ Successfully synced preferences with backend")
+            } catch {
+                print("❌ Failed to sync preferences with backend: \(error)")
+            }
         }
     }
     
@@ -86,7 +120,9 @@ class SessionGeneratorModel: ObservableObject {
         didSet {
             print("[DEBUG] selectedTime changed to: \(String(describing: selectedTime))")
             if !isInitialLoad && !isLoggingOut {
-                schedulePreferenceUpdate()
+                Task {
+                    await schedulePreferenceUpdate()
+                }
             }
             print("\(isInitialLoad) and \(isLoggingOut)")
         }
@@ -96,7 +132,9 @@ class SessionGeneratorModel: ObservableObject {
         didSet {
             print("[DEBUG] selectedEquipment changed to: \(selectedEquipment)")
             if !isInitialLoad && !isLoggingOut {
-                schedulePreferenceUpdate()
+                Task {
+                    await schedulePreferenceUpdate()
+                }
             }
         }
     }
@@ -105,7 +143,9 @@ class SessionGeneratorModel: ObservableObject {
         didSet {
             print("[DEBUG] selectedTrainingStyle changed to: \(String(describing: selectedTrainingStyle))")
             if !isInitialLoad && !isLoggingOut {
-                schedulePreferenceUpdate()
+                Task {
+                    await schedulePreferenceUpdate()
+                }
             }
         }
     }
@@ -114,7 +154,9 @@ class SessionGeneratorModel: ObservableObject {
         didSet {
             print("[DEBUG] selectedLocation changed to: \(String(describing: selectedLocation))")
             if !isInitialLoad && !isLoggingOut {
-                schedulePreferenceUpdate()
+                Task {
+                    await schedulePreferenceUpdate()
+                }
             }
         }
     }
@@ -123,7 +165,9 @@ class SessionGeneratorModel: ObservableObject {
         didSet {
             print("[DEBUG] selectedDifficulty changed to: \(String(describing: selectedDifficulty))")
             if !isInitialLoad && !isLoggingOut {
-                schedulePreferenceUpdate()
+                Task {
+                    await schedulePreferenceUpdate()
+                }
             }
         }
     }
@@ -143,16 +187,17 @@ class SessionGeneratorModel: ObservableObject {
     @Published var orderedSessionDrills: [EditableDrillModel] = [] {
         didSet { 
             if !isInitialLoad && !isLoggingOut {
-                markAsNeedingSave(change: .orderedDrills)
+                Task {
+                    try await DataSyncService.shared.syncOrderedSessionDrills(sessionDrills: orderedSessionDrills)
+                }
             }
         }
     }
     // Saved Drills storage
     @Published var savedDrills: [GroupModel] = [] {
         didSet {
-            if !isInitialLoad && !isLoggingOut {
-                markAsNeedingSave(change: .savedDrills)
-            }
+//            if !isInitialLoad && !isLoggingOut {
+//            }
         }
     }
     
@@ -162,102 +207,26 @@ class SessionGeneratorModel: ObservableObject {
         name: "Liked Drills",
         description: "Your favorite drills",
         drills: []
-    ) {
-        didSet { 
-            markAsNeedingSave(change: .likedDrills)
-        }
-    }
+        )
+//    ) {
+//        didSet { 
+//            markAsNeedingSave(change: .likedDrills)
+//        }
+//    }
     
     // Saved filters storage
     @Published var allSavedFilters: [SavedFiltersModel] = [] {
         didSet {
             if !isInitialLoad && !isLoggingOut {
-                markAsNeedingSave(change: .savedFilters)
+                Task {
+                    try await SavedFiltersService.shared.syncSavedFilters(savedFilters: allSavedFilters)
+                }
             }
         }
     }
     
     
-    
-    // MARK: Data change syncage
-    struct DataChangeTracker {
-        var orderedDrillsChanged: Bool = false
-        var savedFiltersChanged: Bool = false
-        var progressHistoryChanged: Bool = false
-        var likedDrillsChanged: Bool = false
-        var savedDrillsChanged: Bool = false
-        var completedSessionsChanged: Bool = false
-        
-        mutating func reset() {
-            orderedDrillsChanged = false
-            savedFiltersChanged = false
-            progressHistoryChanged = false
-            likedDrillsChanged = false
-            savedDrillsChanged = false
-            completedSessionsChanged = false
-        }
-        
-        var hasAnyChanges: Bool {
-            return
-                   orderedDrillsChanged ||
-                   savedFiltersChanged || 
-                   progressHistoryChanged || 
-                   likedDrillsChanged || 
-                   savedDrillsChanged ||
-                   completedSessionsChanged
-        }
-    }
-    
-    var changeTracker = DataChangeTracker()
-    
-    
-    
-    // Tasks run if there are unsaved changes
-    func markAsNeedingSave(change: DataChange) {
-        // Don't mark changes during logout
-        guard !isLoggingOut else { return }
-        print("DEBUG markAsNeedingSave")
-        
-        hasUnsavedChanges = true
-        
-        switch change {
-        case .userPreferences:
-            // preferences will be saved through this function
-            Task {
-                await syncPreferencesWithBackend()
-            }
-        case .orderedDrills:
-            changeTracker.orderedDrillsChanged = true
-//        case .userPreferences:
-//            // Add preference syncing when filters change
-////            Task {
-////                await syncPreferencesWithBackend()
-////            }
-        case .savedFilters:
-            changeTracker.savedFiltersChanged = true
-        case .progressHistory:
-            changeTracker.progressHistoryChanged = true
-            // Progress history is handled by MainAppModel
-        case .likedDrills:
-            changeTracker.likedDrillsChanged = true
-        case .savedDrills:
-            changeTracker.savedDrillsChanged = true
-        case .completedSessions:
-            changeTracker.completedSessionsChanged = true
-        }
-    }
-    
-    enum DataChange {
-        case userPreferences
-        case orderedDrills
-        case savedFilters
-        case progressHistory
-        case likedDrills
-        case savedDrills
-        case completedSessions
-    }
-    
-    
+
     
     // Define Preferences struct for caching
     struct Preferences: Codable {
@@ -331,37 +300,6 @@ class SessionGeneratorModel: ObservableObject {
         }
     }
 
-    
-    
-
-    // Update the syncPreferencesWithBackend method
-    func syncPreferencesWithBackend() async {
-        await MainActor.run {
-            isLoadingDrills = true
-        }
-        defer {
-            Task { @MainActor in
-                isLoadingDrills = false
-            }
-        }
-        do {
-            try await PreferencesUpdateService.shared.updatePreferences(
-                time: selectedTime,
-                equipment: selectedEquipment,
-                trainingStyle: selectedTrainingStyle,
-                location: selectedLocation,
-                difficulty: selectedDifficulty,
-                skills: selectedSkills,
-                sessionModel: self,
-                isOnboarding: isOnboarding
-            )
-            print("✅ Successfully synced preferences with backend")
-        } catch URLError.timedOut {
-            print("⏱️ Request debounced – too soon since last request")
-        } catch {
-            print("❌ Failed to sync preferences with backend: \(error)")
-        }
-    }
     
     // Load preferences from backend
     func loadPreferencesFromBackend() async {
@@ -493,9 +431,7 @@ class SessionGeneratorModel: ObservableObject {
         autoSaveTimer?.invalidate()
         autoSaveTimer = nil
         
-        // Reset change tracker
-        changeTracker = DataChangeTracker()
-        hasUnsavedChanges = false
+
         
         // First clear all published properties
         orderedSessionDrills = []

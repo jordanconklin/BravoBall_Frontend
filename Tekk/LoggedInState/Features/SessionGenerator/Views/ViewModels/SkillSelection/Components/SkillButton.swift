@@ -30,7 +30,9 @@ struct SkillButton: View {
                     action()
                     
                     if !appModel.viewState.showSkillSearch {
-                        sessionModel.schedulePreferenceUpdate()
+                        Task {
+                            await sessionModel.schedulePreferenceUpdate()
+                        }
                     }
                     
                 }) {

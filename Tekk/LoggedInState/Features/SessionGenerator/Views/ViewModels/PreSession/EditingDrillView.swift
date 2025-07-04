@@ -200,7 +200,7 @@ struct EditingDrillView: View {
                 
                 Spacer()
                 
-                savedChangesButton
+                saveChangesButton
                 
             }
             .padding(.horizontal, 20)
@@ -223,7 +223,7 @@ struct EditingDrillView: View {
         }
     }
     
-    private var savedChangesButton: some View {
+    private var saveChangesButton: some View {
         let validations = (
             sets: Int(editSets).map { $0 > 0 && $0 <= 99 } ?? false,
             reps: Int(editReps).map { $0 > 0 && $0 <= 99 } ?? false,

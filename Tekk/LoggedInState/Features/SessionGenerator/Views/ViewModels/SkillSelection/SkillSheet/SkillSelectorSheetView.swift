@@ -127,7 +127,9 @@ struct SkillSelectorSheet: View {
                 action: {
                     Haptic.light()
                     dismiss()
-                    sessionModel.schedulePreferenceUpdate()
+                    Task {
+                        await sessionModel.schedulePreferenceUpdate()
+                    }
                 },
                 frontColor: globalSettings.primaryYellowColor,
                 backColor: globalSettings.primaryDarkYellowColor,

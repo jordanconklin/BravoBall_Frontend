@@ -229,8 +229,9 @@ struct DrillDetailView: View {
                                                     
                                                 } else {
                                                     showSaveDrill = false
-                                                    localToastManager.toastMessage = .success("Drill added to group")
+                                                    
                                                     sessionModel.addDrillToGroup(drill: drill, groupId: group.id)
+                                                    localToastManager.toastMessage = .success("Drill added to group")
                                                 }
                                             }
                                             showSaveDrill = false

@@ -325,9 +325,6 @@ struct DrillFollowAlongView: View {
             totalDrills: sessionModel.orderedSessionDrills.count
         )
         
-        // Mark that we need to sync the completed session
-        sessionModel.markAsNeedingSave(change: .completedSessions)
-        
         if appModel.allCompletedSessions.count(where: {
             Calendar.current.isDate($0.date, equalTo: Date(), toGranularity: .day)
         }) == 1 {

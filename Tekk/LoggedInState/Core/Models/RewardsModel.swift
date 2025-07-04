@@ -4,6 +4,7 @@
 //
 //  Created by Joshua Conklin on 7/3/25.
 //
+
 import SwiftUI
 
 class RewardsModel: ObservableObject {
