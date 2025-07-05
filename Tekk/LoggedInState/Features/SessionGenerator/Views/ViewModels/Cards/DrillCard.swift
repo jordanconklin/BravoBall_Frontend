@@ -17,11 +17,13 @@ struct DrillCard: View {
     
     @Binding var editableDrill: EditableDrillModel
     @State private var showEditingDrillView = false
+    let toastManager: ToastManager
 
     private let layout = ResponsiveLayout.shared
     
     
     var body: some View {
+        
         let _ = print("DEBUG: DrillCard skill: '\(editableDrill.drill.skill)' -> Icon: '\(sessionModel.skillIconName(for: editableDrill.drill.skill))'")
         Button(action: {
             Haptic.light()
@@ -35,49 +37,54 @@ struct DrillCard: View {
                 
                 // Content container
                 HStack(spacing: layout.isPad ? 20 : 12) {
-                    // Left side content
-                    HStack(spacing: layout.isPad ? 16 : 12) {
-                        // Drag handle
-                        Image(systemName: "line.3.horizontal")
-                            .foregroundColor(globalSettings.primaryGrayColor)
-                            .font(.system(size: layout.isPad ? 16 : 14))
+                        // Left side content
+                        HStack(spacing: layout.isPad ? 16 : 12) {
+                            // Drag handle
+                            Image(systemName: "line.3.horizontal")
+                                .foregroundColor(globalSettings.primaryGrayColor)
+                                .font(.system(size: layout.isPad ? 16 : 14))
+                            
+                            // Skill-specific icon
+                            Image(sessionModel.skillIconName(for: editableDrill.drill.skill))
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: layout.isPad ? 44 : 40, height: layout.isPad ? 44 : 40)
+                                .padding(6)
+                        }
+                        .padding(.leading, layout.isPad ? 24 : 16)
                         
-                        // Skill-specific icon
-                        Image(sessionModel.skillIconName(for: editableDrill.drill.skill))
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: layout.isPad ? 44 : 40, height: layout.isPad ? 44 : 40)
-                            .padding(6)
-                    }
-                    .padding(.leading, layout.isPad ? 24 : 16)
+                        // Center content
+                        VStack(alignment: .leading, spacing: layout.isPad ? 8 : 6) {
+                            Text(editableDrill.drill.title)
+                                .font(.custom("Poppins-Bold", size: layout.isPad ? 18 : 16))
+                                .foregroundColor(globalSettings.primaryDarkColor)
+                                .lineLimit(2)
+                            Text("\(editableDrill.totalSets) sets - \(editableDrill.totalReps) reps - \(editableDrill.totalDuration) mins")
+                                .font(.custom("Poppins-Bold", size: layout.isPad ? 13 : 11))
+                                .foregroundColor(globalSettings.primaryGrayColor)
+                                .lineLimit(1)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    // Center content
-                    VStack(alignment: .leading, spacing: layout.isPad ? 8 : 6) {
-                        Text(editableDrill.drill.title)
-                            .font(.custom("Poppins-Bold", size: layout.isPad ? 18 : 16))
-                            .foregroundColor(globalSettings.primaryDarkColor)
-                            .lineLimit(2)
-                        Text("\(editableDrill.totalSets) sets - \(editableDrill.totalReps) reps - \(editableDrill.totalDuration) mins")
-                            .font(.custom("Poppins-Bold", size: layout.isPad ? 13 : 11))
-                            .foregroundColor(globalSettings.primaryGrayColor)
-                            .lineLimit(1)
+                        Button(action: {
+                            sessionModel.selectedDrillForEditing = editableDrill
+                            appModel.viewState.showDrillOptions = true
+                        }) {
+                            // Right arrow
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(globalSettings.primaryGrayColor)
+                                .font(.system(size: layout.isPad ? 16 : 14, weight: .semibold))
+                                .padding(10)
+                                .padding(.trailing, layout.isPad ? 24 : 16)
+                        }
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    Button(action: {
-                        appModel.viewState.showDrillOptions = true
-                    }) {
-                        // Right arrow
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(globalSettings.primaryGrayColor)
-                            .font(.system(size: layout.isPad ? 16 : 14, weight: .semibold))
-                            .padding(.trailing, layout.isPad ? 24 : 16)
-                    }
+                    
+                    
                    
                 }
                 .frame(maxWidth: layout.isPad ? 600 : 300)
             }
-        }
         .buttonStyle(PlainButtonStyle())
         .sheet(isPresented: $showEditingDrillView) {
             if let selectedDrill = sessionModel.selectedDrillForEditing,
@@ -94,7 +101,8 @@ struct DrillCard: View {
                 DrillOptions(
                     appModel: appModel,
                     sessionModel: sessionModel,
-                    editableDrill: sessionModel.orderedSessionDrills[index]
+                    editableDrill: sessionModel.orderedSessionDrills[index],
+                    toastManager: toastManager
                 )
                 .presentationDetents([.medium])
                 .presentationDragIndicator(.visible)
@@ -113,24 +121,50 @@ struct DrillOptions: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     
-    @State private var selectedDrill: DrillModel? = nil
     let editableDrill: EditableDrillModel
     let globalSettings = GlobalSettings.shared
+    let toastManager: ToastManager
     
     
     // TODO: case enums for neatness and make this shared
     
     var body: some View {
-        NavigationView {
             VStack(alignment: .leading) {
+                // Header
+                HStack {
+                    Spacer()
+                    Text("Drill Options")
+                        .font(.custom("Poppins-Bold", size: 16))
+                        .foregroundColor(globalSettings.primaryDarkColor)
+                    
+                    Spacer()
+                    Button(action: {
+                        Haptic.light()
+                        withAnimation(.spring(dampingFraction: 0.7)) {
+                            appModel.viewState.showDrillOptions = false
+                        }
+                    }) {
+                        Image(systemName: "xmark")
+                            .foregroundColor(globalSettings.primaryGrayColor)
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.top)
+                
                 Button(action: {
                     Haptic.light()
                     
-//                    withAnimation {
-//                        appModel.viewState.showDrillOptions = false
-//                    }
+                    print("DEBUG: Instructions button tapped for drill: \(editableDrill.drill.title)")
                     
-                    selectedDrill = editableDrill.drill
+                    withAnimation {
+                        appModel.viewState.showDrillOptions = false
+                    }
+                    
+                    // Add a small delay to ensure the sheet is fully dismissed
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        sessionModel.selectedDrill = editableDrill.drill
+                        print("DEBUG: Set selectedDrill to: \(editableDrill.drill.title)")
+                    }
                     
                 }) {
                     HStack(spacing: 8) {
@@ -143,7 +177,6 @@ struct DrillOptions: View {
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
                 }
-                .padding()
                 
                 Divider()
                 
@@ -156,6 +189,7 @@ struct DrillOptions: View {
                     
                     
                     sessionModel.deleteDrillFromSession(drill: editableDrill)
+                    toastManager.showToast(.success("Drill deleted"))
                     
                     
                 }) {
@@ -169,19 +203,15 @@ struct DrillOptions: View {
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
                 }
-                .padding()
                 
                 
                 Spacer()
             }
-        }
-            
             .padding(8)
             .background(Color.white)
             .frame(maxWidth: .infinity)
-            .navigationDestination(item: $selectedDrill) { drill in
-                DrillDetailView(appModel: appModel, sessionModel: sessionModel, drill: drill)
-            }
+            
+            
             
         
     }

@@ -12,6 +12,7 @@ struct GeneratedDrillsSection: View {
     @ObservedObject var appModel: MainAppModel
     @ObservedObject var sessionModel: SessionGeneratorModel
     let globalSettings = GlobalSettings.shared
+    let toastManager: ToastManager
     
     private let layout = ResponsiveLayout.shared
     @Environment(\.dismiss) private var dismiss
@@ -19,34 +20,6 @@ struct GeneratedDrillsSection: View {
     var body: some View {
             // Main vertical stack for the drills section
             LazyVStack(alignment: .center, spacing: layout.standardSpacing) {
-                HStack {
-                    
-                    Spacer()
-                    
-                    // Toggle delete mode for drills
-                    CircleButton(
-                        action: {
-                            Haptic.light()
-                            withAnimation(.spring(dampingFraction: 0.7)) {
-                                appModel.viewState.showSessionDeleteButtons.toggle()
-                            }
-                        },
-                        frontColor: Color.white,
-                        backColor: globalSettings.primaryLightGrayColor,
-                        width: 30,
-                        height: 30,
-                        disabled: sessionModel.orderedSessionDrills.isEmpty,
-                        pressedOffset: 4
-                        
-                    ) {
-                        Image(systemName: "trash")
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundColor(globalSettings.primaryDarkColor)
-                    }
-
-                    
-                    
-                }
      
                 // Show loading indicator if loading
                 if sessionModel.isLoadingDrills {
@@ -106,13 +79,15 @@ struct GeneratedDrillsSection: View {
                             DrillCard(
                                 appModel: appModel,
                                 sessionModel: sessionModel,
-                                editableDrill: $editableDrill
+                                editableDrill: $editableDrill,
+                                toastManager: toastManager
                             )
                             .draggable(editableDrill.drill.title) {
                                 DrillCard(
                                     appModel: appModel,
                                     sessionModel: sessionModel,
-                                    editableDrill: $editableDrill
+                                    editableDrill: $editableDrill,
+                                    toastManager: toastManager
                                 )
                             }
                             .dropDestination(for: String.self) { items, location in
@@ -135,7 +110,7 @@ struct GeneratedDrillsSection: View {
                 }
             }
             .padding(.horizontal)
-            .padding(.top, 10)
+            .padding(.top, 20)
             .cornerRadius(15)
             
             

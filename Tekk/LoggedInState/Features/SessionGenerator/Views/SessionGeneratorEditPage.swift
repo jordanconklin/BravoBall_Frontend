@@ -19,10 +19,14 @@ struct SessionGeneratorEditPage: View {
     @State private var searchSkillsText: String = ""
     @State private var showInfoSheet = false
     
+    @StateObject private var localToastManager = ToastManager()
+    
 
     var body: some View {
-        ZStack(alignment: .bottom) {
+        NavigationStack {
             
+            ZStack(alignment: .bottom) {
+                
                 VStack(alignment: .center, spacing: 0) {
                     
                     HStack {
@@ -56,7 +60,7 @@ struct SessionGeneratorEditPage: View {
                         .font(.custom("Poppins-Bold", size: 16))
                     }
                     .padding()
-
+                    
                     
                     SkillSearchBar(appModel: appModel, sessionModel: sessionModel, searchText: $searchSkillsText)
                         .padding(.horizontal)
@@ -69,40 +73,49 @@ struct SessionGeneratorEditPage: View {
                             sessionModel: sessionModel,
                             searchText: $searchSkillsText
                         )
-                    // If skills search bar is not selected
+                        // If skills search bar is not selected
                     } else {
                         FilterScrollView(appModel: appModel, sessionModel: sessionModel, geometry: geometry)
                             .frame(width: geometry.size.width)
                         // Main content
                         ScrollView(showsIndicators: false) {
                             VStack(spacing: appModel.layout.standardSpacing) {
-                                GeneratedDrillsSection(appModel: appModel, sessionModel: sessionModel)
+                                GeneratedDrillsSection(appModel: appModel, sessionModel: sessionModel, toastManager: localToastManager)
                             }
                         }
                         
                     }
                 }
                 .background(Color.white)
-
-            // Prompt to save filter
-            if appModel.viewState.showSaveFiltersPrompt {
-                SaveFiltersPromptView(
-                    sessionModel: sessionModel,
-                    savedFiltersName: $savedFiltersName
-                ) {
-                    // Close the view when the user is done saving filters
-                    appModel.viewState.showSaveFiltersPrompt = false
+                
+                // Prompt to save filter
+                if appModel.viewState.showSaveFiltersPrompt {
+                    SaveFiltersPromptView(
+                        sessionModel: sessionModel,
+                        savedFiltersName: $savedFiltersName
+                    ) {
+                        // Close the view when the user is done saving filters
+                        appModel.viewState.showSaveFiltersPrompt = false
+                    }
+                }
+                
+                FloatingAddButton(
+                    appModel: appModel
+                ){
+                    Haptic.light()
+                    appModel.viewState.showSearchDrills = true
                 }
             }
-            
-            FloatingAddButton(
-                appModel: appModel
-            ){
-                Haptic.light()
-                appModel.viewState.showSearchDrills = true
+            .navigationDestination(item: $sessionModel.selectedDrill) { drill in
+
+                DrillDetailView(appModel: appModel, sessionModel: sessionModel, drill: drill)
             }
             
         }
+        .toastOverlay()
+        .environmentObject(localToastManager)
+        
+        
         .animation(.easeInOut(duration: 0.4), value: appModel.viewState.showFieldBehindHomePage)
         .animation(.easeInOut(duration: 0.4), value: appModel.viewState.showHomePage)
         .onAppear {

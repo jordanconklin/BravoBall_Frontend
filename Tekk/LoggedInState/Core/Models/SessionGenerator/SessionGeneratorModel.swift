@@ -181,6 +181,7 @@ class SessionGeneratorModel: ObservableObject {
     
     @Published var selectedDrills: [DrillModel] = []
     @Published var selectedDrillForEditing: EditableDrillModel?
+    @Published var selectedDrill: DrillModel?
     @Published var recommendedDrills: [DrillModel] = []
     
     // Session Drills storage
