@@ -77,25 +77,29 @@ struct SkillSearchBar: View {
                     
                     Spacer()
                     
-                    // Search skills button
-                    CircleButton(
-                        action: {
-                            Haptic.light()
-                            showingSkillSelector = true
-                        },
-                        frontColor: globalSettings.primaryYellowColor,
-                        backColor: globalSettings.primaryDarkYellowColor,
-                        width: 30,
-                        height: 30,
-                        disabled: false,
-                        pressedOffset: 4
-                        
-                    ) {
-                        Image(systemName: "plus")
-                            .font(.system(size: 20, weight: .bold))
-                            .foregroundColor(Color.white)
+                    if !isFocused {
+                        // Search skills button
+                        CircleButton(
+                            action: {
+                                Haptic.light()
+                                showingSkillSelector = true
+                            },
+                            frontColor: globalSettings.primaryYellowColor,
+                            backColor: globalSettings.primaryDarkYellowColor,
+                            width: 25,
+                            height: 25,
+                            borderColor: .clear,
+                            disabled: false,
+                            pressedOffset: 3
+                            
+                        ) {
+                            Image(systemName: "figure.soccer")
+                                .font(.system(size: 13, weight: .bold))
+                                .foregroundColor(.white)
+                        }
+                        .padding(2)
                     }
-                    .padding(3)
+                    
                     
                     
                     if !searchText.isEmpty {

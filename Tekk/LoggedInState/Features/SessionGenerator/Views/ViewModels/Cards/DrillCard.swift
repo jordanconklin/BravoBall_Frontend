@@ -71,7 +71,7 @@ struct DrillCard: View {
                             appModel.viewState.showDrillOptions = true
                         }) {
                             // Right arrow
-                            Image(systemName: "chevron.right")
+                            Image(systemName: "ellipsis")
                                 .foregroundColor(globalSettings.primaryGrayColor)
                                 .font(.system(size: layout.isPad ? 16 : 14, weight: .semibold))
                                 .padding(10)

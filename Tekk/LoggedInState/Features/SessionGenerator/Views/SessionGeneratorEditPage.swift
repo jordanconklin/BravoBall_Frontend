@@ -85,8 +85,19 @@ struct SessionGeneratorEditPage: View {
                         }
                         
                     }
+                    
                 }
                 .background(Color.white)
+                
+                if !appModel.viewState.showSkillSearch {
+                    FloatingAddButton(
+                        appModel: appModel
+                    ){
+                        Haptic.light()
+                        appModel.viewState.showSearchDrills = true
+                    }
+                }
+                
                 
                 // Prompt to save filter
                 if appModel.viewState.showSaveFiltersPrompt {
@@ -99,12 +110,6 @@ struct SessionGeneratorEditPage: View {
                     }
                 }
                 
-                FloatingAddButton(
-                    appModel: appModel
-                ){
-                    Haptic.light()
-                    appModel.viewState.showSearchDrills = true
-                }
             }
             .navigationDestination(item: $sessionModel.selectedDrill) { drill in
 

@@ -15,6 +15,7 @@ struct CircleButton<Content: View>: View {
     var backColor: Color = Color.accentColor
     var width: CGFloat
     var height: CGFloat = 60
+    var borderColor: Color?
     var disabled: Bool = false
     var pressedOffset: CGFloat
     @ViewBuilder var content: () -> Content
@@ -30,7 +31,8 @@ struct CircleButton<Content: View>: View {
                 width: width,
                 height: height,
                 size: CGSize(width: width, height: height),
-                pressedOffset: pressedOffset
+                pressedOffset: pressedOffset,
+                borderColor: borderColor
             )
         )
         .disabled(disabled)

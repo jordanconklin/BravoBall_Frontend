@@ -24,16 +24,17 @@ struct FilterOptionsButton: View {
                         appModel.viewState.showFilterOptions.toggle()
                     }
                 },
-                frontColor: Color.white,
-                backColor: globalSettings.primaryLightGrayColor,
+                frontColor: globalSettings.primaryYellowColor,
+                backColor: globalSettings.primaryDarkYellowColor,
                 width: 40,
                 height: 40,
+                borderColor: .clear,
                 disabled: false,
                 pressedOffset: 4
                 
             ) {
                 Image(systemName: "slider.horizontal.3")
-                    .foregroundColor(globalSettings.primaryDarkColor)
+                    .foregroundColor(.white)
                     .font(.system(size: 16, weight: .medium))
             }
             .padding(.horizontal)
