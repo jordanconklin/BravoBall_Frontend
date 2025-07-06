@@ -33,7 +33,7 @@ struct SkillSearchBar: View {
                         
                     }) {
                         Image(systemName: "chevron.left")
-                            .foregroundColor(.gray)
+                            .foregroundColor(.white)
                             .padding(.vertical, 3)
                     }
                 }
@@ -94,7 +94,7 @@ struct SkillSearchBar: View {
                             
                         ) {
                             Image(systemName: "figure.soccer")
-                                .font(.system(size: 13, weight: .bold))
+                                .font(.system(size: 12, weight: .bold))
                                 .foregroundColor(.white)
                         }
                         .padding(2)

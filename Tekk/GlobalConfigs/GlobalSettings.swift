@@ -19,6 +19,7 @@ class GlobalSettings: ObservableObject {
     @Published var primaryDarkGreenColor: Color = Color(hex:"288a2e")
     @Published var primaryLightBlueColor: Color = Color(hex:"86C9F7")
     @Published var primaryDarkBlueColor: Color = Color(hex:"508fba")
+    @Published var primaryPurpleColor: Color = Color(hex:"A863CF")
     @Published var primaryDarkColor: Color = Color(hex:"4F4F4F")
     @Published var primaryGrayColor: Color = Color(hex:"858585")
     @Published var primaryLightGrayColor: Color = Color(hex:"d6d6d6")
@@ -35,7 +36,7 @@ struct AppSettings {
     /// 2: Computer (localhost)
     /// 3: Phone (Wi-Fi IP via Info.plist)
     static let appDevCase = 2
-    static let debug = true // for testing; set false in production
+    static let debug = false // for testing; set false in production
 
 
     static var baseURL: String {

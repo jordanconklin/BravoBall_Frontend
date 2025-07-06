@@ -18,73 +18,53 @@ struct FilterOptions: View {
     // TODO: case enums for neatness and make this shared
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Button(action: {
-                Haptic.light()
-                clearFilterSelection()
+        OptionsSheet(
+            title: "Filter Options",
+            onDismiss: {
+                appModel.viewState.showFilterOptions = false
+            }
+        ) {
+            VStack(alignment: .leading, spacing: 5) {
+                OptionButton(
+                    icon: "xmark.circle",
+                    title: "Clear Filters"
+                ) {
+                    Haptic.light()
+                    clearFilterSelection()
+                    
+                    withAnimation {
+                        appModel.viewState.showFilterOptions = false
+                    }
+                }
                 
-                withAnimation {
-                    appModel.viewState.showFilterOptions = false
-                }
-            }) {
-                HStack(spacing: 8) {
-                    Image(systemName: "xmark.circle")
-                        .foregroundColor(globalSettings.primaryDarkColor)
-                    Text("Clear Filters")
-                        .foregroundColor(globalSettings.primaryDarkColor)
-                        .font(.custom("Poppins-Bold", size: 12))
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-            }
-            
-            Divider()
-            
-            Button(action: {
-                Haptic.light()
-                showFilterPrompt()
+                Divider()
                 
-                withAnimation {
-                    appModel.viewState.showFilterOptions = false
+                OptionButton(
+                    icon: "square.and.arrow.down",
+                    title: "Save Filters"
+                ) {
+                    Haptic.light()
+                    showFilterPrompt()
+                    
+                    withAnimation {
+                        appModel.viewState.showFilterOptions = false
+                    }
                 }
-            }) {
-                HStack(spacing: 8) {
-                    Image(systemName: "square.and.arrow.down")
-                        .foregroundColor(globalSettings.primaryDarkColor)
-                    Text("Save Filters")
-                        .foregroundColor(globalSettings.primaryDarkColor)
-                        .font(.custom("Poppins-Bold", size: 12))
+                
+                Divider()
+                
+                OptionButton(
+                    icon: "list.bullet",
+                    title: "Select Saved Filters"
+                ) {
+                    Haptic.light()
+                    withAnimation(.spring(dampingFraction: 0.7)) {
+                        appModel.viewState.showSavedFilters.toggle()
+                        appModel.viewState.showFilterOptions = false
+                    }
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
             }
-            
-            Divider()
-            
-            Button(action: {
-                Haptic.light()
-                withAnimation(.spring(dampingFraction: 0.7)) {
-                    appModel.viewState.showSavedFilters.toggle()
-                    appModel.viewState.showFilterOptions = false
-                }
-            }) {
-                HStack(spacing: 8) {
-                    Image(systemName: "list.bullet")
-                        .foregroundColor(globalSettings.primaryDarkColor)
-                    Text("Select Saved Filters")
-                        .foregroundColor(globalSettings.primaryDarkColor)
-                        .font(.custom("Poppins-Bold", size: 12))
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-            }
-            
-            Spacer()
         }
-        .padding(8)
-        .background(Color.white)
-        .frame(maxWidth: .infinity)
-
     }
     
     // Show Save Filter prompt

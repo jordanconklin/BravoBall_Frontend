@@ -54,10 +54,8 @@
 		17CA37A62DF0BA0F001AD5FA /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CA37A52DF0BA0C001AD5FA /* APIService.swift */; };
 		17CA37A92DF12FC4001AD5FA /* InfoPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CA37A82DF12FBD001AD5FA /* InfoPopupView.swift */; };
 		17CA37BC2DF24428001AD5FA /* Haptic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CA37BB2DF24424001AD5FA /* Haptic.swift */; };
-		17DB45FA2DD69B2C000A76F6 /* BravoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB45F92DD69B29000A76F6 /* BravoHeaderView.swift */; };
 		17DB45FC2DD69D3C000A76F6 /* FilterScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB45FB2DD69D38000A76F6 /* FilterScrollView.swift */; };
 		17DB45FE2DD6A2D3000A76F6 /* SaveFiltersPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB45FD2DD6A2D0000A76F6 /* SaveFiltersPromptView.swift */; };
-		17DB46022DD6D78F000A76F6 /* StartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB46012DD6D789000A76F6 /* StartButton.swift */; };
 		17DB46042DD6D83B000A76F6 /* ResponseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB46032DD6D837000A76F6 /* ResponseModels.swift */; };
 		17DB460B2DD866CB000A76F6 /* BravoBallTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB460A2DD866C7000A76F6 /* BravoBallTests.swift */; };
 		17DB460D2DD8694E000A76F6 /* SessionLoadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB460C2DD86949000A76F6 /* SessionLoadingTests.swift */; };
@@ -251,10 +249,8 @@
 		17CA37A52DF0BA0C001AD5FA /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		17CA37A82DF12FBD001AD5FA /* InfoPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupView.swift; sourceTree = "<group>"; };
 		17CA37BB2DF24424001AD5FA /* Haptic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptic.swift; sourceTree = "<group>"; };
-		17DB45F92DD69B29000A76F6 /* BravoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BravoHeaderView.swift; sourceTree = "<group>"; };
 		17DB45FB2DD69D38000A76F6 /* FilterScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterScrollView.swift; sourceTree = "<group>"; };
 		17DB45FD2DD6A2D0000A76F6 /* SaveFiltersPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveFiltersPromptView.swift; sourceTree = "<group>"; };
-		17DB46012DD6D789000A76F6 /* StartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartButton.swift; sourceTree = "<group>"; };
 		17DB46032DD6D837000A76F6 /* ResponseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseModels.swift; sourceTree = "<group>"; };
 		17DB460A2DD866C7000A76F6 /* BravoBallTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BravoBallTests.swift; sourceTree = "<group>"; };
 		17DB460C2DD86949000A76F6 /* SessionLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionLoadingTests.swift; sourceTree = "<group>"; };
@@ -946,8 +942,6 @@
 				17DB45FB2DD69D38000A76F6 /* FilterScrollView.swift */,
 				17DB45FD2DD6A2D0000A76F6 /* SaveFiltersPromptView.swift */,
 				4289C58F2DFF8A1E005CC91B /* HomePageToolBar.swift */,
-				17DB46012DD6D789000A76F6 /* StartButton.swift */,
-				17DB45F92DD69B29000A76F6 /* BravoHeaderView.swift */,
 				4399B7282D6D7B3B00DA5E84 /* ViewModels */,
 			);
 			path = Views;
@@ -1525,7 +1519,6 @@
 				177B1BD02DF741CE00AF465C /* DebounceService.swift in Sources */,
 				42B35C712E0B2BD600660E6E /* ThreeDPressCircleButtonStyle.swift in Sources */,
 				170167FB2D88B8790078446C /* DrillGroupService.swift in Sources */,
-				17DB45FA2DD69B2C000A76F6 /* BravoHeaderView.swift in Sources */,
 				17CA37A42DF0B1E5001AD5FA /* CustomVideoPlayer.swift in Sources */,
 				43AC25732DA39A5800EDD8C0 /* CacheProtocols.swift in Sources */,
 				4399B6EB2D6942AC00DA5E84 /* DrillRow.swift in Sources */,
@@ -1573,7 +1566,6 @@
 				42B35C6F2E0B2B7600660E6E /* CircleButton.swift in Sources */,
 				43C5FC542D6DBD0E0064E7D5 /* GroupCard.swift in Sources */,
 				4399B7392D6D901B00DA5E84 /* ToastMessageModel.swift in Sources */,
-				17DB46022DD6D78F000A76F6 /* StartButton.swift in Sources */,
 				420DA3A72DCEEF55004CDD7A /* Checkbox.swift in Sources */,
 				42929F3B2DD2EB5000DA73BB /* GroupFilterOptions.swift in Sources */,
 				17CA37A92DF12FC4001AD5FA /* InfoPopupView.swift in Sources */,

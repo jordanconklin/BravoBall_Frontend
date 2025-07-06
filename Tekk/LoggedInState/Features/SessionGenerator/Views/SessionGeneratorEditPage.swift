@@ -29,6 +29,10 @@ struct SessionGeneratorEditPage: View {
                 
                 VStack(alignment: .center, spacing: 0) {
                     
+                    VStack {
+                        
+                    }
+                    
                     HStack {
                         // Info button to show explanation popup
                         Button(action: {
@@ -37,7 +41,7 @@ struct SessionGeneratorEditPage: View {
                         }) {
                             Image(systemName: "info.circle")
                                 .font(.system(size: 28, weight: .regular))
-                                .foregroundColor(globalSettings.primaryGrayColor)
+                                .foregroundColor(.white)
                         }
                         .accessibilityLabel("About Session Generator")
                         
@@ -46,7 +50,7 @@ struct SessionGeneratorEditPage: View {
                         // Section title
                         Text("Edit Session")
                             .font(.custom("Poppins-Bold", size: 20))
-                            .foregroundColor(globalSettings.primaryDarkColor)
+                            .foregroundColor(.white)
                             .padding(.leading, 5)
                         
                         Spacer()
@@ -56,7 +60,7 @@ struct SessionGeneratorEditPage: View {
                             appModel.viewState.showSessionDeleteButtons = false
                             dismiss()
                         }
-                        .foregroundColor(Color.blue)
+                        .foregroundColor(.white)
                         .font(.custom("Poppins-Bold", size: 16))
                     }
                     .padding()
@@ -64,6 +68,7 @@ struct SessionGeneratorEditPage: View {
                     
                     SkillSearchBar(appModel: appModel, sessionModel: sessionModel, searchText: $searchSkillsText)
                         .padding(.horizontal)
+                        .padding(.bottom, 10)
                     
                     // If skills search bar is selected
                     if appModel.viewState.showSkillSearch {
@@ -73,6 +78,8 @@ struct SessionGeneratorEditPage: View {
                             sessionModel: sessionModel,
                             searchText: $searchSkillsText
                         )
+                        .background(Color.white)
+                        
                         // If skills search bar is not selected
                     } else {
                         FilterScrollView(appModel: appModel, sessionModel: sessionModel, geometry: geometry)
@@ -83,11 +90,12 @@ struct SessionGeneratorEditPage: View {
                                 GeneratedDrillsSection(appModel: appModel, sessionModel: sessionModel, toastManager: localToastManager)
                             }
                         }
+                        .background(Color.white)
                         
                     }
                     
                 }
-                .background(Color.white)
+                .background(globalSettings.primaryLightBlueColor)
                 
                 if !appModel.viewState.showSkillSearch {
                     FloatingAddButton(
@@ -149,7 +157,6 @@ struct SessionGeneratorEditPage: View {
             )
             .presentationDragIndicator(.visible)
             .presentationDetents([.medium, .large])
-            .frame(width: geometry.size.width)
         }
         // Sheet pop-up for filter option button
         .sheet(isPresented: $appModel.viewState.showFilterOptions) {
@@ -159,7 +166,6 @@ struct SessionGeneratorEditPage: View {
             )
             .presentationDragIndicator(.visible)
             .presentationDetents([.height(appModel.layout.sheetHeight)])
-            .frame(width: geometry.size.width)
         }
         // Info popup sheet
         .sheet(isPresented: $showInfoSheet) {

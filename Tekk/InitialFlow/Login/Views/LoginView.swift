@@ -125,6 +125,7 @@ struct LoginView: View {
                     action: {
                         Haptic.light()
                         withAnimation(.spring()) {
+                            userManager.showLoginPage = false
                             loginModel.resetLoginInfo()
                         }
                     },

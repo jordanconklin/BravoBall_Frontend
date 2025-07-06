@@ -42,7 +42,10 @@ struct FieldDrillCircleButton: View {
                             .animation(.linear, value: progress)
                     )
                     .offset(x: 0, y: 3)
-                    .opacity(!editableDrill.isCompleted && !isCurrentDrill() ? 0.0 : 1.0)
+                    .opacity(editableDrill.setsDone > 0 || editableDrill.isCompleted ? 1.0 : 0.0)
+                    .onAppear {
+                        print("DEBUG: FieldDrillCircleButton appeared for '\(editableDrill.drill.title)' with setsDone=\(editableDrill.setsDone), isCompleted=\(editableDrill.isCompleted)")
+                    }
                 
             }
             .fullScreenCover(isPresented: $showingFollowAlong) {
@@ -92,8 +95,10 @@ struct FieldDrillCircleButton: View {
     }
     
     var progress: Double {
-            Double(editableDrill.setsDone) / Double(editableDrill.totalSets)
-        }
+        let progressValue = Double(editableDrill.setsDone) / Double(editableDrill.totalSets)
+        print("DEBUG: Progress calculation for '\(editableDrill.drill.title)': setsDone=\(editableDrill.setsDone), totalSets=\(editableDrill.totalSets), progress=\(progressValue)")
+        return progressValue
+    }
     
     private func isCurrentDrill() -> Bool {
         if let firstIncompleteDrill = sessionModel.orderedSessionDrills.first(where: { !$0.isCompleted }) {

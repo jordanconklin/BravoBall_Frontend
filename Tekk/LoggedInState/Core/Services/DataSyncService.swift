@@ -20,6 +20,7 @@ class DataSyncService {
     
     struct OrderedDrillItem: Decodable {
         let drill: OrderedDrillData
+        let setsDone: Int?
         let sets: Int
         let reps: Int
         let duration: Int
@@ -96,10 +97,12 @@ class DataSyncService {
                 videoUrl: drillData.videoUrl
             )
             
+            print("sets done:\(orderedDrillItem.setsDone) ")
+            
             // Create EditableDrillModel with the session-specific data
             return EditableDrillModel(
                 drill: drillModel,
-                setsDone: 0, // Start with 0 sets done
+                setsDone: orderedDrillItem.setsDone ?? 0,
                 totalSets: orderedDrillItem.sets,
                 totalReps: orderedDrillItem.reps,
                 totalDuration: orderedDrillItem.duration,

@@ -47,7 +47,7 @@ struct FilterOptionsButton: View {
                 }
             }
         }
-        .background(Color.white)
+        .background(globalSettings.primaryLightBlueColor)
     }
     
 

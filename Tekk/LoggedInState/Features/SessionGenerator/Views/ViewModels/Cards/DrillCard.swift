@@ -112,7 +112,71 @@ struct DrillCard: View {
     
 }
 
+// Reusable options sheet structure
+struct OptionsSheet<Content: View>: View {
+    let title: String
+    let content: Content
+    let onDismiss: () -> Void
+    
+    init(title: String, onDismiss: @escaping () -> Void, @ViewBuilder content: () -> Content) {
+        self.title = title
+        self.onDismiss = onDismiss
+        self.content = content()
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            // Header
+            HStack {
+                Spacer()
+                Text(title)
+                    .font(.custom("Poppins-Bold", size: 16))
+                    .foregroundColor(GlobalSettings.shared.primaryDarkColor)
+                
+                Spacer()
+                Button(action: {
+                    Haptic.light()
+                    withAnimation(.spring(dampingFraction: 0.7)) {
+                        onDismiss()
+                    }
+                }) {
+                    Image(systemName: "xmark")
+                        .foregroundColor(GlobalSettings.shared.primaryGrayColor)
+                }
+            }
+            .padding(.horizontal)
+            .padding(.top)
+            
+            content
+            
+            Spacer()
+        }
+        .padding(8)
+        .background(Color.white)
+        .frame(maxWidth: .infinity)
+    }
+}
 
+// Reusable option button
+struct OptionButton: View {
+    let icon: String
+    let title: String
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 8) {
+                Image(systemName: icon)
+                    .foregroundColor(GlobalSettings.shared.primaryDarkColor)
+                Text(title)
+                    .foregroundColor(GlobalSettings.shared.primaryDarkColor)
+                    .font(.custom("Poppins-Bold", size: 12))
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+        }
+    }
+}
 
 // TODO: enum this
 
@@ -129,32 +193,18 @@ struct DrillOptions: View {
     // TODO: case enums for neatness and make this shared
     
     var body: some View {
-            VStack(alignment: .leading) {
-                // Header
-                HStack {
-                    Spacer()
-                    Text("Drill Options")
-                        .font(.custom("Poppins-Bold", size: 16))
-                        .foregroundColor(globalSettings.primaryDarkColor)
-                    
-                    Spacer()
-                    Button(action: {
-                        Haptic.light()
-                        withAnimation(.spring(dampingFraction: 0.7)) {
-                            appModel.viewState.showDrillOptions = false
-                        }
-                    }) {
-                        Image(systemName: "xmark")
-                            .foregroundColor(globalSettings.primaryGrayColor)
-                    }
-                }
-                .padding(.horizontal)
-                .padding(.top)
-                
-                Button(action: {
+        OptionsSheet(
+            title: "Drill Options",
+            onDismiss: {
+                appModel.viewState.showDrillOptions = false
+            }
+        ) {
+            VStack(alignment: .leading, spacing: 5) {
+                OptionButton(
+                    icon: "questionmark.circle.fill",
+                    title: "Instructions"
+                ) {
                     Haptic.light()
-                    
-                    print("DEBUG: Instructions button tapped for drill: \(editableDrill.drill.title)")
                     
                     withAnimation {
                         appModel.viewState.showDrillOptions = false
@@ -163,56 +213,25 @@ struct DrillOptions: View {
                     // Add a small delay to ensure the sheet is fully dismissed
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         sessionModel.selectedDrill = editableDrill.drill
-                        print("DEBUG: Set selectedDrill to: \(editableDrill.drill.title)")
                     }
-                    
-                }) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "questionmark.circle.fill")
-                            .foregroundColor(globalSettings.primaryDarkColor)
-                        Text("Instructions")
-                            .foregroundColor(globalSettings.primaryDarkColor)
-                            .font(.custom("Poppins-Bold", size: 12))
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
                 }
                 
                 Divider()
                 
-                Button(action: {
+                OptionButton(
+                    icon: "trash",
+                    title: "Delete Drill"
+                ) {
                     Haptic.light()
                     
                     withAnimation {
                         appModel.viewState.showDrillOptions = false
                     }
                     
-                    
                     sessionModel.deleteDrillFromSession(drill: editableDrill)
                     toastManager.showToast(.success("Drill deleted"))
-                    
-                    
-                }) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "trash")
-                            .foregroundColor(globalSettings.primaryDarkColor)
-                        Text("Delete Drill")
-                            .foregroundColor(globalSettings.primaryDarkColor)
-                            .font(.custom("Poppins-Bold", size: 12))
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
                 }
-                
-                
-                Spacer()
             }
-            .padding(8)
-            .background(Color.white)
-            .frame(maxWidth: .infinity)
-            
-            
-            
-        
+        }
     }
 }

@@ -153,8 +153,8 @@ struct GroupDetailView: View {
                     sessionModel: sessionModel,
                     group: group
                 )
-                .presentationDragIndicator(.hidden)
-                .presentationDetents([.height(200)])
+                .presentationDragIndicator(.visible)
+                .presentationDetents([.height(appModel.layout.sheetHeight)])
             }
             // Sheet for adding drills
             .sheet(isPresented: $showAddDrillSheet) {

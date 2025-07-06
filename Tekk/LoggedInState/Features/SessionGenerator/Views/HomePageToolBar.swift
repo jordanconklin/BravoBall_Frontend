@@ -35,25 +35,7 @@ struct HomePageToolBar: View {
                 
                 Spacer()
                 
-//                HStack {
-//                    Label("500", systemImage: "diamond.fill")
-//                        .labelStyle(IconOnlyLabelStyle())
-//                        .foregroundColor(.blue)
-//                        .font(.system(size: 25))
-//                    Text("0")
-//                        .font(.custom("Poppins-Bold", size: 30))
-//                        .foregroundColor(.blue)
-//                }
-//
-//                HStack {
-//                    Label("5", systemImage: "heart.fill")
-//                        .labelStyle(IconOnlyLabelStyle())
-//                        .foregroundColor(.red)
-//                        .font(.system(size: 25))
-//                    Text("0")
-//                        .font(.custom("Poppins-Bold", size: 30))
-//                        .foregroundColor(.red)
-//                }
+
                 
                 Text("BravoBall")
                     .foregroundColor(globalSettings.primaryYellowColor)

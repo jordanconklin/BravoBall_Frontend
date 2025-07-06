@@ -31,7 +31,7 @@ struct SavedDrillsView: View {
                         }) {
                             Image(systemName: "info.circle")
                                 .font(.system(size: 22, weight: .regular))
-                                .foregroundColor(.gray)
+                                .foregroundColor(.white)
                         }
                         .accessibilityLabel("About Saved Drills")
                         .padding(.horizontal, 20)
@@ -41,7 +41,7 @@ struct SavedDrillsView: View {
                         // Progress header
                         Text("Saved Drills")
                             .font(.custom("Poppins-Bold", size: 18))
-                            .foregroundColor(.black)
+                            .foregroundColor(.white)
                             .padding()
                         
                         Spacer()
@@ -52,10 +52,11 @@ struct SavedDrillsView: View {
                         }) {
                             Image(systemName: "plus")
                                 .font(.custom("Poppins-Bold", size: 20))
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                         }
                         .padding(.horizontal, 20)
                     }
+                    .background(globalSettings.primaryPurpleColor)
                     
                     AllGroupsDisplay(appModel: appModel, sessionModel: sessionModel, selectedGroup: $selectedGroup)
                     

@@ -20,91 +20,67 @@ struct GroupFilterOptions: View {
     @State private var showDeleteConfirmation = false
     
     var body: some View {
-        VStack(alignment: .leading) {
-            if group.id != sessionModel.likedDrillsGroup.id {
-                Button(action: {
-                    Haptic.light()
-                    showDeleteConfirmation = true
-                }) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "trash")
-                            .foregroundColor(globalSettings.primaryDarkColor)
-                        Text("Delete Group")
-                            .foregroundColor(globalSettings.primaryDarkColor)
-                            .font(.custom("Poppins-Bold", size: 12))
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                }
-                .alert("Delete Group", isPresented: $showDeleteConfirmation) {
-                    Button("Cancel", role: .cancel) { }
-                    Button("Delete", role: .destructive) {
-                        sessionModel.deleteGroup(groupId: group.id)
-                        appModel.viewState.showGroupFilterOptions = false
-                        dismiss()
-
-                    }
-                } message: {
-                    Text("Are you sure you want to delete this group? This action cannot be undone.")
-                }
-
+        OptionsSheet(
+            title: "Group Options",
+            onDismiss: {
+                appModel.viewState.showGroupFilterOptions = false
             }
-            
-            
-            Divider()
-            
-            Button(action: {
-                Haptic.light()
-                withAnimation {
-                    appModel.viewState.showGroupFilterOptions = false
+        ) {
+            VStack(alignment: .leading, spacing: 5) {
+                if group.id != sessionModel.likedDrillsGroup.id {
+                    OptionButton(
+                        icon: "trash",
+                        title: "Delete Group"
+                    ) {
+                        Haptic.light()
+                        showDeleteConfirmation = true
+                    }
+                    .alert("Delete Group", isPresented: $showDeleteConfirmation) {
+                        Button("Cancel", role: .cancel) { }
+                        Button("Delete", role: .destructive) {
+                            sessionModel.deleteGroup(groupId: group.id)
+                            appModel.viewState.showGroupFilterOptions = false
+                            dismiss()
+                        }
+                    } message: {
+                        Text("Are you sure you want to delete this group? This action cannot be undone.")
+                    }
                     
-                    appModel.viewState.showDrillGroupDeleteButtons.toggle()
+                    Divider()
                 }
-            }) {
-                HStack(spacing: 8) {
-                    Image(systemName: "gearshape")
-                        .foregroundColor(globalSettings.primaryDarkColor)
-                    Text("Edit Group")
-                        .foregroundColor(globalSettings.primaryDarkColor)
-                        .font(.custom("Poppins-Bold", size: 12))
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-            }
-            
-            Divider()
-            
-            Button(action: {
-                Haptic.light()
                 
-                // Show add drill sheet
-                withAnimation(.spring(dampingFraction: 0.7)) {
-                    appModel.viewState.showGroupFilterOptions = false
-                    
-                    // Delay to allow the first sheet to close smoothly
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        // This will be handled in the parent view by binding to showAddDrillSheet
-                        NotificationCenter.default.post(name: Notification.Name("ShowAddDrillSheet"), object: nil)
+                OptionButton(
+                    icon: "gearshape",
+                    title: "Edit Group"
+                ) {
+                    Haptic.light()
+                    withAnimation {
+                        appModel.viewState.showGroupFilterOptions = false
+                        appModel.viewState.showDrillGroupDeleteButtons.toggle()
                     }
                 }
-            }) {
-                HStack(spacing: 8) {
-                    Image(systemName: "plus")
-                        .foregroundColor(globalSettings.primaryDarkColor)
-                    Text("Add to Group")
-                        .foregroundColor(globalSettings.primaryDarkColor)
-                        .font(.custom("Poppins-Bold", size: 12))
+                
+                Divider()
+                
+                OptionButton(
+                    icon: "plus",
+                    title: "Add to Group"
+                ) {
+                    Haptic.light()
+                    
+                    // Show add drill sheet
+                    withAnimation(.spring(dampingFraction: 0.7)) {
+                        appModel.viewState.showGroupFilterOptions = false
+                        
+                        // Delay to allow the first sheet to close smoothly
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            // This will be handled in the parent view by binding to showAddDrillSheet
+                            NotificationCenter.default.post(name: Notification.Name("ShowAddDrillSheet"), object: nil)
+                        }
+                    }
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
             }
-            
-            Spacer()
         }
         .frame(width: geometry.size.width)
-        .padding(8)
-        .background(Color.white)
-        .frame(maxWidth: .infinity)
-
     }
 }

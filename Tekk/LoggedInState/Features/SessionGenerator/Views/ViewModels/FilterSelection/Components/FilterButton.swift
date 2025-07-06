@@ -40,8 +40,8 @@ struct FilterButton: View {
             .padding(.vertical, 5)
             .background(
                 RoundedRectangle(cornerRadius: 20)
-                    .fill(value.isEmpty ? Color.clear : globalSettings.primaryYellowColor)
-                    .stroke(value.isEmpty ? globalSettings.primaryLightGrayColor : globalSettings.primaryYellowColor, lineWidth: 2)
+                    .fill(value.isEmpty ? Color.white : globalSettings.primaryYellowColor)
+                    .stroke(globalSettings.primaryLightGrayColor, lineWidth: 2)
             )
             .scaleEffect(isSelected ? 0.85 : 0.8)
             .animation(.spring(response: 0.4, dampingFraction: 0.6), value: isSelected)
