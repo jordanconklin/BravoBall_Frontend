@@ -13,6 +13,7 @@ struct ThreeDPressCircleButtonStyle: ButtonStyle {
     var height: CGFloat
     var size: CGSize
     var pressedOffset: CGFloat
+    var borderColor: Color?
 
     func makeBody(configuration: Configuration) -> some View {
         ZStack {
@@ -28,6 +29,10 @@ struct ThreeDPressCircleButtonStyle: ButtonStyle {
                 Circle()
                     .fill(frontColor)
                     .frame(width: width, height: height)
+                    .overlay(
+                        Circle()
+                            .stroke(borderColor ?? Color.clear, lineWidth: 1)
+                    )
                 configuration.label
             }
             .offset(y: configuration.isPressed ? pressedOffset : 0)

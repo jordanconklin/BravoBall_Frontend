@@ -11,20 +11,14 @@ import RiveRuntime
 
 struct ContentView: View {
     @StateObject private var onboardingModel = OnboardingModel()
+    @StateObject private var forgotPasswordModel = ForgotPasswordModel()
+    @StateObject private var loginModel = LoginModel()
     @StateObject private var appModel = MainAppModel()
     @StateObject private var userInfoManager = UserManager()
-    @StateObject private var sessionGenModel: SessionGeneratorModel
+    @StateObject private var sessionGenModel = SessionGeneratorModel()
     @StateObject private var authService = AuthenticationService.shared
     
-    // Add loading state for authentication check
-    @State private var isCheckingAuth = true
-    
-    init() {
-        let appModel = MainAppModel()
-        let onboardingData = OnboardingModel.OnboardingData()
-        self._appModel = StateObject(wrappedValue: appModel)
-        self._sessionGenModel = StateObject(wrappedValue: SessionGeneratorModel(appModel: appModel, onboardingData: onboardingData))
-    }
+
 
     var body: some View {
         GeometryReader { geometry in
@@ -32,13 +26,13 @@ struct ContentView: View {
                 ZStack {
                     
                     // Main content (only show when intro animation is not showing)
-                        if onboardingModel.isLoggedIn {
+                        if userInfoManager.isLoggedIn {
                             MainTabView(onboardingModel: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
                                 .onAppear {
                                     // Load data if user has history
                                     if userInfoManager.userHasAccountHistory {
                                         Task {
-                                            await sessionGenModel.loadBackendData()
+                                            await userInfoManager.loadBackendData(appModel: appModel, sessionModel: sessionGenModel)
                                             
                                             // Set isInitialLoad to false after data loading is complete
                                             await MainActor.run {
@@ -55,21 +49,21 @@ struct ContentView: View {
                                     }
                                 }
                         } else {
-                            OnboardingView(onboardingModel: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel)
+                            LaunchScreenView(onboardingModel: onboardingModel, appModel: appModel, userManager: userInfoManager, sessionModel: sessionGenModel, forgotPasswordModel: forgotPasswordModel, loginModel: loginModel)
                         }
                     
                     // Rive animation with state machine transitions
-                    if onboardingModel.showIntroAnimation || isCheckingAuth {
+                    if userInfoManager.showIntroAnimation || authService.isCheckingAuth {
                         
                         RiveAnimationView(
-                            onboardingModel: onboardingModel,
+                            userManager: userInfoManager,
                             fileName: "BravoBall_Intro",
                             stateMachine: "State Machine 1",
-                            actionForTrigger: isCheckingAuth,
+                            actionForTrigger: authService.isCheckingAuth,
                             animationScale: onboardingModel.animationScale,
                             triggerName: "Start Intro",
                             completionHandler: {
-                                onboardingModel.showIntroAnimation = false
+                                userInfoManager.showIntroAnimation = false
                             }
 
                         )
@@ -85,56 +79,11 @@ struct ContentView: View {
         }
         .onAppear {
             Task {
-                await checkAuthenticationStatus()
+                await authService.updateAuthenticationStatus(onboardingModel: onboardingModel, userManager: userInfoManager)
             }
         }
     }
     
-    // MARK: - Authentication Check
-    
-    private func checkAuthenticationStatus() async {
-        print("\n🔐 ===== STARTING AUTHENTICATION CHECK =====")
-        print("📅 Timestamp: \(Date())")
-        
-        // Check if user has valid stored credentials
-        let isAuthenticated = await authService.checkAuthenticationStatus()
-        
-        // Add a minimum delay to show the loading animation
-        try? await Task.sleep(nanoseconds: 00_800_000_000) // 0.8 second delay
-        
-        await MainActor.run {
-            if isAuthenticated {
-                // User has valid tokens, restore login state
-                print("✅ Authentication check passed - restoring login state")
-                
-                // Restore user data from keychain
-                let userEmail = KeychainWrapper.standard.string(forKey: "userEmail") ?? ""
-                let accessToken = KeychainWrapper.standard.string(forKey: "accessToken") ?? ""
-                
-                print("📱 Restoring data - Email: \(userEmail)")
-                print("🔑 Restoring data - Access Token: \(accessToken.prefix(20))...")
-                
-                // Update user manager
-                userInfoManager.email = userEmail
-                userInfoManager.accessToken = accessToken
-                userInfoManager.isLoggedIn = true
-                userInfoManager.userHasAccountHistory = true
-                
-                // Update onboarding model
-                onboardingModel.accessToken = accessToken
-                onboardingModel.isLoggedIn = true
-                
-                print("🔑 Restored login state for user: \(userEmail)")
-            } else {
-                print("❌ Authentication check failed - user needs to login")
-                print("📱 No valid tokens found or backend validation failed")
-            }
-            
-            // End loading state
-            isCheckingAuth = false
-            print("🏁 Authentication check complete - isCheckingAuth: \(isCheckingAuth)")
-        }
-    }
 }
 
 

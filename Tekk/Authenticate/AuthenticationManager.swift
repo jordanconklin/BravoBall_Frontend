@@ -8,11 +8,14 @@
 import Foundation
 import SwiftKeychainWrapper
 
-class AuthenticationService: ObservableObject {
+final class AuthenticationService: ObservableObject, AuthenticationManaging {
     static let shared = AuthenticationService()
     
-    @Published var isCheckingAuthentication = false
-    @Published var isAuthenticated = false
+    @Published private(set) var isCheckingAuthentication = false
+    @Published private(set) var isAuthenticated = false
+    
+    // Add loading state for authentication check
+    @Published private(set) var isCheckingAuth = true
     
     private init() {}
     
@@ -82,8 +85,54 @@ class AuthenticationService: ObservableObject {
         }
     }
     
+    // MARK: - Authentication Check
+    
+    func updateAuthenticationStatus(onboardingModel: OnboardingModel, userManager: UserManager) async {
+        print("\n🔐 ===== STARTING AUTHENTICATION CHECK =====")
+        print("📅 Timestamp: \(Date())")
+        
+        // Check if user has valid stored credentials
+        let isAuthenticated = await checkAuthenticationStatus()
+        
+        // Add a minimum delay to show the loading animation
+        try? await Task.sleep(nanoseconds: 00_800_000_000) // 0.8 second delay
+        
+        await MainActor.run {
+            if isAuthenticated {
+                // User has valid tokens, restore login state
+                print("✅ Authentication check passed - restoring login state")
+                
+                // Restore user data from keychain
+                let userEmail = KeychainWrapper.standard.string(forKey: "userEmail") ?? ""
+                let accessToken = KeychainWrapper.standard.string(forKey: "accessToken") ?? ""
+                
+                print("📱 Restoring data - Email: \(userEmail)")
+                print("🔑 Restoring data - Access Token: \(accessToken.prefix(20))...")
+                
+                // Update user manager
+                userManager.email = userEmail
+                userManager.accessToken = accessToken
+                userManager.isLoggedIn = true
+                userManager.userHasAccountHistory = true
+                
+                // Update onboarding model
+                userManager.accessToken = accessToken
+                userManager.isLoggedIn = true
+                
+                print("🔑 Restored login state for user: \(userEmail)")
+            } else {
+                print("❌ Authentication check failed - user needs to login")
+                print("📱 No valid tokens found or backend validation failed")
+            }
+            
+            // End loading state
+            isCheckingAuth = false
+            print("🏁 Authentication check complete - isCheckingAuth: \(isCheckingAuth)")
+        }
+    }
+    
     /// Clears invalid tokens from Keychain
-    private func clearInvalidTokens() async {
+    func clearInvalidTokens() async {
         KeychainWrapper.standard.removeObject(forKey: "accessToken")
         KeychainWrapper.standard.removeObject(forKey: "refreshToken")
         KeychainWrapper.standard.removeObject(forKey: "userEmail")
