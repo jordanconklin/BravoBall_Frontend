@@ -32,6 +32,13 @@ struct MainTabView: View {
                     SavedDrillsView(appModel: appModel, sessionModel: sessionModel)
                 case 3:
                     ProfileView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
+                case 4:
+                    // Only show testing view in debug mode
+                    if AppSettings.debug {
+                        TestingView(appModel: appModel, sessionModel: sessionModel, userManager: userManager)
+                    } else {
+                        SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
+                    }
                 default:
                     SessionGeneratorView(onboardingModel: onboardingModel, appModel: appModel, sessionModel: sessionModel, userManager: userManager)
                 }
@@ -69,6 +76,20 @@ struct MainTabView: View {
                             isSelected: appModel.mainTabSelected == 3
                         ) {
                             appModel.mainTabSelected = 3
+                        }
+                        
+                        // Show testing tab only in debug mode
+                        if AppSettings.debug {
+                            CustomTabItem(
+                                icon: AnyView(
+                                    Image(systemName: "wrench.and.screwdriver.fill")
+                                        .font(.system(size: 20))
+                                        .foregroundColor(appModel.mainTabSelected == 4 ? .blue : .gray)
+                                ),
+                                isSelected: appModel.mainTabSelected == 4
+                            ) {
+                                appModel.mainTabSelected = 4
+                            }
                         }
                     }
                     .padding(.horizontal, appModel.layout.contentMinPadding)

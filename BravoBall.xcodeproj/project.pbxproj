@@ -59,6 +59,10 @@
 		17DB46042DD6D83B000A76F6 /* ResponseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB46032DD6D837000A76F6 /* ResponseModels.swift */; };
 		17DB460B2DD866CB000A76F6 /* BravoBallTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB460A2DD866C7000A76F6 /* BravoBallTests.swift */; };
 		17DB460D2DD8694E000A76F6 /* SessionLoadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB460C2DD86949000A76F6 /* SessionLoadingTests.swift */; };
+		17DD357F2E1B329800D1DC3F /* QUICKGUIDE.md in Resources */ = {isa = PBXBuildFile; fileRef = 17DD357E2E1B329400D1DC3F /* QUICKGUIDE.md */; };
+		17DD35822E1B32BF00D1DC3F /* TestingConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DD35812E1B32BC00D1DC3F /* TestingConsole.swift */; };
+		17DD35842E1B32DB00D1DC3F /* TestingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DD35832E1B32D800D1DC3F /* TestingService.swift */; };
+		17DD35862E1B32F200D1DC3F /* TestingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DD35852E1B32F100D1DC3F /* TestingView.swift */; };
 		17F5D6542CD3477E008E8C24 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F5D6532CD3477E008E8C24 /* ColorExtension.swift */; };
 		17F5D6562CD347AE008E8C24 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F5D6552CD347AD008E8C24 /* GlobalSettings.swift */; };
 		420DA39A2DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv in Resources */ = {isa = PBXBuildFile; fileRef = 420DA3992DCDE1EC004CDD7A /* Bravo_Peaking_Home.riv */; };
@@ -254,6 +258,10 @@
 		17DB46032DD6D837000A76F6 /* ResponseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseModels.swift; sourceTree = "<group>"; };
 		17DB460A2DD866C7000A76F6 /* BravoBallTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BravoBallTests.swift; sourceTree = "<group>"; };
 		17DB460C2DD86949000A76F6 /* SessionLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionLoadingTests.swift; sourceTree = "<group>"; };
+		17DD357E2E1B329400D1DC3F /* QUICKGUIDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = QUICKGUIDE.md; sourceTree = "<group>"; };
+		17DD35812E1B32BC00D1DC3F /* TestingConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingConsole.swift; sourceTree = "<group>"; };
+		17DD35832E1B32D800D1DC3F /* TestingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingService.swift; sourceTree = "<group>"; };
+		17DD35852E1B32F100D1DC3F /* TestingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingView.swift; sourceTree = "<group>"; };
 		17E693182C7435B3006B58A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		17F5D6532CD3477E008E8C24 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		17F5D6552CD347AD008E8C24 /* GlobalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
@@ -437,6 +445,7 @@
 				4275F3F42E0AFC50008A5E15 /* ButtonFeatures */,
 				17CA37BA2DF2440A001AD5FA /* HapticFeedback */,
 				1749361D2C3E1031001163B9 /* Assets.xcassets */,
+				17DD357D2E1B324600D1DC3F /* TestingServices */,
 				177B1BEC2DF7680600AF465C /* AudioAssets */,
 				177B1BD62DF752FD00AF465C /* Utilities */,
 				43985E502CB51DEC00BE2AB6 /* Font */,
@@ -582,6 +591,25 @@
 				17CA37BB2DF24424001AD5FA /* Haptic.swift */,
 			);
 			path = HapticFeedback;
+			sourceTree = "<group>";
+		};
+		17DD357D2E1B324600D1DC3F /* TestingServices */ = {
+			isa = PBXGroup;
+			children = (
+				17DD357E2E1B329400D1DC3F /* QUICKGUIDE.md */,
+				17DD35802E1B32AE00D1DC3F /* Views */,
+			);
+			path = TestingServices;
+			sourceTree = "<group>";
+		};
+		17DD35802E1B32AE00D1DC3F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				17DD35812E1B32BC00D1DC3F /* TestingConsole.swift */,
+				17DD35832E1B32D800D1DC3F /* TestingService.swift */,
+				17DD35852E1B32F100D1DC3F /* TestingView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		420DA3A52DCEEF45004CDD7A /* Checkbox */ = {
@@ -1452,6 +1480,7 @@
 				177B1BF22DF7682C00AF465C /* 321-done.MP3 in Resources */,
 				177B1BF62DF8CC8200AF465C /* .cursor in Resources */,
 				4289C58A2DEE8C30005CC91B /* Prereq_Time.riv in Resources */,
+				17DD357F2E1B329800D1DC3F /* QUICKGUIDE.md in Resources */,
 				42E0A9372E147402008ED40E /* Bravo_Animation.riv in Resources */,
 				43BFAA422D444A2C00B12A6F /* Message_Bubble.riv in Resources */,
 				17595AAD2D3B44FE0015F35D /* Drill_Card_Complete.riv in Resources */,
@@ -1572,6 +1601,7 @@
 				17F5D6562CD347AE008E8C24 /* GlobalSettings.swift in Sources */,
 				17F5D6542CD3477E008E8C24 /* ColorExtension.swift in Sources */,
 				42E0A9522E15EA27008ED40E /* ForgotPasswordService.swift in Sources */,
+				17DD35822E1B32BF00D1DC3F /* TestingConsole.swift in Sources */,
 				1782090E2D2E0A1100246494 /* ProfileView.swift in Sources */,
 				42C81AD12E0DE4D500186E41 /* AuthenticationManager.swift in Sources */,
 				42E0A9732E1653C5008ED40E /* StreakResetView.swift in Sources */,
@@ -1612,6 +1642,7 @@
 				4399B6CE2D67CE3B00DA5E84 /* ToastMessageView.swift in Sources */,
 				174C676E2D34E9EE003D02EF /* SessionGeneratorView.swift in Sources */,
 				43AFAE852D6168F800B61982 /* SessionCompleteView.swift in Sources */,
+				17DD35862E1B32F200D1DC3F /* TestingView.swift in Sources */,
 				4399B6E62D693C3100DA5E84 /* EditingDrillView.swift in Sources */,
 				4289C5992E000315005CC91B /* HomePageField.swift in Sources */,
 				4351674B2DAE3ECA00E7D964 /* ResponsiveLayout.swift in Sources */,
@@ -1629,6 +1660,7 @@
 				177B1BC22DF6234D00AF465C /* BravoTextField.swift in Sources */,
 				43FCC7252D7F8D6E00005ABB /* CustomTabItem.swift in Sources */,
 				43AC25562DA38F1400EDD8C0 /* GroupProtocols.swift in Sources */,
+				17DD35842E1B32DB00D1DC3F /* TestingService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
