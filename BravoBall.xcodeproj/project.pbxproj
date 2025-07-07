@@ -817,13 +817,6 @@
 			path = PopUpPages;
 			sourceTree = "<group>";
 		};
-		42E0A9742E168508008ED40E /* Shop */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Shop;
-			sourceTree = "<group>";
-		};
 		431BDFE82D853E0700F4E6EE /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -900,7 +893,6 @@
 				4399B71A2D6D79D800DA5E84 /* SessionGenerator */,
 				4399B71B2D6D79DF00DA5E84 /* Progression */,
 				4399B71C2D6D79E800DA5E84 /* SavedDrills */,
-				42E0A9742E168508008ED40E /* Shop */,
 				4399B71D2D6D79EE00DA5E84 /* Profile */,
 			);
 			path = Features;
@@ -1826,10 +1818,10 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 18;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Tekk/Preview Content\"";
-				DEVELOPMENT_TEAM = 9NT64FVZCY;
+				DEVELOPMENT_TEAM = J36CXA7LCG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Tekk/Info.plist;
@@ -1847,7 +1839,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = ConklinOfficial.BravoBall;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1873,10 +1865,10 @@
 				CODE_SIGN_ENTITLEMENTS = Tekk/Tekk.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 18;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Tekk/Preview Content\"";
-				DEVELOPMENT_TEAM = 9NT64FVZCY;
+				DEVELOPMENT_TEAM = J36CXA7LCG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Tekk/Info.plist;
@@ -1894,7 +1886,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = ConklinOfficial.BravoBall;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;

@@ -273,7 +273,7 @@ class TestingService {
             appModel.allCompletedSessions = sessions.reversed()
             appModel.currentStreak = days
             appModel.highestStreak = max(days, appModel.highestStreak)
-            appModel.countOfFullyCompletedSessions = days
+            appModel.countOfFullyCompletedSessions = appModel.highestStreak + days
             
         case .brokenStreak(let currentStreak, let daysBroken):
             // Create a broken streak scenario
