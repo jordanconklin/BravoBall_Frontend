@@ -380,7 +380,6 @@ class UserManager: ObservableObject {
     
 }
 
-#if DEBUG
 extension UserManager {
     static func testWithSessionTwoDaysAgo() -> [CompletedSession] {
         let calendar = Calendar.current
@@ -396,4 +395,3 @@ extension UserManager {
         ]
     }
 }
-#endif
