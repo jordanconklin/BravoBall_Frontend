@@ -16,5 +16,9 @@
 	</array>
 	<key>PHONE_WIFI_IP</key>
 	<string>10.0.3.169</string>
+    <key>UIDeviceFamily</key>
+    <array>
+        <string>1</string>
+    </array>
 </dict>
 </plist>
